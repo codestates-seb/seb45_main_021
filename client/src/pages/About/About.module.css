@@ -1,3 +1,9 @@
-input {
-  width: 400px;
+.swiper-container {
+  width: 100vw;
+  height: 100vh;
+  margin: 0 auto;
+}
+
+section {
+  width: 100vw !important;
 }

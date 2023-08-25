@@ -5,6 +5,7 @@ button {
   border: none;
   outline: none;
 }
+
 .border-button {
   background-color: transparent;
   color: var(--black-100);

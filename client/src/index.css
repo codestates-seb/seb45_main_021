@@ -26,14 +26,24 @@ html {
   --error: #d0393e;
   --cobalt: #0074d9;
   --sky-blue: #7fdbff;
+  --inner: 1250px;
+  --center: 0 auto;
   height: 100vh;
   background-color: var(--black-800);
   font-family: var(--nanum);
   color: var(--black-200);
 }
 
+::-webkit-scrollbar {
+  width: 0px;
+}
+
 .hidden {
   position: absolute;
   left: 9999%;
   bottom: 9999%;
+}
+
+.swiper-wrapper {
+  transition-timing-function: ease-in-out;
 }
