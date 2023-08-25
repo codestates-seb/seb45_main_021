@@ -1,0 +1,12 @@
+{
+  "files": {
+    "main.css": "/seb45_main_021/static/css/main.31d6cfe0.css",
+    "main.js": "/seb45_main_021/static/js/main.88e5b947.js",
+    "index.html": "/seb45_main_021/index.html",
+    "main.88e5b947.js.map": "/seb45_main_021/static/js/main.88e5b947.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.31d6cfe0.css",
+    "static/js/main.88e5b947.js"
+  ]
+}
