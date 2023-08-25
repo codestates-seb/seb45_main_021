@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import About from './pages/About';
+import About from './pages/About/About';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Project from './pages/Project';
@@ -11,10 +11,15 @@ import PortfolioDetail from './pages/PortfolioDetail';
 import PortfolioWrite from './pages/PortfolioWrite';
 import Portfolio from './pages/Portfolio';
 import NotFound from './pages/NotFound';
+import Header from './components/header/Header/Header';
+import styles from './App.module.css';
+import classNames from 'classnames/bind';
+const cx = classNames.bind(styles);
 
 function App() {
   return (
-    <div className="App">
+    <div className={cx('App')}>
+      <Header />
       <Routes>
         <Route path="/" element={<About />} />
         <Route path="/signin" element={<SignIn />} />
