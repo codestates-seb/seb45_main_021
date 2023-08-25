@@ -21,13 +21,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "react-scripts build && cp build/index.html build/404.html && gh-pages -d build"
   },
-  "homepage": "https://bam-j.github.io/pages/",
+  "homepage": "https://codestates-seb.github.io/seb45_main_021",
   "eslintConfig": {
     "extends": [
       "react-app",
