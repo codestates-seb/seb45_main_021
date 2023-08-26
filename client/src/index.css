@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;500;700&family=Monoton&display=swap');
+
+html {
+  --nanum: 'Nanum Gothic', sans-serif;
+  --nanum-normal: 300;
+  --nanum-semi-bold: 700;
+  --nanum-bold: 800;
+  --barlow: 'Barlow Condensed', sans-serif;
+  --barlow-normal: 300;
+  --barlow-semi-bold: 500;
+  --barlow-bold: 700;
+  --monoton: 'Monoton', cursive;
+  --monoton-normal: 400;
+  --black: #000000;
+  --black-100: #f5f5f5;
+  --black-200: #e0e0e0;
+  --black-300: #bdbdbd;
+  --black-400: #9e9e9e;
+  --black-500: #757575;
+  --black-600: #616161;
+  --black-700: #424242;
+  --black-800: #212121;
+  --error: #d0393e;
+  --cobalt: #0074d9;
+  --sky-blue: #7fdbff;
+  --shadow: #00000020;
+  --inner: 1250px;
+  --center: 0 auto;
+  height: 100vh;
+  background-color: #222722;
+}
+
+::-webkit-scrollbar {
+  width: 0rem;
+}
+
+.hidden {
+  position: absolute;
+  left: 9999%;
+  bottom: 9999%;
+}
+
+button {
+  color: var(--black-100);
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  padding: 0.5rem 0.7rem;
+  font-family: var(--nanum);
+  font-weight: var(--nanum-semi-bold);
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+}
