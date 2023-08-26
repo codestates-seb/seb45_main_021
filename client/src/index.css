@@ -1,9 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;500;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;500;700&family=Monoton&display=swap');
+
 html {
-  -webkit-font-smoothing: antialiased;
-  font-size: 16px;
   --nanum: 'Nanum Gothic', sans-serif;
   --nanum-normal: 300;
   --nanum-semi-bold: 700;
@@ -26,16 +25,15 @@ html {
   --error: #d0393e;
   --cobalt: #0074d9;
   --sky-blue: #7fdbff;
+  --shadow: #00000020;
   --inner: 1250px;
   --center: 0 auto;
   height: 100vh;
-  background-color: var(--black-800);
-  font-family: var(--nanum);
-  color: var(--black-200);
+  background-color: #222722;
 }
 
 ::-webkit-scrollbar {
-  width: 0px;
+  width: 0rem;
 }
 
 .hidden {
@@ -44,6 +42,23 @@ html {
   bottom: 9999%;
 }
 
-.swiper-wrapper {
-  transition-timing-function: ease-in-out;
+button {
+  color: var(--black-100);
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  padding: 0.5rem 0.7rem;
+  font-family: var(--nanum);
+  font-weight: var(--nanum-semi-bold);
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
 }
