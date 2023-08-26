@@ -37,6 +37,7 @@ export default function AboutFirst({ activePage }) {
 
   useEffect(() => {
     if (activePage === 0) setTimeout(() => setActive(true), 0);
+    console.log(process.env.PUBLIC_URL);
   }, [activePage]);
 
   return (
