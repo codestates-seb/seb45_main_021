@@ -6,7 +6,7 @@ const StyleAboutFirst = styled(Section)``;
 export default function AboutSecond() {
   return (
     <StyleAboutFirst className="about-first">
-      <VideoPlayer src="/videos/second.mp4" />
+      <VideoPlayer src={process.env.PUBLIC_URL + '/videos/second.mp4'} />
     </StyleAboutFirst>
   );
 }

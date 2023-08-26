@@ -2,6 +2,7 @@ import { styled } from 'styled-components';
 import Section from '../common/Section';
 import VideoPlayer from './VideoPlayer';
 import { useEffect, useState } from 'react';
+
 const StyleAboutFirst = styled(Section)`
   .site-info {
     position: absolute;
@@ -40,7 +41,7 @@ export default function AboutFirst({ activePage }) {
 
   return (
     <StyleAboutFirst $active={active ? true : false}>
-      <VideoPlayer src="/videos/first.mp4" />
+      <VideoPlayer src={process.env.PUBLIC_URL + '/videos/first.mp4'} />
       <div className="site-info col">
         <h3>SPEC</h3>
         <p>
