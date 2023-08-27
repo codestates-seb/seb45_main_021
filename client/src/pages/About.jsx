@@ -9,12 +9,13 @@ import 'swiper/css/pagination';
 import { styled } from 'styled-components';
 
 const StyleAbout = styled.div`
-  .swiper {
+  & > .swiper {
     width: 100vw;
     height: 100vh;
     position: fixed;
     left: 0;
   }
+
   .swiper-wrapper {
     transition-timing-function: ease-in-out;
     transition-duration: 1s !important;
@@ -56,7 +57,6 @@ export default function About() {
         direction="vertical"
         slidesPerView={1}
         mousewheel={true}
-        navigation
         pagination={{ clickable: true }}
         onSlideChange={handleSlideChange}
       >
