@@ -7,6 +7,7 @@ const StyleVideoPlayer = styled.div`
     width: 100%;
     height: 100vh;
     object-fit: cover;
+    touch-action: 'none';
   }
   div {
     width: 100vw;
@@ -19,7 +20,7 @@ const StyleVideoPlayer = styled.div`
 export default function VideoPlayer({ src }) {
   return (
     <StyleVideoPlayer>
-      <video muted autoPlay loop>
+      <video muted autoPlay loop controls={false}>
         <source src={src} type="video/mp4" />
       </video>
       <div></div>
