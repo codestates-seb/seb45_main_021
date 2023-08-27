@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pagination, A11y, Mousewheel } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import AboutFirst from '../components/about/AboutFirst';
@@ -47,6 +47,14 @@ export default function About() {
     setActivePage(swiper.activeIndex);
     header.style.top = swiper.activeIndex === 0 ? '0' : '-100%';
   };
+
+  useEffect(()=>{
+    return () => {
+      const header = document.getElementById('header');
+      console.log(header);
+      header.style.top = '0'
+    }
+  },[])
 
   return (
     <StyleAbout>
