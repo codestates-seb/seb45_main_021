@@ -2,6 +2,8 @@ import { styled } from 'styled-components';
 import Section from '../common/Section';
 import VideoPlayer from './VideoPlayer';
 import { useEffect, useState } from 'react';
+import video from '../../static/videos/first.mp4';
+
 const StyleAboutFirst = styled(Section)`
   .site-info {
     position: absolute;
@@ -40,12 +42,12 @@ export default function AboutFirst({ activePage }) {
 
   return (
     <StyleAboutFirst $active={active ? true : false}>
-      <VideoPlayer src="/videos/first.mp4" />
+      <VideoPlayer src={video} />
       <div className="site-info col">
         <h3>SPEC</h3>
         <p>
           S/P/E/C 는 프로젝트 협업과, 개인의 포트폴리오 작업, 다양한 경험 <br />
-          그리고 소중한 만남을 모아둔 공간입니다.
+          그리고 소중한 만남을 모아둔 공간입니다 .
         </p>
       </div>
     </StyleAboutFirst>
