@@ -48,7 +48,6 @@ export default function About() {
     setActivePage(swiper.activeIndex);
     header.style.top = swiper.activeIndex === 0 ? '0' : '-100%';
   };
-
   return (
     <StyleAbout>
       <Swiper

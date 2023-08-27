@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom';
 
 export default function useNav() {
   const navigate = useNavigate();
-
   const toAbout = () => navigate('/');
   const toSignin = () => navigate('/signin');
   const toSignup = () => navigate('/signup');
