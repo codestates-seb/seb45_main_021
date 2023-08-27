@@ -3,10 +3,8 @@ import VideoPlayer from './VideoPlayer';
 import { styled } from 'styled-components';
 import video from '../../static/videos/second.mp4';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, A11y } from 'swiper/modules';
+import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
 
 const StyleAboutSecond = styled(Section)`
   .wrapper {
@@ -16,8 +14,11 @@ const StyleAboutSecond = styled(Section)`
     top: 0;
     bottom: 0;
     margin: auto;
-    width: 80%;
-    height: 200px;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .swiper-wrapper {
@@ -28,12 +29,21 @@ const StyleAboutSecond = styled(Section)`
   .swiper-slide {
     transition: all 0.5s;
     opacity: 0.5;
+    filter: blur(2px);
     transform: scale(0.8);
   }
 
   .swiper-slide-active {
     transform: scale(1);
     opacity: 1;
+    filter: none;
+  }
+
+  .card {
+    width: 50rem;
+    height: 50rem;
+    border: 1px solid red;
+    border-radius: 20px;
   }
 `;
 
@@ -43,67 +53,33 @@ export default function AboutSecond() {
       <VideoPlayer src={video} />
       <div className="wrapper">
         <Swiper
-          modules={[Autoplay, A11y]}
+          modules={[Autoplay]}
           slidesPerView={3}
-          spaceBetween={300}
+          spaceBetween={30}
           centeredSlides={true}
           loopedSlides={1}
+          slideToClickedSlide={true}
         >
           <SwiperSlide>
-            <div className="card">
-              <img
-                alt=""
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmu0IDFb1QuR89RXvvmYv8Oue1Z8sv7Kd-RA&usqp=CAU"
-              />
-            </div>
+            <div className="card"></div>
           </SwiperSlide>
           <SwiperSlide>
-            <div className="card">
-              <img
-                alt=""
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmu0IDFb1QuR89RXvvmYv8Oue1Z8sv7Kd-RA&usqp=CAU"
-              />
-            </div>
+            <div className="card"></div>
           </SwiperSlide>
           <SwiperSlide>
-            <div className="card">
-              <img
-                alt=""
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmu0IDFb1QuR89RXvvmYv8Oue1Z8sv7Kd-RA&usqp=CAU"
-              />
-            </div>
+            <div className="card"></div>
           </SwiperSlide>
           <SwiperSlide>
-            <div className="card">
-              <img
-                alt=""
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmu0IDFb1QuR89RXvvmYv8Oue1Z8sv7Kd-RA&usqp=CAU"
-              />
-            </div>
+            <div className="card"></div>
           </SwiperSlide>
           <SwiperSlide>
-            <div className="card">
-              <img
-                alt=""
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmu0IDFb1QuR89RXvvmYv8Oue1Z8sv7Kd-RA&usqp=CAU"
-              />
-            </div>
+            <div className="card"></div>
           </SwiperSlide>
           <SwiperSlide>
-            <div className="card">
-              <img
-                alt=""
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmu0IDFb1QuR89RXvvmYv8Oue1Z8sv7Kd-RA&usqp=CAU"
-              />
-            </div>
+            <div className="card"></div>
           </SwiperSlide>
           <SwiperSlide>
-            <div className="card">
-              <img
-                alt=""
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmu0IDFb1QuR89RXvvmYv8Oue1Z8sv7Kd-RA&usqp=CAU"
-              />
-            </div>
+            <div className="card"></div>
           </SwiperSlide>
         </Swiper>
       </div>
