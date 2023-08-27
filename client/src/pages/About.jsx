@@ -15,7 +15,6 @@ const StyleAbout = styled.div`
     position: fixed;
     left: 0;
   }
-
   .swiper-wrapper {
     transition-timing-function: ease-in-out;
     transition-duration: 1s !important;
@@ -48,7 +47,6 @@ export default function About() {
     setActivePage(swiper.activeIndex);
     header.style.top = swiper.activeIndex === 0 ? '0' : '-100%';
   };
-
   return (
     <StyleAbout>
       <Swiper
