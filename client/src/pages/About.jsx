@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Pagination, A11y, Mousewheel } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import AboutFirst from '../components/about/AboutFirst';
@@ -9,7 +9,7 @@ import 'swiper/css/pagination';
 import { styled } from 'styled-components';
 
 const StyleAbout = styled.div`
-  .swiper {
+  & > .swiper {
     width: 100vw;
     height: 100vh;
     position: fixed;
@@ -47,15 +47,6 @@ export default function About() {
     setActivePage(swiper.activeIndex);
     header.style.top = swiper.activeIndex === 0 ? '0' : '-100%';
   };
-
-  useEffect(()=>{
-    return () => {
-      const header = document.getElementById('header');
-      console.log(header);
-      header.style.top = '0'
-    }
-  },[])
-
   return (
     <StyleAbout>
       <Swiper
@@ -64,7 +55,6 @@ export default function About() {
         direction="vertical"
         slidesPerView={1}
         mousewheel={true}
-        navigation
         pagination={{ clickable: true }}
         onSlideChange={handleSlideChange}
       >

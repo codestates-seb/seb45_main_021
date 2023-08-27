@@ -23,20 +23,17 @@ function App() {
       <Header />
       <Inner>
         <Routes>
-          <Route path="/seb45_main_021" element={<About />} />
-          <Route path="/seb45_main_021/signin" element={<SignIn />} />
-          <Route path="/seb45_main_021/signup" element={<SignUp />} />
-          <Route path="/seb45_main_021/project" element={<Project />} />
-          <Route path="/seb45_main_021/project/write" element={<ProjectWrite />} />
-          <Route path="/seb45_main_021/project/detail/:projectId" element={<ProjectDetail />} />
-          <Route path="/seb45_main_021/project/edit/:projectId" element={<ProjectEdit />} />
-          <Route path="/seb45_main_021/portfolio" element={<Portfolio />} />
-          <Route path="/seb45_main_021/portfolio/write" element={<PortfolioWrite />} />
-          <Route
-            path="/seb45_main_021/portfolio/detail/:portfolioId"
-            element={<PortfolioDetail />}
-          />
-          <Route path="/seb45_main_021/portfolio/edit/:portfolioId" element={<PortfolioEdit />} />
+          <Route path="/" element={<About />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/project" element={<Project />} />
+          <Route path="/project/write" element={<ProjectWrite />} />
+          <Route path="/project/detail/:projectId" element={<ProjectDetail />} />
+          <Route path="/project/edit/:projectId" element={<ProjectEdit />} />
+          <Route path="/portfolio" element={<Portfolio />} />
+          <Route path="/portfolio/write" element={<PortfolioWrite />} />
+          <Route path="/portfolio/detail/:portfolioId" element={<PortfolioDetail />} />
+          <Route path="/portfolio/edit/:portfolioId" element={<PortfolioEdit />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Inner>
