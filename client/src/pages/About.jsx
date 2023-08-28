@@ -15,6 +15,7 @@ const StyleAbout = styled.div`
     position: fixed;
     left: 0;
   }
+
   .swiper-wrapper {
     transition-timing-function: ease-in-out;
     transition-duration: 1s !important;

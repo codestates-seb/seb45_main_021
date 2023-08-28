@@ -13,6 +13,7 @@ const StyleAboutThird = styled(Section)`
   background-image : url(${bgImg});
   background-size: 100% ;
   background-position: center;
+  /* 모든 슬라이드에 공통으로 적용될 스타일 */
   .slide-info {
     display:flex;
     height:100%;
@@ -50,11 +51,11 @@ const StyleAboutThird = styled(Section)`
   }
   .swiper-pagination-bullet {
     background-color: var(--black-100);
-    width: 5rem;
-    height: 0.5rem;
-    transition: all.3s;
+    width: 5rem !important;
+    height: 0.5rem !important;
+    transition: all 0.3s;
     opacity: 0.4;
-    border-radius:0;
+    border-radius: 0;
     margin:0px !important;
   }
   .swiper-pagination-bullet:first-child {
@@ -65,7 +66,6 @@ const StyleAboutThird = styled(Section)`
   }
   .swiper-pagination-bullet-active {
     width: 7rem;
-    height: 0.5rem;
     opacity: 0.7;
   }
   .swiper-slide {
@@ -90,7 +90,7 @@ const StyleAboutThird = styled(Section)`
   .bottom {
     position:absolute;
     gap:1rem;
-    bottom: 5rem;
+    bottom: 5%;
     left: 50%;
     transform: translateX(-50%);
     z-index:5;
@@ -104,6 +104,16 @@ const StyleAboutThird = styled(Section)`
   }
 `
 
+const fluffy = keyframes`
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+`
+
+//첫번째 슬라이드에서 적용될 styledcomponent
 const StyleFirstSlideDiv = styled.div`
   width:100%;
   flex:1;
@@ -124,20 +134,12 @@ const StyleFirstSlideDiv = styled.div`
     text-shadow: 2px 2px 2px var(--black-800);
   }
   img {
-      border-radius:10px;
-      height:80%;
+    border-radius:10px;
+    height:80%;
   }
 `
 
-const fluffy = keyframes`
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-`
-
+//두번째 슬라이드에서 적용될 styledcomponent
 const StyleSecondSlideImg = styled.img`
     position:absolute;
     width:${(props)=>props.$width};
@@ -148,6 +150,7 @@ const StyleSecondSlideImg = styled.img`
     animation: ${fluffy} ${(props)=>props.$time}s ease-in-out infinite;
 `
 
+//세번째 슬라이드에서 적용될 styledcomponent
 const StyleThirdSlideDiv = styled.div`
   margin: 10rem;
   display: flex;
@@ -181,6 +184,7 @@ const StyleThirdSlideDiv = styled.div`
   }
 `;
 
+//첫번째 슬라이드에서 적용될 리액트컴포넌트
 const FirstSlide = () => {
   return (
     <div className="slide-info">
@@ -196,6 +200,7 @@ const FirstSlide = () => {
   )
 }
 
+//두번째 슬라이드에서 적용될 리액트컴포넌트
 const SecondSlide = () => {
   return (
     <div className="slide-info">
@@ -207,6 +212,7 @@ const SecondSlide = () => {
   )
 }
 
+//세번째 슬라이드에서 적용될 리액트컴포넌트
 const ThirdSlide = () => {
   return (
     <div className="slide-info">
@@ -240,7 +246,6 @@ export default function AboutThird() {
         slidesPerView={1.5}
         centeredSlides={true}
         grabCursor={true}
-        navigation
         pagination={{clickable: true}}
       >
         <SwiperSlide>
