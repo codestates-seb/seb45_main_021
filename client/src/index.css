@@ -28,8 +28,9 @@ html {
   --shadow: #00000020;
   --inner: 1250px;
   --center: 0 auto;
+  --backgroundColor: #222722;
   height: 100vh;
-  background-color: #222722;
+  background-color: var(--backgroundColor);
 }
 
 ::-webkit-scrollbar {

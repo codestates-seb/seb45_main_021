@@ -17,6 +17,9 @@ const Global = createGlobalStyle`
     text-shadow: 2px 2px 2px var(--shadow);
   cursor:default ;
  }
+ input {
+  outline:none;
+ }
  
 `;
 
