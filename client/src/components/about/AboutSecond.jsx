@@ -1,4 +1,3 @@
-import Section from '../common/Section';
 import VideoPlayer from './VideoPlayer';
 import { styled } from 'styled-components';
 import video from '../../static/videos/second.mp4';
@@ -6,7 +5,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
 
-const StyleAboutSecond = styled(Section)`
+const StyleAboutSecond = styled.div`
   .wrapper {
     position: absolute;
     left: 0;
