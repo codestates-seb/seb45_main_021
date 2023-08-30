@@ -1,14 +1,13 @@
-package com.seb45_pre_036.stackoverflow.comment.mapper;
+package com.seb_45_main_021.unkwon.comment.mapper;
 
-import com.seb45_pre_036.stackoverflow.answer.entity.Answer;
-import com.seb45_pre_036.stackoverflow.comment.dto.CommentDto;
-import com.seb45_pre_036.stackoverflow.comment.entity.Comment;
-import com.seb45_pre_036.stackoverflow.member.entity.Member;
-import com.seb45_pre_036.stackoverflow.question.entity.Question;
+
+import com.seb_45_main_021.unkwon.comment.dto.CommentDto;
+import com.seb_45_main_021.unkwon.comment.entity.Comment;
+import com.seb_45_main_021.unkwon.member.entity.Member;
+import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
 import org.mapstruct.Mapper;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
@@ -18,13 +17,12 @@ public interface CommentMapper {
         Member member = new Member();
         member.setMemberId(commentPostDto.getMemberId());
 
-        Answer answer = new Answer();
-        answer.setAnswerId(commentPostDto.getAnswerId());
-
+        PortFolio portFolio =new PortFolio();
+        portFolio.setPortfolioId(commentPostDto.getPortfolioId());
 
         Comment comment = new Comment();
         comment.setMember(member);
-        comment.setAnswer(answer);
+        comment.setPortFolio(portFolio);
         comment.setContent(commentPostDto.getContent());
 
         return comment;
@@ -37,10 +35,10 @@ public interface CommentMapper {
         CommentDto.ResponseDto commentResponseDto = new CommentDto.ResponseDto(
                 comment.getCommentId(),
                 comment.getContent(),
-                comment.getAnswer().getAnswerId(),
+                comment.getPortFolio().getPortfolioId(),
                 comment.getMember().getMemberId(),
                 comment.getMember().getEmail(),
-                comment.getMember().getNickName(),
+                comment.getMember().getUsername(),
                 comment.getCreatedAt(),
                 comment.getModifiedAt()
         );

@@ -1,10 +1,9 @@
-package com.seb45_pre_036.stackoverflow.comment.dto;
+package com.seb_45_main_021.unkwon.comment.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -22,7 +21,7 @@ public class CommentDto {
 
         @Positive
         @NotNull
-        private long answerId;
+        private long portfolioId;
 
         @NotBlank(message = "댓글 내용을 작성해주세요.")
         @Size(max = 500, message = "500자 이하로 입력해 주세요.")

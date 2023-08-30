@@ -1,16 +1,14 @@
-package com.seb45_pre_036.stackoverflow.comment.entity;
+package com.seb_45_main_021.unkwon.comment.entity;
 
-import com.seb45_pre_036.stackoverflow.answer.entity.Answer;
-import com.seb45_pre_036.stackoverflow.audit.Auditable;
-import com.seb45_pre_036.stackoverflow.member.entity.Member;
-import com.seb45_pre_036.stackoverflow.question.entity.Question;
+
+import com.seb_45_main_021.unkwon.audit.Auditable;
+import com.seb_45_main_021.unkwon.member.entity.Member;
+import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -31,8 +29,8 @@ public class Comment extends Auditable {
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "ANSWER_ID")
-    private Answer answer;
+    @JoinColumn(name = "PORTFOLIO_ID")
+    private PortFolio portFolio;
 
 
 }

@@ -3,16 +3,18 @@ package com.seb_45_main_021.unkwon.exception;
 import lombok.Getter;
 
 public enum ExceptionCode {
-    MEMBER_NOT_MATCHED(403, "MemberId not matched"),
     MEMBER_NOT_FOUND(404, "Member not found"),
     MEMBER_EXISTS(409, "Member exists"),
-    QUESTION_NOT_FOUND(404, "Question not found"),
-    QUESTION_EXISTS(409, "Question exists"),
-    ANSWER_NOT_FOUND(404, "Answer not found"),
-    ANSWER_EXISTS(409, "Answer exists"),
-    COMMENT_NOT_FOUND(404, "Comment not found"),
-    COMMENT_EXISTS(409, "Comment exists"),
-    TAG_NOT_FOUND(404,"Tag not found");
+    DIFFERENT_PASSWORD(401, "Different Password"),
+    COOKIE_NOT_FOUND(401, "Cookie Not Found"),
+    BAD_ACCESS(401, "Bad Access"),
+    TIME_OUT(401, "Time Out"),
+    STATUS_LOGIN(401, "Status Login"),
+    BAD_TOKEN(401, "Bad Token"),
+    PORTFOLIO_NOT_FOUND(404,"Portfolio not found"),
+    COMMENT_NOT_FOUND(404,"Comment not found");
+
+
 
     @Getter
     private int status;

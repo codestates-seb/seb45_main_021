@@ -1,14 +1,12 @@
-package com.seb45_pre_036.stackoverflow.comment.controller;
+package com.seb_45_main_021.unkwon.comment.controller;
 
-import com.seb45_pre_036.stackoverflow.comment.dto.CommentDto;
-import com.seb45_pre_036.stackoverflow.comment.entity.Comment;
-import com.seb45_pre_036.stackoverflow.comment.mapper.CommentMapper;
-import com.seb45_pre_036.stackoverflow.comment.service.CommentService;
-import com.seb45_pre_036.stackoverflow.dto.MultiResponseDto;
-import com.seb45_pre_036.stackoverflow.dto.SingleResponseDto;
-import com.seb45_pre_036.stackoverflow.utils.UriCreator;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
+
+import com.seb_45_main_021.unkwon.comment.dto.CommentDto;
+import com.seb_45_main_021.unkwon.comment.entity.Comment;
+import com.seb_45_main_021.unkwon.comment.mapper.CommentMapper;
+import com.seb_45_main_021.unkwon.comment.service.CommentService;
+import com.seb_45_main_021.unkwon.dto.SingleResponseDto;
+import com.seb_45_main_021.unkwon.utils.UriCreator;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("/comments")
@@ -51,14 +48,14 @@ public class CommentController {
     // 댓글 수정
     @PatchMapping("/{comment-id}")
     public ResponseEntity patchComment(@PathVariable("comment-id") @Positive long commentId,
-                                       @Valid @RequestBody CommentDto.PatchDto commentPatchDto,
-                                       @RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken) {
+                                       @Valid @RequestBody CommentDto.PatchDto commentPatchDto
+                                       /*@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken*/) {
 
         commentPatchDto.setCommentId(commentId);
 
         Comment comment = mapper.commentPatchDtoToComment(commentPatchDto);
 
-        Comment updateComment = commentService.updateComment(comment, accessToken);
+        Comment updateComment = commentService.updateComment(comment/*, accessToken*/);
 
         CommentDto.ResponseDto responseDto = mapper.commentToCommentResponseDto(updateComment);
 
@@ -68,9 +65,9 @@ public class CommentController {
 
     // 댓글 삭제
     @DeleteMapping("/{comment-id}")
-    public ResponseEntity deleteComment(@PathVariable("comment-id") @Positive long commentId,
-                                        @RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken) {
-        commentService.deleteComment(commentId, accessToken);
+    public ResponseEntity deleteComment(@PathVariable("comment-id") @Positive long commentId/*,
+                                        @RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken*/) {
+        commentService.deleteComment(commentId/*, accessToken*/);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

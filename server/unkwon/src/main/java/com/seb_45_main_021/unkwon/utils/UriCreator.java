@@ -1,4 +1,4 @@
-package com.seb45_pre_036.stackoverflow.utils;
+package com.seb_45_main_021.unkwon.utils;
 
 import org.springframework.web.util.UriComponentsBuilder;
 

@@ -1,9 +1,7 @@
-package com.seb45_pre_036.stackoverflow.comment.repository;
+package com.seb_45_main_021.unkwon.comment.repository;
 
-import com.seb45_pre_036.stackoverflow.comment.entity.Comment;
+import com.seb_45_main_021.unkwon.comment.entity.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 }
