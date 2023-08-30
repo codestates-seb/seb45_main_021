@@ -85,6 +85,7 @@ export default function Select({ width, options, itemValue, onClickHandler }) {
   }, []);
 
   return (
+    <div>
     <Container className="col" $width={width}>
       <StyleSelect onClick={handleClick}>
         <StyleValue>{itemValue}</StyleValue>
@@ -104,5 +105,6 @@ export default function Select({ width, options, itemValue, onClickHandler }) {
         ))}
       </StyleDropMenu>
     </Container>
+    </div>
   );
 }
