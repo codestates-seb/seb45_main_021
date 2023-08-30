@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import About from './pages/About';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
+import Profile from './pages/Profile';
 import Project from './pages/Project';
 import ProjectWrite from './pages/ProjectWrite';
 import ProjectDetail from './pages/ProjectDetail';
@@ -21,11 +22,12 @@ function App() {
   return (
     <StyleApp>
       <Header />
-      <Inner>
+      <Inner className="center height">
         <Routes>
           <Route path="/" element={<About />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/profile/:userId" element={<Profile />} />
           <Route path="/project" element={<Project />} />
           <Route path="/project/write" element={<ProjectWrite />} />
           <Route path="/project/detail/:projectId" element={<ProjectDetail />} />
