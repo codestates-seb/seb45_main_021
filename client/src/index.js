@@ -20,6 +20,12 @@ const Global = createGlobalStyle`
  }
  input {
   outline:none;
+  cursor:text;
+ }
+ textarea {
+  outline:none;
+  cursor:text;
+  resize:none;
  }
  
 `;
