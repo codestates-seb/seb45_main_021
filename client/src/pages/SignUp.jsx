@@ -41,6 +41,9 @@ const StyleContainer = styled.div`
   .formGap {
     gap: 2rem;
   }
+  .error {
+    font-size: 1.3rem;
+  }
 `;
 
 const StyleBtnContainer = styled.div`
@@ -132,7 +135,7 @@ export default function SignUp() {
               width="300px"
               height="56.22px"
               fontSize="2rem"
-              type="password"
+              error="asdasd"
               autoComplete="off"
             />
           </form>

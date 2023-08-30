@@ -33,6 +33,12 @@ const StyleInput = styled.input`
   font-size: ${(props) => (props.$fontSize ? props.$fontSize : '1.5rem')};
 `;
 
+const StyleError = styled.div`
+  width: fit-content;
+  height: 1rem;
+  opacity: ${(props) => (props.error === '' ? 0 : 1)};
+`;
+
 /**
  * 공용 인풋 폼 입니다.
  * 사용시 필요한 정보와 나머지 옵션은 ...rest 스프레드 문법을 통해 전달됩니다.
@@ -72,7 +78,9 @@ export default function Input({
         $fontSize={fontSize}
         {...rest}
       />
-      {error && <div>{error}</div>}
+      <StyleError className="error" $error={error}>
+        {error}
+      </StyleError>
     </StyleErrorInput>
   );
 }
