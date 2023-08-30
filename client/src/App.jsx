@@ -16,7 +16,14 @@ import Header from './components/header/Header';
 import { styled } from 'styled-components';
 import Inner from './components/common/Inner';
 
-const StyleApp = styled.div``;
+const StyleApp = styled.div`
+  .center {
+    padding-top: 55px;
+  }
+  .height {
+    height: 100vh;
+  }
+`;
 
 function App() {
   return (

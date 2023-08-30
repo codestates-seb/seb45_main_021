@@ -29,7 +29,7 @@ const StyleInput = styled.input`
   width: ${(props) => props.$width};
   height: ${(props) => props.$height};
   color: ${(props) => (props.$color ? props.$color : 'var(--black-100)')};
-  padding: 10px;
+  padding: 13px;
   font-size: ${(props) => (props.$fontSize ? props.$fontSize : '1.5rem')};
 `;
 
