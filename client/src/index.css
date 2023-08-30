@@ -63,11 +63,3 @@ button {
   display: flex;
   flex-direction: column;
 }
-
-.center {
-  padding-top: 55px;
-}
-
-.height {
-  height: 100vh;
-}
