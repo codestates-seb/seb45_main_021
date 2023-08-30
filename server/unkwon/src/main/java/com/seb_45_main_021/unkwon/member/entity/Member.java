@@ -1,6 +1,8 @@
 package com.seb_45_main_021.unkwon.member.entity;
 
 import com.seb_45_main_021.unkwon.audit.Auditable;
+import com.seb_45_main_021.unkwon.comment.entity.Comment;
+import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
 import lombok.*;
 
 import javax.persistence.*;
@@ -10,9 +12,8 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Setter
-@AllArgsConstructor
 public class Member extends Auditable {
     /** 사용자 필수 입력 정보 **/
     @Id
@@ -45,6 +46,9 @@ public class Member extends Auditable {
     private SocialType socialType; // 회원가입 방식 (직접 회원가입, GOOGLE, GITHUB)
 
     private String socialId; // 로그인한 소셜 타입의 식별자 값 ( 일반 로그인의 경우 null )
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    List<PortFolio> portfolios = new ArrayList<>();
 
     public void updatePassword(String newPassword){
         this.password = newPassword;

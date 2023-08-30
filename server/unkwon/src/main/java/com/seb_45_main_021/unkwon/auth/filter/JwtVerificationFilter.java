@@ -83,7 +83,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         Map<String, Object> claims = null;
 
         try{
-            claims = jwtTokenizer.getClaims(refreshToken, base64EncodedSecretKey).getBody();
+            jwtTokenizer.verifySignature(refreshToken, base64EncodedSecretKey);
         }catch (SignatureException se) {
             throw new JwtException(ExceptionCode.BAD_TOKEN);
         } catch (ExpiredJwtException ee) {
@@ -94,7 +94,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         // refreshToken 은 문제 없음.
         // accessToken 검증
         try{
-            jwtTokenizer.verifySignature(accessToken, base64EncodedSecretKey);
+            claims = jwtTokenizer.getClaims(accessToken, base64EncodedSecretKey).getBody();
         }catch (SignatureException se) {
             throw new JwtException(ExceptionCode.BAD_TOKEN);
         } catch (ExpiredJwtException ee) {
@@ -105,7 +105,6 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         }
         return claims;
     }
-
     private void regenerateToken(Map<String, Object> claims, HttpServletResponse response){
         String subject = (String) claims.get("username");
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());

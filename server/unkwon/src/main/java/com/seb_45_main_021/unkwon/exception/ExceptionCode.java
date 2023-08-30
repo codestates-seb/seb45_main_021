@@ -10,7 +10,11 @@ public enum ExceptionCode {
     BAD_ACCESS(401, "Bad Access"),
     TIME_OUT(401, "Time Out"),
     STATUS_LOGIN(401, "Status Login"),
-    BAD_TOKEN(401, "Bad Token");
+    BAD_TOKEN(401, "Bad Token"),
+    PORTFOLIO_NOT_FOUND(404,"Portfolio not found"),
+    COMMENT_NOT_FOUND(404,"Comment not found");
+
+
 
     @Getter
     private int status;
