@@ -22,9 +22,11 @@ function App() {
   return (
     <StyleApp>
       <Header />
+      <Routes>
+        <Route path="/" element={<About />} />
+      </Routes>
       <Inner className="center height">
         <Routes>
-          <Route path="/" element={<About />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/profile/:userId" element={<Profile />} />

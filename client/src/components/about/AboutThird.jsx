@@ -1,266 +1,102 @@
-import { keyframes, styled } from "styled-components";
-import Section from "../common/Section";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, A11y, Mousewheel,Navigation} from 'swiper/modules';
-import { StyleBorderButton } from "../common/Buttons";
-import useNav from "../../hooks/useNav";
-import bgImg from '../../static/images/background.jpg';
-import java from '../../static/images/java.png';
-import javascript from '../../static/images/javascript.png';
-import clanguage from '../../static/images/clanguage.png';
+import React, { useState, useEffect } from 'react';
+import { styled } from 'styled-components';
+import Section from '../common/Section';
+import useNav from '../../hooks/useNav';
+import VideoPlayer from './VideoPlayer';
+import video from '../../static/videos/third.mp4';
+import { StyleBorderButton } from '../common/Buttons';
 
 const StyleAboutThird = styled(Section)`
-  background-image : url(${bgImg});
-  background-size: 100% ;
-  background-position: center;
-  /* 모든 슬라이드에 공통으로 적용될 스타일 */
-  .slide-info {
-    display:flex;
-    height:100%;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    padding:2rem;
-  }
-  /* 투명한 검은색 레이어 */
-  &::before {
-    content: "";
+  position: relative;
+  perspective: 50rem;
+  .rotation-box {
+    width: 85rem;
+    perspective-origin: center;
+    display: flex;
+    gap: 5rem;
     position: absolute;
     top: 0;
+    bottom: 0;
+    right: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
+    margin: auto;
   }
-  /* 섹션안에서 swiper가운데정렬 */
-  .swiper {
-    position:absolute !important;
-    left:0;
-    right:0;
-    top:0;
-    bottom:0;
-    margin:auto;
-    width:100vw !important;
-    height:70rem !important;
-  }
-  /* 불릿페이지네이션 바닥에 밀착 */
-  .swiper-pagination {
-    flex-direction:row !important;
-    justify-content:center;
-    bottom:0;
-  }
-  .swiper-pagination-bullet {
-    background-color: var(--black-100);
-    width: 5rem !important;
-    height: 0.5rem !important;
-    transition: all 0.3s;
-    opacity: 0.4;
-    border-radius: 0;
-    margin:0px !important;
-  }
-  .swiper-pagination-bullet:first-child {
-    border-radius: 0.5rem 0 0 0.5rem;
-  }
-  .swiper-pagination-bullet:last-child {
-    border-radius: 0 0.5rem 0.5rem 0;
-  }
-  .swiper-pagination-bullet-active {
-    width: 7rem;
-    opacity: 0.7;
-  }
-  .swiper-slide {
-    position:relative;
-    top:0;
-    bottom:0;
-    left:0;
-    right:0;
-    margin:auto;
-    background-color: transparent;
-    height:70rem;
-    transition:all 1s;
-  }
-  .swiper-slide-next{
-    height:50rem !important;
-    opacity : 0.3
-  }
-  .swiper-slide-prev {
-    height:50rem !important;
-    opacity : 0.3
-  }
-  .bottom {
-    position:absolute;
-    gap:1rem;
-    bottom: 5%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index:5;
-  }
-  span {
-    line-height: 1.5;
-    font-size: 1.8rem;
-    font-weight: var(--nanum-semi-bold);
-    text-align: center;
-    text-shadow: 2px 2px 2px var(--black-800);
-  }
-`
 
-const fluffy = keyframes`
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-`
-
-//첫번째 슬라이드에서 적용될 styledcomponent
-const StyleFirstSlideDiv = styled.div`
-  width:100%;
-  flex:1;
-  display:flex;
-  flex-direction : ${(props)=> props.$start ? 'row' : 'row-reverse'};
-  align-items:center;
-  gap:2rem;
-  div {
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    height:20rem;
-    line-height: 1.5;
-    font-size: 1.3rem;
-    font-weight: var(--nanum-semi-bold);
-    text-align: center;
-    text-shadow: 2px 2px 2px var(--black-800);
-  }
-  img {
-    border-radius:10px;
-    height:80%;
-  }
-`
-
-//두번째 슬라이드에서 적용될 styledcomponent
-const StyleSecondSlideImg = styled.img`
-    position:absolute;
-    width:${(props)=>props.$width};
-    left:${(props)=>props.$left};
-    top:${(props)=>props.$top};
-    filter: blur(${(props)=>props.$blur});
-    opacity:0.5;
-    animation: ${fluffy} ${(props)=>props.$time}s ease-in-out infinite;
-`
-
-//세번째 슬라이드에서 적용될 styledcomponent
-const StyleThirdSlideDiv = styled.div`
-  margin: 10rem;
-  display: flex;
-  justify-content: center;
-  gap: 5rem;
-  div {
-    position: relative;
+  .info-item {
+    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    height: 20rem;
-    line-height: 1.5;
-    font-size: 1.3rem;
-    text-align: center;
+    gap: 2rem;
   }
-  img {
-    border-radius: 50%;
-    height: 80%;
-    transition: transform 0.5s;
+
+  .info-item:last-child {
+    font-size: 4.5rem;
+    letter-spacing: 0.5rem;
+    gap: 3.5rem;
+    font-family: var(--monoton);
   }
-  div:hover img {
-    transform: rotateY(180deg) scale(2);
+
+  .filter {
+    backdrop-filter: none;
   }
-  .back {
-    transform: rotateY(180deg);
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
+  button {
+    border-radius: 3px;
+    font-size: 1.8rem;
+    padding: 2rem;
+  }
+  span:first-child {
+    font-size: 5rem;
   }
 `;
 
-//첫번째 슬라이드에서 적용될 리액트컴포넌트
-const FirstSlide = () => {
-  return (
-    <div className="slide-info">
-      <StyleFirstSlideDiv $start={true}>
-        <div><img src="https://swiperjs.com/demos/images/nature-1.jpg" alt="프로젝트 이미지"/>프로젝트</div>
-        <span>커뮤니티가 고객님의 소식을 기다리고 소식을 기다리고 있어요! 로그인하거나 Pixabay에 가입하여 댓글을 확인하세요 로그인 Pixbay 가입커뮤니티가 고객님의 소식을 기다리고 있어요! 로그인하거나 Pixabay에 가입하여 댓글을 확인하세요 로그인 </span>
-      </StyleFirstSlideDiv>
-      <StyleFirstSlideDiv $start={false}>
-        <div><img src="https://swiperjs.com/demos/images/nature-2.jpg" alt="포트폴리오 이미지"/>포트폴리오</div>
-        <span>커뮤니티가 고객님의 소식을 기다리고 있어요! 로그인하거나 Pixabay에 가입하여 댓글을 확인하세요 로그인 Pixbay 가입커뮤니티가 고객님의 소식을 기다리고 있어요! 로그인하거나 Pixabay에 가입하여 댓을 확인하세요 로그인 Pixbay 가입</span>
-      </StyleFirstSlideDiv>
-    </div>
-  )
-}
+export default function AboutThird({ activePage }) {
+  const { toPortfolio, toProject, toSignin, toSignup } = useNav();
+  const [location, setLocation] = useState({ x: 0, y: 0 });
+  const maxRotation = 2;
+  useEffect(() => {
+    if (activePage === 2) {
+      const locationHandler = (e) => {
+        const { clientX, clientY } = e;
+        setLocation({ x: clientX, y: clientY });
+      };
+      window.addEventListener('mousemove', locationHandler);
+      return () => window.removeEventListener('mousemove', locationHandler);
+    }
+  }, [activePage]);
 
-//두번째 슬라이드에서 적용될 리액트컴포넌트
-const SecondSlide = () => {
-  return (
-    <div className="slide-info">
-      <StyleSecondSlideImg $width={"30rem"} $left={"7%"} $top={"20%"} $blur={"0.3rem"} $time={2} src={clanguage}/>
-      <StyleSecondSlideImg $width={"20rem"} $left={"80%"} $top={"50%"} $blur={"0.2rem"} $time={1.7} src={javascript}/>
-      <StyleSecondSlideImg $width={"15rem"} $left={"40%"} $top={"10%"} $blur={"0.1rem"} $time={1.5} src={java}/>
-      <span>사용하는 언어의 다양한 프로젝트, 포트폴리오를 확인 해보세요</span>
-    </div>
-  )
-}
-
-//세번째 슬라이드에서 적용될 리액트컴포넌트
-const ThirdSlide = () => {
-  return (
-    <div className="slide-info">
-      <span>사이트를 이용하시기 전에 읽어봐주세요.</span>
-      <StyleThirdSlideDiv>
-      <div>
-        <img src="https://swiperjs.com/demos/images/nature-1.jpg" alt="프로젝트 이미지" />
-        <div className="back"/>
-        프로젝트
-      </div>
-      <div>
-        <img src="https://swiperjs.com/demos/images/nature-2.jpg" alt="포트폴리오 이미지" />
-        <div className="back"/>
-        포트폴리오
-      </div>
-    </StyleThirdSlideDiv>
-    </div>
-  )
-}
-
-export default function AboutThird() {
-  const { toPortfolio, toProject } = useNav();
+  const rotationX = (location.y / window.innerHeight) * 2 * maxRotation - maxRotation;
+  const rotationY = (location.x / window.innerWidth) * 2 * maxRotation - maxRotation;
 
   return (
     <StyleAboutThird>
-      <Swiper
-        modules={[Pagination, A11y, Mousewheel, Navigation]}
-        spaceBetween={100}
-        direction="horizontal"
-        autoplay={{ delay: 3000, disableOnInteraction: false }}
-        slidesPerView={1.5}
-        centeredSlides={true}
-        grabCursor={true}
-        pagination={{clickable: true}}
+      <VideoPlayer src={video} />
+      <div
+        className="rotation-box"
+        style={{
+          transform: `rotateX(${-rotationX}deg) rotateY(${rotationY}deg)`,
+        }}
       >
-        <SwiperSlide>
-          <FirstSlide/>
-        </SwiperSlide>
-        <SwiperSlide>
-          <SecondSlide/>
-        </SwiperSlide>
-        <SwiperSlide>
-          <ThirdSlide/>
-        </SwiperSlide>
-      </Swiper>
-      <div className="row bottom">
-          <StyleBorderButton onClick={toProject}>프로젝트</StyleBorderButton>
-          <StyleBorderButton onClick={toPortfolio}>포트폴리오</StyleBorderButton>
+        <div className="info-item">
+          <StyleBorderButton onClick={toProject}>프로젝트 바로가기</StyleBorderButton>
+          <StyleBorderButton onClick={toPortfolio}>포트폴리오 바로가기</StyleBorderButton>
+          <StyleBorderButton onClick={toSignin}>로그인</StyleBorderButton>
+          <StyleBorderButton onClick={toSignup}>회원가입</StyleBorderButton>
+        </div>
+        <div className="info-item col ">
+          <div>
+            <span>S</span>ideProject
+          </div>
+          <div>
+            <span>P</span>ortFolio
+          </div>
+          <div>
+            <span>E</span>xperience
+          </div>
+          <div>
+            <span>C</span>onnection
+          </div>
+        </div>
       </div>
     </StyleAboutThird>
   );

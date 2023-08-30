@@ -58,15 +58,16 @@ export default function About() {
         mousewheel={true}
         pagination={{ clickable: true }}
         onSlideChange={handleSlideChange}
+        initialSlide={2}
       >
         <SwiperSlide>
           <AboutFirst activePage={activePage} />
         </SwiperSlide>
         <SwiperSlide>
-          <AboutSecond />
+          <AboutSecond activePage={activePage} />
         </SwiperSlide>
         <SwiperSlide>
-          <AboutThird />
+          <AboutThird activePage={activePage} />
         </SwiperSlide>
       </Swiper>
     </StyleAbout>

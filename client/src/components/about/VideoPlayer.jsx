@@ -9,10 +9,9 @@ const StyleVideoPlayer = styled.div`
     object-fit: cover;
     touch-action: 'none';
   }
-  div {
+  .filter {
     width: 100vw;
     height: 100vh;
-    background-color: #00000064;
     position: absolute;
     backdrop-filter: blur(5px);
   }
@@ -23,7 +22,7 @@ export default function VideoPlayer({ src }) {
       <video muted autoPlay loop controls={false}>
         <source src={src} type="video/mp4" />
       </video>
-      <div></div>
+      <div className="filter"></div>
     </StyleVideoPlayer>
   );
 }
