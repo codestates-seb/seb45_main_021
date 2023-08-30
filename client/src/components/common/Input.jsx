@@ -13,7 +13,7 @@ const StyleErrorInput = styled.div`
 const Label = styled.label`
   position: absolute;
   top: -11px;
-  left: 5px;
+  left: 10px;
   color: ${(props) => (props.$labelColor ? props.$labelColor : 'var(--black-100)')};
   font-size: 1.6rem;
   background-color: var(--backgroundColor);
@@ -25,12 +25,12 @@ const StyleInput = styled.input`
   background: none;
   border: 1px solid;
   border-color: ${(props) => (props.$borderColor ? props.$borderColor : 'var(--black-100)')};
-  border-radius: 3px;
-  width: ${(props) => props.$width}rem;
-  height: ${(props) => props.$height}rem;
+  border-radius: 10px;
+  width: ${(props) => props.$width};
+  height: ${(props) => props.$height};
   color: ${(props) => (props.$color ? props.$color : 'var(--black-100)')};
-  padding: 8px 6px;
-  font-size: 1.5rem;
+  padding: 10px;
+  font-size: ${(props) => (props.$fontSize ? props.$fontSize : '1.5rem')};
 `;
 
 /**
@@ -40,6 +40,7 @@ const StyleInput = styled.input`
  * @param {string} error - 에러시 띄우고싶은 메세지입니다.
  * @param {string} width - 인풋의 너비입니다.
  * @param {string} height - 인풋의 높이입니다.
+ * @param {string} fontSize - 인풋의 폰트 사이즈입니다.
  * @param {string} color - 인풋의 컬러입니다. 기본 값 --black-100
  * @param {string} labelColor - 라벨 텍스트의 컬러입니다. 기본 값 --black-100
  * @param {string} borderColor -  인풋의 border 색상입니다. 기본 값 --black-100
@@ -55,6 +56,7 @@ export default function Input({
   color,
   labelColor,
   borderColor,
+  fontSize,
   ...rest
 }) {
   return (
@@ -67,6 +69,7 @@ export default function Input({
         $height={height}
         $color={color}
         $borderColor={borderColor}
+        $fontSize={fontSize}
         {...rest}
       />
       {error && <div>{error}</div>}
