@@ -1,6 +1,6 @@
 package com.seb_45_main_021.unkwon.exception;
 
-import lombok.AllArgsConstructor;
+import com.seb_45_main_021.unkwon.exception.ExceptionCode;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -12,63 +12,88 @@ import java.util.stream.Collectors;
 
 @Getter
 public class ErrorResponse {
-
     private int status;
     private String message;
     private List<FieldError> fieldErrors;
-    private List<ConstraintViolationError> constraintViolationErrors;
+    private List<ConstraintViolationError> violationErrors;
 
-    public void setStatusAndMessageFromExceptionCode(ExceptionCode exceptionCode){
-        this.status = exceptionCode.getStatus();
-        this.message = exceptionCode.getMessage();
-    }
-
-    public void setStatusAndMessageFromHttpStatus(HttpStatus httpStatus){
-        this.status = httpStatus.value();
-        this.message = httpStatus.getReasonPhrase();
-    }
-
-    public void setStatusAndMessageFromHttpStatusAndMessage(HttpStatus httpStatus, String message){
-        this.status = httpStatus.value();
+    private ErrorResponse(int status, String message) {
+        this.status = status;
         this.message = message;
     }
 
-
-    public void setFieldErrors(BindingResult bindingResult){
-
-        this.fieldErrors = bindingResult.getFieldErrors()
-                .stream().map(error -> new FieldError(
-                        error.getField(),
-                        error.getRejectedValue() == null ? "" : error.getRejectedValue().toString(),
-                        error.getDefaultMessage()
-                )).collect(Collectors.toList());
+    private ErrorResponse(final List<FieldError> fieldErrors,
+                          final List<ConstraintViolationError> violationErrors) {
+        this.fieldErrors = fieldErrors;
+        this.violationErrors = violationErrors;
     }
 
-    public void setConstraintViolationErrors(Set<ConstraintViolation<?>> constraintViolations){
-        this.constraintViolationErrors = constraintViolations.stream()
-                .map(constraintViolation -> new ConstraintViolationError(
-                        constraintViolation.getPropertyPath().toString(),
-                        constraintViolation.getInvalidValue().toString(),
-                        constraintViolation.getMessage()
-                )).collect(Collectors.toList());
+    public static ErrorResponse of(BindingResult bindingResult) {
+        return new ErrorResponse(FieldError.of(bindingResult), null);
     }
 
+    public static ErrorResponse of(Set<ConstraintViolation<?>> violations) {
+        return new ErrorResponse(null, ConstraintViolationError.of(violations));
+    }
+
+    public static ErrorResponse of(ExceptionCode exceptionCode) {
+        return new ErrorResponse(exceptionCode.getStatus(), exceptionCode.getMessage());
+    }
+
+    public static ErrorResponse of(HttpStatus httpStatus) {
+        return new ErrorResponse(httpStatus.value(), httpStatus.getReasonPhrase());
+    }
+
+    public static ErrorResponse of(HttpStatus httpStatus, String message) {
+        return new ErrorResponse(httpStatus.value(), message);
+    }
 
     @Getter
-    @AllArgsConstructor
-    public static class FieldError{
+    public static class FieldError {
         private String field;
         private Object rejectedValue;
         private String reason;
+
+        private FieldError(String field, Object rejectedValue, String reason) {
+            this.field = field;
+            this.rejectedValue = rejectedValue;
+            this.reason = reason;
+        }
+
+        public static List<FieldError> of(BindingResult bindingResult) {
+            final List<org.springframework.validation.FieldError> fieldErrors =
+                    bindingResult.getFieldErrors();
+            return fieldErrors.stream()
+                    .map(error -> new FieldError(
+                            error.getField(),
+                            error.getRejectedValue() == null ?
+                                    "" : error.getRejectedValue().toString(),
+                            error.getDefaultMessage()))
+                    .collect(Collectors.toList());
+        }
     }
 
     @Getter
-    @AllArgsConstructor
-    public static class ConstraintViolationError{
+    public static class ConstraintViolationError {
         private String propertyPath;
         private Object rejectedValue;
         private String reason;
+
+        private ConstraintViolationError(String propertyPath, Object rejectedValue,
+                                         String reason) {
+            this.propertyPath = propertyPath;
+            this.rejectedValue = rejectedValue;
+            this.reason = reason;
+        }
+
+        public static List<ConstraintViolationError> of(
+                Set<ConstraintViolation<?>> constraintViolations) {
+            return constraintViolations.stream()
+                    .map(constraintViolation -> new ConstraintViolationError(
+                            constraintViolation.getPropertyPath().toString(),
+                            constraintViolation.getInvalidValue().toString(),
+                            constraintViolation.getMessage()
+                    )).collect(Collectors.toList());
+        }
     }
-
-
 }
