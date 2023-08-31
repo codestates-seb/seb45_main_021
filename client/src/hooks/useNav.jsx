@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
  * @description
  * import useNav from '~~'
  * const { toAbout } = useNav();
- * 객체 구조 분해할당으로 사용하길 추천함.
  * @returns {function} toAbout - navigate('/');
  * @returns {function} toSignin - navigate('/signin');
  * @returns {function} toSignup - navigate('/signup');
@@ -15,13 +14,42 @@ import { useNavigate } from 'react-router-dom';
  */
 export default function useNav() {
   const navigate = useNavigate();
-  const toAbout = () => navigate('/');
-  const toSignin = () => navigate('/signin');
-  const toSignup = () => navigate('/signup');
-  const toProject = () => navigate('/project');
-  const toPortfolio = () => navigate('/portfolio');
-  const toProjectWrite = () => navigate('/project/write');
-  const toPortfolioWrite = () => navigate('/portfolio/write');
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  const toAbout = () => {
+    navigate('/');
+    scrollToTop();
+  };
+  const toSignin = () => {
+    navigate('/signin');
+    scrollToTop();
+  };
+  const toSignup = () => {
+    navigate('/signup');
+    scrollToTop();
+  };
+  const toProject = () => {
+    navigate('/project');
+    scrollToTop();
+  };
+  const toPortfolio = () => {
+    navigate('/portfolio');
+    scrollToTop();
+  };
+  const toProjectWrite = () => {
+    navigate('/project/write');
+    scrollToTop();
+  };
+  const toPortfolioWrite = () => {
+    navigate('/portfolio/write');
+    scrollToTop();
+  };
 
   return { toAbout, toSignin, toSignup, toPortfolio, toProject, toProjectWrite, toPortfolioWrite };
 }

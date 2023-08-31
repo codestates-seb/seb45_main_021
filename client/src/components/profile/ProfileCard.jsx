@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import { PiUploadSimple } from 'react-icons/pi';
-import { AiOutlineEdit } from 'react-icons/ai';
+import { FiEdit2 } from 'react-icons/fi';
 import { GoIssueClosed } from 'react-icons/go';
 import { AiOutlineCloseCircle, AiOutlineClose } from 'react-icons/ai';
 import Input from '../common/Input';
@@ -231,7 +231,7 @@ export default function ProfileCard({ id, data }) {
               <h3>프로필</h3>
               <p>{profile.aboutMe}</p>
               <div className="editProfile" onClick={() => setIsEdit({ ...isEdit, profile: true })}>
-                <AiOutlineEdit size="30" />
+                <FiEdit2 size="30" />
               </div>
             </div>
             <div className="col infoInner">

@@ -50,7 +50,7 @@ export default function AnchorMenu() {
       {isClick && (
         <LinkContainer>
           <AnchorLink href="#profile">
-            <LinkItem>내 프로필</LinkItem>
+            <LinkItem>프로필</LinkItem>
           </AnchorLink>
           <AnchorLink href="#project">
             <LinkItem>프로젝트</LinkItem>
