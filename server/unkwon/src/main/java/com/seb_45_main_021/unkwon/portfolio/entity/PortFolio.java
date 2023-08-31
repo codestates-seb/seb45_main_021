@@ -19,14 +19,18 @@ public class PortFolio extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long portfolioId;
 
-    @Column(length = 100, nullable = false)
+    @Column(length = 30, nullable = false)
     private String title;
 
-    @Column(length = 2000, nullable = false)
+    @Column(length = 1000, nullable = false)
     private String content;
 
     @Column(nullable = false)
     private int view = 0;
+
+    private boolean IsComment = true;
+
+    private boolean IsEmploy = true;
 
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
@@ -34,4 +38,8 @@ public class PortFolio extends Auditable {
 
     @OneToMany(mappedBy = "portFolio", cascade = CascadeType.REMOVE)
     List<Comment> comments;
+
+    @Column(columnDefinition = "TEXT")
+    private String tags;
+
 }

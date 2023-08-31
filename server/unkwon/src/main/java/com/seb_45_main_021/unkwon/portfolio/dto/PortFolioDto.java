@@ -19,10 +19,13 @@ public class PortFolioDto {
 
         private String content;
 
+        private String[] tags;
+
     }
 
     @Getter
     @Setter
+    @Builder
     public static class Patch{
 
         private long portfolioId;
@@ -30,6 +33,9 @@ public class PortFolioDto {
         private String title;
 
         private String content;
+
+        private String[] tags;
+
     }
 
     @Getter
@@ -48,6 +54,7 @@ public class PortFolioDto {
 
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
+        private String[] tags;
 
     }
 
@@ -65,6 +72,10 @@ public class PortFolioDto {
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
         private List<PortFolioDto.CommentResponse> comments;
+        private boolean IsComment;
+        private boolean IsEmploy;
+        private String[] tags;
+
     }
     @Getter @Setter
     @Builder
