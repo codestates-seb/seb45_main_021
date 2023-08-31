@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
 
 const Container = styled.div`
-  width: ${(props) => props.$width}rem;
+  width: ${(props) => props.$width};
+  font-size: ${(props) => (props.$fontSize ? props.$fontSize : '1rem')};
   gap: 10px;
   position: relative;
 `;
@@ -26,7 +27,6 @@ const StyleValue = styled.div`
 const StyleIcon = styled.div`
   position: absolute;
   right: 10px;
-  font-size: 1rem;
   transform: ${(props) => (props.$isOn ? 'rotate(180deg)' : '')};
   transition: all 0.4s;
 `;
@@ -39,18 +39,18 @@ const StyleDropMenu = styled.div`
   border-radius: 5px;
   overflow: auto;
   opacity: ${(props) => (props.$isOn ? '1' : '0')};
-  height: ${(props) => (props.$isOn ? '92px' : '0')};
+  height: fit-content;
   transition: all 0.3s;
 `;
 
 const StyleDropMenuItem = styled.div`
   width: 100%;
   padding: 1rem;
-  font-size: 1rem;
   transition: all 0.3s;
+  background-color: black;
   cursor: pointer;
   &:hover {
-    background-color: #00000026;
+    background-color: #7d6a6a;
   }
 `;
 
@@ -64,10 +64,11 @@ const StyleDropMenuItem = styled.div`
  * @param {string} width - 드롭다운 가로 길이
  * @param {object[]} options - 옵션으로 들어올 객체 배열 {value:'옵션'}
  * @param {string} itemValue - 현재 표시할 요소 값 참조
+ * @param {string} fontSize - 전체 폰트 사이즈
  * @param {function} onClickHandler - 함수 전달시 매개변수가 전달됨 해당 매개변수를 세터 값을 변경하는 함수로 만들고 넣으세요
  * @returns {JSX.Element}
  */
-export default function Select({ width, options, itemValue, onClickHandler }) {
+export default function Select({ width, options, itemValue, onClickHandler, fontSize }) {
   const [isOn, setIsOn] = useState(false);
 
   const handleClick = (e) => {
@@ -85,7 +86,7 @@ export default function Select({ width, options, itemValue, onClickHandler }) {
   }, []);
 
   return (
-    <Container className="col" $width={width}>
+    <Container className="col" $width={width} $fontSize={fontSize}>
       <StyleSelect onClick={handleClick}>
         <StyleValue>{itemValue}</StyleValue>
         <StyleIcon $isOn={isOn}>▼</StyleIcon>
