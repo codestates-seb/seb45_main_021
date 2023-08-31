@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sound.sampled.Port;
+import java.util.Arrays;
 import java.util.Optional;
 
 @Service
@@ -43,6 +44,8 @@ public class PortFolioService {
                 .ifPresent(title -> findPortfolio.setTitle(title));
         Optional.ofNullable(portFolio.getContent())
                 .ifPresent(content -> findPortfolio.setContent(content));
+        Optional.ofNullable(portFolio.getTags())
+                .ifPresent(tags -> findPortfolio.setTags(tags));
 
         return portFolioRepository.save(findPortfolio);
     }
@@ -60,6 +63,24 @@ public class PortFolioService {
         return portFolioRepository.findAll(
                 PageRequest.of(page, size, Sort.by("portfolioId").descending()));
     }
+
+    public Page<PortFolio> findTagPortfolio(int page, int size, String[] tags) { //검색 처리
+
+        Arrays.sort(tags);
+
+        StringBuilder likeQueryBuilder = new StringBuilder("");
+
+        for (int i = 0; i < tags.length; i++) {
+            String temp = "%" + tags[i] + "%";
+            likeQueryBuilder.append(temp);
+        }
+
+            PageRequest pageRequest = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "created_at"));
+            Page<PortFolio> searchQuestionList = portFolioRepository.getSearchPortfolioList(likeQueryBuilder.toString(), pageRequest);
+
+            System.out.println();
+            return searchQuestionList;
+        }
 
     public Page<PortFolio> findPortfoliosView(int page, int size){
 

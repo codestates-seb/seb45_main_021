@@ -5,7 +5,8 @@ import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.portfolio.dto.PortFolioDto;
 import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
 import org.mapstruct.Mapper;
-
+import org.mapstruct.Mapping;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,12 +20,25 @@ public interface PortFolioMapper {
         PortFolio portFolio = new PortFolio();
         portFolio.setTitle(portfolioPostDto.getTitle());
         portFolio.setContent(portfolioPostDto.getContent());
+        portFolio.setTags(Arrays.toString(portfolioPostDto.getTags()));
         portFolio.setMember(member);
 
         return portFolio;
     };
 
+
+
+    @Mapping(target = "tags", expression = "java(mapTags(portfolioPatchDto.getTags()))")
     PortFolio portfolioPatchDtoToPortfolio(PortFolioDto.Patch portfolioPatchDto);
+
+    default String mapTags(String[] tags) {
+        if (tags == null || tags.length == 0) {
+            return null;
+        }
+        return String.join(",", tags);
+    }
+
+
 
     default PortFolioDto.Response portfolioToPortfolioResponseDto(PortFolio portFolio){
 
@@ -38,6 +52,7 @@ public interface PortFolioMapper {
                 .createdAt(portFolio.getCreatedAt())
                 .modifiedAt(portFolio.getModifiedAt())
                 .view(portFolio.getView())
+                .tags(new String[]{portFolio.getTags()})
                 .build();
 
         return response;
@@ -59,6 +74,9 @@ public interface PortFolioMapper {
                 .createdAt(portFolio.getCreatedAt())
                 .modifiedAt(portFolio.getModifiedAt())
                 .view(portFolio.getView())
+                .tags(new String[]{portFolio.getTags()})
+                .IsEmploy(portFolio.isIsEmploy())
+                .IsComment(portFolio.isIsComment())
                 .build();
 
         List<Comment> comments = portFolio.getComments();
