@@ -12,7 +12,8 @@ public enum ExceptionCode {
     STATUS_LOGIN(401, "Status Login"),
     BAD_TOKEN(401, "Bad Token"),
     PORTFOLIO_NOT_FOUND(404,"Portfolio not found"),
-    COMMENT_NOT_FOUND(404,"Comment not found");
+    COMMENT_NOT_FOUND(404,"Comment not found"),
+    PROJECT_NOT_FOUND(404, "Question not found");
 
 
 
