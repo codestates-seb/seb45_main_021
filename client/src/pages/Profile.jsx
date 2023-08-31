@@ -191,7 +191,29 @@ const data = {
       },
     ],
   ],
-  projectCard: [{}, {}, {}],
+  projectCard: [
+    {
+      isWorking: true,
+      email: 'dbauddls12@naver.com',
+      userImg: userDefaultImg,
+      userName: '유명인',
+      title: '안녕하세요 자신있는 개발자입니다.',
+      aboutMe: '자기소개 이렇게 적는게 맞는걸까요오오오드용액 가버렷 컽컽컽 !!@!@',
+      call: '010-1111-2222',
+      tags: ['JavaScript', 'React', 'CSS'],
+    },
+    {
+      isWorking: true,
+      email: 'dbauddls12@naver.com',
+      userImg: userDefaultImg,
+      userName: '유명인',
+      title: '안녕하세요 자신없는 개발자입니다.',
+      aboutMe: '내가 자신없으면 너가 뭘 할 수 있는데 으이 ?!!?',
+      call: '010-3333-2222',
+      tags: [],
+    },
+    {},
+  ],
 };
 
 export default function Profile() {
