@@ -21,6 +21,7 @@ public interface PortFolioMapper {
         portFolio.setTitle(portfolioPostDto.getTitle());
         portFolio.setContent(portfolioPostDto.getContent());
         portFolio.setTags(Arrays.toString(portfolioPostDto.getTags()));
+        portFolio.setLang(Arrays.toString(portfolioPostDto.getLang()));
         portFolio.setMember(member);
 
         return portFolio;
@@ -28,10 +29,11 @@ public interface PortFolioMapper {
 
 
 
-    @Mapping(target = "tags", expression = "java(mapTags(portfolioPatchDto.getTags()))")
+    @Mapping(target = "tags", expression = "java(mapping(portfolioPatchDto.getTags()))")
+    @Mapping(target = "lang", expression = "java(mapping(portfolioPatchDto.getLang()))")
     PortFolio portfolioPatchDtoToPortfolio(PortFolioDto.Patch portfolioPatchDto);
 
-    default String mapTags(String[] tags) {
+    default String mapping(String[] tags) {
         if (tags == null || tags.length == 0) {
             return null;
         }
@@ -52,7 +54,9 @@ public interface PortFolioMapper {
                 .createdAt(portFolio.getCreatedAt())
                 .modifiedAt(portFolio.getModifiedAt())
                 .view(portFolio.getView())
+                .commentCount(portFolio.getComments().size())
                 .tags(new String[]{portFolio.getTags()})
+                .lang(new String[]{portFolio.getLang()})
                 .build();
 
         return response;
@@ -74,7 +78,9 @@ public interface PortFolioMapper {
                 .createdAt(portFolio.getCreatedAt())
                 .modifiedAt(portFolio.getModifiedAt())
                 .view(portFolio.getView())
+                .commentCount(portFolio.getComments().size())
                 .tags(new String[]{portFolio.getTags()})
+                .lang(new String[]{portFolio.getLang()})
                 .IsEmploy(portFolio.isIsEmploy())
                 .IsComment(portFolio.isIsComment())
                 .build();

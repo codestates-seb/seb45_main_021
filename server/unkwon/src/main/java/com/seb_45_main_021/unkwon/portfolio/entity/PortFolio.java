@@ -42,4 +42,10 @@ public class PortFolio extends Auditable {
     @Column(columnDefinition = "TEXT")
     private String tags;
 
+    private String lang;
+
+
+//    private String img;
+//    private String titleImg;
+
 }

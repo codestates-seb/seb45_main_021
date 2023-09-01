@@ -13,4 +13,11 @@ public interface PortFolioRepository extends JpaRepository<PortFolio,Long> {
             countQuery = "SELECT COUNT(*) FROM PORT_FOLIO AS p WHERE p.tags LIKE :likeQuery",
             nativeQuery = true)
     Page<PortFolio> getSearchPortfolioList(String likeQuery, Pageable pageable);
+
+    @Query(
+            value = "SELECT * FROM PORT_FOLIO AS p WHERE p.lang LIKE :likeQuery",
+            countQuery = "SELECT COUNT(*) FROM PORT_FOLIO AS p WHERE p.lang LIKE :likeQuery",
+            nativeQuery = true)
+    Page<PortFolio> getSearchPortfolioList1(String likeQuery, Pageable pageable);
+
 }

@@ -14,12 +14,10 @@ public class PortFolioDto {
     public static class Post{
 
         private long memberId;
-
         private String title;
-
         private String content;
-
         private String[] tags;
+        private String[] lang;
 
     }
 
@@ -29,12 +27,10 @@ public class PortFolioDto {
     public static class Patch{
 
         private long portfolioId;
-
         private String title;
-
         private String content;
-
         private String[] tags;
+        private String[] lang;
 
     }
 
@@ -51,10 +47,12 @@ public class PortFolioDto {
 
         private String title;
         private String content;
+        private int commentCount;
 
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
         private String[] tags;
+        private String[] lang;
 
     }
 
@@ -72,9 +70,11 @@ public class PortFolioDto {
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
         private List<PortFolioDto.CommentResponse> comments;
+        private int commentCount;
         private boolean IsComment;
         private boolean IsEmploy;
         private String[] tags;
+        private String[] lang;
 
     }
     @Getter @Setter

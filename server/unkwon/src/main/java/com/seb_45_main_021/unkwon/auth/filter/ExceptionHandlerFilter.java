@@ -2,7 +2,8 @@ package com.seb_45_main_021.unkwon.auth.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seb_45_main_021.unkwon.exception.ErrorResponse;
-import io.jsonwebtoken.JwtException;
+
+import com.seb_45_main_021.unkwon.exception.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.filter.OncePerRequestFilter;

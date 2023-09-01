@@ -46,6 +46,8 @@ public class PortFolioService {
                 .ifPresent(content -> findPortfolio.setContent(content));
         Optional.ofNullable(portFolio.getTags())
                 .ifPresent(tags -> findPortfolio.setTags(tags));
+        Optional.ofNullable(portFolio.getLang())
+                .ifPresent(lang-> findPortfolio.setLang(lang));
 
         return portFolioRepository.save(findPortfolio);
     }
@@ -76,11 +78,29 @@ public class PortFolioService {
         }
 
             PageRequest pageRequest = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "created_at"));
-            Page<PortFolio> searchQuestionList = portFolioRepository.getSearchPortfolioList(likeQueryBuilder.toString(), pageRequest);
+            Page<PortFolio> searchPortfolioTagList = portFolioRepository.getSearchPortfolioList(likeQueryBuilder.toString(), pageRequest);
 
             System.out.println();
-            return searchQuestionList;
+            return searchPortfolioTagList;
         }
+
+    public Page<PortFolio> findLangPortfolio(int page, int size, String[] lang) { //검색 처리
+
+        Arrays.sort(lang);
+
+        StringBuilder likeQueryBuilder = new StringBuilder("");
+
+        for (int i = 0; i < lang.length; i++) {
+            String temp = "%" + lang[i] + "%";
+            likeQueryBuilder.append(temp);
+        }
+
+        PageRequest pageRequest = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "created_at"));
+        Page<PortFolio> searchPortfolioLangList = portFolioRepository.getSearchPortfolioList1(likeQueryBuilder.toString(), pageRequest);
+
+        System.out.println();
+        return searchPortfolioLangList;
+    }
 
     public Page<PortFolio> findPortfoliosView(int page, int size){
 
