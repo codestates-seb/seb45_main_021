@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { AiOutlineFire } from 'react-icons/ai';
 import { styled } from 'styled-components';
 
@@ -19,6 +19,7 @@ const StyleEmployBadge = styled.div`
     transform: translateX(${(props) => (props.$isClick ? '0' : '10px')});
     transition: 0.2s;
     font-size: 1.5rem;
+    backdrop-filter: blur(10px);
     font-family: var(--barlow);
     font-weight: var(--barlow-bold);
   }
@@ -33,14 +34,6 @@ const StyleEmployBadge = styled.div`
 export default function EmployBadge({ size }) {
   const [isShow, setIsShow] = useState(false);
 
-  useEffect(() => {
-    const visibleHandler = () => {
-      if (isShow) setIsShow(false);
-    };
-    window.addEventListener('click', visibleHandler);
-    return () => window.removeEventListener('click', visibleHandler);
-  });
-
   const isShowToggleHandler = (e) => {
     e.stopPropagation();
     setIsShow((pre) => !pre);
@@ -49,7 +42,11 @@ export default function EmployBadge({ size }) {
   return (
     <StyleEmployBadge $isClick={isShow}>
       <span>취업을 위한 포트폴리오예요</span>
-      <AiOutlineFire size={size || '3rem'} onClick={isShowToggleHandler} />
+      <AiOutlineFire
+        size={size || '3rem'}
+        onMouseEnter={isShowToggleHandler}
+        onMouseLeave={isShowToggleHandler}
+      />
     </StyleEmployBadge>
   );
 }

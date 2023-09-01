@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
 import useNav from '../hooks/useNav';
 import { FcGoogle } from 'react-icons/fc';
+import Page from '../components/common/Page';
 import { AiFillGithub } from 'react-icons/ai';
 import Input from '../components/common/Input';
 
-const StyleContainer = styled.div`
+const StyleContainer = styled(Page)`
   border: 1px solid white;
   height: 100%;
   display: flex;

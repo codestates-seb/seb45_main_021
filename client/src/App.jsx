@@ -15,11 +15,10 @@ import NotFound from './pages/NotFound';
 import Header from './components/header/Header';
 import Search from './pages/Search';
 import { styled } from 'styled-components';
-
+import Inner from './components/common/Inner';
 const StyleApp = styled.div`
   .main-content {
-    padding-top: 55px;
-    height: 100vh;
+    width: 100vw;
   }
 `;
 

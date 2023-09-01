@@ -87,7 +87,6 @@ export default function Select({ width, options, itemValue, onClickHandler, font
 
   return (
     <Container className="col" $width={width} $fontSize={fontSize}>
-    <div>
       <StyleSelect onClick={handleClick}>
         <StyleValue>{itemValue}</StyleValue>
         <StyleIcon $isOn={isOn}>▼</StyleIcon>
@@ -106,6 +105,5 @@ export default function Select({ width, options, itemValue, onClickHandler, font
         ))}
       </StyleDropMenu>
     </Container>
-    </div>
   );
 }

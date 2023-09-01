@@ -8,23 +8,24 @@ import Language from '../common/Language';
 import useNav from '../../hooks/useNav';
 import Tag from '../common/Tag';
 import EmployBadge from '../common/EmployBadge';
+
 const StyleAboutPortfolioCard = styled.div`
   height: 35rem;
   width: 60rem;
   background-image: url(${(props) => props.$background});
-  /* background-size: cover; */
+  background-size: cover;
   background-color: white;
   margin: 0 auto;
   border-radius: 5px;
   position: relative;
   overflow: hidden;
   .center {
-    width: 60rem;
+    width: 60rem !important;
     padding: 2rem;
-    justify-content: center;
-    gap: 3rem;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    gap: 3rem !important;
   }
   h3 {
     cursor: pointer;
