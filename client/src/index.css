@@ -41,7 +41,9 @@ html {
   left: 9999%;
   bottom: 9999%;
 }
-
+body {
+  height: 1000rem;
+}
 button {
   color: var(--black-100);
   background-color: transparent;
