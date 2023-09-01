@@ -7,8 +7,6 @@ import { AiFillGithub } from 'react-icons/ai';
 import Input from '../components/common/Input';
 
 const StyleContainer = styled(Page)`
-  border: 1px solid white;
-  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;

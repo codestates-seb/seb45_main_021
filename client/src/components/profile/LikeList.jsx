@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import Select from '../common/Select';
 import ListItem from './ListItem';
+import Page from '../common/Page';
 
-const StyleContainer = styled.div`
+const StyleContainer = styled(Page)`
   width: 100%;
-  height: 100vh;
   background-color: var(--black-800);
   gap: 2rem;
   padding: 1rem;
@@ -58,7 +58,10 @@ const StyleContainer = styled.div`
 export default function LikeList({ id, data }) {
   const [filter, setfilter] = useState({
     value: '포트폴리오',
-    options: [{ value: '포트폴리오' }, { value: '프로젝트' }],
+    options: [
+      { label: '포트폴리오', value: '포폴' },
+      { label: '프로젝트', value: '플젝' },
+    ],
   });
 
   const handleClickFilter = (target) => {
@@ -84,9 +87,9 @@ export default function LikeList({ id, data }) {
           <p>조회수</p>
           <p>좋아요</p>
         </li>
-        {filter.value === '포트폴리오'
+        {filter.value === '포폴'
           ? data[0].map((el, i) => <ListItem key={i} data={el} type="좋아요/포트폴리오" />)
-          : filter.value === '프로젝트'
+          : filter.value === '플젝'
           ? data[1].map((el, i) => <ListItem key={i} data={el} type="좋아요/프로젝트" />)
           : null}
       </ul>

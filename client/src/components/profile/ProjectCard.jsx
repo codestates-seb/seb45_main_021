@@ -70,7 +70,7 @@ export default function ProjectCard({ id, data }) {
         pagination={{ clickable: true }}
         spaceBetween={10}
         slideToClickedSlide={true}
-        initialSlide={isEdit.fetch || isEdit.new ? 1 : 0}
+        initialSlide={isEdit.fetch || isEdit.new ? 0 : 1}
       >
         {!isEdit.fetch &&
           !isEdit.new &&

@@ -7,8 +7,9 @@ import Portfolio from '../components/profile/Portfolio';
 import LikeList from '../components/profile/LikeList';
 import ProjectCard from '../components/profile/ProjectCard';
 import AnchorMenu from '../components/profile/AnchorMenu';
+import Page from '../components/common/Page';
 
-const StyleContainer = styled.div`
+const StyleContainer = styled(Page)`
   width: 100%;
   padding-top: 2rem;
   padding-top: 55px;

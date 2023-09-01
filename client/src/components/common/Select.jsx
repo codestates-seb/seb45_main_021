@@ -40,6 +40,7 @@ const StyleDropMenu = styled.div`
   overflow: auto;
   opacity: ${(props) => (props.$isOn ? '1' : '0')};
   height: fit-content;
+  background-color: black;
   transition: all 0.3s;
 `;
 
@@ -47,7 +48,6 @@ const StyleDropMenuItem = styled.div`
   width: 100%;
   padding: 1rem;
   transition: all 0.3s;
-  background-color: black;
   cursor: pointer;
   &:hover {
     background-color: #7d6a6a;
@@ -71,7 +71,7 @@ const StyleDropMenuItem = styled.div`
 export default function Select({ width, options, value, onClickHandler, fontSize }) {
   const [isOn, setIsOn] = useState(false);
   const [selectedLabel, setSelectedLabel] = useState(value);
- 
+
   const handleClick = (e) => {
     e.stopPropagation();
     setIsOn((prev) => !prev);
@@ -102,7 +102,7 @@ export default function Select({ width, options, value, onClickHandler, fontSize
             }}
             $isOn={isOn}
           >
-            {el.value}
+            {el.label}
           </StyleDropMenuItem>
         ))}
       </StyleDropMenu>
