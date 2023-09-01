@@ -82,8 +82,8 @@ public class PortFolioController {
     }
 
     //검색에 의한 리스트 요청
-    @GetMapping("/search")
-    public ResponseEntity getPortfolios(@RequestParam(required = false, defaultValue = "1") int page,
+    @GetMapping("/tagSearch")
+    public ResponseEntity getPortfoliosTag(@RequestParam(required = false, defaultValue = "1") int page,
                                         @RequestParam(required = false, defaultValue = "12") int size,
                                         @RequestParam("tag") String[] tag ){
         Page<PortFolio> resultSearchTags = portFolioService.findTagPortfolio(page,size,tag);
@@ -91,6 +91,16 @@ public class PortFolioController {
 
         return new ResponseEntity(
                 new MultiResponseDto<>(portfolioResponseDtoList, resultSearchTags),HttpStatus.OK);
+    }
+    @GetMapping("/langSearch")
+    public ResponseEntity getPortfoliosLang(@RequestParam(required = false, defaultValue = "1") int page,
+                                        @RequestParam(required = false, defaultValue = "12") int size,
+                                        @RequestParam("lang") String[] lang ){
+        Page<PortFolio> resultSearchLang = portFolioService.findLangPortfolio(page,size,lang);
+        List<PortFolioDto.Response> portfolioResponseDtoList = mapper.portfoliosToPortfolioResponseDtos(resultSearchLang.getContent());
+
+        return new ResponseEntity(
+                new MultiResponseDto<>(portfolioResponseDtoList, resultSearchLang),HttpStatus.OK);
     }
 
     //포트폴리오 View 정렬 조회

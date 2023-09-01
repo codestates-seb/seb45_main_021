@@ -1,7 +1,7 @@
 package com.seb_45_main_021.unkwon.member.entity;
 
 import com.seb_45_main_021.unkwon.audit.Auditable;
-import com.seb_45_main_021.unkwon.comment.entity.Comment;
+import com.seb_45_main_021.unkwon.heart.entity.Heart;
 import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
 import lombok.*;
 
@@ -49,6 +49,9 @@ public class Member extends Auditable {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     List<PortFolio> portfolios = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Heart> hearts;
 
     public void updatePassword(String newPassword){
         this.password = newPassword;
