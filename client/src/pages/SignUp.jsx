@@ -4,6 +4,7 @@ import useNav from '../hooks/useNav';
 import { FcGoogle } from 'react-icons/fc';
 import { AiFillGithub } from 'react-icons/ai';
 import Input from '../components/common/Input';
+import api from '../hooks/useAxiosInterceptor';
 
 const StyleContainer = styled.div`
   border: 1px solid white;
@@ -111,6 +112,7 @@ export default function SignUp() {
   };
 
   const handleSubmitForm = () => {
+    api.post('/members/signup', { name, email, password });
     setError({ name: '', email: '', password: '' });
   };
 

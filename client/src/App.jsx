@@ -16,12 +16,14 @@ import Header from './components/header/Header';
 import Search from './pages/Search';
 import { styled } from 'styled-components';
 import BackGround from './components/common/BackGround';
+import { useAxiosInterceptor } from './hooks/useAxiosInterceptor';
 
 const StyleApp = styled.div`
   width: 100vw;
 `;
 
 function App() {
+  useAxiosInterceptor();
   return (
     <StyleApp>
       <BackGround />
