@@ -13,14 +13,13 @@ import PortfolioWrite from './pages/PortfolioWrite';
 import Portfolio from './pages/Portfolio';
 import NotFound from './pages/NotFound';
 import Header from './components/header/Header';
+import Search from './pages/Search';
 import { styled } from 'styled-components';
 import Inner from './components/common/Inner';
 
 const StyleApp = styled.div`
-  .center {
+  .main-content {
     padding-top: 55px;
-  }
-  .height {
     height: 100vh;
   }
 `;
@@ -29,11 +28,9 @@ function App() {
   return (
     <StyleApp>
       <Header />
-      <Routes>
-        <Route path="/" element={<About />} />
-      </Routes>
-      <Inner className="center height">
+      <Inner className="main-content">
         <Routes>
+          <Route path="/" element={<About />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/profile/:userId" element={<Profile />} />
@@ -45,6 +42,8 @@ function App() {
           <Route path="/portfolio/write" element={<PortfolioWrite />} />
           <Route path="/portfolio/detail/:portfolioId" element={<PortfolioDetail />} />
           <Route path="/portfolio/edit/:portfolioId" element={<PortfolioEdit />} />
+          <Route path="/search/project/:projectId" element={<Search />} />
+          <Route path="/search/portfolio/:portfolioId" element={<Search />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Inner>
