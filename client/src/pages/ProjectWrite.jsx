@@ -6,9 +6,9 @@ import FileInput from '../components/common/FileInput';
 import { StyleBorderButton } from '../components/common/Buttons';
 import  useForm  from '../hooks/useWrite';
 import DateSelect from '../components/common/DateSelect';
+import Page from './../components/common/Page';
 
-const StyleProjectWrite = styled.div`
-  width:100%;
+const StyleProjectWrite = styled(Page)`
   height:auto;
   background-color: var(--backgroundColor);
   margin-top:6rem;
@@ -63,8 +63,8 @@ export default function ProjectWrite() {
   const time = new Date();
   const initialState = {
     title:'',
-    language : '-',
-    totalPeople : '-',
+    language : 'JAVA',
+    totalPeople : 2,
     year : time.getFullYear(),
     month : time.getMonth()+1,
     day : time.getDate(),
@@ -84,6 +84,11 @@ export default function ProjectWrite() {
     },
     language : {
       min : 1,
+      max : 1,
+    },
+    totalPeople : {
+      min : 2,
+      max : 2,
     },
     body : {
       min : 100,
@@ -96,6 +101,7 @@ export default function ProjectWrite() {
   }
   //errors에 하나라도 있으면 
   const [dataForm,setDataForm,errors] = useForm(initialState, validationRules);
+
   const width = '100%';
   const height = '30rem';
   console.log(dataForm);
@@ -103,6 +109,7 @@ export default function ProjectWrite() {
 
   //테스트용
   const languagesOptions = [
+    {value : '', label : '-'},
     {value : 'JAVA', label : 'JAVA'},
     {value : 'JAVASCRIPT', label : 'JAVASCRIPT'},
     {value : 'C++', label : 'C++'},
@@ -123,6 +130,12 @@ export default function ProjectWrite() {
     {value : 10, label : 10},
   ]
 
+  const subMitHandler = () => {
+    if(Object.keys(errors).length) {
+
+    }
+  }
+
   return (
     <StyleProjectWrite className='col'>
       <div className='header'>
@@ -140,18 +153,20 @@ export default function ProjectWrite() {
           <Select
             width={width}
             options={languagesOptions}
-            itemValue={dataForm.language}
+            value={dataForm.language}
             onClickHandler={(e)=>setDataForm(e, 'language')}
           />
+          <div>{errors.language}</div>
           {/* Select디브는 position이 relative라 요소가 겹침 margin-box로 해결함 */}
           <div className='margin-box'/>
           <p>{'모집할 인원을 선택해주세요.'}</p>
           <Select
             width={width}
             options={totalPeopleOptions}
-            itemValue={dataForm.totalPeople}
+            value={dataForm.totalPeople}
             onClickHandler={(e)=>setDataForm(e, 'totalPeople')}
           />
+          <div>{errors.totalPeople}</div>
           {/* Select디브는 position이 relative라 요소가 겹침 margin-box로 해결함 */}
           <div className='margin-box'/>
           <p>{'프로젝트 마감 날짜를 선택 해 주세요. (모집 시작은 작성일 기준입니다.)'}</p>
@@ -159,19 +174,19 @@ export default function ProjectWrite() {
             <Select
               width={width}
               options={totalPeopleOptions}
-              itemValue={dataForm.year}
+              value={dataForm.year}
               onClickHandler={(e)=>setDataForm(e, 'year')}
             />
             <Select
               width={width}
               options={totalPeopleOptions}
-              itemValue={dataForm.month}
+              value={dataForm.month}
               onClickHandler={(e)=>setDataForm(e, 'month')}
             />
             <Select
               width={width}
               options={totalPeopleOptions}
-              itemValue={dataForm.day}
+              value={dataForm.day}
               onClickHandler={(e)=>setDataForm(e, 'day')}
             />
           </div> */}

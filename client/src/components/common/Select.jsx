@@ -70,7 +70,8 @@ const StyleDropMenuItem = styled.div`
  */
 export default function Select({ width, options, value, onClickHandler, fontSize }) {
   const [isOn, setIsOn] = useState(false);
-
+  const [selectedLabel, setSelectedLabel] = useState(value);
+ 
   const handleClick = (e) => {
     e.stopPropagation();
     setIsOn((prev) => !prev);
@@ -86,9 +87,9 @@ export default function Select({ width, options, value, onClickHandler, fontSize
   }, []);
 
   return (
-    <Container className="col" $width={width} $fontSize={fontSize}>
+    <Container className="col" $width={width}>
       <StyleSelect onClick={handleClick}>
-        <StyleValue>{value}</StyleValue>
+        <StyleValue>{selectedLabel}</StyleValue>
         <StyleIcon $isOn={isOn}>▼</StyleIcon>
       </StyleSelect>
       <StyleDropMenu className="col" $isOn={isOn}>
@@ -97,6 +98,7 @@ export default function Select({ width, options, value, onClickHandler, fontSize
             key={i}
             onClick={() => {
               onClickHandler(el.value);
+              setSelectedLabel(el.label);
             }}
             $isOn={isOn}
           >
