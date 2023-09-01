@@ -7,7 +7,6 @@ import video from '../../static/videos/third.mp4';
 import { StyleBorderButton } from '../common/Buttons';
 
 const StyleAboutThird = styled(Section)`
-  position: relative;
   perspective: 50rem;
   .rotation-box {
     width: 85rem;
@@ -37,9 +36,6 @@ const StyleAboutThird = styled(Section)`
     font-family: var(--monoton);
   }
 
-  .filter {
-    backdrop-filter: none;
-  }
   button {
     border-radius: 3px;
     font-size: 1.8rem;
@@ -53,6 +49,8 @@ const StyleAboutThird = styled(Section)`
 export default function AboutThird({ activePage }) {
   const { toPortfolio, toProject, toSignin, toSignup } = useNav();
   const [location, setLocation] = useState({ x: 0, y: 0 });
+  const stringArr = ['SideProject', 'Portfolio', 'Experience', 'Connection'];
+
   const maxRotation = 2;
   useEffect(() => {
     if (activePage === 2) {
@@ -84,18 +82,12 @@ export default function AboutThird({ activePage }) {
           <StyleBorderButton onClick={toSignup}>회원가입</StyleBorderButton>
         </div>
         <div className="info-item col ">
-          <div>
-            <span>S</span>ideProject
-          </div>
-          <div>
-            <span>P</span>ortFolio
-          </div>
-          <div>
-            <span>E</span>xperience
-          </div>
-          <div>
-            <span>C</span>onnection
-          </div>
+          {stringArr.map((str, i) => (
+            <div key={i}>
+              <span>{str.slice(0, 1)}</span>
+              {str.slice(1)}
+            </div>
+          ))}
         </div>
       </div>
     </StyleAboutThird>

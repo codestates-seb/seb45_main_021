@@ -6,50 +6,43 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import img from '../../static/images/second.jpg';
 import { useEffect, useState } from 'react';
+import data from '../../static/portfolio.json';
+import AboutPortfolioCard from './AboutPortfolioCard';
+import StyleFilter from '../common/Filter';
 
 const StyleAboutSecond = styled(Section)`
   background-image: url(${img});
-  background-repeat: no-repeat;
   background-size: cover;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  .filter {
-    position: absolute;
-    width: 100vw;
-    height: 100vh;
-    background-color: #00000048;
-  }
   .center {
     display: flex;
     gap: 1rem;
     width: var(--inner);
+    height: 35rem;
   }
   .page-description {
-    position: relative;
-    padding-right: 30px;
-    margin-right: 10px;
-    width: var(--inner);
+    flex: 1;
     h3 {
+      flex: 1;
       font-size: 10rem;
-      margin-top: -2rem;
+      margin-top: -1.5rem;
+      margin-left: -0.5rem;
       font-family: var(--barlow);
       color: var(--black-100);
-      text-shadow: 3px 3px 2px var(--black-800);
+      text-shadow: 3px 3px 6px var(--black-800);
     }
     p {
-      padding-top: 3rem;
       line-height: 1.8;
       font-size: 2rem;
       font-weight: var(--nanum-semi-bold);
-      text-shadow: 2px 2px 2px var(--black-800);
+      text-shadow: 2px 2px 6px var(--black-800);
     }
   }
   .wrapper {
-    width: 65rem;
+    width: 70rem;
   }
   .swiper-wrapper {
     transition-timing-function: ease !important;
+    transition-duration: 0.7s !important;
     transition-duration: 0.7s !important;
   }
   .swiper-slide {
@@ -60,10 +53,6 @@ const StyleAboutSecond = styled(Section)`
   .swiper-slide-active {
     transform: scale(1);
     opacity: 1;
-  }
-  .card {
-    height: 40rem;
-    background-color: #ffffff34;
   }
   .swiper-button-prev,
   .swiper-button-next {
@@ -77,6 +66,7 @@ const StyleAboutSecond = styled(Section)`
 export default function AboutSecond({ activePage }) {
   const [ranking, setRanking] = useState(1);
   const [swiperInstance, setSwiperInstance] = useState(null);
+  const [portfolios, setPortfolios] = useState([]);
 
   useEffect(() => {
     if (swiperInstance) {
@@ -94,9 +84,9 @@ export default function AboutSecond({ activePage }) {
 
   return (
     <StyleAboutSecond>
-      <div className="filter"></div>
+      <StyleFilter $background="#00000050" />
       <div className="center ">
-        <div className="page-description">
+        <div className="page-description col">
           <h3>BEST {ranking}</h3>
           <p>
             SPEC에서 현재 가장 핫한 포트폴리오 10선을 소개합니다 <br />
@@ -107,7 +97,6 @@ export default function AboutSecond({ activePage }) {
             서로의 영감을 나눌 수 있는 공간을 만들고자 합니다.
           </p>
         </div>
-
         <div className="wrapper">
           <Swiper
             modules={[Navigation]}
@@ -116,27 +105,11 @@ export default function AboutSecond({ activePage }) {
             navigation={true}
             onSlideChange={swiperSwitchHandler}
           >
-            <SwiperSlide>
-              <div className="card"></div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div className="card"></div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div className="card"></div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div className="card"></div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div className="card"></div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div className="card"></div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div className="card"></div>
-            </SwiperSlide>
+            {data.portfolios.map((portfolio) => (
+              <SwiperSlide key={portfolio.id}>
+                <AboutPortfolioCard portfolio={portfolio} />
+              </SwiperSlide>
+            ))}
           </Swiper>
         </div>
       </div>

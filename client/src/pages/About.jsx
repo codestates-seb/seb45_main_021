@@ -9,13 +9,13 @@ import 'swiper/css/pagination';
 import { styled } from 'styled-components';
 
 const StyleAbout = styled.div`
+  margin-top: -55px;
   & > .swiper {
     width: 100vw;
     height: 100vh;
     position: fixed;
     left: 0;
   }
-
   .swiper-wrapper {
     transition-timing-function: ease-in-out;
     transition-duration: 1s !important;
@@ -48,6 +48,7 @@ export default function About() {
     setActivePage(swiper.activeIndex);
     header.style.top = swiper.activeIndex === 0 ? '0' : '-100%';
   };
+
   return (
     <StyleAbout>
       <Swiper
@@ -58,7 +59,7 @@ export default function About() {
         mousewheel={true}
         pagination={{ clickable: true }}
         onSlideChange={handleSlideChange}
-        initialSlide={2}
+        initialSlide={0}
       >
         <SwiperSlide>
           <AboutFirst activePage={activePage} />
