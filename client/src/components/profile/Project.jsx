@@ -58,7 +58,7 @@ const StyleContainer = styled.div`
 export default function Project({ id, data }) {
   const [filter, setfilter] = useState({
     value: '등록한 프로젝트',
-    options: [{ label: '등록한 프로젝트' }, { label: '참여한 프로젝트' }],
+    options: [{ value: '등록한 프로젝트' }, { value: '참여한 프로젝트' }],
   });
 
   const handleClickFilter = (target) => {
@@ -69,7 +69,7 @@ export default function Project({ id, data }) {
       <h2>프로젝트</h2>
       <div className="filterWrapper">
         <Select
-          itemValue={filter.value}
+          value={filter.value}
           options={filter.options}
           onClickHandler={handleClickFilter}
           width="30rem"

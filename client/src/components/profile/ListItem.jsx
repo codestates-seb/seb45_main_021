@@ -2,7 +2,7 @@ import React from 'react';
 import { styled } from 'styled-components';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { FaRegEye } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import useNav from '../../hooks/useNav';
 
 const ItemContainer = styled.li`
   border-bottom: 1px solid #bdbdbd6e;
@@ -16,15 +16,15 @@ const ItemContainer = styled.li`
 `;
 
 export default function ListItem({ data, type }) {
-  const nav = useNavigate();
+  const { toProfile, toProjectDetail, toPortfolioDetail } = useNav();
 
   const handleClickTitle = () => {
-    if (type === '포트폴리오' || type === '좋아요/포트폴리오') nav(`/project/${data.postId}`);
-    if (type === '프로젝트' || type === '좋아요/프로젝트') nav(`/portfolio/${data.postId}`);
+    if (type === '포트폴리오' || type === '좋아요/포트폴리오') toPortfolioDetail(data.postId);
+    if (type === '프로젝트' || type === '좋아요/프로젝트') toProjectDetail(data.postId);
   };
 
   const handleClickName = () => {
-    nav(`/profile/${data.author.userId}`);
+    toProfile(data.author.userId);
   };
 
   return (

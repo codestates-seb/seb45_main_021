@@ -58,7 +58,7 @@ const StyleContainer = styled.div`
 export default function LikeList({ id, data }) {
   const [filter, setfilter] = useState({
     value: '포트폴리오',
-    options: [{ label: '포트폴리오' }, { label: '프로젝트' }],
+    options: [{ value: '포트폴리오' }, { value: '프로젝트' }],
   });
 
   const handleClickFilter = (target) => {
@@ -69,7 +69,7 @@ export default function LikeList({ id, data }) {
       <h2>좋아요</h2>
       <div className="filterWrapper">
         <Select
-          itemValue={filter.value}
+          value={filter.value}
           options={filter.options}
           onClickHandler={handleClickFilter}
           width="30rem"

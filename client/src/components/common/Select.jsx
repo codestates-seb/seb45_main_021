@@ -102,7 +102,7 @@ export default function Select({ width, options, value, onClickHandler, fontSize
             }}
             $isOn={isOn}
           >
-            {el.label}
+            {el.value}
           </StyleDropMenuItem>
         ))}
       </StyleDropMenu>
