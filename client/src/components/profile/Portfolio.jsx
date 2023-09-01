@@ -58,7 +58,7 @@ const StyleContainer = styled.div`
 export default function Portfolio({ id, data }) {
   const [filter, setfilter] = useState({
     value: '구직용',
-    options: [{ label: '구직용' }, { label: '재직용' }],
+    options: [{ value: '구직용' }, { value: '재직용' }],
   });
 
   const handleClickFilter = (target) => {
@@ -69,7 +69,7 @@ export default function Portfolio({ id, data }) {
       <h2>포트폴리오</h2>
       <div className="filterWrapper">
         <Select
-          itemValue={filter.value}
+          value={filter.value}
           options={filter.options}
           onClickHandler={handleClickFilter}
           width="30rem"
