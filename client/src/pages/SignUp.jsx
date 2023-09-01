@@ -5,10 +5,9 @@ import { FcGoogle } from 'react-icons/fc';
 import { AiFillGithub } from 'react-icons/ai';
 import Input from '../components/common/Input';
 import api from '../hooks/useAxiosInterceptor';
+import Page from '../components/common/Page';
 
-const StyleContainer = styled.div`
-  border: 1px solid white;
-  height: 100%;
+const StyleContainer = styled(Page)`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -125,7 +124,7 @@ export default function SignUp() {
       <h3>회원가입</h3>
       <div className="row gap bottom">
         <span>이미 회원이신가요 ?</span>
-        <p onClick={toSignin}>로그인</p>
+        <p onClick={toSignin}>&nbsp;로그인</p>
       </div>
       <StyleRowContainer className="row">
         <StyleColContainer className="col colgap">

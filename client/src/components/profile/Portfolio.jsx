@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import Select from '../common/Select';
 import ListItem from './ListItem';
+import Page from '../common/Page';
 
-const StyleContainer = styled.div`
+const StyleContainer = styled(Page)`
   width: 100%;
-  height: 100vh;
   background-color: var(--black-800);
   gap: 2rem;
   padding: 1rem;
@@ -58,7 +58,10 @@ const StyleContainer = styled.div`
 export default function Portfolio({ id, data }) {
   const [filter, setfilter] = useState({
     value: '구직용',
-    options: [{ value: '구직용' }, { value: '재직용' }],
+    options: [
+      { label: '구직용', value: '구직' },
+      { label: '재직용', value: '재직' },
+    ],
   });
 
   const handleClickFilter = (target) => {
@@ -84,9 +87,9 @@ export default function Portfolio({ id, data }) {
           <p>조회수</p>
           <p>좋아요</p>
         </li>
-        {filter.value === '구직용'
+        {filter.value === '구직'
           ? data[0].map((el, i) => <ListItem key={i} data={el} type="포트폴리오" />)
-          : filter.value === '재직용'
+          : filter.value === '재직'
           ? data[1].map((el, i) => <ListItem key={i} data={el} type="포트폴리오" />)
           : null}
       </ul>
