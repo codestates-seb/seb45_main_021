@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pagination, A11y, Mousewheel } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import AboutFirst from '../components/about/AboutFirst';
@@ -8,13 +8,13 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import { styled } from 'styled-components';
 
-const StyleAbout = styled.div`
-  margin-top: -55px;
+const StyleAbout = styled.main`
   & > .swiper {
     width: 100vw;
     height: 100vh;
     position: fixed;
     left: 0;
+    top: 0;
   }
   .swiper-wrapper {
     transition-timing-function: ease-in-out;
@@ -48,6 +48,13 @@ export default function About() {
     setActivePage(swiper.activeIndex);
     header.style.top = swiper.activeIndex === 0 ? '0' : '-100%';
   };
+
+  useEffect(() => {
+    return () => {
+      const header = document.getElementById('header');
+      header.style.top = '0';
+    };
+  }, []);
 
   return (
     <StyleAbout>

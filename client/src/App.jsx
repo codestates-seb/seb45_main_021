@@ -19,8 +19,7 @@ import Inner from './components/common/Inner';
 
 const StyleApp = styled.div`
   .main-content {
-    padding-top: 55px;
-    height: 100vh;
+    width: 100vw;
   }
 `;
 
