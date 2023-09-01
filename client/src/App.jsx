@@ -15,7 +15,6 @@ import NotFound from './pages/NotFound';
 import Header from './components/header/Header';
 import Search from './pages/Search';
 import { styled } from 'styled-components';
-import Inner from './components/common/Inner';
 
 const StyleApp = styled.div`
   .main-content {
@@ -42,8 +41,8 @@ function App() {
           <Route path="/portfolio/write" element={<PortfolioWrite />} />
           <Route path="/portfolio/detail/:portfolioId" element={<PortfolioDetail />} />
           <Route path="/portfolio/edit/:portfolioId" element={<PortfolioEdit />} />
-          <Route path="/search/project/:projectId" element={<Search />} />
-          <Route path="/search/portfolio/:portfolioId" element={<Search />} />
+          <Route path="/search/project/:keyword" element={<Search />} />
+          <Route path="/search/portfolio/:keyword" element={<Search />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Inner>
