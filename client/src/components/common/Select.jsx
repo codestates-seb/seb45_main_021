@@ -56,13 +56,15 @@ const StyleDropMenuItem = styled.div`
 
 /**
  * 공용 드롭다운
+ * * @description
+ * - const handleClickItem = (item) => {
+    setCurItem(item);
+  };
+ * - props width="30" options={options} itemValue={curItem} onClickHandler={handleClickItem}
  * @param {string} width - 드롭다운 가로 길이
  * @param {object[]} options - 옵션으로 들어올 객체 배열 {value:'옵션'}
  * @param {string} itemValue - 현재 표시할 요소 값 참조
  * @param {function} onClickHandler - 함수 전달시 매개변수가 전달됨 해당 매개변수를 세터 값을 변경하는 함수로 만들고 넣으세요
- * const handleClickItem = (item) => {
-    setCurItem(item);
-  };
  * @returns {JSX.Element}
  */
 export default function Select({ width, options, itemValue, onClickHandler }) {
@@ -83,6 +85,7 @@ export default function Select({ width, options, itemValue, onClickHandler }) {
   }, []);
 
   return (
+    <div>
     <Container className="col" $width={width}>
       <StyleSelect onClick={handleClick}>
         <StyleValue>{itemValue}</StyleValue>
@@ -102,5 +105,6 @@ export default function Select({ width, options, itemValue, onClickHandler }) {
         ))}
       </StyleDropMenu>
     </Container>
+    </div>
   );
 }

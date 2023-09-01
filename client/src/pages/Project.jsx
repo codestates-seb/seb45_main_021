@@ -36,7 +36,7 @@ export default function Project() {
       <Input
         label={'아이디'}
         error={'아 오류 존나뜨네'}
-        width={'30'}
+        width={'30px'}
         value={test}
         onChange={handleChange}
       />

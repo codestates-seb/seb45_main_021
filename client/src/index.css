@@ -26,7 +26,6 @@ html {
   --cobalt: #0074d9;
   --sky-blue: #7fdbff;
   --shadow: #00000020;
-  --inner: 1250px;
   --center: 0 auto;
   --backgroundColor: #222722;
   height: 100vh;
@@ -62,4 +61,13 @@ button {
 .col {
   display: flex;
   flex-direction: column;
+}
+
+.center {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
 }

@@ -12,6 +12,7 @@ const Global = createGlobalStyle`
   font-family: var(--nanum);
   color: var(--black-100);
   -webkit-font-smoothing: antialiased;
+  --inner: 1250px;
  }
  *{
     text-shadow: 2px 2px 2px var(--shadow);
@@ -19,6 +20,12 @@ const Global = createGlobalStyle`
  }
  input {
   outline:none;
+  cursor:text;
+ }
+ textarea {
+  outline:none;
+  cursor:text;
+  resize:none;
  }
  
 `;

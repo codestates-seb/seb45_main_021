@@ -5,16 +5,12 @@ const StyleVideoPlayer = styled.div`
   video {
     position: absolute;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     object-fit: cover;
     touch-action: 'none';
-  }
-  div {
-    width: 100vw;
-    height: 100vh;
-    background-color: #00000064;
-    position: absolute;
-    backdrop-filter: blur(5px);
+    z-index: -1;
+    left: 0;
+    top: 0;
   }
 `;
 export default function VideoPlayer({ src }) {
@@ -23,7 +19,6 @@ export default function VideoPlayer({ src }) {
       <video muted autoPlay loop controls={false}>
         <source src={src} type="video/mp4" />
       </video>
-      <div></div>
     </StyleVideoPlayer>
   );
 }
