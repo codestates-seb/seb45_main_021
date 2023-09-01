@@ -9,6 +9,7 @@ import { StyleBorderButton } from '../common/Buttons';
 import useNav from '../../hooks/useNav';
 
 const StyleProfileContainer = styled.div`
+  display: flex;
   gap: 5rem;
   font-size: 2rem;
   .withdrawal {
@@ -310,7 +311,7 @@ export default function ProfileCard({ id, data }) {
                             setEditProfile({
                               ...editProfile,
                               tags: {
-                                value: editProfile.tags.value.filter((el, idx) => i !== idx),
+                                value: editProfile.tags.value.filter((_, idx) => i !== idx),
                                 curString: editProfile.tags.curString,
                               },
                             })

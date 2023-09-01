@@ -5,7 +5,7 @@ import ListItem from './ListItem';
 
 const StyleContainer = styled.div`
   width: 100%;
-  height: 50rem;
+  height: 100vh;
   background-color: var(--black-800);
   gap: 2rem;
   padding: 1rem;

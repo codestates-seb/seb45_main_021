@@ -10,8 +10,9 @@ import AnchorMenu from '../components/profile/AnchorMenu';
 
 const StyleContainer = styled.div`
   width: 100%;
+  height: 100%;
   padding-top: 2rem;
-  gap: 2rem;
+  padding-top: 55px;
   display: flex;
   flex-direction: column;
   overflow: scroll;
@@ -27,7 +28,7 @@ const data = {
     tags: ['JavaScript', 'React', 'CSS'],
     isWorking: false,
     aboutMe: '나 안산에 사는 코딩을 공부중인 23살 명인쓰인데 리액트 잘하고 css 맛깔나게 짠다.',
-    created_At: '1999.3.3',
+    created_At: '1999-3-3',
   },
   project: [
     [

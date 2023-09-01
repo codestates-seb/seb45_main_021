@@ -14,16 +14,8 @@ import Portfolio from './pages/Portfolio';
 import NotFound from './pages/NotFound';
 import Header from './components/header/Header';
 import { styled } from 'styled-components';
-import Inner from './components/common/Inner';
 
-const StyleApp = styled.div`
-  .center {
-    padding-top: 55px;
-  }
-  .height {
-    height: 100vh;
-  }
-`;
+const StyleApp = styled.div``;
 
 function App() {
   return (
@@ -32,22 +24,20 @@ function App() {
       <Routes>
         <Route path="/" element={<About />} />
       </Routes>
-      <Inner className="center height">
-        <Routes>
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/profile/:userId" element={<Profile />} />
-          <Route path="/project" element={<Project />} />
-          <Route path="/project/write" element={<ProjectWrite />} />
-          <Route path="/project/detail/:projectId" element={<ProjectDetail />} />
-          <Route path="/project/edit/:projectId" element={<ProjectEdit />} />
-          <Route path="/portfolio" element={<Portfolio />} />
-          <Route path="/portfolio/write" element={<PortfolioWrite />} />
-          <Route path="/portfolio/detail/:portfolioId" element={<PortfolioDetail />} />
-          <Route path="/portfolio/edit/:portfolioId" element={<PortfolioEdit />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Inner>
+      <Routes>
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/profile/:userId" element={<Profile />} />
+        <Route path="/project" element={<Project />} />
+        <Route path="/project/write" element={<ProjectWrite />} />
+        <Route path="/project/detail/:projectId" element={<ProjectDetail />} />
+        <Route path="/project/edit/:projectId" element={<ProjectEdit />} />
+        <Route path="/portfolio" element={<Portfolio />} />
+        <Route path="/portfolio/write" element={<PortfolioWrite />} />
+        <Route path="/portfolio/detail/:portfolioId" element={<PortfolioDetail />} />
+        <Route path="/portfolio/edit/:portfolioId" element={<PortfolioEdit />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </StyleApp>
   );
 }

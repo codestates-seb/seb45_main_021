@@ -7,6 +7,7 @@ import { styled } from 'styled-components';
  * @param {string} fontSize - 폰트 크기
  * @param {string} hoverEvent - 호버 이벤트를 추가로 줄 수 있습니다
  * @param {string} borderColor - 테두리 색 지정
+ * @param {string} color - 버튼 색 컬러 지정
  * @return {JSX.Element}
  */
 export const StyleBorderButton = styled.button`

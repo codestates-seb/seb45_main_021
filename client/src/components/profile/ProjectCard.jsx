@@ -9,9 +9,17 @@ import SwiperEdit from './SwiperEdit';
 
 const StyleContainer = styled.div`
   width: 100%;
-  height: 70rem;
+  height: 100vh;
   padding: 2rem;
   background-color: var(--black-800);
+  position: relative;
+  h2 {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    font-size: 3rem;
+    font-weight: 800;
+  }
   .swiper {
     width: 100%;
     height: 100%;
@@ -30,19 +38,30 @@ const StyleContainer = styled.div`
 
 export default function ProjectCard({ id, data }) {
   const [activePage, setActivePage] = useState(0);
-  const [isEdit, setIsEdit] = useState(false);
+  const [isEdit, setIsEdit] = useState({ fetch: false, new: false });
   const [editIdx, setEditIdx] = useState(null);
   const handleSlideChange = (swiper) => {
     setActivePage(swiper.activeIndex);
   };
-  const handleIsEdit = () => {
-    setIsEdit((prev) => !prev);
+  const handleIsEdit = (type) => {
+    if (type === 'fetch') {
+      setIsEdit({ ...isEdit, fetch: !isEdit.fetch });
+    }
+    if (type === 'new') {
+      setIsEdit({ ...isEdit, new: !isEdit.new });
+    }
+    if (type === 'all') {
+      setIsEdit({ fetch: false, new: false });
+      setEditIdx(null);
+    }
   };
   const handleEditIdx = (target) => {
     setEditIdx(target);
   };
+
   return (
     <StyleContainer id={id}>
+      <h2>프로젝트 카드</h2>
       <Swiper
         modules={[Pagination]}
         onSlideChange={handleSlideChange}
@@ -51,9 +70,10 @@ export default function ProjectCard({ id, data }) {
         pagination={{ clickable: true }}
         spaceBetween={10}
         slideToClickedSlide={true}
-        initialSlide={1}
+        initialSlide={isEdit.fetch || isEdit.new ? 1 : 0}
       >
-        {!isEdit &&
+        {!isEdit.fetch &&
+          !isEdit.new &&
           data.map((el, i) => (
             <SwiperSlide key={i}>
               <SwiperItem
@@ -65,9 +85,14 @@ export default function ProjectCard({ id, data }) {
               />
             </SwiperSlide>
           ))}
-        {isEdit && editIdx !== null && (
+        {(isEdit.fetch || isEdit.new) && editIdx !== null && (
           <SwiperSlide>
-            <SwiperEdit data={data[editIdx]} />
+            <SwiperEdit
+              data={data[editIdx]}
+              idx={editIdx}
+              handler={handleIsEdit}
+              type={isEdit.fetch ? 'fetch' : isEdit.new ? 'new' : ''}
+            />
           </SwiperSlide>
         )}
       </Swiper>
