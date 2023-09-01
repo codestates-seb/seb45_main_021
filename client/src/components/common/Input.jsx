@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { styled } from 'styled-components';
 
 const StyleErrorInput = styled.div`
@@ -33,11 +33,11 @@ const StyleInput = styled.input`
   font-size: ${(props) => (props.$fontSize ? props.$fontSize : '1.5rem')};
 `;
 
-const StyleError = styled.div`
-  width: fit-content;
-  height: 1rem;
-  opacity: ${(props) => (props.error === '' ? 0 : 1)};
-`;
+// const StyleError = styled.div`
+//   width: fit-content;
+//   height: 1rem;
+//   opacity: ${(props) => (props.error === '' ? 0 : 1)};
+// `;
 
 const StyleTextArea = styled.textarea`
   background: none;
@@ -78,7 +78,7 @@ export default function Input({
   labelColor,
   borderColor,
   onChangeHandler,
-  type = 'text',
+  type,
   ...rest
 }) {
   return (
@@ -86,13 +86,23 @@ export default function Input({
       <Label htmlFor={name} $labelColor={labelColor}>
         {label}
       </Label>
-      {type === 'text' || type === 'password' ? (
+      {type === 'text' ? (
         <StyleInput
           $width={width}
           $height={height}
           $color={color}
           $borderColor={borderColor}
           onChange={onChangeHandler}
+          {...rest}
+        />
+      ) : type === 'password' ? (
+        <StyleInput
+          $width={width}
+          $height={height}
+          $color={color}
+          $borderColor={borderColor}
+          onChange={onChangeHandler}
+          type="password"
           {...rest}
         />
       ) : type === 'textarea' ? (
