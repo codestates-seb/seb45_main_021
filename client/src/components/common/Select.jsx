@@ -68,7 +68,7 @@ const StyleDropMenuItem = styled.div`
  * @param {function} onClickHandler - 함수 전달시 매개변수가 전달됨 해당 매개변수를 세터 값을 변경하는 함수로 만들고 넣으세요
  * @returns {JSX.Element}
  */
-export default function Select({ width, options, itemValue, onClickHandler, fontSize }) {
+export default function Select({ width, options, value, onClickHandler, fontSize }) {
   const [isOn, setIsOn] = useState(false);
 
   const handleClick = (e) => {
@@ -87,9 +87,8 @@ export default function Select({ width, options, itemValue, onClickHandler, font
 
   return (
     <Container className="col" $width={width} $fontSize={fontSize}>
-    <div>
       <StyleSelect onClick={handleClick}>
-        <StyleValue>{itemValue}</StyleValue>
+        <StyleValue>{value}</StyleValue>
         <StyleIcon $isOn={isOn}>▼</StyleIcon>
       </StyleSelect>
       <StyleDropMenu className="col" $isOn={isOn}>
@@ -97,15 +96,14 @@ export default function Select({ width, options, itemValue, onClickHandler, font
           <StyleDropMenuItem
             key={i}
             onClick={() => {
-              onClickHandler(el.label);
+              onClickHandler(el.value);
             }}
             $isOn={isOn}
           >
-            {el.label}
+            {el.value}
           </StyleDropMenuItem>
         ))}
       </StyleDropMenu>
     </Container>
-    </div>
   );
 }
