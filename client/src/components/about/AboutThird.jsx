@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
-import Section from '../common/Section';
 import useNav from '../../hooks/useNav';
 import VideoPlayer from './VideoPlayer';
 import video from '../../static/videos/third.mp4';
 import { StyleBorderButton } from '../common/Buttons';
 
-const StyleAboutThird = styled(Section)`
+const StyleAboutThird = styled.section`
+  width: 100vw;
+  height: 100vh;
+  position: relative;
   perspective: 50rem;
   .rotation-box {
     width: 85rem;

@@ -1,4 +1,3 @@
-import Section from '../common/Section';
 import { styled } from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
@@ -10,7 +9,10 @@ import data from '../../static/portfolio.json';
 import AboutPortfolioCard from './AboutPortfolioCard';
 import StyleFilter from '../common/Filter';
 
-const StyleAboutSecond = styled(Section)`
+const StyleAboutSecond = styled.section`
+  width: 100vw;
+  height: 100vh;
+  position: relative;
   background-image: url(${img});
   background-size: cover;
   .center {

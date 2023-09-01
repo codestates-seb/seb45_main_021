@@ -1,5 +1,4 @@
 import { styled } from 'styled-components';
-import Section from '../common/Section';
 import VideoPlayer from './VideoPlayer';
 import { useEffect, useState } from 'react';
 import video from '../../static/videos/first.mp4';
@@ -7,7 +6,7 @@ import { MdKeyboardDoubleArrowDown } from 'react-icons/md';
 import { BsMouse } from 'react-icons/bs';
 import StyleFilter from '../common/Filter';
 
-const StyleAboutFirst = styled(Section)`
+const StyleAboutFirst = styled.section`
   .center {
     width: 60rem;
     height: 18rem;

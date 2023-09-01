@@ -48,7 +48,7 @@ export default function useNav() {
     toPortfolioWrite,
     toProjectDetail,
     toPortfolioDetail,
-    toProfileDetail,
+    toProfile,
     toSearch,
   };
 }
