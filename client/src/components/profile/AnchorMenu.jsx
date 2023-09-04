@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
 import { BsQuestionCircleFill } from 'react-icons/bs';
 import AnchorLink from 'react-anchor-link-smooth-scroll';
@@ -43,11 +43,25 @@ const LinkItem = styled.div`
 `;
 
 export default function AnchorMenu() {
-  const [isClick, setIsClick] = useState(false);
+  const [isOn, setIsOn] = useState(false);
+
+  const handleIsOn = (e) => {
+    e.stopPropagation();
+    setIsOn((prev) => !prev);
+  };
+
+  const handleIsOnfalse = () => {
+    setIsOn(false);
+  };
+
+  useEffect(() => {
+    window.addEventListener('click', handleIsOnfalse);
+    return () => window.removeEventListener('click', handleIsOnfalse);
+  }, []);
 
   return (
     <StyleContainer>
-      {isClick && (
+      {isOn && (
         <LinkContainer>
           <AnchorLink href="#profile">
             <LinkItem>프로필</LinkItem>
@@ -66,7 +80,7 @@ export default function AnchorMenu() {
           </AnchorLink>
         </LinkContainer>
       )}
-      <BsQuestionCircleFill size={50} onClick={() => setIsClick((prev) => !prev)} />
+      <BsQuestionCircleFill size={50} onClick={handleIsOn} />
     </StyleContainer>
   );
 }

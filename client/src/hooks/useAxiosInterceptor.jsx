@@ -44,12 +44,12 @@ export const useAxiosInterceptor = () => {
     },
     (error) => {
       console.log(error);
-      let msg;
-      if (error.response.data.message) {
-        msg = error.response.data.message;
+      let message;
+      if (error?.response?.data?.message) {
+        message = error.response.data.message;
       }
 
-      if (msg && msg === 'refreshToken has expired') {
+      if (message === 'refreshToken has expired') {
         dispatch(deleteUser());
         window.alert('토큰이 만료되어 자동으로 로그아웃 되었습니다.');
         toSignin();

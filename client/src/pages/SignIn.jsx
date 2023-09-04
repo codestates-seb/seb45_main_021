@@ -7,7 +7,8 @@ import { AiFillGithub } from 'react-icons/ai';
 import Input from '../components/common/Input';
 import api from '../hooks/useAxiosInterceptor';
 import { useDispatch } from 'react-redux';
-import { updateUser } from '../redux/userform/userslice';
+import { updateUser, deleteUser } from '../redux/userform/userslice';
+import { isValidEmail, isValidPassword } from '../components/profile/isValid';
 
 const StyleContainer = styled(Page)`
   display: flex;
@@ -16,6 +17,7 @@ const StyleContainer = styled(Page)`
   align-items: center;
   gap: 2rem;
   font-size: 2rem;
+
   h3 {
     font-size: 5rem;
     font-weight: 700;
@@ -97,7 +99,7 @@ export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState({ email: '', password: '' });
-  const { toSignup } = useNav;
+  const { toSignup } = useNav();
   const dispatch = useDispatch();
 
   const handleChangeEmail = (e) => {
@@ -110,27 +112,44 @@ export default function SignIn() {
 
   const handleSubmitForm = () => {
     try {
-      api.post('/members/login', { email, password }).then((el) => {
-        console.log(el.data);
-        dispatch(updateUser({ isLogin: true, userInfo: { ...el.data } }));
-      });
+      const isvalidEmail = isValidEmail(email);
+      const isvalidPassword = isValidPassword(password);
+      if (isvalidEmail && isvalidPassword) {
+        setError({ email: '', password: '' });
+        api.post('/members/login', { email, password }).then((el) => {
+          dispatch(updateUser({ isLogin: true, userInfo: { ...el.data } }));
+          const { accesstoken, refreshtoken } = el.headers;
+          if (accesstoken && refreshtoken) {
+            dispatch(updateUser({ jwt: { accesstoken: accesstoken, refreshtoken: refreshtoken } }));
+          }
+        });
+      } else if (!isvalidEmail && !isvalidPassword) {
+        setError({
+          email: '올바른 이메일 형식을 입력해주세요.',
+          password: '영어,숫자,특수기호 포함 8글자 이상으로 입력해주세요.',
+        });
+      } else if (!isvalidEmail) {
+        setError({ ...error, email: '올바른 이메일 형식을 입력해주세요.' });
+      } else if (!isvalidPassword) {
+        setError({ ...error, password: '영어,숫자,특수기호 포함 8글자 이상으로 입력해주세요.' });
+      }
     } catch (error) {
       console.log(error);
+      setError({ email: '다시 확인해주세요.', password: '다시 확인해주세요.' });
     }
-
-    setError({ email: '', password: '' });
   };
 
   useEffect(() => {
     // 마운트 함수
+    dispatch(deleteUser());
   }, []);
 
   return (
     <StyleContainer>
       <h3>로그인</h3>
       <div className="row gap bottom">
-        <span>회원가입이 필요하신가요 ? &nbsp;</span>
-        <p onClick={toSignup}>{'회원가입 '}</p>
+        <span>회원가입이 필요하신가요 ?</span>
+        <p onClick={toSignup}>&nbsp;회원가입</p>
       </div>
       <StyleRowContainer className="row">
         <StyleColContainer className="col colgap">
