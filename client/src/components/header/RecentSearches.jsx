@@ -1,37 +1,40 @@
 import React from 'react';
 import { styled } from 'styled-components';
-import { HiXMark } from 'react-icons/hi2';
 import useNav from '../../hooks/useNav';
 
 const StyleRecentSearches = styled.div`
   position: absolute;
-
   top: 45px;
   width: 100%;
-  background-color: var(--black-100);
+  background-color: #181818;
+  box-shadow: 0 3px 5px 1px var(--shadow);
   border-radius: 10px;
-  color: black;
-  padding: 2rem;
+  padding: 2rem 0;
+  button {
+    color: var(--cobalt);
+  }
   .top-menu {
     font-size: 1.3rem;
     display: flex;
+    padding: 5px 2rem;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     h4 {
       flex: 1;
       font-weight: var(--nanum-bold);
     }
-    button {
-      color: var(--cobalt);
-    }
   }
   .history-item {
+    padding: 5px 2rem;
     font-size: 1.5rem;
     font-family: var(--nanum);
     font-weight: var(--nanum-semi-bold);
     display: flex;
     align-items: center;
-    transition: 1s;
+    margin-bottom: 5px;
+    &:hover {
+      background-color: var(--black-700);
+    }
     span {
       cursor: pointer;
       flex: 1;
@@ -39,12 +42,6 @@ const StyleRecentSearches = styled.div`
     svg,
     path {
       cursor: pointer;
-    }
-    button {
-      color: var(--black-500);
-      &:hover {
-        color: black;
-      }
     }
   }
   .not-found {
@@ -69,9 +66,7 @@ export default function RecentSearches({ searchHistory, clearSearchHistory, dele
           {searchHistory.map((keyword, i) => (
             <li className="history-item" key={i}>
               <span onClick={() => toSearch(keyword, 'project')}>{keyword}</span>
-              <button onClick={() => deleteSearchHistory(keyword)}>
-                <HiXMark size={20} />
-              </button>
+              <button onClick={() => deleteSearchHistory(keyword)}>삭제</button>
             </li>
           ))}
         </ul>

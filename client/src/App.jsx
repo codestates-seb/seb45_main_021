@@ -14,18 +14,14 @@ import Portfolio from './pages/Portfolio';
 import NotFound from './pages/NotFound';
 import Header from './components/header/Header';
 import Search from './pages/Search';
-import { styled } from 'styled-components';
 import BackGround from './components/common/BackGround';
 import { useAxiosInterceptor } from './hooks/useAxiosInterceptor';
-
-const StyleApp = styled.div`
-  width: 100vw;
-`;
+import Footer from './components/footer/Footer';
 
 function App() {
   useAxiosInterceptor();
   return (
-    <StyleApp>
+    <>
       <BackGround />
       <Header />
       <Routes>
@@ -45,7 +41,8 @@ function App() {
         <Route path="/search/portfolio/:keyword" element={<Search />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </StyleApp>
+      <Footer />
+    </>
   );
 }
 
