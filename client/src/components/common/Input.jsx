@@ -97,7 +97,7 @@ export default function Input({
           type="password"
           {...rest}
         />
-      ) : type === 'textarea' ? (
+      : type === 'textarea' ? (
         <StyleTextArea
           rows={1}
           $width={width}
