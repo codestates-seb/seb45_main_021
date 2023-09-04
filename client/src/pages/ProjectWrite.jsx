@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { styled } from 'styled-components';
 import Input from '../components/common/Input';
 import Select from '../components/common/Select';
 import FileInput from '../components/common/FileInput';
 import { StyleBorderButton } from '../components/common/Buttons';
-import  useForm  from '../hooks/useWrite';
-import DateSelect from '../components/common/DateSelect';
+import  useForm  from '../hooks/useForm';
+import DateSelect from '../components/project/DateSelect';
 import Page from './../components/common/Page';
+import useNav from '../hooks/useNav';
+import EnterTag from '../components/project/EnterTag';
+import WriteHeader from '../components/project/WriteHeader';
+import SelectBox from '../components/project/SelectBox';
 
 const StyleProjectWrite = styled(Page)`
   height:auto;
@@ -14,18 +18,10 @@ const StyleProjectWrite = styled(Page)`
   margin-top:6rem;
   padding-top:2rem;
   font-size:1.6rem;
-  p {
-    font-size:1.6rem;
-    margin-bottom:1rem;
+  * {
+    border-radius:4px;
   }
-  .header {
-    height:20rem;
-    background-color:var(--black-200);
-    margin-bottom:10rem;
-  }
-  .margin-box {
-    margin-top:9rem;
-  }
+  
   .input-container {
     flex:5;
     height:100%;
@@ -57,19 +53,24 @@ const StyleProjectWrite = styled(Page)`
       flex:1;
     }
   }
+  .error {
+    color:var(--error);
+    margin-top:1rem;
+  }
 `
 
 export default function ProjectWrite() {
-  const time = new Date();
+  const today = new Date(); // 현재 날짜.
+  const oneWeekLater = new Date(today.setDate(today.getDate() + 7));
+  const {toProject} = useNav();
+
+  //수정시에 initialState의 값만 조절해주면 됌
   const initialState = {
     title:'',
     language : 'JAVA',
     totalPeople : 2,
-    year : time.getFullYear(),
-    month : time.getMonth()+1,
-    day : time.getDate(),
-    closed_At : '',
-    keyWord : [],
+    closed_At : oneWeekLater,
+    tags : [],
     body : '',
     description : '',
     titleImg : '',
@@ -90,6 +91,10 @@ export default function ProjectWrite() {
       min : 2,
       max : 2,
     },
+    closed_At : {
+      min : 1,
+      max : 1,
+    },
     body : {
       min : 100,
       max : 500,
@@ -99,17 +104,13 @@ export default function ProjectWrite() {
       max : 200,
     }
   }
-  //errors에 하나라도 있으면 
+  
   const [dataForm,setDataForm,errors] = useForm(initialState, validationRules);
 
   const width = '100%';
   const height = '30rem';
-  console.log(dataForm);
-  console.log(errors);
-
-  //테스트용
+  //테스트용 언어 옵션들
   const languagesOptions = [
-    {value : '', label : '-'},
     {value : 'JAVA', label : 'JAVA'},
     {value : 'JAVASCRIPT', label : 'JAVASCRIPT'},
     {value : 'C++', label : 'C++'},
@@ -130,68 +131,59 @@ export default function ProjectWrite() {
     {value : 10, label : 10},
   ]
 
+  //errors에 하나라도 있으면 오류 뱉음
   const subMitHandler = () => {
     if(Object.keys(errors).length) {
-
+      console.log('유효성검사에 문제가 존재함');
+    } else {
+      console.log('유효성검사에 문제없음');
     }
   }
 
   return (
     <StyleProjectWrite className='col'>
-      <div className='header'>
-      </div>
+      <WriteHeader text={'프로젝트 헤더 부분'} />
       <div className='row'>
         <div className='input-container col'>
           <Input
             label={'프로젝트 제목'}
             error={errors.title}
             width={'100%'}
-            onChange={(e)=>setDataForm(e.target.value, 'title')}
+            onChange={(e)=>{
+              console.log(e);
+              setDataForm(e.target.value, 'title')}}
             placeholder={'최소 10 글자 최대 30글자까지 입력 가능 합니다. (필수)'}
           />
-          <p>{'사용할 언어를 선택 해주세요.'}</p>
-          <Select
-            width={width}
-            options={languagesOptions}
-            value={dataForm.language}
-            onClickHandler={(e)=>setDataForm(e, 'language')}
+
+          <SelectBox
+            text={'사용할 언어를 선택 해주세요.'}
+            component={<Select
+              width={width}
+              options={languagesOptions}
+              value={dataForm.language}
+              onClickHandler={(e)=>setDataForm(e, 'language')}
+            />}
           />
-          <div>{errors.language}</div>
-          {/* Select디브는 position이 relative라 요소가 겹침 margin-box로 해결함 */}
-          <div className='margin-box'/>
-          <p>{'모집할 인원을 선택해주세요.'}</p>
-          <Select
-            width={width}
-            options={totalPeopleOptions}
-            value={dataForm.totalPeople}
-            onClickHandler={(e)=>setDataForm(e, 'totalPeople')}
+          
+          <SelectBox
+            text={'모집할 인원을 선택해주세요.'}
+            component={<Select
+              width={width}
+              options={totalPeopleOptions}
+              value={dataForm.totalPeople}
+              onClickHandler={(e)=>setDataForm(e, 'totalPeople')}
+            />}
           />
-          <div>{errors.totalPeople}</div>
-          {/* Select디브는 position이 relative라 요소가 겹침 margin-box로 해결함 */}
-          <div className='margin-box'/>
-          <p>{'프로젝트 마감 날짜를 선택 해 주세요. (모집 시작은 작성일 기준입니다.)'}</p>
-          {/* <div className='data-select-container row'>
-            <Select
-              width={width}
-              options={totalPeopleOptions}
-              value={dataForm.year}
-              onClickHandler={(e)=>setDataForm(e, 'year')}
-            />
-            <Select
-              width={width}
-              options={totalPeopleOptions}
-              value={dataForm.month}
-              onClickHandler={(e)=>setDataForm(e, 'month')}
-            />
-            <Select
-              width={width}
-              options={totalPeopleOptions}
-              value={dataForm.day}
-              onClickHandler={(e)=>setDataForm(e, 'day')}
-            />
-          </div> */}
-          <DateSelect/>
-          <div className='margin-box'/>
+
+          <SelectBox
+            text={'프로젝트 마감 날짜를 선택 해 주세요. (모집 시작은 작성일 기준입니다.)'}
+            component={<div className='data-select-container row'>
+              <DateSelect defaultDate={oneWeekLater} width={width} setDataForm={setDataForm}/>
+            </div>}
+          />
+          
+          <EnterTag width="100%" height="3.5rem" placeholder="태그는 최대 3개까지 등록이 가능합니다." dataForm={dataForm} setDataForm={setDataForm}/>
+          
           <Input
             label={'기획서'}
             error={errors.body}
@@ -201,6 +193,7 @@ export default function ProjectWrite() {
             onChange={(e)=>setDataForm(e.target.value, 'body')}
             placeholder={'최소 100 ~ 500글자까지 입력 가능합니다. (필수)'}
           />
+
           <Input
             label={'상세 요강'}
             error={errors.description}
@@ -210,22 +203,23 @@ export default function ProjectWrite() {
             onChange={(e)=>setDataForm(e.target.value, 'description')}
             placeholder={'최소 100 ~ 500글자까지 입력 가능합니다. (필수)'}
           />
+
         </div>
+
         <div className='imgs-container col'>
           <FileInput
             name={'타이틀 이미지'}
             width={'70rem'}
-            height={'60rem'}
-            deleteLabelSize={'5rem'}
+            height={'65rem'}
             number={1}
             dataForm={dataForm}
             setDataForm={setDataForm}
           />
+
           <FileInput
             name={'이미지'}
             width={'70rem'}
-            height={'60rem'}
-            deleteLabelSize={'5rem'}
+            height={'65rem'}
             number={7}
             dataForm={dataForm}
             setDataForm={setDataForm}
@@ -233,8 +227,8 @@ export default function ProjectWrite() {
         </div>
       </div>
       <div className='submit-box'>
-        <StyleBorderButton>게시</StyleBorderButton>
-        <StyleBorderButton>취소</StyleBorderButton>
+        <StyleBorderButton onClick={subMitHandler}>게시</StyleBorderButton>
+        <StyleBorderButton onClick={toProject}>취소</StyleBorderButton>
       </div>
     </StyleProjectWrite>
   );

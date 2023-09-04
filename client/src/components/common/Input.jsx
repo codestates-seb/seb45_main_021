@@ -86,17 +86,9 @@ export default function Input({
       <Label htmlFor={name} $labelColor={labelColor}>
         {label}
       </Label>
-      {type === 'text' ? (
-        <StyleInput
-          $width={width}
-          $height={height}
-          $color={color}
-          $borderColor={borderColor}
-          onChange={onChangeHandler}
-          {...rest}
-        />
-      ) : type === 'password' ? (
-        <StyleInput
+      {type === 'text' || type === 'password'
+      ? <StyleInput
+          type={type}
           $width={width}
           $height={height}
           $color={color}

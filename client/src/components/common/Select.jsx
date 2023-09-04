@@ -48,6 +48,7 @@ const StyleDropMenuItem = styled.div`
   width: 100%;
   padding: 1rem;
   transition: all 0.3s;
+  background-color: var(--backgroundColor);
   cursor: pointer;
   &:hover {
     background-color: #7d6a6a;
@@ -85,6 +86,10 @@ export default function Select({ width, options, value, onClickHandler, fontSize
     window.addEventListener('click', handleDropDownCloser);
     return () => window.removeEventListener('click', handleDropDownCloser);
   }, []);
+
+  useEffect(() => {
+    setSelectedLabel(value);
+  }, [value]);
 
   return (
     <Container className="col" $width={width}>
