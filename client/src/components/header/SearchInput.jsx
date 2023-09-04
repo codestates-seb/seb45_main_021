@@ -55,7 +55,7 @@ export default function SearchInput() {
   const [isInputFocused, setIsInputFocused] = useState(false);
   const { toSearch } = useNav();
   const inputRef = useRef(null);
-  
+
   useEffect(() => {
     // 주소가 바뀌면, 최근 검색창을 감추고, path에서 값을 빼오기
     setIsInputFocused(false);

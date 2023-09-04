@@ -1,9 +1,13 @@
 import React from 'react';
 import useNav from '../../hooks/useNav';
-import { StyleBorderButton, StyleBottomButton } from '../common/Buttons';
+import { StyleBottomButton } from '../common/Buttons';
 import { styled } from 'styled-components';
 import SearchInput from './SearchInput';
 import Inner from '../common/Inner';
+import LoginActions from './LoginActions';
+import UnLoginActions from './UnLoginActions';
+import { useSelector } from 'react-redux';
+
 const StyleHeader = styled.header`
   padding: 10px 0;
   z-index: 10;
@@ -15,15 +19,16 @@ const StyleHeader = styled.header`
   .inner {
     display: flex;
     align-items: center;
-    gap: 3rem;
+    gap: 2rem;
   }
   h1 {
     font-family: var(--monoton);
     font-size: 3.5rem;
     cursor: pointer;
   }
-  nav button {
+  button {
     height: 35px;
+    padding: 0px 10px;
   }
   .page-actions {
     display: flex;
@@ -31,17 +36,18 @@ const StyleHeader = styled.header`
   }
   .user-actions {
     display: flex;
-
-    gap: 10px;
-    button {
-      padding: 0 15px;
+    align-items: center;
+    gap: 1.5rem;
+    img {
+      margin-right: 5px;
+      width: 35px;
     }
   }
 `;
 
 export default function Header() {
-  const { toAbout, toPortfolio, toProject, toSignin, toSignup } = useNav();
-
+  const { toAbout, toPortfolio, toProject } = useNav();
+  const { isLogin, userInfo } = useSelector((state) => state.user);
   return (
     <StyleHeader id="header">
       <Inner>
@@ -52,8 +58,7 @@ export default function Header() {
         </nav>
         <SearchInput />
         <nav className="user-actions">
-          <StyleBorderButton onClick={toSignin}>로그인</StyleBorderButton>
-          <StyleBorderButton onClick={toSignup}>회원가입</StyleBorderButton>
+          {isLogin ? <LoginActions userInfo={userInfo} /> : <UnLoginActions />}
         </nav>
       </Inner>
     </StyleHeader>
