@@ -61,6 +61,6 @@ export const StyleBottomButton = styled.button`
     margin: auto;
   }
   &:hover:after {
-    width: 65%;
+    width: 80%;
   }
 `;
