@@ -22,10 +22,10 @@ const StyleDateUser = styled.div`
 `;
 export default function DateUser({ date, size, user }) {
   const { id, name } = user;
-  const { toProfileDetail } = useNav();
+  const { toProfile } = useNav();
   return (
     <StyleDateUser $size={size}>
-      <span className="user" onClick={() => toProfileDetail(id)}>
+      <span className="user" onClick={() => toProfile(id)}>
         {name}
       </span>
       <span>{dateFormatter(date)}</span>
