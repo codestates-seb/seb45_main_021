@@ -1,6 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import userSlice from './userform/userslice';
-import isLoadingSlice from './loading/isLoadingSlice';
 import {
   persistStore,
   persistReducer,
@@ -22,7 +21,6 @@ const persistConfig = {
 
 const reducers = combineReducers({
   user: userSlice,
-  isLoading: isLoadingSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateIsLoading } from '../redux/loading/isLoadingSlice';
 import { updateUser, deleteUser } from '../redux/userform/userslice';
 import useNav from '../hooks/useNav';
 
@@ -18,7 +17,6 @@ export const useAxiosInterceptor = () => {
 
   instance.interceptors.request.use(
     (config) => {
-      dispatch(updateIsLoading(true));
       if (jwt?.accesstoken) {
         config.headers['accesstoken'] = `Bearer ${jwt.accesstoken}`;
       }
@@ -61,7 +59,6 @@ export const useAxiosInterceptor = () => {
         console.log('요청 시간 초과');
         toAbout();
       }
-      dispatch(updateIsLoading(false));
       return Promise.reject(error);
     },
   );
