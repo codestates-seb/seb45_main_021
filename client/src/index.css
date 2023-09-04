@@ -32,18 +32,12 @@ html {
   background-color: var(--backgroundColor);
 }
 
-::-webkit-scrollbar {
-  width: 0rem;
-}
-
 .hidden {
   position: absolute;
   left: 9999%;
   bottom: 9999%;
 }
-body {
-  height: 1000rem;
-}
+
 button {
   color: var(--black-100);
   background-color: transparent;

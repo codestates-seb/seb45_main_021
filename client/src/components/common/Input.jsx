@@ -33,11 +33,12 @@ const StyleInput = styled.input`
   font-size: ${(props) => (props.$fontSize ? props.$fontSize : '1.5rem')};
 `;
 
-// const StyleError = styled.div`
-//   width: fit-content;
-//   height: 1rem;
-//   opacity: ${(props) => (props.error === '' ? 0 : 1)};
-// `;
+const StyleError = styled.div`
+  width: fit-content;
+  font-size: 1.5rem;
+  height: 1rem;
+  opacity: ${(props) => (props.error === '' ? 0 : 1)};
+`;
 
 const StyleTextArea = styled.textarea`
   background: none;
@@ -116,7 +117,7 @@ export default function Input({
           {...rest}
         />
       ) : undefined}
-      {error && <div>{error}</div>}
+      <StyleError>{error}</StyleError>
     </StyleErrorInput>
   );
 }

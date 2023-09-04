@@ -57,12 +57,16 @@ const StyleContainer = styled(Page)`
 
 export default function Project({ id, data }) {
   const [filter, setfilter] = useState({
-    value: '등록한 프로젝트',
+    defaultLabel: '등록한 프로젝트',
+    value: 'add',
     options: [
-      { label: '등록한 프로젝트', value: '등록' },
-      { label: '참여한 프로젝트', value: '참여' },
+      { label: '등록한 프로젝트', value: 'add' },
+      { label: '참여한 프로젝트', value: 'attend' },
     ],
   });
+
+  const add = data[0];
+  const attend = data[1];
 
   const handleClickFilter = (target) => {
     setfilter({ ...filter, value: target });
@@ -72,7 +76,7 @@ export default function Project({ id, data }) {
       <h2>프로젝트</h2>
       <div className="filterWrapper">
         <Select
-          value={filter.value}
+          defaultLabel={filter.defaultLabel}
           options={filter.options}
           onClickHandler={handleClickFilter}
           width="30rem"
@@ -81,16 +85,16 @@ export default function Project({ id, data }) {
       </div>
       <ul className="listWrapper col">
         <li className="listHeader row">
-          <p className="title">제목</p>
-          <p>작성자</p>
-          <p>작성시간</p>
-          <p>조회수</p>
-          <p>좋아요</p>
+          <span className="title">제목</span>
+          <span>작성자</span>
+          <span>작성시간</span>
+          <span>조회수</span>
+          <span>좋아요</span>
         </li>
-        {filter.value === '등록'
-          ? data[0].map((el, i) => <ListItem key={i} data={el} type="프로젝트" />)
-          : filter.value === '참여'
-          ? data[1].map((el, i) => <ListItem key={i} data={el} type="프로젝트" />)
+        {filter.value === 'add'
+          ? add.map((el, i) => <ListItem key={i} data={el} type="프로젝트" />)
+          : filter.value === 'attend'
+          ? attend.map((el, i) => <ListItem key={i} data={el} type="프로젝트" />)
           : null}
       </ul>
     </StyleContainer>
