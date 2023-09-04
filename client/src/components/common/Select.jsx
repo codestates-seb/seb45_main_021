@@ -39,7 +39,8 @@ const StyleDropMenu = styled.div`
   border-radius: 5px;
   overflow: auto;
   opacity: ${(props) => (props.$isOn ? '1' : '0')};
-  max-height: ${(props) => ( !props.$isOn ? '0' : '120px')};
+  height: fit-content;
+  background-color: black;
   transition: all 0.3s;
 `;
 
@@ -106,7 +107,7 @@ export default function Select({ width, options, value, onClickHandler, fontSize
             }}
             $isOn={isOn}
           >
-            {el.value}
+            {el.label}
           </StyleDropMenuItem>
         ))}
       </StyleDropMenu>

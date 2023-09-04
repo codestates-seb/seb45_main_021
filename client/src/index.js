@@ -6,11 +6,8 @@ import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import { Provider } from 'react-redux';
-import { store } from './redux/store';
-import { persistStore } from 'redux-persist';
+import { store, persistor } from './redux/store';
 import { PersistGate } from 'redux-persist/integration/react';
-
-const persistor = persistStore(store);
 
 const Global = createGlobalStyle`
  html{

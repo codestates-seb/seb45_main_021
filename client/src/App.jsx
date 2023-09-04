@@ -15,37 +15,36 @@ import NotFound from './pages/NotFound';
 import Header from './components/header/Header';
 import Search from './pages/Search';
 import { styled } from 'styled-components';
-import Inner from './components/common/Inner';
+import BackGround from './components/common/BackGround';
+import { useAxiosInterceptor } from './hooks/useAxiosInterceptor';
 
 const StyleApp = styled.div`
-  .main-content {
-    width: 100vw;
-  }
+  width: 100vw;
 `;
 
 function App() {
+  useAxiosInterceptor();
   return (
     <StyleApp>
+      <BackGround />
       <Header />
-      <Inner className="main-content">
-        <Routes>
-          <Route path="/" element={<About />} />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/profile/:userId" element={<Profile />} />
-          <Route path="/project" element={<Project />} />
-          <Route path="/project/write" element={<ProjectWrite />} />
-          <Route path="/project/detail/:projectId" element={<ProjectDetail />} />
-          <Route path="/project/edit/:projectId" element={<ProjectEdit />} />
-          <Route path="/portfolio" element={<Portfolio />} />
-          <Route path="/portfolio/write" element={<PortfolioWrite />} />
-          <Route path="/portfolio/detail/:portfolioId" element={<PortfolioDetail />} />
-          <Route path="/portfolio/edit/:portfolioId" element={<PortfolioEdit />} />
-          <Route path="/search/project/:keyword" element={<Search />} />
-          <Route path="/search/portfolio/:keyword" element={<Search />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Inner>
+      <Routes>
+        <Route path="/" element={<About />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/profile/:userId" element={<Profile />} />
+        <Route path="/project" element={<Project />} />
+        <Route path="/project/write" element={<ProjectWrite />} />
+        <Route path="/project/detail/:projectId" element={<ProjectDetail />} />
+        <Route path="/project/edit/:projectId" element={<ProjectEdit />} />
+        <Route path="/portfolio" element={<Portfolio />} />
+        <Route path="/portfolio/write" element={<PortfolioWrite />} />
+        <Route path="/portfolio/detail/:portfolioId" element={<PortfolioDetail />} />
+        <Route path="/portfolio/edit/:portfolioId" element={<PortfolioEdit />} />
+        <Route path="/search/project/:keyword" element={<Search />} />
+        <Route path="/search/portfolio/:keyword" element={<Search />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </StyleApp>
   );
 }
