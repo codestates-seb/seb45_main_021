@@ -10,7 +10,6 @@ import AnchorMenu from '../components/profile/AnchorMenu';
 
 const StyleContainer = styled.div`
   width: 100%;
-  height: 100%;
   padding-top: 2rem;
   padding-top: 55px;
   display: flex;

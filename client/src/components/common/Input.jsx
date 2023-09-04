@@ -50,7 +50,7 @@ const StyleTextArea = styled.textarea`
   padding: 8px 6px;
   font-size: 1.5rem;
   font-family: var(--nanum);
-`
+`;
 
 /**
  * 공용 인풋 폼 입니다.
@@ -78,7 +78,7 @@ export default function Input({
   labelColor,
   borderColor,
   onChangeHandler,
-  type = "text",
+  type = 'text',
   ...rest
 }) {
   return (
@@ -96,8 +96,8 @@ export default function Input({
           onChange={onChangeHandler}
           {...rest}
         />
-      : type === 'textarea'
-      ? <StyleTextArea
+      ) : type === 'textarea' ? (
+        <StyleTextArea
           rows={1}
           $width={width}
           $height={height}
@@ -106,8 +106,7 @@ export default function Input({
           onChange={onChangeHandler}
           {...rest}
         />
-      : undefined
-      }
+      ) : undefined}
       {error && <div>{error}</div>}
     </StyleErrorInput>
   );
