@@ -5,6 +5,9 @@ import { FcGoogle } from 'react-icons/fc';
 import Page from '../components/common/Page';
 import { AiFillGithub } from 'react-icons/ai';
 import Input from '../components/common/Input';
+import api from '../hooks/useAxiosInterceptor';
+import { useDispatch } from 'react-redux';
+import { updateUser } from '../redux/userform/userslice';
 
 const StyleContainer = styled(Page)`
   display: flex;
@@ -95,6 +98,7 @@ export default function SignIn() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState({ email: '', password: '' });
   const { toSignup } = useNav;
+  const dispatch = useDispatch();
 
   const handleChangeEmail = (e) => {
     setEmail(e.target.value);
@@ -105,6 +109,15 @@ export default function SignIn() {
   };
 
   const handleSubmitForm = () => {
+    try {
+      api.post('/members/login', { email, password }).then((el) => {
+        console.log(el.data);
+        dispatch(updateUser({ isLogin: true, userInfo: { ...el.data } }));
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
     setError({ email: '', password: '' });
   };
 

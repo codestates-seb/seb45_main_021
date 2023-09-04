@@ -7,6 +7,7 @@ import { AiOutlineCloseCircle, AiOutlineClose } from 'react-icons/ai';
 import Input from '../common/Input';
 import { StyleBorderButton } from '../common/Buttons';
 import useNav from '../../hooks/useNav';
+import api from '../../hooks/useAxiosInterceptor';
 
 const StyleProfileContainer = styled.div`
   display: flex;
@@ -176,8 +177,8 @@ export default function ProfileCard({ id, data }) {
     },
   });
   const [editPassword, setEditPassword] = useState({
-    curPassword: '',
-    curPassword2: '',
+    prevPassword: '',
+    prevPassword2: '',
     newPassword: '',
   });
 
@@ -208,12 +209,19 @@ export default function ProfileCard({ id, data }) {
 
   const handleEditPassword = (e) => {
     e.preventDefault();
+    api
+      .patch('/merbers/password/2', {
+        prevPassword: editPassword.prevPassword,
+        newPassword: editPassword.newPassword,
+      })
+      .then((el) => console.log(el));
     console.log('비밀번호 변경 요청 함수 실행');
     console.log(editPassword);
   };
 
   const handleClickWithdrawal = () => {
     console.log('회원탈퇴 요청');
+    api.delete('/members/2').then((el) => console.log(el));
     toAbout();
   };
 
@@ -346,9 +354,9 @@ export default function ProfileCard({ id, data }) {
                   fontSize="2rem"
                   width="100%"
                   height="4rem"
-                  value={editPassword.curPassword}
+                  value={editPassword.prevPassword}
                   onChange={(e) =>
-                    setEditPassword({ ...editPassword, curPassword: e.target.value })
+                    setEditPassword({ ...editPassword, prevPassword: e.target.value })
                   }
                 />
                 <Input
@@ -358,9 +366,9 @@ export default function ProfileCard({ id, data }) {
                   fontSize="2rem"
                   width="100%"
                   height="4rem"
-                  value={editPassword.curPassword2}
+                  value={editPassword.prevPassword2}
                   onChange={(e) =>
-                    setEditPassword({ ...editPassword, curPassword2: e.target.value })
+                    setEditPassword({ ...editPassword, prevPassword2: e.target.value })
                   }
                 />
                 <Input
