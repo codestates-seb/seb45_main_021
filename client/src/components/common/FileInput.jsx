@@ -20,6 +20,7 @@ const StyleFileInput = styled.div`
 
 const ImgContainer = styled.div`
     background-color:var(--backgroundColor);
+    position:relative;
     border-radius : 3px;
     width: 100%;
     height:90%;
@@ -74,6 +75,7 @@ const TextLabel = styled.label`
 
 const DragDropBox = styled.label`
     position:absolute;
+    z-index: 1;
     width:100%;
     height:90%;
     display:flex;
@@ -127,11 +129,22 @@ const MiddleLine = styled.div`
     border-radius:3px;
 `
 //width 퍼센테이지로 주면 스크롤 다 깨짐 씨이이발
+
+/**
+ * - jpg, jpeg, png 파일 전용 미리보기 폼
+ * @param {string} name - 폼의 제목. 필수입력
+ * @param {string} width - 폼의 가로길이. 퍼센테이지로 입력시 비율깨질수있음 
+ * @param {string} height - 폼의 세로길이. 이미지는 세로길이에 맞춰서 비율이 유지됨
+ * @param {string} number - 입력받을 사진파일의 개수. 필수입력
+ * @param {string} dataForm - 저장할 state데이터. 필수입력필요
+ * @param {string} setDatForm - state의 세터함수. 필수입력필요
+ * @returns 
+ */
+
 export default function FileInput({
     name,
     width,
     height,
-    deleteLabelSize,
     number,
     dataForm,
     setDataForm
@@ -236,7 +249,7 @@ export default function FileInput({
                 {imgs.map((el,idx)=>
                     <React.Fragment key={idx}>
                         {idx !== 0 && <MiddleLine />}
-                        <ImgBox $deleteLabelSize={deleteLabelSize}>
+                        <ImgBox>
                             <img src={el} alt='미리보기 사진'/>
                             <HiX onClick={()=>deleteImgHandler(idx)}/>
                         </ImgBox>

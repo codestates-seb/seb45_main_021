@@ -86,8 +86,9 @@ export default function Input({
       <Label htmlFor={name} $labelColor={labelColor}>
         {label}
       </Label>
-      {type === 'text'
+      {type === 'text' || type === 'password'
       ? <StyleInput
+          type={type}
           $width={width}
           $height={height}
           $color={color}

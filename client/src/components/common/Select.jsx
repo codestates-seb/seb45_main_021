@@ -39,7 +39,7 @@ const StyleDropMenu = styled.div`
   border-radius: 5px;
   overflow: auto;
   opacity: ${(props) => (props.$isOn ? '1' : '0')};
-  height: fit-content;
+  max-height: ${(props) => ( !props.$isOn ? '0' : '120px')};
   transition: all 0.3s;
 `;
 
@@ -47,7 +47,7 @@ const StyleDropMenuItem = styled.div`
   width: 100%;
   padding: 1rem;
   transition: all 0.3s;
-  background-color: black;
+  background-color: var(--backgroundColor);
   cursor: pointer;
   &:hover {
     background-color: #7d6a6a;
@@ -71,7 +71,7 @@ const StyleDropMenuItem = styled.div`
 export default function Select({ width, options, value, onClickHandler, fontSize }) {
   const [isOn, setIsOn] = useState(false);
   const [selectedLabel, setSelectedLabel] = useState(value);
- 
+
   const handleClick = (e) => {
     e.stopPropagation();
     setIsOn((prev) => !prev);
@@ -85,6 +85,10 @@ export default function Select({ width, options, value, onClickHandler, fontSize
     window.addEventListener('click', handleDropDownCloser);
     return () => window.removeEventListener('click', handleDropDownCloser);
   }, []);
+
+  useEffect(() => {
+    setSelectedLabel(value);
+  }, [value]);
 
   return (
     <Container className="col" $width={width}>
