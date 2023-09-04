@@ -92,10 +92,10 @@ const StyleDivider = styled.div`
 `;
 
 export default function SignUp() {
-  const [name, setName] = useState('');
+  const [username, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState({ name: '', email: '', password: '' });
+  const [error, setError] = useState({ username: '', email: '', password: '' });
   const { toSignin } = useNav();
 
   const handleChangeEmail = (e) => {
@@ -110,9 +110,15 @@ export default function SignUp() {
     setName(e.target.value);
   };
 
-  const handleSubmitForm = () => {
-    api.post('/members/signup', { name, email, password });
-    setError({ name: '', email: '', password: '' });
+  const handleSubmitForm = async () => {
+    try {
+      const data = JSON.stringify({ username, email, password });
+      api.post('/members/signup', data).then(toSignin());
+    } catch (error) {
+      console.log(error);
+    }
+
+    setError({ username: '', email: '', password: '' });
   };
 
   useEffect(() => {
@@ -151,13 +157,13 @@ export default function SignUp() {
               height="56.22px"
               fontSize="2rem"
               type="text"
-              value={name}
+              value={username}
               onChange={handleChangeName}
-              error={error.name}
+              error={error.username}
             />
             <Input
               label={'이메일'}
-              placeholder="name@example.com"
+              placeholder="username@example.com"
               width="40rem"
               height="56.22px"
               fontSize="2rem"

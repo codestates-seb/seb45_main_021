@@ -1,11 +1,10 @@
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateIsLoading } from '../redux/loading/isLoadingSlice';
 import { updateUser, deleteUser } from '../redux/userform/userslice';
 import useNav from '../hooks/useNav';
 
 const instance = axios.create({
-  baseURL: 'https://5164-14-53-203-58.ngrok-free.app',
+  baseURL: 'https://5073-14-53-203-58.ngrok-free.app',
   timeout: 7000,
   headers: { 'Content-Type': 'application/json', withCredentials: true },
 });
@@ -18,12 +17,11 @@ export const useAxiosInterceptor = () => {
 
   instance.interceptors.request.use(
     (config) => {
-      dispatch(updateIsLoading(true));
-      if (jwt?.accessToken) {
-        config.headers['Authorization'] = `Bearer ${jwt.accessToken}`;
+      if (jwt?.accesstoken) {
+        config.headers['accesstoken'] = `Bearer ${jwt.accesstoken}`;
       }
-      if (jwt?.refreshToken) {
-        config.headers['refreshToken'] = `${jwt.refreshToken}`;
+      if (jwt?.refreshtoken) {
+        config.headers['refreshtoken'] = `${jwt.refreshtoken}`;
       }
       if (userInfo?.memberId) {
         config.headers['memberId'] = `${userInfo.memberId}`;
@@ -32,23 +30,16 @@ export const useAxiosInterceptor = () => {
     },
     (error) => {
       console.log(error);
-      dispatch(updateIsLoading(false));
       return Promise.reject(error);
     },
   );
 
   instance.interceptors.response.use(
     (response) => {
-      const { Authorization, refreshToken } = response.headers;
-      if (Authorization) {
-        dispatch(
-          updateUser({ jwt: { accessToken: Authorization, refreshToken: jwt.refreshToken } }),
-        );
+      const { accesstoken, refreshtoken } = response.headers;
+      if (accesstoken && refreshtoken) {
+        dispatch(updateUser({ jwt: { accesstoken: accesstoken, refreshtoken: refreshtoken } }));
       }
-      if (refreshToken) {
-        dispatch(updateUser({ jwt: { accessToken: jwt.accessToken, refreshToken: refreshToken } }));
-      }
-      dispatch(updateIsLoading(false));
       return response;
     },
     (error) => {
@@ -68,7 +59,6 @@ export const useAxiosInterceptor = () => {
         console.log('요청 시간 초과');
         toAbout();
       }
-      dispatch(updateIsLoading(false));
       return Promise.reject(error);
     },
   );
