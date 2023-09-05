@@ -14,6 +14,7 @@ import useError from '../hooks/useError';
 import { checkValidations } from '../utils/checkValidations';
 import ProGress from '../components/common/ProGress';
 import ToggleButton from '../components/common/ToggleButton';
+import languages from '../static/languages';
 
 const StyleProjectWrite = styled(Page)`
   height:auto;
@@ -106,15 +107,14 @@ export default function PortfolioWrite() {
   const height = '90rem';
 
   //테스트용 언어 옵션들
-  const languagesOptions = [
-    {value : '', label : '-'},
-    {value : 'JAVA', label : 'JAVA'},
-    {value : 'JAVASCRIPT', label : 'JAVASCRIPT'},
-    {value : 'C++', label : 'C++'},
-    {value : 'C#', label : 'C#'},
-    {value : 'RUBY', label : 'RUBY'},
-    {value : 'GO', label : 'GO'},
-  ]
+  const languagesOptions = (() => {
+    const arr = [];
+    arr.push({value : '', label : '-'});
+    for(let i = 0; i < languages.length; i++) {
+      arr.push({value: languages[i], label : languages[i]});
+    }
+    return arr;
+  })()
 
   //errors에 하나라도 있으면 오류 뱉음
   const subMitHandler = () => {

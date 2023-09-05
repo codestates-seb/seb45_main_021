@@ -14,6 +14,8 @@ import SelectBox from '../components/project/SelectBox';
 import useError from '../hooks/useError';
 import { checkValidations } from '../utils/checkValidations';
 import ProGress from '../components/common/ProGress';
+import languages from '../static/languages'
+import api from '../hooks/useAxiosInterceptor';
 
 const StyleProjectWrite = styled(Page)`
   height:auto;
@@ -26,6 +28,7 @@ const StyleProjectWrite = styled(Page)`
   .margin-top-remove {
     margin-top:-20px !important;
   }
+
   .input-container {
     flex:5;
     height:100%;
@@ -63,6 +66,8 @@ export default function ProjectWrite() {
   const today = new Date(); // 현재 날짜.
   const oneWeekLater = new Date(today.setDate(today.getDate() + 7));
   const {toProject} = useNav();
+
+  const url = ''
 
   //수정시에 initialState의 값만 조절해주면 됌
   const initialState = {
@@ -120,16 +125,14 @@ export default function ProjectWrite() {
   const width = '100%';
   const height = '30rem';
 
-  //테스트용 언어 옵션들
-  const languagesOptions = [
-    {value : '', label : '-'},
-    {value : 'JAVA', label : 'JAVA'},
-    {value : 'JAVASCRIPT', label : 'JAVASCRIPT'},
-    {value : 'C++', label : 'C++'},
-    {value : 'C#', label : 'C#'},
-    {value : 'RUBY', label : 'RUBY'},
-    {value : 'GO', label : 'GO'},
-  ]
+  const languagesOptions = (() => {
+      const arr = [];
+      arr.push({value : '', label : '-'});
+      for(let i = 0; i < languages.length; i++) {
+        arr.push({value: languages[i], label : languages[i]});
+      }
+      return arr;
+  })()
 
   const totalPeopleOptions = [
     {value : '', label : '-'},
@@ -155,7 +158,31 @@ export default function ProjectWrite() {
       setErrors(newError);
       window.scrollTo(0,0);
     } else {
-      console.log('유효성검사에 문제없음');
+      const jsonData = {};
+      const fileData = {}
+      for (let key in dataForm) {
+        if(dataForm[key] instanceof FormData) {
+          fileData[key] = dataForm[key];
+        } else {
+          jsonData[key] = dataForm[key];
+        }
+      }
+      
+      const fileHeader = {
+        headers : {
+          'Content-Type': 'multipart/form-data',
+          withCredentials: true
+        }
+      }
+      api.post('/projects',dataForm,fileHeader)
+      .then((res)=>{
+        api.post('/projects',)
+      })
+      .catch(err=>{
+        console.log(err);
+      })
+      // console.log(jsonData);
+      // console.log(fileData);
     }
   }
   

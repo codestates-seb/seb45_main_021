@@ -1,9 +1,6 @@
-@ -1,24 +1,35 @@
 import React, { useState } from 'react';
 import styled from 'styled-components'
 import Page from '../components/common/Page';
-import WriteHeader from '../components/project/WriteHeader';
-import Language from './../components/common/Language';
 import DetailHead from '../components/project/DetailHead';
 import DetailBody from '../components/project/DetailBody';
 import { StyleBorderButton } from '../components/common/Buttons';
@@ -21,7 +18,6 @@ const StyleProjectDetailWrapper = styled(Page)`
 const StyleProjectDetailContainer = styled.div`
   width:100%;
   height:100%;
-  background-color:var(--black-800);
   background-color:rgba(0,0,0,0.3);
   border-radius:10px;
   padding:4rem;
@@ -37,19 +33,20 @@ const OnlyAdmin = styled.div`
 const DummyData = {
   id : 1,
   title : '프론트엔드 리액트를 사용하여 프로젝트,포트폴리오 공유 프로젝트입니다.',
-@ -47,9 +58,9 @@ const DummyData = {
   closed_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
   language : 'JAVA',
-  tag : ['테스트태그','의미없는 태그', '의미없는 태그2'],
-  body : '',
+  tag : ['테스트태그', '의미없는 태그', '의미없는 태그2'],
   body : '우리가 준비한 프로젝트는 이렇고 저렇고 어쩌고 저쩌고우리가 준비한 프로젝트는 이렇고 저렇고 어쩌고 저쩌고우리가 준비한 프로젝트는 이렇고 저렇고 어쩌고 저쩌고우리가 준비한 프로젝트는 이렇고 저렇고 어쩌고 저쩌고우리가 준비한 프로젝트는 이렇고 저렇고 어쩌고 저쩌고우리가 준비한 프로젝트는 이렇고 저렇고 어쩌고 저쩌고우리가 준비한 프로젝트는 이렇고 저렇고 어쩌고 저쩌고우리가 준비한 프로젝트는 이렇고 저렇고 어쩌고 저쩌고우리가 준비한 프로젝트는 이렇고 저렇고 어쩌고 저쩌고',
   titleImg : '',
-  imgs : '',
   imgs : ['https://source.unsplash.com/random','https://source.unsplash.com/random','https://source.unsplash.com/random','https://source.unsplash.com/random'],
   description : '',
   author : {
     img : '',
-@ -77,11 +88,24 @@ const DummyData = {
+    userName : '박찬섭', 
+    id : 1,
+  },
+  likes : ["1", "2", "3", "4", "5"],
+}
 
 export default function ProjectDetail() {
   const [detailData, setDetailData] = useState(DummyData);
@@ -75,3 +72,4 @@ export default function ProjectDetail() {
       </StyleProjectDetailContainer>
     </StyleProjectDetailWrapper>
   );
+}

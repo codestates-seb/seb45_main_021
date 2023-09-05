@@ -161,7 +161,7 @@ export default function FileInput({
             for(let i = 0; i < files.length; i++) {
                 formData.append('file',files[i]);
             }
-            setDataForm(null,formData,'imgs');
+            setDataForm(null,formData, number===1?'titleImg':'imgs');
             if(number === 1) {
                 clearError('titleImg');
             }

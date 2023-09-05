@@ -10,12 +10,7 @@ import Tag from '../common/Tag';
 const StyleDetailHead = styled.div`
     height : auto;
     padding-bottom:1rem;
-    position:relative;    
-
-    * {
-        border-radius: 4px;
-        transition:all 0.2s;
-    }
+    position:relative;
 
     .project-detail {
         font-size:3rem;
@@ -76,10 +71,6 @@ const Border = styled.div`
     border-bottom : 3px solid var(--black-300);
 `
 
-const TagAdminBox = styled.div`
-    
-`
-
 export default function DetailHead({
     type='project',
     height='15rem',
@@ -110,11 +101,6 @@ export default function DetailHead({
             <HiX
                 onClick={()=>type==='project' ? toProject() : toPortfolio()}
             />
-            <TagAdminBox className='row'>
-                {detailData.tag.map(text=>
-                    <Tag key={text} text={text} type={type}/>
-                )}
-            </TagAdminBox>
         </StyleDetailHead>
     )
 }
