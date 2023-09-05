@@ -3,25 +3,42 @@ import About from './pages/About';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Profile from './pages/Profile';
-import Project from './pages/Project';
 import ProjectWrite from './pages/ProjectWrite';
 import ProjectDetail from './pages/ProjectDetail';
 import ProjectEdit from './pages/ProjectEdit';
 import PortfolioEdit from './pages/PortfolioEdit';
 import PortfolioDetail from './pages/PortfolioDetail';
 import PortfolioWrite from './pages/PortfolioWrite';
-import Portfolio from './pages/Portfolio';
 import NotFound from './pages/NotFound';
 import Header from './components/header/Header';
 import Search from './pages/Search';
 import BackGround from './components/common/BackGround';
 import { useAxiosInterceptor } from './hooks/useAxiosInterceptor';
 import Footer from './components/footer/Footer';
+import PostList from './pages/PostList';
+import { styled } from 'styled-components';
+import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { clearOption } from './redux/filterOptionForm/filterOptionSlice';
+const StyleApp = styled.div`
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+`;
 
 function App() {
+  const pageType = useLocation().pathname.split('/')[1];
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(clearOption());
+    console.log('option 초기화');
+  }, [pageType]);
+
   useAxiosInterceptor();
   return (
-    <>
+    <StyleApp>
       <BackGround />
       <Header />
       <Routes>
@@ -29,11 +46,11 @@ function App() {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/profile/:userId" element={<Profile />} />
-        <Route path="/project" element={<Project />} />
+        <Route path="/project" element={<PostList />} />
         <Route path="/project/write" element={<ProjectWrite />} />
         <Route path="/project/detail/:projectId" element={<ProjectDetail />} />
         <Route path="/project/edit/:projectId" element={<ProjectEdit />} />
-        <Route path="/portfolio" element={<Portfolio />} />
+        <Route path="/portfolio" element={<PostList />} />
         <Route path="/portfolio/write" element={<PortfolioWrite />} />
         <Route path="/portfolio/detail/:portfolioId" element={<PortfolioDetail />} />
         <Route path="/portfolio/edit/:portfolioId" element={<PortfolioEdit />} />
@@ -42,7 +59,7 @@ function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
-    </>
+    </StyleApp>
   );
 }
 
