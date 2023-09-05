@@ -7,7 +7,7 @@ import { AiFillGithub } from 'react-icons/ai';
 import Input from '../components/common/Input';
 import api from '../hooks/useAxiosInterceptor';
 import { useDispatch } from 'react-redux';
-import { updateUser } from '../redux/userform/userslice';
+import { updateUser } from '../redux/userForm/userSlice';
 
 const StyleContainer = styled(Page)`
   display: flex;

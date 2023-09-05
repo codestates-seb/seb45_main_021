@@ -28,7 +28,7 @@ export default function useNav() {
   const toProjectWrite = () => navigate('/project/write');
   const toPortfolioWrite = () => navigate('/portfolio/write');
   const toProjectDetail = (id) => navigate(`/project/detail/${id}`);
-  const toPortfolioDetail = (id) => navigate(`/project/detail/${id}`);
+  const toPortfolioDetail = (id) => navigate(`/portfolio/detail/${id}`);
   const toProfile = (id) => navigate(`/profile/${id}`);
   const toSearch = (text, type) => {
     if (type === 'project') {

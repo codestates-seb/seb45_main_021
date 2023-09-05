@@ -30,8 +30,8 @@ const StyleSearchInput = styled.div`
     }
   }
   .search-button {
-    left: 3px;
-    top: 3px;
+    left: 2px;
+    top: 4px;
     bottom: 0;
     position: absolute;
     z-index: -1;

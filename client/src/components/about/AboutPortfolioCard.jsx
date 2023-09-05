@@ -4,7 +4,7 @@ import img from '../../static/images/mockImage.png';
 import Filter from '../common/Filter';
 import Like from '../common/Like';
 import DateUser from '../common/DateUser';
-import Language from '../common/Language';
+import LanguageTag from '../common/LanguageTag';
 import useNav from '../../hooks/useNav';
 import Tag from '../common/Tag';
 import EmployBadge from '../common/EmployBadge';
@@ -49,7 +49,7 @@ export default function AboutPortfolioCard({ portfolio }) {
     <StyleAboutPortfolioCard $background={titleImg || img}>
       {isEmploy && <EmployBadge />}
       <Filter $background="#00000080" />
-      <Language language={language} size={'2rem'} />
+      <LanguageTag language={language} size={'2rem'} />
       <div className="center">
         <h3 onClick={() => toPortfolioDetail(id)}>{title}</h3>
         <div className="skill">

@@ -1,5 +1,6 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import userSlice from './userform/userslice';
+import userSlice from './userForm/userSlice';
+import filterOptionSlice from './filterOptionForm/filterOptionSlice';
 import {
   persistStore,
   persistReducer,
@@ -15,12 +16,13 @@ import storage from 'redux-persist/lib/storage';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['user'],
+  whitelist: ['user', 'filterOption'],
   blacklist: ['isLoading'],
 };
 
 const reducers = combineReducers({
   user: userSlice,
+  filterOption: filterOptionSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);
