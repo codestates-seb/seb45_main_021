@@ -1,84 +1,77 @@
+@ -1,24 +1,35 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components'
 import Page from '../components/common/Page';
 import WriteHeader from '../components/project/WriteHeader';
-import Language from './../components/common/LanguageTag';
+import Language from './../components/common/Language';
 import DetailHead from '../components/project/DetailHead';
 import DetailBody from '../components/project/DetailBody';
+import { StyleBorderButton } from '../components/common/Buttons';
+import { useDispatch, useSelector } from 'react-redux';
 
 const StyleProjectDetailWrapper = styled(Page)`
-  padding-top: 6rem;
-  height: 500rem;
-`;
+  padding-top:6rem;
+  height:500rem;
+  * {
+        border-radius: 6px;
+        transition:all 0.2s;
+  }
+`
 
 const StyleProjectDetailContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  background-color: var(--black-800);
-  border-radius: 10px;
-  padding: 4rem;
-`;
+  width:100%;
+  height:100%;
+  background-color:var(--black-800);
+  background-color:rgba(0,0,0,0.3);
+  border-radius:10px;
+  padding:4rem;
+`
+
+const OnlyAdmin = styled.div`
+  width:100%;
+  justify-content:end;
+  gap:2rem;
+  margin-bottom:1rem;
+`
 
 const DummyData = {
-  id: 1,
-  title: '프론트엔드 리액트를 사용하여 프로젝트,포트폴리오 공유 프로젝트입니다.',
-  totalPeople: '5',
-  joinPeople: [
-    {
-      userName: '박찬섭',
-      memberId: 1,
-    },
-    {
-      userName: '박찬섭2',
-      memberId: 2,
-    },
-    {
-      userName: '박찬섭3',
-      memberId: 3,
-    },
-  ],
-  requestPeople: [{}, {}, {}],
-  created_At: 'Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)',
-  modified_At: 'Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)',
-  closed_At: 'Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)',
-  language: 'JAVA',
-  tag: ['테스트태그', '의미없는 태그', '의미없는 태그2'],
-  body: '',
-  titleImg: '',
-  imgs: '',
-  description: '',
-  author: {
-    img: '',
-    userName: '박찬섭',
-    id: 1,
-  },
-  likes: ['1', '2', '3', '4', '5'],
-};
-
-// {
-//   "titleImg": "",
-//   "title": "리액트를 활용한, 신세대 프로젝트입니다 반갑습니다",
-//   "created_At": "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-//   "id": "3",
-//   "language": "C#",
-//   "tag": ["React", "vue", "Angular"],
-//   "author": {
-//     "id": "1",
-//     "img": "",
-//     "name": "명인입니다"
-//   },
-//   "likes": ["1", "2", "3", "4", "5"],
-//   "isEmploy": true
-// },
+  id : 1,
+  title : '프론트엔드 리액트를 사용하여 프로젝트,포트폴리오 공유 프로젝트입니다.',
+@ -47,9 +58,9 @@ const DummyData = {
+  closed_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
+  language : 'JAVA',
+  tag : ['테스트태그','의미없는 태그', '의미없는 태그2'],
+  body : '',
+  body : '우리가 준비한 프로젝트는 이렇고 저렇고 어쩌고 저쩌고우리가 준비한 프로젝트는 이렇고 저렇고 어쩌고 저쩌고우리가 준비한 프로젝트는 이렇고 저렇고 어쩌고 저쩌고우리가 준비한 프로젝트는 이렇고 저렇고 어쩌고 저쩌고우리가 준비한 프로젝트는 이렇고 저렇고 어쩌고 저쩌고우리가 준비한 프로젝트는 이렇고 저렇고 어쩌고 저쩌고우리가 준비한 프로젝트는 이렇고 저렇고 어쩌고 저쩌고우리가 준비한 프로젝트는 이렇고 저렇고 어쩌고 저쩌고우리가 준비한 프로젝트는 이렇고 저렇고 어쩌고 저쩌고',
+  titleImg : '',
+  imgs : '',
+  imgs : ['https://source.unsplash.com/random','https://source.unsplash.com/random','https://source.unsplash.com/random','https://source.unsplash.com/random'],
+  description : '',
+  author : {
+    img : '',
+@ -77,11 +88,24 @@ const DummyData = {
 
 export default function ProjectDetail() {
   const [detailData, setDetailData] = useState(DummyData);
+  const dispatch = useDispatch();
+  const loginUserData = useSelector(state=>state.user);
+  const isAdmin = true;
+  // loginUserData?.userInfo === detailData.id
+  
+  // const loginUserData = 
+  const fontSize = '1.6rem'
+
   return (
     <StyleProjectDetailWrapper>
-      <StyleProjectDetailContainer className="col">
-        <DetailHead detailData={detailData} />
-        <DetailBody />
+      <StyleProjectDetailContainer className='col'>
+        <DetailHead detailData={detailData}/>
+        <DetailBody/>
+        {isAdmin && <OnlyAdmin className='row'>
+          <StyleBorderButton $fontSize={fontSize}>참여 현황</StyleBorderButton>
+          <StyleBorderButton $fontSize={fontSize}>수정</StyleBorderButton>
+          <StyleBorderButton $fontSize={fontSize}>삭제</StyleBorderButton>
+        </OnlyAdmin>}
+        <DetailBody detailData={detailData}/>
       </StyleProjectDetailContainer>
     </StyleProjectDetailWrapper>
   );
-}

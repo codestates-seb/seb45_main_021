@@ -2,7 +2,7 @@ import React from 'react';
 import useNav from '../../hooks/useNav';
 import { StyleBorderButton } from '../common/Buttons';
 import { useDispatch } from 'react-redux';
-import { deleteUser } from '../../redux/userform/userSlice';
+import { deleteUser } from '../../redux/userForm/userSlice';
 import userDefaultImg from '../../static/images/userDefaultImg.jpeg';
 
 export default function LoginActions({ userInfo }) {

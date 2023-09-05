@@ -4,7 +4,7 @@ import { PiUploadSimple } from 'react-icons/pi';
 import useNav from '../../hooks/useNav';
 import { useParams } from 'react-router-dom';
 import api from '../../hooks/useAxiosInterceptor';
-import { updateUser, deleteUser } from '../../redux/userform/userSlice';
+import { updateUser, deleteUser } from '../../redux/userForm/userSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import EditPassword from './EditPassword';
 import EditProfile from './EditProfile';
