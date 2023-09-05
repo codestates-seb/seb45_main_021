@@ -27,9 +27,8 @@ html {
   --sky-blue: #7fdbff;
   --shadow: #00000020;
   --center: 0 auto;
-  --backgroundColor: #222722;
+  --backgroundColor: #00000060;
   height: 100vh;
-  background-color: var(--backgroundColor);
 }
 
 .hidden {
@@ -72,13 +71,13 @@ button {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background-color: transparent !important;
+  background-color: var(--black-700) !important;
   padding: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
   border-radius: 20px;
-  background-color: var(--black-200);
+  background-color: var(--black-100);
 }
 
 ::-webkit-scrollbar-thumb:hover {

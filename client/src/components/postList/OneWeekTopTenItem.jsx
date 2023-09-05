@@ -4,9 +4,10 @@ import { styled } from 'styled-components';
 
 const StyleOneWeekTopTenItem = styled.div`
   font-size: 1.3rem;
-  display: flex; 
+  display: flex;
   font-weight: var(--nanum-semi-bold);
   gap: 3px;
+  text-align: start !important;
   &:not(:last-child) {
     margin-bottom: 25px;
   }
