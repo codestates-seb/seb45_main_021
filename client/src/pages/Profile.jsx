@@ -15,8 +15,7 @@ const StyleContainer = styled(Page)`
   width: 100%;
   height: 100%;
   gap: 2rem;
-  padding-top: 2rem;
-  padding-top: 55px;
+  padding-top: 6rem;
   display: flex;
   flex-direction: column;
   position: relative;

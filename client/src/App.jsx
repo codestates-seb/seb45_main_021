@@ -21,6 +21,7 @@ import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { clearOption } from './redux/filterOptionForm/filterOptionSlice';
+
 const StyleApp = styled.div`
   min-height: 100vh;
   display: flex;

@@ -39,8 +39,10 @@ const StyleHeader = styled.header`
     align-items: center;
     gap: 1.5rem;
     img {
+      cursor: pointer;
       margin-right: 5px;
       width: 35px;
+      border: 1px solid var(--black-800);
     }
   }
 `;
