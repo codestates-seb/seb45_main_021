@@ -11,10 +11,11 @@ const StyleOneWeekTopTenList = styled.div`
   border-radius: 3px;
   padding: 1.5rem 2rem;
   position: absolute;
+  left: 0;
   backdrop-filter: blur(5px);
   overflow: hidden;
   height: ${(props) => (props.$isSpread ? '440px' : '90px')};
-  background-color: ${(props) => (props.$isSpread ? '#00000060' : '#00000020')};
+  background-color: ${(props) => (props.$isSpread ? 'var(--backgroundColor)' : '#00000020')};
   transition: all.2s ease-in-out;
   .swiper-wrapper {
     height: 15px;

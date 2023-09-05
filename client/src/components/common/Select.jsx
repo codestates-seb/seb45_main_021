@@ -1,22 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
-
+import { IoIosArrowDown } from 'react-icons/io';
 const Container = styled.div`
-  width: ${(props) => props.$width};
-  font-size: ${(props) => (props.$fontSize ? props.$fontSize : '1rem')};
+  width: ${(props) => props.$width || '300px'};
+  font-size: ${(props) => (props.$fontSize ? props.$fontSize : '1.5rem')};
   gap: 10px;
   position: relative;
+  font-weight: bold;
 `;
 
 const StyleSelect = styled.div`
   width: 100%;
-  height: 3rem;
+  height: ${(props) => props.$height || '3rem'};
   position: absolute;
   display: flex;
   align-items: center;
   border: 1px solid var(--black-100);
   border-radius: 5px;
   cursor: pointer;
+  .arrow-icon {
+    position: absolute;
+    right: 10px;
+    transform: ${(props) => (props.$isOn ? 'rotate(180deg)' : '')};
+    transition: all 0.4s;
+  }
 `;
 
 const StyleValue = styled.div`
@@ -24,24 +31,26 @@ const StyleValue = styled.div`
   left: 10px;
 `;
 
-const StyleIcon = styled.div`
-  position: absolute;
-  right: 10px;
-  transform: ${(props) => (props.$isOn ? 'rotate(180deg)' : '')};
-  transition: all 0.4s;
-`;
-
 const StyleDropMenu = styled.div`
   position: absolute;
-  top: 35px;
+  top: ${(props) => (props.$height ? `calc(${props.$height} + 5px)` : '35px')};
   width: 100%;
   border: 1px solid var(--black-100);
   border-radius: 5px;
   overflow: auto;
   opacity: ${(props) => (props.$isOn ? '1' : '0')};
-  max-height:${(props) => (props.$isOn ? '120px' : '0')};
-  background-color: black;
+  max-height: ${(props) => (props.$isOn ? '120px' : '0')};
   transition: all 0.3s;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  /* 스크롤바 전체 영역 */
+  &::-webkit-scrollbar-track {
+    background: var(--backgroundColor) !important;
+    border-radius: 6px;
+  }
 `;
 
 const StyleDropMenuItem = styled.div`
@@ -63,13 +72,15 @@ const StyleDropMenuItem = styled.div`
   };
  * - props width="30" options={options} itemValue={curItem} onClickHandler={handleClickItem}
  * @param {string} width - 드롭다운 가로 길이
+ * @param {string} height - 드롭다운 세로 길이
  * @param {object[]} options - 옵션으로 들어올 객체 배열 {defaultLabel:'옵션'}
  * @param {string} itemValue - 현재 표시할 요소 값 참조
+ * @param {function} defaultLabel - 기본 라벨입니다
  * @param {string} fontSize - 전체 폰트 사이즈
  * @param {function} onClickHandler - 함수 전달시 매개변수가 전달됨 해당 매개변수를 세터 값을 변경하는 함수로 만들고 넣으세요
  * @returns {JSX.Element}
  */
-export default function Select({ width, options, defaultLabel, onClickHandler, fontSize }) {
+export default function Select({ width, options, defaultLabel, onClickHandler, fontSize, height }) {
   const [isOn, setIsOn] = useState(false);
   const [selectedLabel, setSelectedLabel] = useState(defaultLabel);
 
@@ -92,12 +103,12 @@ export default function Select({ width, options, defaultLabel, onClickHandler, f
   }, [defaultLabel]);
 
   return (
-    <Container className="col" $width={width}>
-      <StyleSelect onClick={handleClick}>
+    <Container className="col" $width={width} $fontSize={fontSize}>
+      <StyleSelect className="select" $height={height} $isOn={isOn} onClick={handleClick}>
         <StyleValue>{selectedLabel}</StyleValue>
-        <StyleIcon $isOn={isOn}>▼</StyleIcon>
+        <IoIosArrowDown className="arrow-icon" size={20} />
       </StyleSelect>
-      <StyleDropMenu className="col" $isOn={isOn}>
+      <StyleDropMenu $height={height} className="col" $isOn={isOn}>
         {options.map((el, i) => (
           <StyleDropMenuItem
             key={i}
