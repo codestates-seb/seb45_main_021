@@ -17,10 +17,6 @@ import { useAxiosInterceptor } from './hooks/useAxiosInterceptor';
 import Footer from './components/footer/Footer';
 import PostList from './pages/PostList';
 import { styled } from 'styled-components';
-import { useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { clearOption } from './redux/filterOptionForm/filterOptionSlice';
 
 const StyleApp = styled.div`
   min-height: 100vh;
@@ -29,14 +25,6 @@ const StyleApp = styled.div`
 `;
 
 function App() {
-  const pageType = useLocation().pathname.split('/')[1];
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(clearOption());
-    console.log('option 초기화');
-  }, [pageType]);
-
   useAxiosInterceptor();
   return (
     <StyleApp>

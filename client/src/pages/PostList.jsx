@@ -1,11 +1,10 @@
-import { useEffect } from 'react';
 import { styled } from 'styled-components';
 import Page from '../components/common/Page';
 import { useLocation } from 'react-router';
 import TextCoverOver from '../components/common/TextCoverOver';
 import OneWeekTopTenList from '../components/postList/OneWeekTopTenList';
-import { useSelector } from 'react-redux';
 import FilterOption from '../components/postList/FilterOption';
+import useFilterOption from '../hooks/useFilterOption';
 
 const StylePostList = styled(Page)`
   h3 {
@@ -15,6 +14,8 @@ const StylePostList = styled(Page)`
   .user-action {
     margin-top: 20px;
     position: relative;
+    height: 45px;
+    display: flex;
   }
   .infinite {
     border: 1px solid white;
@@ -26,17 +27,16 @@ const StylePostList = styled(Page)`
 export default function PostList() {
   const path = useLocation().pathname.split('/');
   const type = path[1];
-  const filterOption = useSelector((state) => state.filterOption);
-
+  const [option, optionHandler] = useFilterOption();
+  console.log(option);
   return (
     <StylePostList>
-      <button> hello</button>
       <h3>
         <TextCoverOver text={type.toUpperCase()} fontSize="7rem" />
       </h3>
       <div className="user-action">
         <OneWeekTopTenList type={type} />
-        <FilterOption />
+        <FilterOption option={option} optionHandler={optionHandler} type={type} />
       </div>
       <div className="infinite"></div>
     </StylePostList>
