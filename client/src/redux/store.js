@@ -1,5 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import userSlice from './userForm/userSlice';
+import userSlice from './userform/userSlice';
 import filterOptionSlice from './filterOptionForm/filterOptionSlice';
 import {
   persistStore,

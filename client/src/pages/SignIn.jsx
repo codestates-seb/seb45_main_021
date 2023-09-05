@@ -7,7 +7,7 @@ import { AiFillGithub } from 'react-icons/ai';
 import Input from '../components/common/Input';
 import api from '../hooks/useAxiosInterceptor';
 import { useDispatch } from 'react-redux';
-import { updateUser, deleteUser } from '../redux/userform/userslice';
+import { updateUser, deleteUser } from '../redux/userform/userSlice';
 import { isValidEmail, isValidPassword } from '../components/profile/isValid';
 import userDefaultImg from '../static/images/userDefaultImg.jpeg';
 
@@ -128,10 +128,6 @@ export default function SignIn() {
               },
             }),
           );
-          // const { accesstoken, refreshtoken } = el.headers;
-          // if (accesstoken && refreshtoken) {
-          //   dispatch(updateUser({ jwt: { accesstoken: accesstoken, refreshtoken: refreshtoken } }));
-          // }
         });
       } else if (!isvalidEmail && !isvalidPassword) {
         setError({
