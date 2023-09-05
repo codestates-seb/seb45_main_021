@@ -28,6 +28,8 @@ public class PortFolio extends Auditable {
     @Column(nullable = false)
     private int view = 0;
 
+    private int heartCount = 0;
+
     private boolean IsComment = true;
 
     private boolean IsEmploy = true;

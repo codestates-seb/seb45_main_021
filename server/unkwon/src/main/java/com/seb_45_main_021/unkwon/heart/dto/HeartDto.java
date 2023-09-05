@@ -8,6 +8,5 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class HeartDto {
-    private String portfolioId;
     private String memberId;
 }

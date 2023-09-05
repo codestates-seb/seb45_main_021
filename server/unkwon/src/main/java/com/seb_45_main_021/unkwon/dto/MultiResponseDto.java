@@ -1,7 +1,10 @@
 package com.seb_45_main_021.unkwon.dto;
 
+import com.seb_45_main_021.unkwon.portfolio.dto.PortFolioDto;
+import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 

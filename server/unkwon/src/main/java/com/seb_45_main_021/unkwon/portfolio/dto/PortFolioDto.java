@@ -32,6 +32,7 @@ public class PortFolioDto {
         private String[] tags;
         private String[] lang;
 
+
     }
 
     @Getter
