@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Select from "../common/Select";
+import { checkValidations } from "../../utils/checkValidations";
 
-export default function DateSelect ({defaultDate ,width, setDataForm}) {
+export default function DateSelect ({defaultDate ,width, setDataForm, setErrors}) {
     const time = new Date()
     const [resetDate, setResetDate] = useState([
         defaultDate.getFullYear(),
@@ -60,11 +61,16 @@ export default function DateSelect ({defaultDate ,width, setDataForm}) {
                     key={idx}
                     width={width}
                     options={setOptions[idx]}
-                    value={el}
+                    defaultLabel={el}
                     onClickHandler={(e)=>{
                         setResetDate(settingByIndex(idx,e));
-                        if(idx === 2) {setDataForm(new Date(resetDate[0],resetDate[1],e), 'closed_At')}
-                        else{setDataForm('', 'closed_At')}
+                        if(idx === 2) {
+                            setDataForm(null,new Date(resetDate[0],resetDate[1],e), 'closed_At')
+                            setErrors(null,String(new Date(resetDate[0],resetDate[1],e)), 'closed_At', checkValidations)
+                        } else {
+                            setDataForm(null,'', 'closed_At')
+                            setErrors(null,'', 'closed_At', checkValidations)
+                        }
                     }}
                 />
             )}

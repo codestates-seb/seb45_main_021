@@ -3,11 +3,14 @@ import { styled } from 'styled-components';
 import {HiX} from 'react-icons/hi'
 
 const StyleFileInput = styled.div`
+    margin:5px 0 5px 0;
+`
+
+const FileInputContainer = styled.div`
     position:relative;
-    z-index:10;
+    margin-top:7px;
     border: 1.2px solid var(--black-100);
     border-radius : 3px;
-    margin-top:1rem;
     height:${props=>props.$height};
     width:${props=>props.$width};
     display:flex;
@@ -19,7 +22,7 @@ const StyleFileInput = styled.div`
 `
 
 const ImgContainer = styled.div`
-    background-color:var(--backgroundColor);
+    background-color:var(--black-700);
     position:relative;
     border-radius : 3px;
     width: 100%;
@@ -64,13 +67,8 @@ const ImgBox = styled.div`
     }
 `
 
-const TextLabel = styled.label`
-    position: absolute;
-    z-index:20;
-    left:1rem;
-    top:-1rem;
-    background-color:var(--backgroundColor);
-    padding:0 3px;
+const TextLabel = styled.div`
+    background-color:transparent;
 `
 
 const DragDropBox = styled.label`
@@ -83,7 +81,7 @@ const DragDropBox = styled.label`
     align-items:center;
     background-color:var(--black-300);
     border-radius: 3px;
-    opacity:${props=>props.$isDrag ? 1 : 0.3};
+    opacity:${props=>props.$isDrag ? 1 : 0.5};
     transition: all 0.2s;
     visibility:${props=>props.$isDrag || props.$number === 0 ? 'visible' : 'hidden'};
     &:hover {
@@ -93,34 +91,38 @@ const DragDropBox = styled.label`
 `
 
 const AddImageButton = styled.label`
+    position: relative;
     border: 2px solid var(--black-100);
-    position:absolute;
     border-radius: 20px;
-    overflow: hidden;
     opacity: 0.8;
-    transition: all.2s;
-    &:after {
+    transition: all 0.2s;
+    overflow: hidden;
+    ::after {
         position: absolute;
         content: '';
         width: 100%;
         left: -100%;
         top: 0;
-        height: 100px;
+        height: 100%;
         background-color: #ffffff23;
-        transition: all.2s;
+        transition: all 0.2s;
         z-index: -1;
     }
+
     &:hover {
         opacity: 1;
+        cursor: pointer;
     }
+
     &:hover:after {
         left: 0;
     }
-    left:0;
-    bottom:-5rem;
-    padding:1rem;
-    border-radius:3px;
-`
+
+    left: 0;
+    bottom:-2rem;
+    padding: 1rem;
+    border-radius: 3px;
+`;
 
 const MiddleLine = styled.div`
     height:90%;
@@ -146,19 +148,27 @@ export default function FileInput({
     width,
     height,
     number,
-    dataForm,
-    setDataForm
+    setDataForm,
+    setErrors,
+    clearError,
 }) {
     const [imgs,setImgs] = useState([]);
     const [isDrag, setIsDrag] = useState(false);
     
     const saveImgToFile = (files) => {
         const formData = new FormData();
-        for(let i = 0; i < files.length; i++) {
-            formData.append('file',files[i]);
+        try {
+            for(let i = 0; i < files.length; i++) {
+                formData.append('file',files[i]);
+            }
+            setDataForm(null,formData,'imgs');
+            if(number === 1) {
+                clearError('titleImg');
+            }
+        } catch {
+            alert('사진 첨부실패');
         }
-        setDataForm({...dataForm, imgs : formData})
-      };
+    };
 
     const readImgToUrl = (file) => {
         return new Promise(resolve => {
@@ -193,6 +203,9 @@ export default function FileInput({
     const deleteImgHandler = (idx) => {
         const newImgs = imgs.filter((el,id)=>id!==idx);
         setImgs(newImgs);
+        if(number===1){
+            setErrors(null,true,'titleImg');
+        }
     }
 
     const dragEnterHandler = (e) => {
@@ -227,46 +240,49 @@ export default function FileInput({
     }
 
     return (
-        <StyleFileInput
-            $width={width}
-            $height={height}
-            onDragEnter={dragEnterHandler}
-            onDragOver={dragOverHandler}
-            onDragLeave={dragLeaveHandler}
-        >
+        <StyleFileInput>
             <TextLabel>{`${name} ${imgs.length} / ${number}`}</TextLabel>
-            <input
-                type='file'
-                id={name}
-                multiple
-                accept=".png, .jpg, .jpeg"
-                onChange={fileClickHandler}
-            />
-            <ImgContainer 
-                className='row'
-                $imgsNum={imgs.length}
-            >
-                {imgs.map((el,idx)=>
-                    <React.Fragment key={idx}>
-                        {idx !== 0 && <MiddleLine />}
-                        <ImgBox>
-                            <img src={el} alt='미리보기 사진'/>
-                            <HiX onClick={()=>deleteImgHandler(idx)}/>
-                        </ImgBox>
-                    </React.Fragment>
-                )}       
-            </ImgContainer>
-            <DragDropBox
-                htmlFor={name}
-                $isDrag={isDrag}
-                $number={imgs.length}
+            <FileInputContainer
+                $width={width}
+                $height={height}
                 onDragEnter={dragEnterHandler}
                 onDragOver={dragOverHandler}
                 onDragLeave={dragLeaveHandler}
-                onDrop={dragDropHandler}
             >
-                사진 업로드
-            </DragDropBox>
+                
+                <input
+                    type='file'
+                    id={name}
+                    multiple
+                    accept=".png, .jpg, .jpeg"
+                    onChange={fileClickHandler}
+                />
+                <ImgContainer 
+                    className='row'
+                    $imgsNum={imgs.length}
+                >
+                    {imgs.map((el,idx)=>
+                        <React.Fragment key={idx}>
+                            {idx !== 0 && <MiddleLine />}
+                            <ImgBox>
+                                <img src={el} alt='미리보기 사진'/>
+                                <HiX onClick={()=>deleteImgHandler(idx)}/>
+                            </ImgBox>
+                        </React.Fragment>
+                    )}       
+                </ImgContainer>
+                <DragDropBox
+                    htmlFor={name}
+                    $isDrag={isDrag}
+                    $number={imgs.length}
+                    onDragEnter={dragEnterHandler}
+                    onDragOver={dragOverHandler}
+                    onDragLeave={dragLeaveHandler}
+                    onDrop={dragDropHandler}
+                >
+                    사진 업로드
+                </DragDropBox>
+            </FileInputContainer>
             {imgs.length !== number && <AddImageButton htmlFor={name}>사진 업로드</AddImageButton>}
         </StyleFileInput>
     );
