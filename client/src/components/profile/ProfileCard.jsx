@@ -1,18 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
 import { PiUploadSimple } from 'react-icons/pi';
-import { FiEdit2 } from 'react-icons/fi';
-import { GoIssueClosed } from 'react-icons/go';
-import { AiOutlineCloseCircle, AiOutlineClose } from 'react-icons/ai';
-import Input from '../common/Input';
-import { StyleBorderButton } from '../common/Buttons';
 import useNav from '../../hooks/useNav';
+import { useParams } from 'react-router-dom';
 import api from '../../hooks/useAxiosInterceptor';
+import { updateUser, deleteUser } from '../../redux/userform/userslice';
+import { useSelector, useDispatch } from 'react-redux';
+import EditPassword from './EditPassword';
+import EditProfile from './EditProfile';
+import Withdrawal from './Withdrawal';
+import ShowProfile from './ShowProfile';
+import { isValidPassword } from './isValid';
+import userDefaultImg from '../../static/images/userDefaultImg.jpeg';
 
 const StyleProfileContainer = styled.div`
   display: flex;
+  padding-top: 3rem;
   gap: 5rem;
   font-size: 2rem;
+  .label {
+    font-size: 1.5rem;
+  }
   .withdrawal {
     position: relative;
     height: 100%;
@@ -38,6 +46,7 @@ const StyleProfileContainer = styled.div`
     align-items: center;
   }
   .tagGap {
+    font-size: 1.6rem;
     gap: 1rem;
   }
   .imgContainer {
@@ -45,6 +54,7 @@ const StyleProfileContainer = styled.div`
     position: relative;
     .userImg {
       width: 100%;
+      height: 100%;
       border-radius: 10px;
       &:hover {
         filter: brightness(0.8);
@@ -73,19 +83,19 @@ const StyleProfileContainer = styled.div`
   }
 
   .infoContainer {
-    width: 60%;
+    width: 100%;
     border: 1px solid var(--black-100);
     border-radius: 10px;
-    padding: 2.5rem;
+    padding: 2rem;
     justify-content: space-between;
     gap: 2rem;
     position: relative;
 
     .editProfile {
       position: absolute;
-      top: 2.5rem;
-      right: 2.5rem;
-      gap: 1rem;
+      top: 2rem;
+      right: 2rem;
+      gap: 0.5rem;
       display: flex;
       svg {
         cursor: pointer;
@@ -102,7 +112,7 @@ const StyleProfileContainer = styled.div`
     }
 
     .gap {
-      gap: 3rem;
+      gap: 1rem;
     }
     .infoInner {
       position: relative;
@@ -114,11 +124,8 @@ const StyleProfileContainer = styled.div`
 `;
 
 const EditTagContainer = styled.div`
-  position: absolute;
-  bottom: 0;
-  right: 0;
+  margin-top: 2rem;
   gap: 2rem;
-
   p {
     cursor: pointer;
     color: var(--error);
@@ -148,12 +155,13 @@ const Tag = styled.div`
 `;
 
 export default function ProfileCard({ id, data }) {
-  const { toAbout } = useNav();
+  const { toAbout, toProfile } = useNav();
   const [isEdit, setIsEdit] = useState({ profile: false, password: false, withDrawal: false });
   const [profile, setProfile] = useState({
     email: data.email,
     userName: data.userName,
     userImg: data.userImg,
+    isWorking: data.isWorking,
     age: data.age,
     tags: data.tags,
     aboutMe: data.aboutMe,
@@ -175,12 +183,27 @@ export default function ProfileCard({ id, data }) {
       value: profile.tags,
       curString: '',
     },
+    isWorking: {
+      value: profile.isWorking,
+    },
   });
   const [editPassword, setEditPassword] = useState({
-    prevPassword: '',
-    prevPassword2: '',
-    newPassword: '',
+    prevPassword: {
+      value: '',
+      error: '',
+    },
+    newPassword: {
+      value: '',
+      error: '',
+    },
+    newPassword2: {
+      value: '',
+      error: '',
+    },
   });
+  const { userId } = useParams();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
 
   const handleTagKeyDown = (e) => {
     if (e.code !== 'Enter' && e.code !== 'NumpadEnter') return;
@@ -196,237 +219,163 @@ export default function ProfileCard({ id, data }) {
     }
   };
 
+  useEffect(() => {}, []);
+
   const handleEditProfile = () => {
-    console.log('수정 요청 함수 실행');
-    const responseBody = {
-      aboutMe: editProfile.aboutMe.value,
-      userName: editProfile.userName.value,
-      age: editProfile.age.value,
-      tags: editProfile.tags.value,
-    };
-    console.log(responseBody);
+    console.log('프로필 수정 요청');
+    try {
+      const responseBody = {
+        aboutMe: editProfile.aboutMe.value,
+        userName: editProfile.userName.value,
+        age: editProfile.age.value,
+        tags: editProfile.tags.value,
+        isWorking: editProfile.isWorking.value,
+      };
+      api.patch(`members/${userId}`, responseBody).then(() => {
+        console.log('프로필 수정 성공');
+        toProfile(userId);
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleEditPassword = (e) => {
+  const handleEditPassword = async (e) => {
     e.preventDefault();
-    api
-      .patch('/merbers/password/2', {
-        prevPassword: editPassword.prevPassword,
-        newPassword: editPassword.newPassword,
-      })
-      .then((el) => console.log(el));
-    console.log('비밀번호 변경 요청 함수 실행');
-    console.log(editPassword);
+    console.log('비밀번호 수정 요청');
+    try {
+      if (
+        editPassword.newPassword === editPassword.newPassword2 &&
+        isValidPassword(editPassword.prevPassword) &&
+        isValidPassword(editPassword.newPassword) &&
+        isValidPassword(editPassword.newPassword2)
+      ) {
+        setEditPassword({
+          ...editPassword,
+          prevPassword: { ...editPassword.prevPassword, error: '' },
+          newPassword: { ...editPassword.newPassword, error: '' },
+          newPassword2: { ...editPassword.newPassword, error: '' },
+        });
+        api
+          .patch(`/members/password/${userId}`, {
+            prevPassword: editPassword.prevPassword,
+            newPassword: editPassword.newPassword,
+          })
+          .then((el) => {
+            alert('비밀번호 변경이 완료되었습니다');
+          });
+      } else if (!(editPassword.newPassword === editPassword.newPassword2)) {
+        setEditPassword({
+          ...editPassword,
+          newPassword: { ...editPassword.newPassword, error: '새 비밀번호는 같아야 합니다.' },
+          newPassword2: { ...editPassword.newPassword, error: '새 비밀번호는 같아야 합니다.' },
+        });
+      } else if (!isValidPassword(editPassword.prevPassword)) {
+        setEditPassword({
+          ...editPassword,
+          prevPassword: { ...editPassword.prevPassword, error: '다시 입력해주세요' },
+        });
+      } else if (!isValidPassword(editPassword.newPassword)) {
+        setEditPassword({
+          ...editPassword,
+          newPassword: { ...editPassword.newPassword, error: '다시 입력해주세요' },
+        });
+      } else if (isValidPassword(editPassword.newPassword)) {
+        setEditPassword({
+          ...editPassword,
+          newPassword2: { ...editPassword.newPassword2, error: '다시 입력해주세요' },
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleClickWithdrawal = () => {
     console.log('회원탈퇴 요청');
-    api.delete('/members/2').then((el) => console.log(el));
-    toAbout();
+    if (window.confirm('정말 탈퇴하시겠습니까 ?')) {
+      api.delete(`/members/${userId}`).then((el) => console.log(el));
+      dispatch(deleteUser());
+      alert('이용해주셔서 감사합니다.');
+      toAbout();
+    }
+  };
+
+  const fileInputRef = React.createRef();
+
+  const handleClickUserImg = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = (e) => {
+    console.log('유저 이미지 교체 요청');
+    const file = e.target.files[0];
+    api.patch(`/members/profileImg/${userId}`).then((el) => {
+      setProfile({ ...profile, userImg: el.data.imgUrl });
+      dispatch(updateUser({ userInfo: { ...user.userInfo, imgUrl: el.data.imgUrl } }));
+    });
+    console.log(file);
   };
 
   return (
     <StyleProfileContainer id={id} className="row">
       <div className="imgContainer">
-        <img className="userImg" src={profile.userImg} alt="userImage" />
-        <div className="editImg">
-          <PiUploadSimple color="black" size="30" />
-        </div>
+        <img
+          className="userImg"
+          src={profile.userImg ? profile.userImg : userDefaultImg}
+          alt="userImage"
+        />
+        {user.isLogin && Number(userId) === user.userInfo.memberId && (
+          <>
+            <input
+              type="file"
+              accept=".png, .jpg, .jpeg"
+              className="hidden"
+              onChange={handleFileChange}
+              ref={fileInputRef}
+            />
+            <div className="editImg" onClick={handleClickUserImg}>
+              <PiUploadSimple color="black" size="30" />
+            </div>
+          </>
+        )}
       </div>
       <div className="infoContainer col">
         {!isEdit.profile && !isEdit.password && !isEdit.withDrawal && (
-          <>
-            <div className="col gap">
-              <h3>프로필</h3>
-              <p>{profile.aboutMe}</p>
-              <div className="editProfile" onClick={() => setIsEdit({ ...isEdit, profile: true })}>
-                <FiEdit2 size="30" />
-              </div>
-            </div>
-            <div className="col infoInner">
-              <div className="col info">
-                <p>{`이메일 : ${profile.email}`}</p>
-                <p>{`이름 : ${profile.userName}`}</p>
-                <p>{`나이 : ${profile.age}`}</p>
-                <div className="row tagGap alignItem">
-                  <p>{`태그 :`}</p>
-                  {profile.tags.map((el, i) => (
-                    <Tag key={i}>{el}</Tag>
-                  ))}
-                </div>
-                <p>{`가입일 : ${profile.created_At}`}</p>
-              </div>
-              <EditTagContainer className="row">
-                <p onClick={() => setIsEdit({ ...isEdit, password: true })}>비밀번호 수정</p>
-                <p onClick={() => setIsEdit({ ...isEdit, withDrawal: true })}>회원탈퇴</p>
-              </EditTagContainer>
-            </div>
-          </>
+          <ShowProfile
+            profile={profile}
+            isEdit={isEdit}
+            setIsEdit={setIsEdit}
+            Tag={Tag}
+            EditTagContainer={EditTagContainer}
+          />
         )}
-        {isEdit.profile && (
-          <>
-            <div className="col gap">
-              <h3>프로필 변경</h3>
-              <Input
-                label="한줄소개"
-                width="100%"
-                height="3.5rem"
-                value={editProfile.aboutMe.value}
-                error={editProfile.aboutMe.error}
-                onChange={(e) =>
-                  setEditProfile({ ...editProfile, aboutMe: { value: e.target.value, error: '' } })
-                }
-              />
-              <Input
-                label="이름"
-                width="100%"
-                height="3.5rem"
-                value={editProfile.userName.value}
-                error={editProfile.userName.error}
-                onChange={(e) =>
-                  setEditProfile({ ...editProfile, userName: { value: e.target.value, error: '' } })
-                }
-              />
-              <Input
-                label="나이"
-                width="100%"
-                height="3.5rem"
-                value={editProfile.age.value}
-                onChange={(e) => setEditProfile({ ...editProfile, age: { value: e.target.value } })}
-              />
-              <div className="col gap">
-                <div className="col tagGap">
-                  <Input
-                    label="태그"
-                    height="3.5rem"
-                    value={editProfile.tags.curString}
-                    onChange={(e) =>
-                      setEditProfile({
-                        ...editProfile,
-                        tags: { value: [...editProfile.tags.value], curString: e.target.value },
-                      })
-                    }
-                    onKeyDown={handleTagKeyDown}
-                  />
-                  <div className="row tagGap">
-                    {editProfile.tags.value.map((el, i) => (
-                      <Tag key={i}>
-                        {el}
-                        <AiOutlineClose
-                          size={15}
-                          color={'var(--error)'}
-                          onClick={() =>
-                            setEditProfile({
-                              ...editProfile,
-                              tags: {
-                                value: editProfile.tags.value.filter((_, idx) => i !== idx),
-                                curString: editProfile.tags.curString,
-                              },
-                            })
-                          }
-                        />
-                      </Tag>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className="editProfile">
-                <GoIssueClosed size="30" color="green" onClick={handleEditProfile} />
-                <AiOutlineCloseCircle
-                  size="30"
-                  color="var(--error)"
-                  onClick={() => setIsEdit({ ...isEdit, profile: false })}
-                />
-              </div>
-            </div>
-          </>
+        {isEdit.profile && user.isLogin && Number(userId) === user.userInfo.memberId && (
+          <EditProfile
+            editProfile={editProfile}
+            setEditProfile={setEditProfile}
+            isEdit={isEdit}
+            setIsEdit={setIsEdit}
+            handleTagKeyDown={handleTagKeyDown}
+            handleEditProfile={handleEditProfile}
+            Tag={Tag}
+          />
         )}
-        {isEdit.password && (
-          <>
-            <div className="col gap">
-              <h3>비밀번호 변경</h3>
-              <form className="col gap">
-                <Input
-                  type="password"
-                  autoComplete="off"
-                  label="현재 비밀번호"
-                  fontSize="2rem"
-                  width="100%"
-                  height="4rem"
-                  value={editPassword.prevPassword}
-                  onChange={(e) =>
-                    setEditPassword({ ...editPassword, prevPassword: e.target.value })
-                  }
-                />
-                <Input
-                  type="password"
-                  autoComplete="off"
-                  label="현재 비밀번호 재확인"
-                  fontSize="2rem"
-                  width="100%"
-                  height="4rem"
-                  value={editPassword.prevPassword2}
-                  onChange={(e) =>
-                    setEditPassword({ ...editPassword, prevPassword2: e.target.value })
-                  }
-                />
-                <Input
-                  type="password"
-                  autoComplete="off"
-                  label="새로운 비밀번호"
-                  fontSize="2rem"
-                  width="100%"
-                  height="4rem"
-                  value={editPassword.newPassword}
-                  onChange={(e) =>
-                    setEditPassword({ ...editPassword, newPassword: e.target.value })
-                  }
-                />
-
-                <StyleBorderButton
-                  $hoverEvent="background-color:black"
-                  $fontSize="30px"
-                  $radius="5px"
-                  onClick={handleEditPassword}
-                >
-                  변경
-                </StyleBorderButton>
-              </form>
-            </div>
-            <div className="editProfile">
-              <AiOutlineCloseCircle
-                size="30"
-                color="var(--error)"
-                onClick={() => setIsEdit({ ...isEdit, password: false })}
-              />
-            </div>
-          </>
+        {isEdit.password && user.isLogin && Number(userId) === user.userInfo.memberId && (
+          <EditPassword
+            isEdit={isEdit}
+            setIsEdit={setIsEdit}
+            editPassword={editPassword}
+            setEditPassword={setEditPassword}
+            handleEditPassword={handleEditPassword}
+          />
         )}
-        {isEdit.withDrawal && (
-          <>
-            <div className="col withdrawal">
-              <div className="col gap">
-                <h3>회원 탈퇴</h3>
-                <p>회원 탈퇴는 돌이킬 수 없습니다. 선택에 유의해주세요.</p>
-              </div>
-              <StyleBorderButton
-                $hoverEvent="background-color:black"
-                $fontSize="30px"
-                $radius="5px"
-                $color="var(--error)"
-                $borderColor="var(--error)"
-                onClick={handleClickWithdrawal}
-              >
-                탈퇴
-              </StyleBorderButton>
-              <AiOutlineCloseCircle
-                size="30"
-                color="var(--error)"
-                onClick={() => setIsEdit({ ...isEdit, withDrawal: false })}
-              />
-            </div>
-          </>
+        {isEdit.withDrawal && user.isLogin && Number(userId) === user.userInfo.memberId && (
+          <Withdrawal
+            handleClickWithdrawal={handleClickWithdrawal}
+            isEdit={isEdit}
+            setIsEdit={setIsEdit}
+          />
         )}
       </div>
     </StyleProfileContainer>

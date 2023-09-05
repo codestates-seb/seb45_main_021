@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
 import { BsQuestionCircleFill } from 'react-icons/bs';
 import AnchorLink from 'react-anchor-link-smooth-scroll';
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const StyleContainer = styled.div`
   position: relative;
@@ -43,11 +45,27 @@ const LinkItem = styled.div`
 `;
 
 export default function AnchorMenu() {
-  const [isClick, setIsClick] = useState(false);
+  const [isOn, setIsOn] = useState(false);
+  const { userId } = useParams();
+  const user = useSelector((state) => state.user);
+
+  const handleIsOn = (e) => {
+    e.stopPropagation();
+    setIsOn((prev) => !prev);
+  };
+
+  const handleIsOnfalse = () => {
+    setIsOn(false);
+  };
+
+  useEffect(() => {
+    window.addEventListener('click', handleIsOnfalse);
+    return () => window.removeEventListener('click', handleIsOnfalse);
+  }, []);
 
   return (
     <StyleContainer>
-      {isClick && (
+      {isOn && (
         <LinkContainer>
           <AnchorLink href="#profile">
             <LinkItem>프로필</LinkItem>
@@ -58,15 +76,19 @@ export default function AnchorMenu() {
           <AnchorLink href="#portfolio">
             <LinkItem>포트폴리오</LinkItem>
           </AnchorLink>
-          <AnchorLink href="#likeList">
-            <LinkItem>좋아요 리스트</LinkItem>
-          </AnchorLink>
-          <AnchorLink href="#projectCard">
-            <LinkItem>프로젝트 카드</LinkItem>
-          </AnchorLink>
+          {user.isLogin && userId === user.userInfo.memberId && (
+            <>
+              <AnchorLink href="#likeList">
+                <LinkItem>좋아요 리스트</LinkItem>
+              </AnchorLink>
+              <AnchorLink href="#projectCard">
+                <LinkItem>프로젝트 카드</LinkItem>
+              </AnchorLink>
+            </>
+          )}
         </LinkContainer>
       )}
-      <BsQuestionCircleFill size={50} onClick={() => setIsClick((prev) => !prev)} />
+      <BsQuestionCircleFill size={50} onClick={handleIsOn} />
     </StyleContainer>
   );
 }

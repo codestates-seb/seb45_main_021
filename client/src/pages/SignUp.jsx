@@ -6,6 +6,9 @@ import { AiFillGithub } from 'react-icons/ai';
 import Input from '../components/common/Input';
 import api from '../hooks/useAxiosInterceptor';
 import Page from '../components/common/Page';
+import { isValidEmail, isValidPassword } from '../components/profile/isValid';
+import { deleteUser } from '../redux/userform/userslice';
+import { useDispatch } from 'react-redux';
 
 const StyleContainer = styled(Page)`
   display: flex;
@@ -14,6 +17,7 @@ const StyleContainer = styled(Page)`
   align-items: center;
   gap: 2rem;
   font-size: 2rem;
+
   h3 {
     font-size: 5rem;
     font-weight: 700;
@@ -97,6 +101,7 @@ export default function SignUp() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState({ username: '', email: '', password: '' });
   const { toSignin } = useNav();
+  const dispatch = useDispatch();
 
   const handleChangeEmail = (e) => {
     setEmail(e.target.value);
@@ -110,19 +115,44 @@ export default function SignUp() {
     setName(e.target.value);
   };
 
-  const handleSubmitForm = async () => {
+  const handleSubmitForm = (e) => {
     try {
-      const data = JSON.stringify({ username, email, password });
-      api.post('/members/signup', data).then(toSignin());
+      const isvalidEmail = isValidEmail(email);
+      const isvalidPassword = isValidPassword(password);
+
+      if (isvalidEmail && isvalidPassword) {
+        const data = JSON.stringify({ username, email, password });
+        api.post('/members/signup', data).then(toSignin());
+      } else if (!isvalidEmail && !isvalidPassword) {
+        setError({
+          email: '올바른 이메일 형식을 입력해주세요.',
+          password: '영어,숫자,특수기호 포함 8글자 이상으로 입력해주세요.',
+        });
+      } else if (!isvalidEmail) {
+        setError({ ...error, email: '올바른 이메일 형식을 입력해주세요.' });
+      } else if (!isvalidPassword) {
+        setError({ ...error, password: '영어,숫자,특수기호 포함 8글자 이상으로 입력해주세요.' });
+      }
+    } catch (error) {
+      console.log(error);
+      setError({ email: '다시 확인해주세요.', password: '다시 확인해주세요.' });
+    }
+  };
+
+  const handleClickGoogleBtn = () => {
+    try {
+      // api.post('/oauth2/authorization/google');
+      // window.location.assign(
+      //   'https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=15196070608-ti8mt0m3fo8tj48172bhq72h4re8bcni.apps.googleusercontent.com&scope=email%20profile&state=WXWKmZbi37lUKgjof9BPMSDKwOEL_QhVWWYwV5gMxcM%3D&redirect_uri=http://d9fd-14-53-203-58.ngrok-free.app/login/oauth2/code/google',
+      // );
     } catch (error) {
       console.log(error);
     }
-
-    setError({ username: '', email: '', password: '' });
   };
 
   useEffect(() => {
     // 마운트 함수
+    dispatch(deleteUser());
   }, []);
 
   return (
@@ -134,9 +164,11 @@ export default function SignUp() {
       </div>
       <StyleRowContainer className="row">
         <StyleColContainer className="col colgap">
-          <StyleBtnContainer>
-            <FcGoogle className="logo" size={30} />
-            <span>Google 회원가입</span>
+          <StyleBtnContainer onClick={handleClickGoogleBtn}>
+            <a href="https://d9fd-14-53-203-58.ngrok-free.app/oauth2/authorization/google?redirect_uri=http://localhost:3000/login/redirect">
+              <FcGoogle className="logo" size={30} />
+              <span>Google 회원가입</span>
+            </a>
           </StyleBtnContainer>
           <StyleBtnContainer>
             <AiFillGithub className="logo" size={30} />
@@ -152,7 +184,7 @@ export default function SignUp() {
           <form className="formGap col">
             <Input
               label={'이름'}
-              placeholder="최대 5글자"
+              placeholder="이름을 입력해주세요"
               width="40rem"
               height="56.22px"
               fontSize="2rem"

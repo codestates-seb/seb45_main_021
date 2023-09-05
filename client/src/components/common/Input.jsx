@@ -2,7 +2,6 @@ import React from 'react';
 import { styled } from 'styled-components';
 
 const StyleErrorInput = styled.div`
-  position: relative;
   margin: 5px 0 5px 0;
   div {
     color: var(--error);
@@ -11,19 +10,16 @@ const StyleErrorInput = styled.div`
 `;
 
 const Label = styled.label`
-  position: absolute;
-  top: -11px;
-  left: 10px;
   color: ${(props) => (props.$labelColor ? props.$labelColor : 'var(--black-100)')};
   font-size: 1.6rem;
-  background-color: var(--backgroundColor);
-  padding-left: 3px;
-  padding-right: 3px;
+  background-color: transparent;
 `;
 
 const StyleInput = styled.input`
+  margin-top: 7px;
   background: none;
   border: 1px solid;
+  font-size: ${(props) => props.$fontSize};
   border-color: ${(props) => (props.$borderColor ? props.$borderColor : 'var(--black-100)')};
   border-radius: 3px;
   width: ${(props) => props.$width};
@@ -33,17 +29,20 @@ const StyleInput = styled.input`
   font-size: ${(props) => (props.$fontSize ? props.$fontSize : '1.5rem')};
 `;
 
-// const StyleError = styled.div`
-//   width: fit-content;
-//   height: 1rem;
-//   opacity: ${(props) => (props.error === '' ? 0 : 1)};
-// `;
+const StyleError = styled.div`
+  width: fit-content;
+  font-size: 1.5rem;
+  height: 1rem;
+  opacity: ${(props) => (props.error === '' ? 0 : 1)};
+`;
 
 const StyleTextArea = styled.textarea`
+  margin-top: 7px;
   background: none;
   border: 1px solid;
   border-color: ${(props) => (props.$borderColor ? props.$borderColor : 'var(--black-100)')};
   border-radius: 3px;
+  font-size: ${(props) => props.$fontSize};
   width: ${(props) => props.$width};
   min-height: ${(props) => props.$height};
   color: ${(props) => (props.$color ? props.$color : 'var(--black-100)')};
@@ -75,6 +74,7 @@ export default function Input({
   width,
   height,
   color,
+  fontSize,
   labelColor,
   borderColor,
   onChangeHandler,
@@ -82,33 +82,44 @@ export default function Input({
   ...rest
 }) {
   return (
-    <StyleErrorInput>
+    <StyleErrorInput className="col">
       <Label htmlFor={name} $labelColor={labelColor}>
         {label}
       </Label>
-      {type === 'text' || type === 'password'
-      ? <StyleInput
-          type={type}
+      {type === 'text' ? (
+        <StyleInput
           $width={width}
           $height={height}
           $color={color}
+          $fontSize={fontSize}
+          $borderColor={borderColor}
+          onChange={onChangeHandler}
+          {...rest}
+        />
+      ) : type === 'password' ? (
+        <StyleInput
+          $width={width}
+          $height={height}
+          $color={color}
+          $fontSize={fontSize}
           $borderColor={borderColor}
           onChange={onChangeHandler}
           type="password"
           {...rest}
         />
-      : type === 'textarea' ? (
+      ) : type === 'textarea' ? (
         <StyleTextArea
           rows={1}
           $width={width}
           $height={height}
           $color={color}
+          $fontSize={fontSize}
           $borderColor={borderColor}
           onChange={onChangeHandler}
           {...rest}
         />
       ) : undefined}
-      {error && <div>{error}</div>}
+      <StyleError $error={error}>{error}</StyleError>
     </StyleErrorInput>
   );
 }

@@ -3,6 +3,10 @@ import { styled } from 'styled-components';
 import Input from '../common/Input';
 import { StyleBorderButton } from '../common/Buttons';
 import { AiOutlineClose, AiOutlineCloseCircle } from 'react-icons/ai';
+import api from '../../hooks/useAxiosInterceptor';
+import useNav from '../../hooks/useNav';
+import { useParams } from 'react-router-dom';
+import { isValidPhone } from './isValid';
 
 const SwiperCard = styled.div`
   width: 100%;
@@ -13,7 +17,7 @@ const SwiperCard = styled.div`
   transition: all 0.4s;
   position: relative;
   display: flex;
-  gap: 10rem;
+  gap: 5rem;
   .btn {
     position: absolute;
     right: 2rem;
@@ -58,16 +62,66 @@ const Tag = styled.div`
 `;
 
 export default function SwiperEdit({ data, idx, handler, type }) {
-  const [temp, setTemp] = useState({ ...data, curString: '' });
+  const [temp, setTemp] = useState({
+    ...data,
+    phone: { value: data.phone, error: '' },
+    tags: data.tags,
+    aboutMe: { value: data.aboutMe, error: '' },
+    title: { value: data.title, error: '' },
+    curString: '',
+  });
+  const { toProfile } = useNav();
+  const { userId } = useParams();
 
   useEffect(() => {
     if (temp.tags === undefined) {
-      setTemp({ call: '', tags: [], aboutMe: '', title: '' });
+      setTemp({
+        ...temp,
+        tags: [],
+      });
     }
   }, []);
 
   const handleClickSubmit = () => {
-    console.log('제출');
+    const isvalidPhone = isValidPhone(temp.phone.value.replace(/-/g, ''));
+    if (type === 'fetch') {
+      if (isvalidPhone && temp.title.value.length <= 20 && temp.aboutMe.value.length <= 200) {
+        api
+          .patch(`/projectcards/${idx}`, {
+            title: temp.title.value,
+            tag: temp.tags,
+            tell: temp.phone.value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'),
+            aboutMe: temp.aboutMe.value,
+          })
+          .then((el) => {
+            window.alert('수정완료.');
+            toProfile(userId);
+          });
+      } else if (!isvalidPhone) {
+        setTemp({ ...temp, phone: { ...temp.phone, error: '숫자만 입력해주세요.' } });
+      } else if (temp.title.value.length > 20) {
+        setTemp({ ...temp, title: { ...temp.title, error: '20 글자 이하로 입력해주세요.' } });
+      } else if (temp.aboutMe.value.length > 200) {
+        setTemp({
+          ...temp,
+          abooutMe: { ...temp.abooutMe, error: '200 글자 이하로 입력해주세요.' },
+        });
+      }
+    } else if (type === 'new') {
+      if (isvalidPhone && temp.title.value.length <= 20 && temp.aboutMe.value.length <= 200) {
+        api
+          .post(`/projectcards/${idx}`, {
+            title: temp.title.value,
+            tag: temp.tags,
+            tell: temp.phone.value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'),
+            aboutMe: temp.aboutMe.value,
+          })
+          .then((el) => {
+            window.alert('생성완료.');
+            toProfile(userId);
+          });
+      }
+    }
   };
 
   const handleClickCancel = () => {
@@ -95,29 +149,37 @@ export default function SwiperEdit({ data, idx, handler, type }) {
       <Input
         label="제목"
         width="100%"
-        placeholder="타인에게 보여줄 카드 제목을 정해주세요."
-        value={temp.title || ''}
-        onChange={(e) => setTemp({ ...temp, title: e.target.value })}
+        type="text"
+        placeholder="20글자까지 작성이 가능합니다."
+        value={temp.title.value || ''}
+        error={temp.title.error}
+        onChange={(e) => setTemp({ ...temp, title: { ...temp.title, value: e.target.value } })}
       />
       <Input
         label="자기소개"
         width="100%"
+        height="15rem"
+        type="textarea"
         placeholder="200글자까지 작성이 가능합니다."
-        value={temp.aboutMe || ''}
-        onChange={(e) => setTemp({ ...temp, aboutMe: e.target.value })}
+        value={temp.aboutMe.value || ''}
+        error={temp.aboutMe.error}
+        onChange={(e) => setTemp({ ...temp, aboutMe: { ...temp.aboutMe, value: e.target.value } })}
       />
       <Input
         label="연락처"
         width="100%"
+        type="text"
         placeholder="- 없이 숫자만 입력해주세요."
-        value={temp.call || ''}
-        onChange={(e) => setTemp({ ...temp, call: e.target.value })}
+        value={temp.phone.value.replace(/-/g, '') || ''}
+        error={temp.phone.error}
+        onChange={(e) => setTemp({ ...temp, phone: { ...temp.phone, value: e.target.value } })}
       />
       <div className="tagwrapper">
         <Input
           label="태그"
           width="100%"
           height="3.5rem"
+          type="text"
           placeholder="태그는 최대 3개까지 등록이 가능합니다."
           value={temp.curString || ''}
           onChange={(e) =>
@@ -154,7 +216,7 @@ export default function SwiperEdit({ data, idx, handler, type }) {
           $fontSize="4rem"
           onClick={handleClickSubmit}
         >
-          전송
+          {`${type === 'fetch' ? '수정' : '생성'}`}
         </StyleBorderButton>
       </div>
     </SwiperCard>

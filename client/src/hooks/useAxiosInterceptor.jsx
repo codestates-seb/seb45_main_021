@@ -4,14 +4,13 @@ import { updateUser, deleteUser } from '../redux/userForm/userSlice';
 import useNav from '../hooks/useNav';
 
 const instance = axios.create({
-  baseURL: 'https://5073-14-53-203-58.ngrok-free.app',
+  baseURL: 'https://d9fd-14-53-203-58.ngrok-free.app/',
   timeout: 7000,
   headers: { 'Content-Type': 'application/json', withCredentials: true },
 });
 
 export const useAxiosInterceptor = () => {
   const dispatch = useDispatch();
-  const userInfo = useSelector((state) => state.user.userInfo);
   const jwt = useSelector((state) => state.user.jwt);
   const { toAbout, toSignin } = useNav();
 
@@ -23,9 +22,7 @@ export const useAxiosInterceptor = () => {
       if (jwt?.refreshtoken) {
         config.headers['refreshtoken'] = `${jwt.refreshtoken}`;
       }
-      if (userInfo?.memberId) {
-        config.headers['memberId'] = `${userInfo.memberId}`;
-      }
+
       return config;
     },
     (error) => {
@@ -44,12 +41,12 @@ export const useAxiosInterceptor = () => {
     },
     (error) => {
       console.log(error);
-      let msg;
-      if (error.response.data.message) {
-        msg = error.response.data.message;
+      let message;
+      if (error?.response?.data?.message) {
+        message = error.response.data.message;
       }
 
-      if (msg && msg === 'refreshToken has expired') {
+      if (message === 'refreshToken has expired') {
         dispatch(deleteUser());
         window.alert('토큰이 만료되어 자동으로 로그아웃 되었습니다.');
         toSignin();

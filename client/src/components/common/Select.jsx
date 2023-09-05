@@ -39,7 +39,7 @@ const StyleDropMenu = styled.div`
   border-radius: 5px;
   overflow: auto;
   opacity: ${(props) => (props.$isOn ? '1' : '0')};
-  height: fit-content;
+  max-height:${(props) => (props.$isOn ? '120px' : '0')};
   background-color: black;
   transition: all 0.3s;
 `;
@@ -63,15 +63,15 @@ const StyleDropMenuItem = styled.div`
   };
  * - props width="30" options={options} itemValue={curItem} onClickHandler={handleClickItem}
  * @param {string} width - 드롭다운 가로 길이
- * @param {object[]} options - 옵션으로 들어올 객체 배열 {value:'옵션'}
+ * @param {object[]} options - 옵션으로 들어올 객체 배열 {defaultLabel:'옵션'}
  * @param {string} itemValue - 현재 표시할 요소 값 참조
  * @param {string} fontSize - 전체 폰트 사이즈
  * @param {function} onClickHandler - 함수 전달시 매개변수가 전달됨 해당 매개변수를 세터 값을 변경하는 함수로 만들고 넣으세요
  * @returns {JSX.Element}
  */
-export default function Select({ width, options, value, onClickHandler, fontSize }) {
+export default function Select({ width, options, defaultLabel, onClickHandler, fontSize }) {
   const [isOn, setIsOn] = useState(false);
-  const [selectedLabel, setSelectedLabel] = useState(value);
+  const [selectedLabel, setSelectedLabel] = useState(defaultLabel);
 
   const handleClick = (e) => {
     e.stopPropagation();
@@ -88,8 +88,8 @@ export default function Select({ width, options, value, onClickHandler, fontSize
   }, []);
 
   useEffect(() => {
-    setSelectedLabel(value);
-  }, [value]);
+    setSelectedLabel(defaultLabel);
+  }, [defaultLabel]);
 
   return (
     <Container className="col" $width={width}>

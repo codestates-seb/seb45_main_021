@@ -11,17 +11,21 @@ import useNav from '../hooks/useNav';
 import EnterTag from '../components/project/EnterTag';
 import WriteHeader from '../components/project/WriteHeader';
 import SelectBox from '../components/project/SelectBox';
+import useError from '../hooks/useError';
+import { checkValidations } from '../utils/checkValidations';
+import ProGress from '../components/common/ProGress';
 
 const StyleProjectWrite = styled(Page)`
   height:auto;
-  background-color: var(--backgroundColor);
-  margin-top:6rem;
-  padding-top:2rem;
+  background-color: transparent;
+  padding-top:6rem;
   font-size:1.6rem;
   * {
     border-radius:4px;
   }
-  
+  .margin-top-remove {
+    margin-top:-20px !important;
+  }
   .input-container {
     flex:5;
     height:100%;
@@ -53,10 +57,6 @@ const StyleProjectWrite = styled(Page)`
       flex:1;
     }
   }
-  .error {
-    color:var(--error);
-    margin-top:1rem;
-  }
 `
 
 export default function ProjectWrite() {
@@ -67,17 +67,26 @@ export default function ProjectWrite() {
   //수정시에 initialState의 값만 조절해주면 됌
   const initialState = {
     title:'',
-    language : 'JAVA',
-    totalPeople : 2,
+    language : '',
+    totalPeople : '',
     closed_At : oneWeekLater,
     tags : [],
     body : '',
     description : '',
-    titleImg : '',
+    titleImg : new FormData(),
     imgs : new FormData(),
     author : {}
   }
 
+  const initialError = {
+    title : false,
+    body : false,
+    language : false,
+    totalPeople : false,
+    titleImg: false,
+  }
+
+  //min과 max의 값이 같으면 값의 존재유무확인, min과 max가 다르면 길이 확인
   const validationRules = {
     title : {
       min : 10,
@@ -88,8 +97,8 @@ export default function ProjectWrite() {
       max : 1,
     },
     totalPeople : {
-      min : 2,
-      max : 2,
+      min : 1,
+      max : 1,
     },
     closed_At : {
       min : 1,
@@ -105,12 +114,15 @@ export default function ProjectWrite() {
     }
   }
   
-  const [dataForm,setDataForm,errors] = useForm(initialState, validationRules);
+  const [dataForm, setDataForm, clearForm] = useForm(initialState);
+  const [errors, handleErrorChange, clearError, setErrors] = useError(initialError ,validationRules);
 
   const width = '100%';
   const height = '30rem';
+
   //테스트용 언어 옵션들
   const languagesOptions = [
+    {value : '', label : '-'},
     {value : 'JAVA', label : 'JAVA'},
     {value : 'JAVASCRIPT', label : 'JAVASCRIPT'},
     {value : 'C++', label : 'C++'},
@@ -120,90 +132,145 @@ export default function ProjectWrite() {
   ]
 
   const totalPeopleOptions = [
-    {value : 2, label : 2},
-    {value : 3, label : 3},
-    {value : 4, label : 4},
-    {value : 5, label : 5},
-    {value : 6, label : 6},
-    {value : 7, label : 7},
-    {value : 8, label : 8},
-    {value : 9, label : 9},
-    {value : 10, label : 10},
+    {value : '', label : '-'},
+    {value : '2', label : '2'},
+    {value : '3', label : '3'},
+    {value : '4', label : '4'},
+    {value : '5', label : '5'},
+    {value : '6', label : '6'},
+    {value : '7', label : '7'},
+    {value : '8', label : '8'},
+    {value : '9', label : '9'},
+    {value : '10', label : '10'},
   ]
 
   //errors에 하나라도 있으면 오류 뱉음
   const subMitHandler = () => {
     if(Object.keys(errors).length) {
       console.log('유효성검사에 문제가 존재함');
+      const newError = {...errors};
+      for (let key in newError) {
+        newError[key] = true;
+      }
+      setErrors(newError);
+      window.scrollTo(0,0);
     } else {
       console.log('유효성검사에 문제없음');
     }
   }
-
+  
   return (
     <StyleProjectWrite className='col'>
       <WriteHeader text={'프로젝트 헤더 부분'} />
       <div className='row'>
         <div className='input-container col'>
+
           <Input
             label={'프로젝트 제목'}
-            error={errors.title}
             width={'100%'}
             onChange={(e)=>{
-              console.log(e);
-              setDataForm(e.target.value, 'title')}}
+              setDataForm(null,e.target.value,'title');
+              handleErrorChange(null,e.target.value,'title',checkValidations);
+            }}
             placeholder={'최소 10 글자 최대 30글자까지 입력 가능 합니다. (필수)'}
+            type='text'
+            maxLength={30}
           />
+          <ProGress
+            className={'margin-top-remove'}
+            width={'100%'}
+            height={'1.2rem'}
+            fontSize={'1.2rem'}
+            comPleteNum={validationRules.title.max}
+            proGressNum={dataForm.title.length ?? 0}
+            error={dataForm.title.length < 10 ? true : false}
+          />
+
 
           <SelectBox
             text={'사용할 언어를 선택 해주세요.'}
             component={<Select
               width={width}
               options={languagesOptions}
-              value={dataForm.language}
-              onClickHandler={(e)=>setDataForm(e, 'language')}
+              defaultLabel={'-'}
+              onClickHandler={(e)=>{
+                setDataForm(null,e,'language')
+                handleErrorChange(null,e,'language',checkValidations)
+              }}
             />}
+            error={errors.language}
+            name='언어'
           />
-          
+
           <SelectBox
             text={'모집할 인원을 선택해주세요.'}
             component={<Select
               width={width}
               options={totalPeopleOptions}
-              value={dataForm.totalPeople}
-              onClickHandler={(e)=>setDataForm(e, 'totalPeople')}
+              defaultLabel={'-'}
+              onClickHandler={(e)=>{
+                setDataForm(null,e, 'totalPeople')
+                handleErrorChange(null,e,'totalPeople',checkValidations)
+              }}
             />}
+            error={errors.totalPeople}
+            name='모집 인원'
           />
 
           <SelectBox
             text={'프로젝트 마감 날짜를 선택 해 주세요. (모집 시작은 작성일 기준입니다.)'}
             component={<div className='data-select-container row'>
-              <DateSelect defaultDate={oneWeekLater} width={width} setDataForm={setDataForm}/>
+              <DateSelect defaultDate={oneWeekLater} width={width} setDataForm={setDataForm} setErrors={handleErrorChange}/>
             </div>}
+            error={errors.closed_At}
+            name='마감 날짜'
           />
           
           <EnterTag width="100%" height="3.5rem" placeholder="태그는 최대 3개까지 등록이 가능합니다." dataForm={dataForm} setDataForm={setDataForm}/>
           
           <Input
             label={'기획서'}
-            error={errors.body}
             width={width}
             height={height}
             type={'textarea'}
-            onChange={(e)=>setDataForm(e.target.value, 'body')}
+            onChange={(e)=>{
+              setDataForm(null,e.target.value, 'body')
+              handleErrorChange(null,e.target.value,'body',checkValidations)
+            }}
             placeholder={'최소 100 ~ 500글자까지 입력 가능합니다. (필수)'}
+            maxLength={500}
+          />
+          <ProGress
+            className={'margin-top-remove'}
+            width={'100%'}
+            height={'1.2rem'}
+            fontSize={'1.2rem'}
+            comPleteNum={validationRules.body.max}
+            proGressNum={dataForm.body.length ?? 0}
+            error={dataForm.body.length < 100 ? true : false}
           />
 
           <Input
             label={'상세 요강'}
-            error={errors.description}
             width={width}
             height={height}
             type={'textarea'}
-            onChange={(e)=>setDataForm(e.target.value, 'description')}
-            placeholder={'최소 100 ~ 500글자까지 입력 가능합니다. (필수)'}
+            onChange={(e)=>{
+              setDataForm(null,e.target.value, 'description')
+              handleErrorChange(null,e.target.value, 'description', checkValidations)
+            }}
+            placeholder={'최대 200글자까지 입력 가능합니다. (선택)'}
+            maxLength={200}
           />
-
+          <ProGress
+            className={'margin-top-remove'}
+            width={'100%'}
+            height={'1.2rem'}
+            fontSize={'1.2rem'}
+            comPleteNum={validationRules.description.max}
+            proGressNum={dataForm.description.length ?? 0}
+            error={dataForm.description.length > 200 ? true : false}
+          />
         </div>
 
         <div className='imgs-container col'>
@@ -214,6 +281,8 @@ export default function ProjectWrite() {
             number={1}
             dataForm={dataForm}
             setDataForm={setDataForm}
+            handleErrorChange={handleErrorChange}
+            clearError={clearError}
           />
 
           <FileInput
