@@ -10,17 +10,21 @@ import useNav from '../hooks/useNav';
 import EnterTag from '../components/project/EnterTag';
 import WriteHeader from '../components/project/WriteHeader';
 import SelectBox from '../components/project/SelectBox';
+import useError from '../hooks/useError';
+import { checkValidations } from '../utils/checkValidations';
+import ProGress from '../components/common/ProGress';
 
 const StyleProjectWrite = styled(Page)`
   height:auto;
-  background-color: var(--backgroundColor);
-  margin-top:6rem;
-  padding-top:2rem;
+  background-color: transparent;
+  padding-top:6rem;
   font-size:1.6rem;
   * {
     border-radius:4px;
   }
-
+  .margin-top-remove {
+    margin-top:-20px !important;
+  }
   .input-container {
     flex:5;
     height:100%;
@@ -67,13 +71,21 @@ export default function PortfolioWrite() {
 
   const initialState = {
     title:'',
-    language : 'JAVA',
+    language : '',
     isComments : false,
     tags : [],
     body : '',
     titleImg : '',
     imgs : new FormData(),
     author : {}
+  }
+
+  const initialError = {
+    title : false,
+    body : false,
+    language : false,
+    titleImg: false,
+    isComments : false,
   }
 
   const validationRules = {
@@ -91,14 +103,15 @@ export default function PortfolioWrite() {
     },
   }
   
-  const [dataForm,setDataForm,errors] = useForm(initialState, validationRules);
+  const [dataForm,setDataForm, clearForm] = useForm(initialState, validationRules);
+  const [errors, handleErrorChange, clearError, setErrors ] = useError(initialError ,validationRules);
 
   const width = '100%';
   const height = '90rem';
-  console.log(dataForm);
 
   //테스트용 언어 옵션들
   const languagesOptions = [
+    {value : '', label : '-'},
     {value : 'JAVA', label : 'JAVA'},
     {value : 'JAVASCRIPT', label : 'JAVASCRIPT'},
     {value : 'C++', label : 'C++'},
@@ -111,11 +124,16 @@ export default function PortfolioWrite() {
   const subMitHandler = () => {
     if(Object.keys(errors).length) {
       console.log('유효성검사에 문제가 존재함');
+      const newError = {...errors};
+      for (let key in newError) {
+        newError[key] = true;
+      }
+      handleErrorChange(newError);
+      window.scrollTo(0,0);
     } else {
       console.log('유효성검사에 문제없음');
     }
   }
-
   return (
     <StyleProjectWrite className='col'>
       <WriteHeader text={'포트폴리오 헤더 부분'}/>
@@ -124,10 +142,23 @@ export default function PortfolioWrite() {
 
           <Input
             label={'포트폴리오 제목'}
-            error={errors.title}
             width={'100%'}
-            onChange={(e)=>setDataForm(e.target.value, 'title')}
+            onChange={(e)=>{
+              setDataForm(null,e.target.value,'title');
+              handleErrorChange(null,e.target.value,'title',checkValidations);
+            }}
             placeholder={'최소 10 글자 최대 30글자까지 입력 가능 합니다. (필수)'}
+            type='text'
+            maxLength={30}
+          />
+          <ProGress
+            className={'margin-top-remove'}
+            width={'100%'}
+            height={'1.2rem'}
+            fontSize={'1.2rem'}
+            comPleteNum={validationRules.title.max}
+            proGressNum={dataForm.title.length ?? 0}
+            error={dataForm.title.length < 10 ? true : false}
           />
 
           <SelectBox
@@ -135,31 +166,50 @@ export default function PortfolioWrite() {
             component={<Select
               width={width}
               options={languagesOptions}
-              value={dataForm.language}
-              onClickHandler={(e)=>setDataForm(e, 'language')}
+              defaultLabel={'-'}
+              onClickHandler={(e)=>{
+                setDataForm(null,e,'language')
+                handleErrorChange(null,e,'language',checkValidations)
+              }}
             />}
+            error={errors.language}
           />
 
           <SelectBox
             text={'포트폴리오에 댓글 허용 여부'}
             component={<div className='comments-allow col'>
-              <StyleBorderButton onClick={()=>setDataForm(true,'isComments')}>허용함</StyleBorderButton>
-              <StyleBorderButton onClick={()=>setDataForm(false,'isComments')}>허용하지 않음</StyleBorderButton>
+              <StyleBorderButton onClick={()=>setDataForm(null,true,'isComments')}>허용함</StyleBorderButton>
+              <StyleBorderButton onClick={()=>setDataForm(null,false,'isComments')}>허용하지 않음</StyleBorderButton>
             </div>}
             margin={false}
+            error={errors.isComments}
           />
           
           <EnterTag width="100%" height="3.5rem" placeholder="태그는 최대 3개까지 등록이 가능합니다." dataForm={dataForm} setDataForm={setDataForm}/>
           
           <Input
             label={'포트폴리오 본문'}
-            error={errors.body}
             width={width}
             height={height}
             type={'textarea'}
-            onChange={(e)=>setDataForm(e.target.value, 'body')}
+            onChange={(e)=>{
+              setDataForm(null,e.target.value, 'body')
+              handleErrorChange(null,e.target.value,'body',checkValidations)
+            }}
             placeholder={'최소 200 ~ 1000글자까지 입력 가능합니다. (필수)'}
+            maxLength={1000}
+            error={errors.body}
           />
+          <ProGress
+            className={'margin-top-remove'}
+            width={'100%'}
+            height={'1.2rem'}
+            fontSize={'1.2rem'}
+            comPleteNum={validationRules.body.max}
+            proGressNum={dataForm.body.length ?? 0}
+            error={dataForm.body.length < 100 ? true : false}
+          />
+
         </div>
 
         <div className='imgs-container col'>

@@ -2,7 +2,6 @@ import React from 'react';
 import { styled } from 'styled-components';
 
 const StyleErrorInput = styled.div`
-  position: relative;
   margin: 5px 0 5px 0;
   div {
     color: var(--error);
@@ -11,17 +10,13 @@ const StyleErrorInput = styled.div`
 `;
 
 const Label = styled.label`
-  position: absolute;
-  top: -11px;
-  left: 10px;
   color: ${(props) => (props.$labelColor ? props.$labelColor : 'var(--black-100)')};
   font-size: 1.6rem;
-  background-color: var(--backgroundColor);
-  padding-left: 3px;
-  padding-right: 3px;
+  background-color: transparent;
 `;
 
 const StyleInput = styled.input`
+  margin-top:7px;
   background: none;
   border: 1px solid;
   border-color: ${(props) => (props.$borderColor ? props.$borderColor : 'var(--black-100)')};
@@ -41,6 +36,7 @@ const StyleError = styled.div`
 `;
 
 const StyleTextArea = styled.textarea`
+  margin-top:7px;
   background: none;
   border: 1px solid;
   border-color: ${(props) => (props.$borderColor ? props.$borderColor : 'var(--black-100)')};
@@ -83,13 +79,21 @@ export default function Input({
   ...rest
 }) {
   return (
-    <StyleErrorInput>
+    <StyleErrorInput className='col'>
       <Label htmlFor={name} $labelColor={labelColor}>
         {label}
       </Label>
-      {type === 'text' || type === 'password'
-      ? <StyleInput
-          type={type}
+      {type === 'text' ? (
+        <StyleInput
+          $width={width}
+          $height={height}
+          $color={color}
+          $borderColor={borderColor}
+          onChange={onChangeHandler}
+          {...rest}
+        />
+      ) : type === 'password' ? (
+        <StyleInput
           $width={width}
           $height={height}
           $color={color}
@@ -98,7 +102,7 @@ export default function Input({
           type="password"
           {...rest}
         />
-      : type === 'textarea' ? (
+      ) : type === 'textarea' ? (
         <StyleTextArea
           rows={1}
           $width={width}
@@ -109,7 +113,7 @@ export default function Input({
           {...rest}
         />
       ) : undefined}
-      <StyleError>{error}</StyleError>
+      <StyleError $error={error}>{error}</StyleError>
     </StyleErrorInput>
   );
 }

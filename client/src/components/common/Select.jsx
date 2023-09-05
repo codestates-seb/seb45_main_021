@@ -39,7 +39,7 @@ const StyleDropMenu = styled.div`
   border-radius: 5px;
   overflow: auto;
   opacity: ${(props) => (props.$isOn ? '1' : '0')};
-  max-height: ${(props) => (props.$isOn ? '120px' : '0')};
+  max-height:${(props) => (props.$isOn ? '120px' : '0')};
   background-color: black;
   transition: all 0.3s;
 `;
@@ -88,8 +88,8 @@ export default function Select({ width, options, defaultLabel, onClickHandler, f
   }, []);
 
   useEffect(() => {
-    setSelectedLabel(value);
-  }, [value]);
+    setSelectedLabel(defaultLabel);
+  }, [defaultLabel]);
 
   return (
     <Container className="col" $width={width}>
