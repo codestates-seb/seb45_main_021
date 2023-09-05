@@ -14,8 +14,8 @@ const StylePostList = styled(Page)`
   .user-action {
     margin-top: 20px;
     position: relative;
+    height: 45px;
     display: flex;
-    justify-content: end;
   }
   .infinite {
     border: 1px solid white;

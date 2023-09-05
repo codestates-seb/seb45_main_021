@@ -39,7 +39,12 @@ const StyleCheckBox = styled.div`
 
 export default function CheckBox({ boxSize = '30px', fontSize = '15px', value, label, onChange }) {
   return (
-    <StyleCheckBox onClick={() => onChange(!value)} $boxSize={boxSize} $fontSize={fontSize}>
+    <StyleCheckBox
+      onClick={() => onChange(!value)}
+      $boxSize={boxSize}
+      $fontSize={fontSize}
+      className="check-box"
+    >
       <div className={value ? 'active' : ''}>{value && <BsCheckLg />}</div>
       <span>{label}</span>
     </StyleCheckBox>

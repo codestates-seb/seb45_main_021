@@ -103,7 +103,7 @@ export default function Select({ width, options, defaultLabel, onClickHandler, f
   }, [defaultLabel]);
 
   return (
-    <Container className="col" $width={width} $fontSize={fontSize}>
+    <Container className="select-container col" $width={width} $fontSize={fontSize}>
       <StyleSelect className="select" $height={height} $isOn={isOn} onClick={handleClick}>
         <StyleValue>{selectedLabel}</StyleValue>
         <IoIosArrowDown className="arrow-icon" size={20} />

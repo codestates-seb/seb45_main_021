@@ -5,12 +5,13 @@ import CheckBox from '../common/CheckBox';
 
 const StyleFilterOption = styled.div`
   display: flex;
-  .option-box {
-    display: flex;
-    gap: 5px;
-    span {
-      background-color: white;
-    }
+  width: 100%;
+  gap: 15px;
+  align-items: center;
+  justify-content: end;
+  z-index: 1;
+  .select {
+    position: static;
   }
 `;
 
@@ -29,22 +30,28 @@ export default function FilterOption({ optionHandler, option, type }) {
   return (
     <StyleFilterOption>
       <Select
-        width="15rem"
-        height="35px"
+        className="selected-box"
+        width="20rem"
+        height="40px"
         options={languagesOption}
         defaultLabel={defaultLanguages === '-' ? '언어' : defaultLanguages}
         onClickHandler={(value) => optionHandler('lang', value)}
       />
       <Select
         options={sortOption}
-        width="15rem"
-        height="35px"
+        width="20rem"
+        height="40px"
         defaultLabel={sort === 'latest' ? '최신순' : '관심순'}
         onClickHandler={(value) => optionHandler('sort', value)}
       />
 
       {type === 'portfolio' && (
-        <CheckBox  value={employ} label='구직용 포트폴리오 모아보기' onChange={(value) => optionHandler('employ', value)} />
+        <CheckBox
+          value={employ}
+          boxSize="25px"
+          label="구직용 포트폴리오 모아보기"
+          onChange={(value) => optionHandler('employ', value)}
+        />
       )}
     </StyleFilterOption>
   );
