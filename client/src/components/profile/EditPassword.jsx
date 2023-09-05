@@ -19,30 +19,36 @@ export default function EditPassword({
             type="password"
             autoComplete="off"
             label="현재 비밀번호"
+            placeholder="영어,숫자,특수기호 포함 8글자 이상"
             fontSize="2rem"
             width="100%"
             height="4rem"
-            value={editPassword.prevPassword}
+            value={editPassword.prevPassword.value}
+            error={editPassword.prevPassword.error}
             onChange={(e) => setEditPassword({ ...editPassword, prevPassword: e.target.value })}
           />
           <Input
             type="password"
             autoComplete="off"
             label="새로운 비밀번호"
+            placeholder="영어,숫자,특수기호 포함 8글자 이상"
             fontSize="2rem"
             width="100%"
             height="4rem"
-            value={editPassword.newPassword}
+            value={editPassword.newPassword.value}
+            error={editPassword.newPassword.error}
             onChange={(e) => setEditPassword({ ...editPassword, newPassword: e.target.value })}
           />
           <Input
             type="password"
             autoComplete="off"
             label="새로운 비밀번호 재확인"
+            placeholder="영어,숫자,특수기호 포함 8글자 이상"
             fontSize="2rem"
             width="100%"
             height="4rem"
-            value={editPassword.newPassword2}
+            value={editPassword.newPassword2.value}
+            error={editPassword.newPassword2.error}
             onChange={(e) => setEditPassword({ ...editPassword, newPasswordCheck: e.target.value })}
           />
 

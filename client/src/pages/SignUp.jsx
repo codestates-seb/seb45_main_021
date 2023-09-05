@@ -141,7 +141,10 @@ export default function SignUp() {
 
   const handleClickGoogleBtn = () => {
     try {
-      api.post('/oauth2/authorization/google');
+      // api.post('/oauth2/authorization/google');
+      // window.location.assign(
+      //   'https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=15196070608-ti8mt0m3fo8tj48172bhq72h4re8bcni.apps.googleusercontent.com&scope=email%20profile&state=WXWKmZbi37lUKgjof9BPMSDKwOEL_QhVWWYwV5gMxcM%3D&redirect_uri=http://d9fd-14-53-203-58.ngrok-free.app/login/oauth2/code/google',
+      // );
     } catch (error) {
       console.log(error);
     }
@@ -162,8 +165,10 @@ export default function SignUp() {
       <StyleRowContainer className="row">
         <StyleColContainer className="col colgap">
           <StyleBtnContainer onClick={handleClickGoogleBtn}>
-            <FcGoogle className="logo" size={30} />
-            <span>Google 회원가입</span>
+            <a href="https://d9fd-14-53-203-58.ngrok-free.app/oauth2/authorization/google?redirect_uri=http://localhost:3000/login/redirect">
+              <FcGoogle className="logo" size={30} />
+              <span>Google 회원가입</span>
+            </a>
           </StyleBtnContainer>
           <StyleBtnContainer>
             <AiFillGithub className="logo" size={30} />

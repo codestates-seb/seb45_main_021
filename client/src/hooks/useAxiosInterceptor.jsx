@@ -4,14 +4,13 @@ import { updateUser, deleteUser } from '../redux/userform/userslice';
 import useNav from '../hooks/useNav';
 
 const instance = axios.create({
-  baseURL: 'https://5073-14-53-203-58.ngrok-free.app',
+  baseURL: 'https://d9fd-14-53-203-58.ngrok-free.app/',
   timeout: 7000,
   headers: { 'Content-Type': 'application/json', withCredentials: true },
 });
 
 export const useAxiosInterceptor = () => {
   const dispatch = useDispatch();
-  const userInfo = useSelector((state) => state.user.userInfo);
   const jwt = useSelector((state) => state.user.jwt);
   const { toAbout, toSignin } = useNav();
 
@@ -23,9 +22,7 @@ export const useAxiosInterceptor = () => {
       if (jwt?.refreshtoken) {
         config.headers['refreshtoken'] = `${jwt.refreshtoken}`;
       }
-      if (userInfo?.memberId) {
-        config.headers['memberId'] = `${userInfo.memberId}`;
-      }
+
       return config;
     },
     (error) => {

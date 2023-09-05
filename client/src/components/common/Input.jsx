@@ -16,9 +16,10 @@ const Label = styled.label`
 `;
 
 const StyleInput = styled.input`
-  margin-top:7px;
+  margin-top: 7px;
   background: none;
   border: 1px solid;
+  font-size: ${(props) => props.$fontSize};
   border-color: ${(props) => (props.$borderColor ? props.$borderColor : 'var(--black-100)')};
   border-radius: 3px;
   width: ${(props) => props.$width};
@@ -36,11 +37,12 @@ const StyleError = styled.div`
 `;
 
 const StyleTextArea = styled.textarea`
-  margin-top:7px;
+  margin-top: 7px;
   background: none;
   border: 1px solid;
   border-color: ${(props) => (props.$borderColor ? props.$borderColor : 'var(--black-100)')};
   border-radius: 3px;
+  font-size: ${(props) => props.$fontSize};
   width: ${(props) => props.$width};
   min-height: ${(props) => props.$height};
   color: ${(props) => (props.$color ? props.$color : 'var(--black-100)')};
@@ -72,6 +74,7 @@ export default function Input({
   width,
   height,
   color,
+  fontSize,
   labelColor,
   borderColor,
   onChangeHandler,
@@ -79,7 +82,7 @@ export default function Input({
   ...rest
 }) {
   return (
-    <StyleErrorInput className='col'>
+    <StyleErrorInput className="col">
       <Label htmlFor={name} $labelColor={labelColor}>
         {label}
       </Label>
@@ -88,6 +91,7 @@ export default function Input({
           $width={width}
           $height={height}
           $color={color}
+          $fontSize={fontSize}
           $borderColor={borderColor}
           onChange={onChangeHandler}
           {...rest}
@@ -97,6 +101,7 @@ export default function Input({
           $width={width}
           $height={height}
           $color={color}
+          $fontSize={fontSize}
           $borderColor={borderColor}
           onChange={onChangeHandler}
           type="password"
@@ -108,6 +113,7 @@ export default function Input({
           $width={width}
           $height={height}
           $color={color}
+          $fontSize={fontSize}
           $borderColor={borderColor}
           onChange={onChangeHandler}
           {...rest}
