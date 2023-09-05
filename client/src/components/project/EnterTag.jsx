@@ -54,9 +54,10 @@ export default function EnterTag({width, height, placeholder, dataform, setDataF
                 width={width}
                 height={height}
                 placeholder={placeholder}
+                type='text'
                 onKeyDown={(e)=>{
                     enterTagHandler(e);
-                    setDataForm(tags,'tags')
+                    setDataForm(null,tags,'tags')
                 }}
             >
             </Input>
@@ -70,7 +71,7 @@ export default function EnterTag({width, height, placeholder, dataform, setDataF
                             onClick={()=>{
                                 const newTags = tags.filter((_,i)=>i!==idx);
                                 setTags(newTags)
-                                setDataForm(newTags,'tags');
+                                setDataForm(null,newTags,'tags');
                             }}
                         />
                     </Tag>
