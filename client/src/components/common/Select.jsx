@@ -87,9 +87,9 @@ export default function Select({ width, options, defaultLabel, onClickHandler, f
     return () => window.removeEventListener('click', handleDropDownCloser);
   }, []);
 
-  useEffect(() => {
-    setSelectedLabel(value);
-  }, [value]);
+  // useEffect(() => {
+  //   setSelectedLabel(value);
+  // }, [value]);
 
   return (
     <Container className="col" $width={width}>
