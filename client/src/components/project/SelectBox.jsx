@@ -20,15 +20,16 @@ const StyleErrorOrClear = styled.p`
     color:${props=> props.$isError ? 'var(--error)' : 'green'};
 `
 
-export default function SelectBox({text, component, margin='11rem',error}) {
+export default function SelectBox({text, component, margin='11rem',error, hideError=false, name}) {
     return (
         <StyleSelectBox>
             <P>{text}</P>
             {component}
-            {error===true
-                ? <StyleErrorOrClear $isError={true}>{'언어 선택은 필수 입니다.'}</StyleErrorOrClear>
+            { !hideError ? (error===true
+                ? <StyleErrorOrClear $isError={true}>{`${name} 선택은 필수 입니다.`}</StyleErrorOrClear>
                 : error===undefined
                 ? <StyleErrorOrClear $isError={false}>{'선택됨'}</StyleErrorOrClear>
+                : <StyleErrorOrClear $isError={false}></StyleErrorOrClear>)
                 : <StyleErrorOrClear $isError={false}></StyleErrorOrClear>
             }
             {margin ? <MarginBox $margin={margin}/> : undefined}

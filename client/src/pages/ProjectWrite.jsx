@@ -14,7 +14,6 @@ import SelectBox from '../components/project/SelectBox';
 import useError from '../hooks/useError';
 import { checkValidations } from '../utils/checkValidations';
 import ProGress from '../components/common/ProGress';
-import axios from 'axios'
 
 const StyleProjectWrite = styled(Page)`
   height:auto;
@@ -154,13 +153,6 @@ export default function ProjectWrite() {
         newError[key] = true;
       }
       setErrors(newError);
-      axios.post('http://localhost:3000',dataForm)
-      .then((res)=>{
-        console.log(res.data);
-      })
-      .catch(err=>{
-        console.log(err);
-      })
       window.scrollTo(0,0);
     } else {
       console.log('유효성검사에 문제없음');
@@ -207,6 +199,7 @@ export default function ProjectWrite() {
               }}
             />}
             error={errors.language}
+            name='언어'
           />
 
           <SelectBox
@@ -221,6 +214,7 @@ export default function ProjectWrite() {
               }}
             />}
             error={errors.totalPeople}
+            name='모집 인원'
           />
 
           <SelectBox
@@ -229,6 +223,7 @@ export default function ProjectWrite() {
               <DateSelect defaultDate={oneWeekLater} width={width} setDataForm={setDataForm} setErrors={handleErrorChange}/>
             </div>}
             error={errors.closed_At}
+            name='마감 날짜'
           />
           
           <EnterTag width="100%" height="3.5rem" placeholder="태그는 최대 3개까지 등록이 가능합니다." dataForm={dataForm} setDataForm={setDataForm}/>
@@ -286,7 +281,7 @@ export default function ProjectWrite() {
             number={1}
             dataForm={dataForm}
             setDataForm={setDataForm}
-            setErrors={handleErrorChange}
+            handleErrorChange={handleErrorChange}
             clearError={clearError}
           />
 
@@ -297,8 +292,6 @@ export default function ProjectWrite() {
             number={7}
             dataForm={dataForm}
             setDataForm={setDataForm}
-            setErrors={handleErrorChange}
-            clearError={clearError}
           />
         </div>
       </div>

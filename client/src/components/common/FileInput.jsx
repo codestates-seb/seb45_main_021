@@ -149,7 +149,7 @@ export default function FileInput({
     height,
     number,
     setDataForm,
-    setErrors,
+    handleErrorChange,
     clearError,
 }) {
     const [imgs,setImgs] = useState([]);
@@ -204,7 +204,7 @@ export default function FileInput({
         const newImgs = imgs.filter((el,id)=>id!==idx);
         setImgs(newImgs);
         if(number===1){
-            setErrors(null,true,'titleImg');
+            handleErrorChange(null,true,'titleImg');
         }
     }
 
