@@ -13,6 +13,7 @@ import SelectBox from '../components/project/SelectBox';
 import useError from '../hooks/useError';
 import { checkValidations } from '../utils/checkValidations';
 import ProGress from '../components/common/ProGress';
+import ToggleButton from '../components/common/ToggleButton';
 
 const StyleProjectWrite = styled(Page)`
   height:auto;
@@ -60,10 +61,6 @@ const StyleProjectWrite = styled(Page)`
     color:var(--error);
     margin-top:1rem;
   }
-
-  .comments-allow {
-    gap:1rem;
-  }
 `
 
 export default function PortfolioWrite() {
@@ -85,7 +82,6 @@ export default function PortfolioWrite() {
     body : false,
     language : false,
     titleImg: false,
-    isComments : false,
   }
 
   const validationRules = {
@@ -103,9 +99,9 @@ export default function PortfolioWrite() {
     },
   }
   
-  const [dataForm,setDataForm, clearForm] = useForm(initialState, validationRules);
+  const [dataForm,setDataForm] = useForm(initialState, validationRules);
   const [errors, handleErrorChange, clearError, setErrors ] = useError(initialError ,validationRules);
-
+  console.log(dataForm);
   const width = '100%';
   const height = '90rem';
 
@@ -128,12 +124,13 @@ export default function PortfolioWrite() {
       for (let key in newError) {
         newError[key] = true;
       }
-      handleErrorChange(newError);
+      setErrors(newError);
       window.scrollTo(0,0);
     } else {
       console.log('유효성검사에 문제없음');
     }
   }
+
   return (
     <StyleProjectWrite className='col'>
       <WriteHeader text={'포트폴리오 헤더 부분'}/>
@@ -173,16 +170,23 @@ export default function PortfolioWrite() {
               }}
             />}
             error={errors.language}
+            name='언어'
           />
 
           <SelectBox
             text={'포트폴리오에 댓글 허용 여부'}
-            component={<div className='comments-allow col'>
-              <StyleBorderButton onClick={()=>setDataForm(null,true,'isComments')}>허용함</StyleBorderButton>
-              <StyleBorderButton onClick={()=>setDataForm(null,false,'isComments')}>허용하지 않음</StyleBorderButton>
-            </div>}
+            component={
+              <ToggleButton
+                width='10rem'
+                height='5rem'
+                onClickHandler={()=>{
+                  setDataForm(null, !dataForm.isComments, 'isComments')
+                }}
+                defaultValue={dataForm.isComments}
+              />
+            }
             margin={false}
-            error={errors.isComments}
+            hideError={true}
           />
           
           <EnterTag width="100%" height="3.5rem" placeholder="태그는 최대 3개까지 등록이 가능합니다." dataForm={dataForm} setDataForm={setDataForm}/>
@@ -220,6 +224,8 @@ export default function PortfolioWrite() {
             number={1}
             dataForm={dataForm}
             setDataForm={setDataForm}
+            handleErrorChange={handleErrorChange}
+            clearError={clearError}
           />
 
           <FileInput
