@@ -11,7 +11,6 @@ const instance = axios.create({
 
 export const useAxiosInterceptor = () => {
   const dispatch = useDispatch();
-  const userInfo = useSelector((state) => state.user.userInfo);
   const jwt = useSelector((state) => state.user.jwt);
   const { toAbout, toSignin } = useNav();
 
@@ -23,9 +22,7 @@ export const useAxiosInterceptor = () => {
       if (jwt?.refreshtoken) {
         config.headers['refreshtoken'] = `${jwt.refreshtoken}`;
       }
-      if (userInfo?.memberId) {
-        config.headers['memberId'] = `${userInfo.memberId}`;
-      }
+
       return config;
     },
     (error) => {
