@@ -3,6 +3,7 @@ import { styled } from 'styled-components';
 import Select from '../common/Select';
 import ListItem from './ListItem';
 import Page from '../common/Page';
+import { tablet, mobile } from '../../static/theme';
 
 const StyleContainer = styled(Page)`
   width: 100%;
@@ -31,7 +32,7 @@ const StyleContainer = styled(Page)`
     font-size: 2rem;
     justify-content: space-between;
     gap: 2rem;
-    p {
+    span {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -47,10 +48,32 @@ const StyleContainer = styled(Page)`
     list-style: none;
     .title {
       flex-shrink: 0;
-      width: 70rem;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      width: 60rem;
+      ${tablet} {
+        width: 40rem;
+      }
+      ${mobile} {
+        width: 20rem;
+      }
+    }
+    .views {
+      ${tablet} {
+        display: none;
+      }
+      ${mobile} {
+        display: none;
+      }
+    }
+    .likes {
+      ${tablet} {
+        display: none;
+      }
+      ${mobile} {
+        display: none;
+      }
     }
   }
 `;
@@ -86,10 +109,10 @@ export default function Project({ id, data }) {
       <ul className="listWrapper col">
         <li className="listHeader row">
           <span className="title">제목</span>
-          <span>작성자</span>
-          <span>작성시간</span>
-          <span>조회수</span>
-          <span>좋아요</span>
+          <span className="author">작성자</span>
+          <span className="created_At">작성시간</span>
+          <span className="views">조회수</span>
+          <span className="likes">좋아요</span>
         </li>
         {filter.value === 'add'
           ? add.map((el, i) => <ListItem key={i} data={el} type="프로젝트" />)

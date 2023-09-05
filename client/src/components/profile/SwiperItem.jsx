@@ -2,6 +2,9 @@ import React from 'react';
 import { styled } from 'styled-components';
 import { LiaPlusSolid } from 'react-icons/lia';
 import { StyleBorderButton } from '../common/Buttons';
+import { useParams } from 'react-router-dom';
+import api from '../../hooks/useAxiosInterceptor';
+import useNav from '../../hooks/useNav';
 
 const SwiperCard = styled.div`
   width: 100%;
@@ -79,12 +82,19 @@ const ButtonWrapper = styled.div`
 `;
 
 export default function SwiperItem({ activePage, data, idx, handler, idxHandler }) {
+  const { userId } = useParams();
+  const { toProfile } = useNav();
+
   const handleEdit = (type) => {
     idxHandler(idx);
     handler(type);
   };
   const deleteHandler = () => {
     console.log('삭제요청');
+    api.delete(`/projectcards/${idx}`).then((el) => {
+      window.alert('삭제가 완료되었습니다.');
+      toProfile(userId);
+    });
   };
   return (
     <>

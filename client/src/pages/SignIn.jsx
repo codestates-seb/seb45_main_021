@@ -9,6 +9,7 @@ import api from '../hooks/useAxiosInterceptor';
 import { useDispatch } from 'react-redux';
 import { updateUser, deleteUser } from '../redux/userform/userslice';
 import { isValidEmail, isValidPassword } from '../components/profile/isValid';
+import userDefaultImg from '../static/images/userDefaultImg.jpeg';
 
 const StyleContainer = styled(Page)`
   display: flex;
@@ -117,11 +118,20 @@ export default function SignIn() {
       if (isvalidEmail && isvalidPassword) {
         setError({ email: '', password: '' });
         api.post('/members/login', { email, password }).then((el) => {
-          dispatch(updateUser({ isLogin: true, userInfo: { ...el.data } }));
-          const { accesstoken, refreshtoken } = el.headers;
-          if (accesstoken && refreshtoken) {
-            dispatch(updateUser({ jwt: { accesstoken: accesstoken, refreshtoken: refreshtoken } }));
-          }
+          dispatch(
+            updateUser({
+              isLogin: true,
+              userInfo: {
+                memberId: el.data.memberId,
+                userName: el.data.username,
+                imgUrl: el.data.imgUrl,
+              },
+            }),
+          );
+          // const { accesstoken, refreshtoken } = el.headers;
+          // if (accesstoken && refreshtoken) {
+          //   dispatch(updateUser({ jwt: { accesstoken: accesstoken, refreshtoken: refreshtoken } }));
+          // }
         });
       } else if (!isvalidEmail && !isvalidPassword) {
         setError({

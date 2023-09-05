@@ -8,14 +8,17 @@ import LikeList from '../components/profile/LikeList';
 import ProjectCard from '../components/profile/ProjectCard';
 import AnchorMenu from '../components/profile/AnchorMenu';
 import Page from '../components/common/Page';
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const StyleContainer = styled(Page)`
   width: 100%;
+  height: 100%;
+  gap: 2rem;
   padding-top: 2rem;
   padding-top: 55px;
   display: flex;
   flex-direction: column;
-  overflow: scroll;
   position: relative;
 `;
 
@@ -200,7 +203,7 @@ const data = {
       userName: '유명인',
       title: '안녕하세요 자신있는 개발자입니다.',
       aboutMe: '자기소개 이렇게 적는게 맞는걸까요오오오드용액 가버렷 컽컽컽 !!@!@',
-      call: '010-1111-2222',
+      phone: '010-1111-2222',
       tags: ['JavaScript', 'React', 'CSS'],
     },
     {
@@ -210,7 +213,7 @@ const data = {
       userName: '유명인',
       title: '안녕하세요 자신없는 개발자입니다.',
       aboutMe: '내가 자신없으면 너가 뭘 할 수 있는데 으이 ?!!?',
-      call: '010-3333-2222',
+      phone: '010-3333-2222',
       tags: [],
     },
     {},
@@ -218,13 +221,20 @@ const data = {
 };
 
 export default function Profile() {
+  const { userId } = useParams();
+  const user = useSelector((state) => state.user);
   return (
     <StyleContainer>
       <ProfileCard id="profile" data={data.profile} />
       <Project id="project" data={data.project} />
       <Portfolio id="portfolio" data={data.portfolio} />
-      <LikeList id="likeList" data={data.likeList} />
-      <ProjectCard id="projectCard" data={data.projectCard} />
+      {user.isLogin && Number(userId) === user.userInfo.memberId && (
+        <>
+          <LikeList id="likeList" data={data.likeList} />
+          <ProjectCard id="projectCard" data={data.projectCard} />
+        </>
+      )}
+
       <AnchorMenu />
     </StyleContainer>
   );

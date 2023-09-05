@@ -7,3 +7,8 @@ export const isValidPassword = (password) => {
   const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   return passwordPattern.test(password);
 };
+
+export const isValidPhone = (phone) => {
+  const phonePattern = /^010\d{8}$/;
+  return phonePattern.test(phone);
+};
