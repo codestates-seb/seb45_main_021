@@ -15,7 +15,7 @@ const RUST_COLOR = '#DEA584';
 const DART_COLOR = '#0175C2';
 const CPP_COLOR = '#00599C';
 
-const StyleLanguage = styled.span`
+const StyleLanguageTag = styled.span`
   background-color: ${(props) => props.$background};
   padding: 3px 6px;
   position: absolute;
@@ -40,7 +40,7 @@ const StyleLanguage = styled.span`
  * @returns {JSX.Element}
  */
 
-export default function Language({ language }) {
+export default function LanguageTag({ language }) {
   let background = '';
   let color = '';
 
@@ -93,8 +93,8 @@ export default function Language({ language }) {
   }
 
   return (
-    <StyleLanguage $background={background} $color={color}>
+    <StyleLanguageTag $background={background} $color={color}>
       {language}
-    </StyleLanguage>
+    </StyleLanguageTag>
   );
 }

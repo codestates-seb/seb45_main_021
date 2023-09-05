@@ -19,7 +19,7 @@ const StyleHeader = styled.header`
   .inner {
     display: flex;
     align-items: center;
-    gap: 2rem;
+    gap: 3rem;
   }
   h1 {
     font-family: var(--monoton);
