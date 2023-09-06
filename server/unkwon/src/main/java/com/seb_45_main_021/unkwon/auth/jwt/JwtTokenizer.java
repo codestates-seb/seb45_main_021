@@ -1,5 +1,7 @@
 package com.seb_45_main_021.unkwon.auth.jwt;
 
+import com.seb_45_main_021.unkwon.exception.ExceptionCode;
+import com.seb_45_main_021.unkwon.exception.JwtException;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.member.repository.MemberRepository;
 import io.jsonwebtoken.Claims;
@@ -10,6 +12,7 @@ import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +26,7 @@ import java.util.Map;
 // (1)
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class JwtTokenizer {
     @Getter
     @Value("${jwt.key.secret}")
@@ -79,7 +83,7 @@ public class JwtTokenizer {
     }
 
 
-    // subject = memberId
+    // subject = memberId (식별자)
     public String getSubject(String jws, String base64EncodedSecretKey){
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
         String subject = Jwts.parserBuilder()
@@ -95,9 +99,9 @@ public class JwtTokenizer {
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
         Jwts.parserBuilder()
-                .setSigningKey(key)
+                .setSigningKey(key) // 전달된 key 로 jwt 의 서명 확인, 서명 변경 시 jwt 무효화 처리
                 .build()
-                .parseClaimsJws(jws);
+                .parseClaimsJws(jws); // JWT 의 내용 (claims, payload) 확인, 서명을 통해 변경 여부 확인 (ExpiredJwtException)
     }
 
     // (5)
@@ -124,6 +128,8 @@ public class JwtTokenizer {
         claims.put("username", member.getEmail());
         claims.put("roles", member.getRoles());
 
+        log.info(member.getRoles().toString());
+
         // subject 를 이메일 대신 회원 식별자로 변경
         String subject = String.valueOf(member.getMemberId());
         Date expiration = getTokenExpiration(getAccessTokenExpirationMinutes());
@@ -147,4 +153,10 @@ public class JwtTokenizer {
 
         return accessToken;
     }
+
+    public Member findMemberByMemberId(Long memberId){
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new JwtException(ExceptionCode.MEMBER_NOT_FOUND));
+    }
+
 }

@@ -13,6 +13,7 @@ import com.seb_45_main_021.unkwon.oauth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -55,7 +56,8 @@ public class SecurityConfiguration {
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
                         .antMatchers("/h2/**").permitAll()
-                        .antMatchers("/portfolios/**", "/projects/**", "/members/**").permitAll()
+                        // .antMatchers(HttpMethod.OPTIONS).permitAll() // preflight 요청은 OPTIONS 메서드를 사용하기 때문에  허용
+                        .antMatchers("/portfolios/**", "/projects/**", "/members/**", "/projectcards/**", "/oauth2/**").permitAll()
                         .anyRequest().authenticated())
                 .oauth2Login()
                 .successHandler(oAuth2LoginSuccessHandler)
@@ -71,7 +73,6 @@ public class SecurityConfiguration {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-
     // CORS 정책
     @Bean
     CorsConfigurationSource corsConfigurationSource(){
@@ -79,11 +80,12 @@ public class SecurityConfiguration {
         // 모든 출처에 대한 스크립트 기반 HTTP 통신 허용
         configuration.setAllowedOrigins(Arrays.asList("*"));
         // HTTP 메서드에 대한 HTTP 통신 허용
-        configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PATCH", "DELETE"));
+        configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setExposedHeaders(List.of(
                 "AccessToken",
-                "RefreshToken"
+                "RefreshToken",
+                "memberId"
         ));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -96,7 +98,6 @@ public class SecurityConfiguration {
     public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity>{
         @Override
         public void configure(HttpSecurity builder) throws Exception{
-
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
             JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
@@ -105,7 +106,7 @@ public class SecurityConfiguration {
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new UserAuthenticationFailureHandler());
 
             JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
-            ExceptionHandlerFilter exceptionHandlerFilter = new ExceptionHandlerFilter();
+            ExceptionHandlerFilter exceptionHandlerFilter = new ExceptionHandlerFilter(jwtTokenizer);
 
             builder
                     .addFilter(jwtAuthenticationFilter)
