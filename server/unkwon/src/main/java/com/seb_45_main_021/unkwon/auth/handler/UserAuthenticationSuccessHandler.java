@@ -7,7 +7,6 @@ import com.seb_45_main_021.unkwon.exception.ExceptionCode;
 import com.seb_45_main_021.unkwon.member.dto.response.LoginResponseDto;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.member.repository.MemberRepository;
-import io.jsonwebtoken.Jwt;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -49,6 +48,7 @@ public class UserAuthenticationSuccessHandler implements AuthenticationSuccessHa
                 .memberId(member.getMemberId())
                 .username(member.getUsername())
                 .imgUrl(member.getImgUrl())
+                .socialType(member.getSocialType()) // 값이 null 이기 때문에 클라이언트 쪽에서는 확인 불가능
                 .build();
 
         response.setStatus(HttpStatus.OK.value());
@@ -64,7 +64,7 @@ public class UserAuthenticationSuccessHandler implements AuthenticationSuccessHa
         response.setHeader("accessToken", accessToken);
         response.setHeader("refreshToken", refreshToken);
 
-        member.setRefreshToken(refreshToken);
+        member.updateRefreshToken(refreshToken);
 
         memberRepository.save(member);
     }
@@ -73,6 +73,4 @@ public class UserAuthenticationSuccessHandler implements AuthenticationSuccessHa
         return memberRepository.findByEmail(email)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
-
-
 }
