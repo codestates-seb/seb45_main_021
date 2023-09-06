@@ -3,8 +3,13 @@ package com.seb_45_main_021.unkwon.auth.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seb_45_main_021.unkwon.auth.jwt.JwtTokenizer;
 import com.seb_45_main_021.unkwon.exception.ErrorResponse;
+<<<<<<< HEAD
 import com.seb_45_main_021.unkwon.exception.JwtException;
 import lombok.RequiredArgsConstructor;
+=======
+
+import com.seb_45_main_021.unkwon.exception.JwtException;
+>>>>>>> serverDev
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.filter.OncePerRequestFilter;

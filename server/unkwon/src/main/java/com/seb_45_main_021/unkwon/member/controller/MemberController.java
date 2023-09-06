@@ -5,6 +5,7 @@ import com.seb_45_main_021.unkwon.dto.MultiInformResponseDto;
 import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
 import com.seb_45_main_021.unkwon.member.dto.request.MemberInformUpdateDto;
 import com.seb_45_main_021.unkwon.member.dto.request.MemberPasswordUpdateDto;
+import com.seb_45_main_021.unkwon.heart.service.PortfolioHeartService;
 import com.seb_45_main_021.unkwon.member.dto.request.MemberSignupDto;
 import com.seb_45_main_021.unkwon.member.dto.response.MemberInformResponseDto;
 import com.seb_45_main_021.unkwon.member.entity.Member;
@@ -35,6 +36,8 @@ public class MemberController {
     private final ProjectCardMapper projectCardMapper;
 
     /** 회원 가입 **/
+    private final PortfolioHeartService portfolioHeartService;
+
     @PostMapping("/signup")
     public ResponseEntity signUp(@Valid @RequestBody MemberSignupDto memberSignupDto){
         memberService.signUp(memberSignupDto);

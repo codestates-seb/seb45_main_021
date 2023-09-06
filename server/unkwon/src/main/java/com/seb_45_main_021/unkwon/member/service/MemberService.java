@@ -11,7 +11,12 @@ import com.seb_45_main_021.unkwon.member.dto.response.MemberInformResponseDto;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+<<<<<<< HEAD
 import org.springframework.security.core.parameters.P;
+=======
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+>>>>>>> serverDev
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -132,16 +137,22 @@ public class MemberService {
         }
     }
 
+<<<<<<< HEAD
     /** 회원 DB 조회 (식별자) **/
+=======
+>>>>>>> serverDev
     public Member findVerifiedMember(Long memberId){
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 
+<<<<<<< HEAD
     /** 비밀번호 비교 **/
     private void comparePassword(String prevPassword, String userPassword){
         if(!passwordEncoder.matches(prevPassword, userPassword))
             throw new BusinessLogicException(ExceptionCode.DIFFERENT_PASSWORD);
     }
 
+=======
+>>>>>>> serverDev
 }

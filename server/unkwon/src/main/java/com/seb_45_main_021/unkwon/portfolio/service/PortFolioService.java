@@ -82,12 +82,21 @@ public class PortFolioService {
             likeQueryBuilder.append(temp);
         }
 
+<<<<<<< HEAD
         PageRequest pageRequest = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "created_at"));
         Page<PortFolio> searchPortfolioTagList = portFolioRepository.getSearchPortfolioList(likeQueryBuilder.toString(), pageRequest);
 
         System.out.println();
         return searchPortfolioTagList;
     }
+=======
+            PageRequest pageRequest = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "created_at"));
+            Page<PortFolio> searchPortfolioTagList = portFolioRepository.getSearchPortfolioList(likeQueryBuilder.toString(), pageRequest);
+
+            System.out.println();
+            return searchPortfolioTagList;
+        }
+>>>>>>> serverDev
 
     public Page<PortFolio> findLangPortfolio(int page, int size, String[] lang) { //검색 처리
 
@@ -126,4 +135,8 @@ public class PortFolioService {
         portFolioRepository.delete(portFolio);
     }
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> serverDev

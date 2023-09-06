@@ -58,4 +58,10 @@ public class PortfolioHeartService {
     public List<PortfolioHeart> getHeartByPortfolio(PortFolio portFolio){
         return portfolioHeartRepository.findByPortFolio(portFolio);
     }
+<<<<<<< HEAD
 }
+=======
+}
+
+
+>>>>>>> serverDev

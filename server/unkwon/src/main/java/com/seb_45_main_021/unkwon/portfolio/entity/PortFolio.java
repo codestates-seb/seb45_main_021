@@ -55,4 +55,8 @@ public class PortFolio extends Auditable {
 //    private String img;
 //    private String titleImg;
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> serverDev

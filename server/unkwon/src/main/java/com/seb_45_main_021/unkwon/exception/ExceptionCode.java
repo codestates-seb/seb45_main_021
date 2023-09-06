@@ -14,8 +14,16 @@ public enum ExceptionCode {
     BAD_ACCESS(401, "Bad Access"),
     REFRESHTOKEN_HAS_EXPIRED(401, "refreshToken has expired"),
     STATUS_LOGIN(401, "Status Login"),
+<<<<<<< HEAD
     CARD_LIMIT_OVER(422, "Card Limit Over"),
     BAD_TOKEN(401, "Bad Token");
+=======
+    BAD_TOKEN(401, "Bad Token"),
+    PORTFOLIO_NOT_FOUND(404,"Portfolio not found"),
+    COMMENT_NOT_FOUND(404,"Comment not found");
+
+
+>>>>>>> serverDev
 
     @Getter
     private int status;
