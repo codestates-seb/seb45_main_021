@@ -48,12 +48,7 @@ public class CommentController {
     // 댓글 수정
     @PatchMapping("/{comment-id}")
     public ResponseEntity patchComment(@PathVariable("comment-id") @Positive long commentId,
-                                       @Valid @RequestBody CommentDto.PatchDto commentPatchDto
-<<<<<<< HEAD
-            /*@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken*/) {
-=======
-                                       /*@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken*/) {
->>>>>>> serverDev
+                                       @Valid @RequestBody CommentDto.PatchDto commentPatchDto) {
 
         commentPatchDto.setCommentId(commentId);
 
@@ -75,10 +70,4 @@ public class CommentController {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> serverDev

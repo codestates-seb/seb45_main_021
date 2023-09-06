@@ -102,7 +102,6 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         // 일치할 경우 accessToken 확인 ( refreshToken 유효 )
         Map<String, Object> claims = null;
         try{
-<<<<<<< HEAD
             // 1. accessToken 유효 판단
             claims = jwtTokenizer.getClaims(accessToken, base64EncodedSecretKey).getBody();
         }catch (SignatureException se) {
@@ -111,39 +110,19 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
             // 2. accessToken 이 유효하지 않다면 refreshToken 을 통해 재발급 ( claims 는 위에서 조회한 member 객체를 이용해서 새로 생성 )
             String newAccessToken = jwtTokenizer.delegateAccessToken(member);
             response.setHeader("AccessToken", newAccessToken);
-=======
-            jwtTokenizer.verifySignature(refreshToken, base64EncodedSecretKey);
-        }catch (SignatureException se) {
-            throw new JwtException(ExceptionCode.BAD_TOKEN);
-        } catch (ExpiredJwtException ee) {
-            throw new JwtException(ExceptionCode.TIME_OUT);
-        } catch (Exception e) {
-            throw new JwtException(ExceptionCode.BAD_ACCESS);
-        }
-        // refreshToken 은 문제 없음.
-        // accessToken 검증
-        try{
-            claims = jwtTokenizer.getClaims(accessToken, base64EncodedSecretKey).getBody();
-        }catch (SignatureException se) {
-            throw new JwtException(ExceptionCode.BAD_TOKEN);
-        } catch (ExpiredJwtException ee) {
-            // 시간 만료시 재발급 후 헤더 갱신
-            regenerateToken(claims, response);
->>>>>>> serverDev
-        } catch (Exception e) {
+        }catch (Exception e) {
             throw new JwtException(ExceptionCode.BAD_ACCESS);
         }
 
         claims.put("memberId", hostId);
         return claims;
     }
-<<<<<<< HEAD
 
-    private Long verifyRefreshToken(String refreshToken, String base64EncodedSecretKey){
+    private Long verifyRefreshToken(String refreshToken, String base64EncodedSecretKey) {
         Long hostId = null;
-        try{
+        try {
             hostId = Long.parseLong(jwtTokenizer.getSubject(refreshToken, base64EncodedSecretKey));
-        }catch (SignatureException se) {
+        } catch (SignatureException se) {
             throw new JwtException(ExceptionCode.BAD_TOKEN);
         } catch (ExpiredJwtException ee) {
             throw new JwtException(ExceptionCode.REFRESHTOKEN_HAS_EXPIRED);
@@ -151,14 +130,6 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
             throw new JwtException(ExceptionCode.BAD_ACCESS);
         }
         return hostId;
-=======
-    private void regenerateToken(Map<String, Object> claims, HttpServletResponse response){
-        String subject = (String) claims.get("username");
-        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-        Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
-        String newAccessToken = "Bearer" + jwtTokenizer.generateAccessToken(claims, subject, expiration, base64EncodedSecretKey);
-        response.setHeader("AccessToken", newAccessToken);
->>>>>>> serverDev
     }
 
 }

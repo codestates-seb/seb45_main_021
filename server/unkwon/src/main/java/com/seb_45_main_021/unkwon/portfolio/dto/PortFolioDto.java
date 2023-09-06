@@ -95,9 +95,4 @@ public class PortFolioDto {
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
     }
-
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> serverDev
