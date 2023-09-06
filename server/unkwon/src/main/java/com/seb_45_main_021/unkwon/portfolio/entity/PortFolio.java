@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -28,9 +30,14 @@ public class PortFolio extends Auditable {
     @Column(nullable = false)
     private int view = 0;
 
+    private int heartCount = 0;
+
     private boolean IsComment = true;
 
     private boolean IsEmploy = true;
+
+    @Column(name = "heart_at")
+    private LocalDateTime heartAt; // 포트폴리오가 좋아요를 받은 날짜 및 시간
 
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")

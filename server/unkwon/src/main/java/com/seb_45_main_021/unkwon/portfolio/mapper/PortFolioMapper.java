@@ -57,6 +57,7 @@ public interface PortFolioMapper {
                 .commentCount(portFolio.getComments().size())
                 .tags(new String[]{portFolio.getTags()})
                 .lang(new String[]{portFolio.getLang()})
+                .heartCount(portFolio.getHeartCount())
                 .build();
 
         return response;
@@ -83,6 +84,7 @@ public interface PortFolioMapper {
                 .lang(new String[]{portFolio.getLang()})
                 .IsEmploy(portFolio.isIsEmploy())
                 .IsComment(portFolio.isIsComment())
+                .heartCount(portFolio.getHeartCount())
                 .build();
 
         List<Comment> comments = portFolio.getComments();

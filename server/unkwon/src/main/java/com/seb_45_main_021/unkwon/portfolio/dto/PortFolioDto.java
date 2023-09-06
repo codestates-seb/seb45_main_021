@@ -32,6 +32,7 @@ public class PortFolioDto {
         private String[] tags;
         private String[] lang;
 
+
     }
 
     @Getter
@@ -53,6 +54,7 @@ public class PortFolioDto {
         private LocalDateTime modifiedAt;
         private String[] tags;
         private String[] lang;
+        private int heartCount;
 
     }
 
@@ -75,7 +77,7 @@ public class PortFolioDto {
         private boolean IsEmploy;
         private String[] tags;
         private String[] lang;
-
+        private int heartCount;
     }
     @Getter @Setter
     @Builder

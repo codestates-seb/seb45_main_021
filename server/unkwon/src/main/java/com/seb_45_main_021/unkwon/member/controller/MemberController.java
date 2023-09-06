@@ -1,9 +1,9 @@
 package com.seb_45_main_021.unkwon.member.controller;
 
+import com.seb_45_main_021.unkwon.heart.service.PortfolioHeartService;
 import com.seb_45_main_021.unkwon.member.dto.request.MemberSignupDto;
 import com.seb_45_main_021.unkwon.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +16,8 @@ import javax.validation.constraints.Positive;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
+    private final PortfolioHeartService portfolioHeartService;
+
     @PostMapping("/signup")
     public ResponseEntity signUp(@Valid @RequestBody MemberSignupDto memberSignupDto){
         memberService.signUp(memberSignupDto);
@@ -29,4 +31,5 @@ public class MemberController {
 
         return new ResponseEntity(HttpStatus.OK);
     }
+
 }

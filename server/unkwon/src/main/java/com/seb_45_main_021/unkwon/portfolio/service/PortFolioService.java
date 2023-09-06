@@ -6,12 +6,17 @@ import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
 import com.seb_45_main_021.unkwon.portfolio.repository.PortFolioRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sound.sampled.Port;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -101,12 +106,20 @@ public class PortFolioService {
         System.out.println();
         return searchPortfolioLangList;
     }
+    public Page<PortFolio> findWeeklyPopularPortfolios(Pageable pageRequest) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime oneWeekAgo = now.minus(1, ChronoUnit.WEEKS);
+
+        return portFolioRepository.findByHeartAtBetween(oneWeekAgo, now, pageRequest);
+    }
+
 
     public Page<PortFolio> findPortfoliosView(int page, int size){
 
         return portFolioRepository.findAll(
                 PageRequest.of(page, size, Sort.by("view").descending()));
     }
+
     public void deletePortfolio(long portfolioId){
         PortFolio portFolio = findByPortfolioId(portfolioId);
 
