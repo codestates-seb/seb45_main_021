@@ -1,55 +1,66 @@
 import { useEffect, useState, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
+const DEFAULT_OPTIONS = {
+  lang: 'all',
+  sort: 'latest',
+  employ: false,
+  keyword: '',
+  type: 'project',
+};
+
 export default function useFilterOption() {
   const location = useLocation();
   const navigate = useNavigate();
-  const langDefaultOption = 'all';
-  const sortDefaultOption = 'latest';
-  const employDefaultOption = false;
-  const type = location.pathname.split('/')[1];
   const queryParams = new URLSearchParams(location.search);
+  const pageType = location.pathname.split('/')[1];
   const firstRendering = useRef(true);
 
-  const [option, setOption] = useState({
-    lang: queryParams.get('lang') || langDefaultOption,
-    sort: queryParams.get('sort') || sortDefaultOption,
-    employ: queryParams.get('employ') || employDefaultOption,
-  });
-
-  const { lang, employ, sort } = option;
-
-  const optionHandler = (name, value) => {
-    setOption((prevOption) => ({ ...prevOption, [name]: value }));
+  const initialOptions = {
+    lang: queryParams.get('lang') || DEFAULT_OPTIONS.lang,
+    sort: queryParams.get('sort') || DEFAULT_OPTIONS.sort,
+    employ: queryParams.get('employ') === 'true' || false,
+    keyword: queryParams.get('keyword') || DEFAULT_OPTIONS.keyword,
+    type: queryParams.get('type') || DEFAULT_OPTIONS.type,
   };
 
-  const clearOption = () => {
-    setOption({
-      lang: langDefaultOption,
-      sort: sortDefaultOption,
-      employ: employDefaultOption,
-    });
+  const [options, setOptions] = useState(initialOptions);
+
+  const optionHandler = (name, value) => {
+    setOptions((prevOptions) => ({ ...prevOptions, [name]: value }));
+  };
+
+  const clearOptions = () => {
+    setOptions(DEFAULT_OPTIONS);
   };
 
   useEffect(() => {
     const newParams = new URLSearchParams();
-    console.log({ lang, sort, employ });
+    Object.entries(options).forEach(([key, value]) => {
+      if (value !== DEFAULT_OPTIONS[key]) {
+        newParams.set(key, value);
+      }
+    });
 
-    if (lang !== langDefaultOption) newParams.set('lang', lang);
-    if (sort !== sortDefaultOption) newParams.set('sort', sort);
-    if (employ !== employDefaultOption) newParams.set('employ', employ);
-    newParams.toString() === ''
-      ? navigate(`/${type.toLowerCase()}`)
-      : navigate(`/${type.toLowerCase()}?${newParams.toString()}`);
-  }, [lang, sort, employ, navigate]);
+    if (pageType === 'search') {
+      newParams.set('type', options.type);
+    }
+    const newPath =
+      newParams.toString() === ''
+        ? `/${pageType.toLowerCase()}`
+        : `/${pageType.toLowerCase()}?${newParams.toString()}`;
+    navigate(newPath);
+  }, [options, pageType, navigate]);
 
   useEffect(() => {
-    if (firstRendering.current) {
-      firstRendering.current = false;
+    if (!firstRendering.current) {
+      clearOptions();
     } else {
-      clearOption();
+      firstRendering.current = false;
     }
-  }, [type]);
+  }, [pageType]);
 
-  return [option, optionHandler];
+  useEffect(() => optionHandler('employ', false), [options.type]);
+
+  return [options, optionHandler];
 }

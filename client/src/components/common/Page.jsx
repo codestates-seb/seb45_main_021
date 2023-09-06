@@ -4,7 +4,7 @@ const Page = styled.section`
   width: var(--inner);
   margin: var(--center);
   padding-top: 65px;
-  flex: 1;
+  min-height: 100vh;
   position: relative;
 `;
 

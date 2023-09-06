@@ -19,7 +19,6 @@ import PostList from './pages/PostList';
 import { styled } from 'styled-components';
 
 const StyleApp = styled.div`
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
 `;
@@ -43,8 +42,7 @@ function App() {
         <Route path="/portfolio/write" element={<PortfolioWrite />} />
         <Route path="/portfolio/detail/:portfolioId" element={<PortfolioDetail />} />
         <Route path="/portfolio/edit/:portfolioId" element={<PortfolioEdit />} />
-        <Route path="/search/project/:keyword" element={<Search />} />
-        <Route path="/search/portfolio/:keyword" element={<Search />} />
+        <Route path="/search" element={<Search />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />

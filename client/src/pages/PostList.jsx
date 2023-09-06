@@ -5,6 +5,7 @@ import TextCoverOver from '../components/common/TextCoverOver';
 import OneWeekTopTenList from '../components/postList/OneWeekTopTenList';
 import FilterOption from '../components/postList/FilterOption';
 import useFilterOption from '../hooks/useFilterOption';
+import { useEffect } from 'react';
 
 const StylePostList = styled(Page)`
   h3 {
@@ -12,10 +13,8 @@ const StylePostList = styled(Page)`
     margin-top: 50px;
   }
   .user-action {
-    margin-top: 20px;
+    margin-top: 50px;
     position: relative;
-    height: 45px;
-    display: flex;
   }
   .infinite {
     border: 1px solid white;
@@ -28,7 +27,11 @@ export default function PostList() {
   const path = useLocation().pathname.split('/');
   const type = path[1];
   const [option, optionHandler] = useFilterOption();
-  console.log(option);
+
+  useEffect(() => {
+    console.log('postList 요청');
+  }, [option]);
+
   return (
     <StylePostList>
       <h3>

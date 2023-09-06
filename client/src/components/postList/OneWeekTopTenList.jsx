@@ -12,8 +12,6 @@ const StyleOneWeekTopTenList = styled.div`
   position: absolute;
   padding: 1.5rem 1rem;
   backdrop-filter: blur(5px);
-  overflow: hidden;
-  height: ${(props) => (props.$isSpread ? '400px' : '45px')};
   background-color: var(--backgroundColor);
   transition: all.2s;
   z-index: 2;
@@ -24,9 +22,16 @@ const StyleOneWeekTopTenList = styled.div`
   .swiper-wrapper {
     height: 15px;
   }
+  h5 {
+    top: -25px;
+    font-size: 1.4rem;
+    font-weight: var(--nanum-semi-bold);
+    left: 0;
+    position: absolute;
+  }
   button {
     position: absolute;
-    right: 0;
+    right: 3px;
     top: 10px;
     z-index: 2;
   }
@@ -48,10 +53,8 @@ export default function OneWeekTopTenList({ type }) {
 
   return (
     <StyleOneWeekTopTenList onClick={(e) => e.stopPropagation()} $isSpread={isSpread}>
-      {/* <div className="top-menu">
-        <h4>주간 인기 게시글</h4> */}
+      <h5>주간 인기 게시글</h5>
       <button onClick={() => setIsSpread((prev) => !prev)}>{isSpread ? '접기' : '펼치기'}</button>
-      {/* </div> */}
       {isSpread ? (
         topTenList.map((item, i) => (
           <OneWeekTopTenItem key={item.id} type={type} ranking={i + 1} item={item} />

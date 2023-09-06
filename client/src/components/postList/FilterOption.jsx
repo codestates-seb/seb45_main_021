@@ -7,7 +7,8 @@ const StyleFilterOption = styled.div`
   display: flex;
   width: 100%;
   gap: 15px;
-  align-items: center;
+  height: 47px;
+  align-items: end;
   justify-content: end;
   z-index: 1;
   .select {
@@ -28,7 +29,7 @@ export default function FilterOption({ optionHandler, option, type }) {
   });
 
   return (
-    <StyleFilterOption>
+    <StyleFilterOption className="filter-option">
       <Select
         className="selected-box"
         width="20rem"
