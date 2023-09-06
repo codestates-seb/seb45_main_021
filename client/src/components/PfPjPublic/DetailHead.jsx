@@ -2,10 +2,9 @@ import React from 'react';
 import styled from 'styled-components'
 import defaultImg from '../../static/images/userDefaultImg.jpeg'
 import Like from '../common/Like';
-import { dateFormatter } from './../../utils/dateFormatter';
+import { dateFormatter } from '../../utils/dateFormatter';
 import useNav from '../../hooks/useNav';
 import {HiX} from 'react-icons/hi'
-import Tag from '../common/Tag';
 
 const StyleDetailHead = styled.div`
     height : auto;
