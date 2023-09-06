@@ -1,12 +1,10 @@
 package com.seb_45_main_021.unkwon.heart.entity;
 
-import com.seb_45_main_021.unkwon.audit.Auditable;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -14,7 +12,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Heart {
+public class PortfolioHeart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,9 +32,9 @@ public class Heart {
     private Member member;
 
 
-    public Heart(boolean status,
-                 Member member,
-                 PortFolio portFolio) {
+    public PortfolioHeart(boolean status,
+                          Member member,
+                          PortFolio portFolio) {
         this.status = status;
         this.member = member;
         this.portFolio = portFolio;

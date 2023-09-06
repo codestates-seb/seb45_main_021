@@ -1,9 +1,8 @@
 package com.seb_45_main_021.unkwon.heart.controller;
 
 import com.seb_45_main_021.unkwon.dto.MultiResponseDto;
-import com.seb_45_main_021.unkwon.heart.dto.HeartDto;
-import com.seb_45_main_021.unkwon.heart.entity.Heart;
-import com.seb_45_main_021.unkwon.heart.service.HeartService;
+import com.seb_45_main_021.unkwon.heart.dto.PortfolioHeartDto;
+import com.seb_45_main_021.unkwon.heart.service.PortfolioHeartService;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.member.service.MemberService;
 import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
@@ -20,9 +19,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/hearts")
-public class HeartController {
+public class PortfolioHeartController {
 
-    private final HeartService heartService;
+    private final PortfolioHeartService portfolioHeartService;
     private final PortFolioService portFolioService;
     private final MemberService memberService;
     private final PortFolioMapper mapper;
@@ -30,8 +29,8 @@ public class HeartController {
 
 
     @Autowired
-    public HeartController(HeartService heartService, PortFolioService portFolioService, MemberService memberService, PortFolioMapper mapper) {
-        this.heartService = heartService;
+    public PortfolioHeartController(PortfolioHeartService portfolioHeartService, PortFolioService portFolioService, MemberService memberService, PortFolioMapper mapper) {
+        this.portfolioHeartService = portfolioHeartService;
         this.portFolioService = portFolioService;
         this.memberService = memberService;
 
@@ -42,36 +41,45 @@ public class HeartController {
     @PostMapping("/{portfolioId}")
     @ResponseBody
     public ResponseEntity heartPortfolio(@PathVariable Long portfolioId,
-                                         @RequestBody HeartDto heartDto
+                                         @RequestBody PortfolioHeartDto portfolioHeartDto
                                          ) {
-        Long memberId = Long.valueOf(heartDto.getMemberId());
-        Member member = memberService.getMemberById(memberId);
+        Long memberId = Long.valueOf(portfolioHeartDto.getMemberId());
+        Member member = memberService.findVerifiedMember(memberId);
 
         PortFolio portFolio = portFolioService.findByPortfolioId(portfolioId);
         if (portFolio == null) {
             return ResponseEntity.notFound().build();
         }
 
-        if (!heartService.isHeartPost(member, portFolio)) {
-            heartService.heart(member, portFolio);
+        if (!portfolioHeartService.isHeartPost(member, portFolio)) {
+            portfolioHeartService.heart(member, portFolio);
 
             return ResponseEntity.ok("hearted");
         } else {
-            heartService.unheart(member, portFolio);
+            portfolioHeartService.unheart(member, portFolio);
             return ResponseEntity.ok("unhearted");
         }
     }
-    @GetMapping("/likes/{memberId}")
+    @GetMapping("/memberLikes/{memberId}")
     public ResponseEntity<Page<PortFolio>> getHeartedPortfoliosByMemberId(@PathVariable Long memberId,
                                                                           @RequestParam(required = false, defaultValue = "1") int page,
                                                                           @RequestParam(required = false, defaultValue = "12") int size ) {
-            Page<PortFolio> heartedPortfolios = heartService.getHeartedPortfoliosByMemberId(memberId, PageRequest.of(page - 1, size));
+            Page<PortFolio> heartedPortfolios = portfolioHeartService.getHeartedPortfoliosByMemberId(memberId, PageRequest.of(page - 1, size));
             List<PortFolio> portFolios = heartedPortfolios.getContent();
 
             return new ResponseEntity(
                     new MultiResponseDto<>(mapper.portfoliosToPortfolioResponseDtos(portFolios),heartedPortfolios),HttpStatus.OK);
+    }
 
-        }
+//    @GetMapping("/portfolioLikes/{portfolioId}")
+//    public void getPortfolioByMemberId(@PathVariable long portfolioId){
+//        PortFolio portFolio = new PortFolio();
+//        portFolio.setPortfolioId(portfolioId);
+//
+//        System.out.println(heartService.getHeartByPortfolio(portFolio).size());
+//    }
+
+
 }
 
 

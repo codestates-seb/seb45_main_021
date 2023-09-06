@@ -62,11 +62,9 @@ public class MemberService {
         }
     }
 
-    public Member getMemberById(Long memberId){
+    public Member findVerifiedMember(Long memberId){
         return memberRepository.findById(memberId)
-                .orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
-
-
 
 }
