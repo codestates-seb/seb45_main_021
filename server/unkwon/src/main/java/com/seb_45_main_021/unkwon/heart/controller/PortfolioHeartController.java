@@ -2,6 +2,7 @@ package com.seb_45_main_021.unkwon.heart.controller;
 
 import com.seb_45_main_021.unkwon.dto.MultiResponseDto;
 import com.seb_45_main_021.unkwon.heart.dto.PortfolioHeartDto;
+import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
 import com.seb_45_main_021.unkwon.heart.service.PortfolioHeartService;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.member.service.MemberService;
@@ -68,6 +69,12 @@ public class PortfolioHeartController {
 
         return new ResponseEntity(
                 new MultiResponseDto<>(mapper.portfoliosToPortfolioResponseDtos(portFolios),heartedPortfolios),HttpStatus.OK);
+    }
+
+    @GetMapping("/weekly-top")
+    public ResponseEntity<List<PortFolio>> getTop10PortfoliosByHeartsLast7Days() {
+        List<PortFolio> top10Portfolios = portfolioHeartService.getTop10PortfoliosByHeartsLast7Days();
+        return new ResponseEntity<>(top10Portfolios, HttpStatus.OK);
     }
 
 //    @GetMapping("/portfolioLikes/{portfolioId}")
