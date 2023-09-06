@@ -2,19 +2,20 @@ package com.seb_45_main_021.unkwon.member.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-@NoArgsConstructor
 @Getter
-public class MemberSignupDto {
-    @NotBlank
-    private String email;
+@NoArgsConstructor
+public class MemberPasswordUpdateDto {
+    @Setter
+    private Long memberId;
     @NotBlank
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$")
-    private String password;
+    private String prevPassword;
     @NotBlank
-    private String username;
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$")
+    private String newPassword;
 }

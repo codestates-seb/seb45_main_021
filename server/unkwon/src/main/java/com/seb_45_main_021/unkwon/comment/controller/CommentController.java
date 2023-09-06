@@ -49,7 +49,11 @@ public class CommentController {
     @PatchMapping("/{comment-id}")
     public ResponseEntity patchComment(@PathVariable("comment-id") @Positive long commentId,
                                        @Valid @RequestBody CommentDto.PatchDto commentPatchDto
+<<<<<<< HEAD
+            /*@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken*/) {
+=======
                                        /*@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken*/) {
+>>>>>>> serverDev
 
         commentPatchDto.setCommentId(commentId);
 
@@ -73,4 +77,8 @@ public class CommentController {
     }
 
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> serverDev

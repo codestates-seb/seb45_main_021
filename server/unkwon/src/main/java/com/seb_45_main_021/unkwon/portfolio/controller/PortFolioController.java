@@ -55,7 +55,11 @@ public class PortFolioController {
     //포트폴리오 수정
     @PatchMapping("/{portfolio-id}")
     public ResponseEntity updatePortfolio(@PathVariable("portfolio-id")@Positive long portfolioId,
+<<<<<<< HEAD
+                                          @Valid @RequestBody PortFolioDto.Patch portfolioPatchDto){
+=======
                                          @Valid @RequestBody PortFolioDto.Patch portfolioPatchDto){
+>>>>>>> serverDev
 
         portfolioPatchDto.setPortfolioId(portfolioId);
 
@@ -91,8 +95,13 @@ public class PortFolioController {
     //검색에 의한 리스트 요청
     @GetMapping("/tagSearch")
     public ResponseEntity getPortfoliosTag(@RequestParam(required = false, defaultValue = "1") int page,
+<<<<<<< HEAD
+                                           @RequestParam(required = false, defaultValue = "12") int size,
+                                           @RequestParam("tag") String[] tag ){
+=======
                                         @RequestParam(required = false, defaultValue = "12") int size,
                                         @RequestParam("tag") String[] tag ){
+>>>>>>> serverDev
         Page<PortFolio> resultSearchTags = portFolioService.findTagPortfolio(page,size,tag);
         List<PortFolioDto.Response> portfolioResponseDtoList = mapper.portfoliosToPortfolioResponseDtos(resultSearchTags.getContent());
 
@@ -101,8 +110,13 @@ public class PortFolioController {
     }
     @GetMapping("/langSearch")
     public ResponseEntity getPortfoliosLang(@RequestParam(required = false, defaultValue = "1") int page,
+<<<<<<< HEAD
+                                            @RequestParam(required = false, defaultValue = "12") int size,
+                                            @RequestParam("lang") String[] lang ){
+=======
                                         @RequestParam(required = false, defaultValue = "12") int size,
                                         @RequestParam("lang") String[] lang ){
+>>>>>>> serverDev
         Page<PortFolio> resultSearchLang = portFolioService.findLangPortfolio(page,size,lang);
         List<PortFolioDto.Response> portfolioResponseDtoList = mapper.portfoliosToPortfolioResponseDtos(resultSearchLang.getContent());
 
@@ -145,4 +159,8 @@ public class PortFolioController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> serverDev

@@ -50,5 +50,9 @@ public interface CommentMapper {
     List<CommentDto.ResponseDto> commentsToCommentResponseDtos(List<Comment> comments);
 
 
+<<<<<<< HEAD
+}
+=======
 }
 
+>>>>>>> serverDev

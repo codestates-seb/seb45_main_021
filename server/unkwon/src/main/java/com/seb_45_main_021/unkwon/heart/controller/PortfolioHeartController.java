@@ -42,7 +42,11 @@ public class PortfolioHeartController {
     @ResponseBody
     public ResponseEntity heartPortfolio(@PathVariable Long portfolioId,
                                          @RequestBody PortfolioHeartDto portfolioHeartDto
+<<<<<<< HEAD
+    ) {
+=======
                                          ) {
+>>>>>>> serverDev
         Long memberId = Long.valueOf(portfolioHeartDto.getMemberId());
         Member member = memberService.findVerifiedMember(memberId);
 
@@ -64,11 +68,19 @@ public class PortfolioHeartController {
     public ResponseEntity<Page<PortFolio>> getHeartedPortfoliosByMemberId(@PathVariable Long memberId,
                                                                           @RequestParam(required = false, defaultValue = "1") int page,
                                                                           @RequestParam(required = false, defaultValue = "12") int size ) {
+<<<<<<< HEAD
+        Page<PortFolio> heartedPortfolios = portfolioHeartService.getHeartedPortfoliosByMemberId(memberId, PageRequest.of(page - 1, size));
+        List<PortFolio> portFolios = heartedPortfolios.getContent();
+
+        return new ResponseEntity(
+                new MultiResponseDto<>(mapper.portfoliosToPortfolioResponseDtos(portFolios),heartedPortfolios),HttpStatus.OK);
+=======
             Page<PortFolio> heartedPortfolios = portfolioHeartService.getHeartedPortfoliosByMemberId(memberId, PageRequest.of(page - 1, size));
             List<PortFolio> portFolios = heartedPortfolios.getContent();
 
             return new ResponseEntity(
                     new MultiResponseDto<>(mapper.portfoliosToPortfolioResponseDtos(portFolios),heartedPortfolios),HttpStatus.OK);
+>>>>>>> serverDev
     }
 
 //    @GetMapping("/portfolioLikes/{portfolioId}")
@@ -80,6 +92,10 @@ public class PortfolioHeartController {
 //    }
 
 
+<<<<<<< HEAD
+}
+=======
 }
 
 
+>>>>>>> serverDev

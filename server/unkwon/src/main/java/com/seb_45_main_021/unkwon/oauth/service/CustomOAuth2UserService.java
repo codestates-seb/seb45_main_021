@@ -32,6 +32,7 @@ import java.util.Map;
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final MemberRepository memberRepository;
     private final CustomAuthorityUtils authorityUtils;
+
     // private final HttpServletResponse response;
     private static final String GOOGLE = "google";
     private static final String GITHUB = "github";
@@ -71,20 +72,30 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     private Member getMember(OauthAttribute attribute, SocialType socialType){
+        // 소셜타입과 이메일로 회원 탐색
         Member findMember = memberRepository.
                 findBySocialTypeAndEmail(socialType, attribute.getOAuth2MemberInfo().getEmail()).orElse(null);
 
+        // 회원 가입
         if(findMember == null){
             return saveMember(attribute, socialType);
         }
 
-        // RefreshToken 이 Null 이 아닐 경우에는 다른 곳에서 로그인 했으므로 예와 발생
+        // RefreshToken 이 Null 이 아닐 경우에는 다른 곳에서 로그인 했으므로 예외 발생
         if(!findMember.refreshTokenIsNull()) throw new BusinessLogicException(ExceptionCode.STATUS_LOGIN);
-        return findMember;
+
+        // 로그인
+        return updateUsernameAndImgUrl(findMember, attribute);
     }
 
     private Member saveMember(OauthAttribute attribute, SocialType socialType){
         Member newMember = attribute.toEntity(socialType, attribute.getOAuth2MemberInfo());
         return memberRepository.save(newMember);
+    }
+
+    /** 구글 쪽에서 프로필 및 유저 네임 변경을 했을수도 있으므로 업데이트 **/
+    private Member updateUsernameAndImgUrl(Member findMember, OauthAttribute attribute){
+        findMember.updateUsernameAndImgUrl(attribute.getOAuth2MemberInfo().getUsername(), attribute.getOAuth2MemberInfo().getImageUrl());
+        return memberRepository.save(findMember);
     }
 }

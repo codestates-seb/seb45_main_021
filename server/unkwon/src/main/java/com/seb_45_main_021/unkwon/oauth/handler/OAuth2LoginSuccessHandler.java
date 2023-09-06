@@ -15,19 +15,26 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
+public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JwtTokenizer jwtTokenizer;
     private final MemberRepository memberRepository;
+    public static final String REDIRECT_URI = "http://localhost:3000/login/redirect";
+
+    // http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:3000/login/redirect 요청 url
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         log.info("OAuth2 로그인 성공");
@@ -42,8 +49,24 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         // 토큰 생성
         // 토큰 헤더 저장 및 DB 저장
         setTokenToResponse(response, member);
-
+        getRedirectStrategy().sendRedirect(request, response, getRedirectUri(REDIRECT_URI));
     }
+
+    @Override
+    protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response){
+        String redirectUri = request.getParameter(REDIRECT_URI);
+
+        log.info(redirectUri);
+        return redirectUri;
+    }
+
+    private String getRedirectUri(String targetUri){
+        String redirectUri = UriComponentsBuilder.fromUriString(targetUri)
+                .build().toUriString();
+        log.info("URI : " + redirectUri);
+        return redirectUri;
+    }
+
 
     private Member findMemberByEmail(String email){
         return memberRepository.findByEmail(email)
@@ -55,6 +78,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                 .memberId(member.getMemberId())
                 .username(member.getUsername())
                 .imgUrl(member.getImgUrl())
+                .socialType(member.getSocialType())
                 .build();
 
         response.setStatus(HttpStatus.OK.value());
