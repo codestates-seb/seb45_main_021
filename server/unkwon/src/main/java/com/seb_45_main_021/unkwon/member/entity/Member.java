@@ -4,6 +4,7 @@ import com.seb_45_main_021.unkwon.audit.Auditable;
 import com.seb_45_main_021.unkwon.projectcard.entity.ProjectCard;
 import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
 import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
+import com.seb_45_main_021.unkwon.project.entity.Project;
 import lombok.*;
 
 import javax.persistence.*;
@@ -73,8 +74,13 @@ public class Member extends Auditable {
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     List<PortFolio> portfolios = new ArrayList<>();
 
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    List<Project> projects = new ArrayList<>(); // 내가 쓴 프로젝트 게시글
+
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true, fetch = FetchType.LAZY)
     private List<PortfolioHeart> portfolioHearts;
+
 
     public void updatePassword(String newPassword){
         this.password = newPassword;
