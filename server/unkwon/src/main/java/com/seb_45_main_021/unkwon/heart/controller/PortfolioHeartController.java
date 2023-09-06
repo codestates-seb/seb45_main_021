@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/hearts")
+@RequestMapping("/hearts/portfolio")
 public class PortfolioHeartController {
 
     private final PortfolioHeartService portfolioHeartService;

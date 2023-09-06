@@ -15,8 +15,6 @@ public enum ExceptionCode {
     REFRESHTOKEN_HAS_EXPIRED(401, "refreshToken has expired"),
     STATUS_LOGIN(401, "Status Login"),
     BAD_TOKEN(401, "Bad Token"),
-    PORTFOLIO_NOT_FOUND(404,"Portfolio not found"),
-    COMMENT_NOT_FOUND(404,"Comment not found"),
     PROJECT_NOT_FOUND(404, "Project not found"),
     PROJECT_STATUS_NOT_FOUND(404, "Project Status not found"),
     COMMON_CODE_NOT_FOUND(404, "Common Code not found"),

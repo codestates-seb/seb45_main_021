@@ -1,5 +1,6 @@
 package com.seb_45_main_021.unkwon.project.controller;
 
+import com.seb_45_main_021.unkwon.dto.MultiResponseDto;
 import com.seb_45_main_021.unkwon.project.dto.ProjectPatchDto;
 import com.seb_45_main_021.unkwon.project.dto.ProjectPostDto;
 import com.seb_45_main_021.unkwon.project.dto.ProjectRequestDto;
@@ -64,7 +65,7 @@ public class ProjectController {
 
     // 프로젝트 1개 조회
     @GetMapping("/{project-id}")
-    public ResponseEntity getProject(@PathVariable("project-id")@Positive long projectId) {
+    public ResponseEntity getProject(@PathVariable("project-id") @Positive long projectId) {
 
         Project project = projectService.findProject(projectId);
 
@@ -77,12 +78,14 @@ public class ProjectController {
     public ResponseEntity getProjects(@RequestParam(required = false, defaultValue = "1") int page,
                                       @RequestParam(required = false, defaultValue = "12") int size) {
 
-        Page<Project> projectList = projectService.findProjects(page-1,size);
-        List<ProjectResponseDto> response = projectList.stream()
-                .map(mapper::projectToProjectResponseDto)
-                .collect(Collectors.toList());
+        Page<Project> pageProjects = projectService.findProjects(page-1,size);
+        List<Project> projects = pageProjects.getContent();
+//        List<ProjectResponseDto> response = projectList.stream()
+//                .map(mapper::projectToProjectResponseDto)
+//                .collect(Collectors.toList());
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(mapper.projectsToProjectResponseDtos(projects), pageProjects),HttpStatus.OK);
 
     }
 
@@ -116,13 +119,16 @@ public class ProjectController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // 내 프로젝트에 지원한 유저상태 조회
+    // 하나의 프로젝트에 대한 지원현황 조회
     @GetMapping("/{projectId}/request")
     public ResponseEntity getRequestPeoples(@PathVariable long projectId) {
 
-        List<ProjectStatus> requestPeoples = projectService.findRequestPeople(projectId);
+        List<ProjectStatus> requestPeoples = projectService.findProjectStatus(projectId);
+        List<ProjectRequestDto> response = requestPeoples.stream()
+                .map(mapper::projectStatusToprojectRequestDto)
+                .collect(Collectors.toList());
 
-        return new ResponseEntity<>(requestPeoples, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
 

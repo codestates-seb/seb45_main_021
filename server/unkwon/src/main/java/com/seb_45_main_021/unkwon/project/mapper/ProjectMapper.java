@@ -2,6 +2,8 @@ package com.seb_45_main_021.unkwon.project.mapper;
 
 import com.seb_45_main_021.unkwon.commonCode.CommonCode;
 import com.seb_45_main_021.unkwon.member.entity.Member;
+import com.seb_45_main_021.unkwon.portfolio.dto.PortFolioDto;
+import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
 import com.seb_45_main_021.unkwon.project.dto.ProjectPatchDto;
 import com.seb_45_main_021.unkwon.project.dto.ProjectPostDto;
 import com.seb_45_main_021.unkwon.project.dto.ProjectRequestDto;
@@ -10,6 +12,8 @@ import com.seb_45_main_021.unkwon.project.entity.Project;
 import com.seb_45_main_021.unkwon.project.entity.ProjectStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ProjectMapper {
@@ -60,6 +64,36 @@ public interface ProjectMapper {
 
         return projectStatus;
     }
+
+    default ProjectRequestDto projectStatusToprojectRequestDto(ProjectStatus projectStatus) {
+        ProjectRequestDto projectRequestDto = new ProjectRequestDto();
+
+        if (projectStatus.getProject() != null) {
+            long projectId = projectStatus.getProject().getProjectId();
+            projectRequestDto.setProjectId(projectId);
+        }
+
+        if (projectStatus.getMember() != null) {
+            long memberId = projectStatus.getMember().getMemberId();
+            projectRequestDto.setMemberId(memberId);
+        }
+
+        if (projectStatus.getCommonCode() != null) {
+            long commonCodeId = projectStatus.getCommonCode().getCodeId();
+            projectRequestDto.setCommonCodeId(commonCodeId);
+        }
+
+        if (projectStatus.getCommonCode() !=null) {
+            String codeName = projectStatus.getCommonCode().getCodeName();
+            projectRequestDto.setCodeName(codeName);
+        }
+
+        return projectRequestDto;
+
+    }
+
+    List<ProjectResponseDto> projectsToProjectResponseDtos(List<Project> projects);
+
     default ProjectResponseDto projectToProjectResponseDto(Project project) {
 
         ProjectResponseDto projectResponseDto = ProjectResponseDto.builder()

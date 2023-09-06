@@ -104,8 +104,8 @@ public class ProjectService {
         projectStatusRepository.delete(projectStatus);
     }
 
-    // 내 프로젝트 지원 유저상태 조회 ()
-    public List<ProjectStatus> findRequestPeople(Long projectId) {
+    // 하나의 프로젝트에 대한 projectStatus 조회
+    public List<ProjectStatus> findProjectStatus(Long projectId) {
 
         return projectStatusRepository.findByProject_ProjectId(projectId);
     }

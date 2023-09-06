@@ -19,7 +19,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,8 +56,10 @@ public class Project {
 
     private String description; // 상세내용
 
-//    @OneToMany(mappedBy = "project")
-//    private List<ProjectLike> likes;
+    private int heartCount = 0;
+
+    @Column(name = "heart_at")
+    private LocalDateTime heartAt; // 포트폴리오가 좋아요를 받은 날짜 및 시간
 
     @ManyToOne
     @JoinColumn(name = "memberId")
