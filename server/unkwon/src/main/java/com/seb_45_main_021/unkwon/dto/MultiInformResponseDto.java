@@ -1,6 +1,6 @@
 package com.seb_45_main_021.unkwon.dto;
 
-import com.seb_45_main_021.unkwon.heart.entity.Heart;
+import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
 import com.seb_45_main_021.unkwon.member.dto.response.MemberInformResponseDto;
 import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
 import com.seb_45_main_021.unkwon.project.entity.Project;
@@ -15,7 +15,7 @@ public class MultiInformResponseDto {
     private MemberInformResponseDto profile;
     private List<List<Project>> project = new ArrayList<>();
     private List<List<PortFolio>> portFolio = new ArrayList();
-    private List<List<Heart>> heart = new ArrayList<>();
+    private List<List<PortfolioHeart>> heart = new ArrayList<>();
     private List<ProjectCardResponseDto> projectCard;
     private final int INDEX = 1;
 
@@ -28,7 +28,7 @@ public class MultiInformResponseDto {
         this.portFolio.add(list2);
     }
 
-    public void setHeartList(List<Heart> list1, List<Heart> list2) {
+    public void setHeartList(List<PortfolioHeart> list1, List<PortfolioHeart> list2) {
         this.heart.add(list1);
         this.heart.add(list2);
     }

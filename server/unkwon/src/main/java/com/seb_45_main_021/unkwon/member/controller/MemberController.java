@@ -2,7 +2,7 @@ package com.seb_45_main_021.unkwon.member.controller;
 
 import com.seb_45_main_021.unkwon.auth.userdetails.MemberInfo;
 import com.seb_45_main_021.unkwon.dto.MultiInformResponseDto;
-import com.seb_45_main_021.unkwon.heart.entity.Heart;
+import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
 import com.seb_45_main_021.unkwon.member.dto.request.MemberInformUpdateDto;
 import com.seb_45_main_021.unkwon.member.dto.request.MemberPasswordUpdateDto;
 import com.seb_45_main_021.unkwon.member.dto.request.MemberSignupDto;
@@ -20,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.ArrayList;
@@ -77,7 +76,7 @@ public class MemberController {
         // 2. 자기 자신의 프로필 조회
         if(hostId != 0 && memberId == hostId){
             // 찜 리스트, 프로젝트 카드
-            responseInformDto.setHeartList(new ArrayList<Heart>(), new ArrayList<Heart>());
+            responseInformDto.setHeartList(new ArrayList<PortfolioHeart>(), new ArrayList<PortfolioHeart>());
             responseInformDto.setProjectCardList(projectCardMapper.
                     projectCardListToProjectCardResponseDto(findMember.getProjectCardList()));
         }
