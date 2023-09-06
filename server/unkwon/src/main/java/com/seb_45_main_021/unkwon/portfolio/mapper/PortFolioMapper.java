@@ -106,11 +106,4 @@ public interface PortFolioMapper {
 
         return detailResponse;
     };
-
-
-
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> serverDev

@@ -15,8 +15,4 @@ public class UriCreator {
 
 
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> serverDev

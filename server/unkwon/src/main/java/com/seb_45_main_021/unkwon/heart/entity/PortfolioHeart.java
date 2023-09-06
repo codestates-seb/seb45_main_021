@@ -39,8 +39,4 @@ public class PortfolioHeart {
         this.member = member;
         this.portFolio = portFolio;
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> serverDev
