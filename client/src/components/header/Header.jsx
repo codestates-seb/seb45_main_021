@@ -2,7 +2,7 @@ import React from 'react';
 import useNav from '../../hooks/useNav';
 import { StyleBottomButton } from '../common/Buttons';
 import { styled } from 'styled-components';
-import SearchInput from './SearchInput';
+import SearchBox from './SearchBox';
 import Inner from '../common/Inner';
 import LoginActions from './LoginActions';
 import UnLoginActions from './UnLoginActions';
@@ -58,7 +58,7 @@ export default function Header() {
           <StyleBottomButton onClick={toProject}>프로젝트</StyleBottomButton>
           <StyleBottomButton onClick={toPortfolio}>포트폴리오</StyleBottomButton>
         </nav>
-        <SearchInput />
+        <SearchBox />
         <nav className="user-actions">
           {isLogin ? <LoginActions userInfo={userInfo} /> : <UnLoginActions />}
         </nav>

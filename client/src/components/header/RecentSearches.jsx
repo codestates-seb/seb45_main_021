@@ -1,6 +1,5 @@
 import React from 'react';
 import { styled } from 'styled-components';
-import useNav from '../../hooks/useNav';
 
 const StyleRecentSearches = styled.div`
   position: absolute;
@@ -36,6 +35,7 @@ const StyleRecentSearches = styled.div`
       background-color: var(--black-700);
     }
     span {
+      padding: 10px 0;
       cursor: pointer;
       flex: 1;
     }
@@ -51,8 +51,12 @@ const StyleRecentSearches = styled.div`
     font-weight: var(--nanum-semi-bold);
   }
 `;
-export default function RecentSearches({ searchHistory, clearSearchHistory, deleteSearchHistory }) {
-  const { toSearch } = useNav();
+export default function RecentSearches({
+  searchHistory,
+  updateSearchHistory,
+  clearSearchHistory,
+  deleteSearchHistory,
+}) {
   return (
     <StyleRecentSearches>
       {!!searchHistory.length && (
@@ -65,7 +69,7 @@ export default function RecentSearches({ searchHistory, clearSearchHistory, dele
         <ul className="history-box">
           {searchHistory.map((keyword, i) => (
             <li className="history-item" key={i}>
-              <span onClick={() => toSearch(keyword, 'project')}>{keyword}</span>
+              <span onClick={() => updateSearchHistory(keyword)}>{keyword}</span>
               <button onClick={() => deleteSearchHistory(keyword)}>삭제</button>
             </li>
           ))}

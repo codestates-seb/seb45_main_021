@@ -11,11 +11,9 @@ import { useNavigate } from 'react-router-dom';
  * @returns {function} toProject - navigate('/project');
  * @returns {function} toProjectWrite - navigate('/project/write');
  * @returns {function} toProjectDetail - navigate(`/project/detail/${id}`);
- * @returns {function} toSearch - navigate(`/search/project/${text}`);
  * @returns {function} toPortfolio - navigate('/portfolio');
  * @returns {function} toPortfolioWrite - navigate('/portfolio/write');
  * @returns {function} toPortfolioDetail - navigate(`/portfolio/detail/${id}`);
- * @returns {function} toSearch - navigate(`/search/portfolio/${text}`);
  */
 export default function useNav() {
   const navigate = useNavigate();
@@ -28,15 +26,9 @@ export default function useNav() {
   const toProjectWrite = () => navigate('/project/write');
   const toPortfolioWrite = () => navigate('/portfolio/write');
   const toProjectDetail = (id) => navigate(`/project/detail/${id}`);
-  const toPortfolioDetail = (id) => navigate(`/portfolio/detail/${id}`);
+  const toPortfolioDetail = (id) => navigate(`/project/detail/${id}`);
   const toProfile = (id) => navigate(`/profile/${id}`);
-  const toSearch = (text, type) => {
-    if (type === 'project') {
-      navigate(`/search/project/${text}`);
-    } else if (type === 'portfolio') {
-      navigate(`/search/portfolio/${text}`);
-    }
-  };
+  const toSearch = (text, type) => navigate(`/search?type=${type}&keyword=${text}`);
 
   return {
     toAbout,

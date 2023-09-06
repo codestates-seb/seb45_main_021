@@ -45,12 +45,13 @@ const StyleSearchInput = styled.div`
 
 const searchHiddenPath = ['portfolio/write', 'project/write', 'portfolio/edit', 'project/edit', ''];
 
-export default function SearchInput() {
-  const path = useLocation().pathname;
-  const hiddenPath = path.split('/').slice(1, 3).join('/');
-  let keyword = path.split('/')[1] === 'search' ? decodeURIComponent(path.split('/')[3]) : '';
+export default function SearchBox() {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const currentKeyword = queryParams.get('keyword') || '';
+  const hiddenPath = location.pathname.split('/').slice(1, 3).join('/');
   const isSearchHidden = searchHiddenPath.includes(hiddenPath);
-  const [searchInput, setSearchInput] = useForm({ keyword: keyword });
+  const [searchInput, setSearchInput] = useForm({ keyword: currentKeyword });
   const [searchHistory, setSearchHistory] = useState([]);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const { toSearch } = useNav();
@@ -59,9 +60,9 @@ export default function SearchInput() {
   useEffect(() => {
     // 주소가 바뀌면, 최근 검색창을 감추고, path에서 값을 빼오기
     setIsInputFocused(false);
-    setSearchInput(null, keyword, 'keyword');
-    if (inputRef.current) inputRef.current.blur(); // 포커스 해제
-  }, [path]);
+    setSearchInput(null, currentKeyword, 'keyword');
+    if (inputRef.current) inputRef.current.blur();
+  }, [currentKeyword]);
 
   useEffect(() => {
     // 페이지 로드 시 로컬 스토리지에서 검색 기록 불러오기
@@ -84,10 +85,10 @@ export default function SearchInput() {
     localStorage.setItem('searchHistory', JSON.stringify(newSearchHistory));
   };
 
-  const updateSearchHistory = () => {
+  const updateSearchHistory = (keyword) => {
     // 검색 기록 업데이트
-    const keyword = searchInput.keyword.trim();
-    if (keyword) {
+
+    if (keyword && keyword !== currentKeyword) {
       const newHistory = [keyword, ...searchHistory.filter((item) => item !== keyword)];
       if (newHistory.length > 5) {
         newHistory.pop();
@@ -101,7 +102,7 @@ export default function SearchInput() {
   const searchHandler = (e) => {
     e.preventDefault();
     if (searchInput.keyword.trim()) {
-      updateSearchHistory();
+      updateSearchHistory(searchInput.keyword.trim());
     }
   };
 
@@ -128,6 +129,7 @@ export default function SearchInput() {
       </form>
       {isInputFocused && (
         <RecentSearches
+          updateSearchHistory={updateSearchHistory}
           isInputFocused={isInputFocused}
           searchHistory={searchHistory}
           clearSearchHistory={clearSearchHistory}
