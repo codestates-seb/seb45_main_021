@@ -6,6 +6,8 @@ public enum ExceptionCode {
     NOT_FOUND(404, "Not Found"),
     MEMBER_NOT_FOUND(404, "Member not found"),
     COOKIE_NOT_FOUND(401, "Cookie Not Found"),
+    PORTFOLIO_NOT_FOUND(404,"Portfolio not found"),
+    COMMENT_NOT_FOUND(404,"Comment not found"),
     MEMBER_EXISTS(409, "Member exists"),
     DIFFERENT_PASSWORD(401, "Different Password"),
     DIFFERENT_MEMBER(401, "Different Member"),
