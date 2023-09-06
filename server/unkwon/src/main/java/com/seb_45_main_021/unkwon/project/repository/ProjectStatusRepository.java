@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface ProjectStatusRepository extends JpaRepository<ProjectStatus, Long> {
 
-    // projectId 와, status 로 projectStatus 찾기
-    List<ProjectStatus> findByProject_ProjectIdAndStatus_CodeValue(Long projectId, String status);
+    List<ProjectStatus> findByProject_ProjectIdAndCommonCode_CodeValue(Long projectId, String codeValue);
+
+    List<ProjectStatus> findByProject_ProjectId(Long projectId);
 }

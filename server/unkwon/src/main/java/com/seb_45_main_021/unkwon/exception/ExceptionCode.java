@@ -13,7 +13,9 @@ public enum ExceptionCode {
     BAD_TOKEN(401, "Bad Token"),
     PORTFOLIO_NOT_FOUND(404,"Portfolio not found"),
     COMMENT_NOT_FOUND(404,"Comment not found"),
-    PROJECT_NOT_FOUND(404, "Question not found");
+    PROJECT_NOT_FOUND(404, "Project not found"),
+    PROJECT_STATUS_NOT_FOUND(404, "Project Status not found"),
+    COMMON_CODE_NOT_FOUND(404, "Common Code not found");
 
 
 

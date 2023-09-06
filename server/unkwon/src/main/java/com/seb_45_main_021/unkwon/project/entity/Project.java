@@ -44,8 +44,7 @@ public class Project {
     @LastModifiedDate
     private LocalDateTime modifiedAt; // 수정일
 
-//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
-//    private LocalDateTime closedAt; // 마감일 (유저 입력)
+    private LocalDateTime closedAt; // 마감일 (유저 입력)
 
 //    private List<Tag> tag = new ArrayList<>(); // 태그
 
@@ -62,7 +61,7 @@ public class Project {
 //    private List<ProjectLike> likes;
 
     @ManyToOne
-    @JoinColumn(name = "MEMBER_ID")
+    @JoinColumn(name = "memberId")
     private Member member;
 
 }

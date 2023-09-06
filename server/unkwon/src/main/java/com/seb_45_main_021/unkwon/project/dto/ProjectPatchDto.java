@@ -7,6 +7,7 @@ import lombok.Setter;
 @Setter
 public class ProjectPatchDto {
     private long projectId;
+    private long memberId;
     private String title;
     private int totalPeople;
     private String language;

@@ -107,4 +107,42 @@ public class ProjectController {
         return ResponseEntity.created(location).build();
     }
 
+    // 프로젝트 지원 취소
+    @DeleteMapping("cancel/{projectStatus-id}")
+    public ResponseEntity cancelProject(@PathVariable("projectStatus-id") @Positive long projectStatusId) {
+
+        projectService.revokeProject(projectStatusId);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    // 내 프로젝트에 지원한 유저상태 조회
+    @GetMapping("/{projectId}/request")
+    public ResponseEntity getRequestPeoples(@PathVariable long projectId) {
+
+        List<ProjectStatus> requestPeoples = projectService.findRequestPeople(projectId);
+
+        return new ResponseEntity<>(requestPeoples, HttpStatus.OK);
+
+    }
+
+    // 프로젝트 지원 수락
+    @PatchMapping("/request/{projectStatusId}/accept")
+    public ResponseEntity acceptProject(@PathVariable Long projectStatusId) {
+
+        projectService.approveProject(projectStatusId);
+
+        return ResponseEntity.ok().build();
+    }
+
+    // 프로젝트 지원 거절
+    @PatchMapping("/request/{projectStatusId}/refuse")
+    public ResponseEntity refuseProject(@PathVariable Long projectStatusId) {
+
+        projectService.rejectProject(projectStatusId);
+
+        return ResponseEntity.ok().build();
+
+    }
+
 }

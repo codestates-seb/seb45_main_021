@@ -68,17 +68,10 @@ public class ProjectService {
 
     // 특정 프로젝트 조회
     public Project findProject(long projectId) {
+
         Project findProject = findVerifiedProject(projectId);
 
-        List<ProjectStatus> projectStatuses = projectStatusRepository.findByProject_ProjectIdAndStatus_CodeValue(projectId, "수락 대기중");
-
-        List<Long> requestPeople = projectStatuses.stream()
-                .map(status -> status.getMember().getMemberId())
-                .collect(Collectors.toList());
-
-        findProject.setRequestPeople(requestPeople);
-
-        return findVerifiedProject(projectId);
+        return findProject;
     }
 
     // 전체 프로젝트 조회
@@ -100,6 +93,56 @@ public class ProjectService {
     public ProjectStatus applyForProject(ProjectStatus projectStatus) {
 
         return projectStatusRepository.save(projectStatus);
+    }
+
+    // 프로젝트 지원 취소
+    public void revokeProject(long projectStatusId) {
+
+        ProjectStatus projectStatus = projectStatusRepository.findById(projectStatusId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PROJECT_NOT_FOUND));
+
+        projectStatusRepository.delete(projectStatus);
+    }
+
+    // 내 프로젝트 지원 유저상태 조회 ()
+    public List<ProjectStatus> findRequestPeople(Long projectId) {
+
+        return projectStatusRepository.findByProject_ProjectId(projectId);
+    }
+
+    // 프로젝트 지원 수락
+    public void approveProject(Long projectStatusId) {
+
+        // 프로젝트 지원 상태 식별자로 상태 찾기
+        ProjectStatus projectStatus = projectStatusRepository.findById(projectStatusId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PROJECT_STATUS_NOT_FOUND));
+
+        // 변경할 상태코드가 존재하는지 검증
+        CommonCode acceptedStatus = commonCodeRepository.findByCodeId(2L)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMMON_CODE_NOT_FOUND));
+
+        // 원하는 상태코드로
+        projectStatus.setCommonCode(acceptedStatus);
+
+        projectStatusRepository.save(projectStatus);
+    }
+
+    // 프로젝트 지원 거절
+    public void rejectProject(Long projectStatusId) {
+
+        // 프로젝트 지원 상태 식별자로 상태 찾기
+        ProjectStatus projectStatus = projectStatusRepository.findById(projectStatusId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PROJECT_NOT_FOUND));
+
+        // 변경할 상태코드가 존재하는지 검증
+        CommonCode acceptedStatus = commonCodeRepository.findByCodeId(3L)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMMON_CODE_NOT_FOUND));
+
+        // 원하는 상태코드로
+        projectStatus.setCommonCode(acceptedStatus);
+
+        projectStatusRepository.save(projectStatus);
+
     }
 
 

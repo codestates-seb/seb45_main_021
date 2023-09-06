@@ -8,6 +8,6 @@ import lombok.Setter;
 public class ProjectRequestDto {
     private long projectId;
     private long memberId;
-    private String statusCode;
+    private long commonCodeId;
 
 }

@@ -14,6 +14,8 @@ import java.util.List;
 public class ProjectResponseDto {
     private long projectId;
 
+    private long memberId;
+
     private String title;
 
     private int totalPeople;

@@ -19,14 +19,14 @@ public class ProjectStatus { // 프로젝트 지원정보
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long projectStatusId;
     @ManyToOne
-    @JoinColumn(name = "project_id")
+    @JoinColumn(name = "projectId")
     private Project project;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "memberId")
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "status_code_id")
-    private CommonCode status;
+    @JoinColumn(name = "commonCodeId")
+    private CommonCode commonCode;
 }
