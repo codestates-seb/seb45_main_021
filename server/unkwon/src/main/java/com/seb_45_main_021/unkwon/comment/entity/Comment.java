@@ -31,6 +31,4 @@ public class Comment extends Auditable {
     @ManyToOne
     @JoinColumn(name = "PORTFOLIO_ID")
     private PortFolio portFolio;
-
-
 }

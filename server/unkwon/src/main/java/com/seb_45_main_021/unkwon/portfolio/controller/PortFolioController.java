@@ -8,6 +8,9 @@ import com.seb_45_main_021.unkwon.portfolio.mapper.PortFolioMapper;
 import com.seb_45_main_021.unkwon.portfolio.service.PortFolioService;
 import com.seb_45_main_021.unkwon.utils.UriCreator;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -16,6 +19,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 
@@ -35,6 +42,7 @@ public class PortFolioController {
         this.mapper = mapper;
     }
 
+    //포트폴리오 생성
     @PostMapping
     public ResponseEntity postPortfolio(@RequestBody @Valid PortFolioDto.Post portfolioPostDto){
         PortFolio portFolio = portFolioService.createPortfolio(mapper.portfolioPostDtoToPortfolio(portfolioPostDto));
@@ -44,9 +52,10 @@ public class PortFolioController {
         return ResponseEntity.created(location).build();
     }
 
+    //포트폴리오 수정
     @PatchMapping("/{portfolio-id}")
     public ResponseEntity updatePortfolio(@PathVariable("portfolio-id")@Positive long portfolioId,
-                                         @Valid @RequestBody PortFolioDto.Patch portfolioPatchDto){
+                                          @Valid @RequestBody PortFolioDto.Patch portfolioPatchDto){
 
         portfolioPatchDto.setPortfolioId(portfolioId);
 
@@ -57,6 +66,7 @@ public class PortFolioController {
                         mapper.portfolioToPortfolioDetailResponseDto(portFolio)), HttpStatus.OK);
     }
 
+    //포트폴리오 상세조회
     @GetMapping("/{portfolio-id}")
     public ResponseEntity getPortfolio (@PathVariable("portfolio-id") @Positive long portfolioId){
 
@@ -67,6 +77,7 @@ public class PortFolioController {
                         mapper.portfolioToPortfolioDetailResponseDto(portFolio)), HttpStatus.OK);
     }
 
+    //포트폴리오 전체 조회
     @GetMapping
     public ResponseEntity getPortfolios(@RequestParam(required = false, defaultValue = "1") int page,
                                         @RequestParam(required = false, defaultValue = "12") int size){
@@ -77,6 +88,43 @@ public class PortFolioController {
                 new MultiResponseDto<>(mapper.portfoliosToPortfolioResponseDtos(portFolios), pagePortFolios),HttpStatus.OK);
     }
 
+    //검색에 의한 리스트 요청
+    @GetMapping("/tagSearch")
+    public ResponseEntity getPortfoliosTag(@RequestParam(required = false, defaultValue = "1") int page,
+                                        @RequestParam(required = false, defaultValue = "12") int size,
+                                        @RequestParam("tag") String[] tag ){
+        Page<PortFolio> resultSearchTags = portFolioService.findTagPortfolio(page,size,tag);
+        List<PortFolioDto.Response> portfolioResponseDtoList = mapper.portfoliosToPortfolioResponseDtos(resultSearchTags.getContent());
+
+        return new ResponseEntity(
+                new MultiResponseDto<>(portfolioResponseDtoList, resultSearchTags),HttpStatus.OK);
+    }
+    @GetMapping("/langSearch")
+    public ResponseEntity getPortfoliosLang(@RequestParam(required = false, defaultValue = "1") int page,
+                                            @RequestParam(required = false, defaultValue = "12") int size,
+                                            @RequestParam("lang") String[] lang ){
+        Page<PortFolio> resultSearchLang = portFolioService.findLangPortfolio(page,size,lang);
+        List<PortFolioDto.Response> portfolioResponseDtoList = mapper.portfoliosToPortfolioResponseDtos(resultSearchLang.getContent());
+
+        return new ResponseEntity(
+                new MultiResponseDto<>(portfolioResponseDtoList, resultSearchLang),HttpStatus.OK);
+    }
+
+    @GetMapping("/weekly-popular")
+    public ResponseEntity<Page<PortFolio>> getWeeklyPopularPortfolios(
+            @RequestParam(required = false, defaultValue = "1") int page,
+            @RequestParam(required = false, defaultValue = "10") int size) {
+
+        Pageable pageRequest = PageRequest.of(page - 1, size);
+        Page<PortFolio> popularPortfolios = portFolioService.findWeeklyPopularPortfolios(pageRequest);
+        List<PortFolioDto.Response> portfolioResponseDtoList = mapper.portfoliosToPortfolioResponseDtos(popularPortfolios.getContent());
+
+        return new ResponseEntity(
+                new MultiResponseDto<>(portfolioResponseDtoList,popularPortfolios),HttpStatus.OK);
+    }
+
+
+    //포트폴리오 View 정렬 조회
     @GetMapping("/view")
     public ResponseEntity getPortfoliosView(@RequestParam(required = false, defaultValue = "1") int page,
                                             @RequestParam(required = false, defaultValue = "12") int size){
@@ -88,7 +136,7 @@ public class PortFolioController {
     }
 
 
-
+    //포트폴리오 삭제
     @DeleteMapping("/{portfolio-id}")
     public ResponseEntity deletePortfolio(@PathVariable("portfolio-id") @Positive long portfolioId){
 

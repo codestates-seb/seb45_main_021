@@ -55,6 +55,4 @@ public class CommentDto {
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
     }
-
-
 }

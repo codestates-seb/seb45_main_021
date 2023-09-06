@@ -10,5 +10,4 @@ public class PageInfo {
     private int size;
     private long totalElements;
     private int totalPages;
-
 }
