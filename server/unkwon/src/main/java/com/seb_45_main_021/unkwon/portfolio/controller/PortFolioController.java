@@ -110,18 +110,6 @@ public class PortFolioController {
                 new MultiResponseDto<>(portfolioResponseDtoList, resultSearchLang),HttpStatus.OK);
     }
 
-    @GetMapping("/weekly-popular")
-    public ResponseEntity<Page<PortFolio>> getWeeklyPopularPortfolios(
-            @RequestParam(required = false, defaultValue = "1") int page,
-            @RequestParam(required = false, defaultValue = "10") int size) {
-
-        Pageable pageRequest = PageRequest.of(page - 1, size);
-        Page<PortFolio> popularPortfolios = portFolioService.findWeeklyPopularPortfolios(pageRequest);
-        List<PortFolioDto.Response> portfolioResponseDtoList = mapper.portfoliosToPortfolioResponseDtos(popularPortfolios.getContent());
-
-        return new ResponseEntity(
-                new MultiResponseDto<>(portfolioResponseDtoList,popularPortfolios),HttpStatus.OK);
-    }
 
 
     //포트폴리오 View 정렬 조회

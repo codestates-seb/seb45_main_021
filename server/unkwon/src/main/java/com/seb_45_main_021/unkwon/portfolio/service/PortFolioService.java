@@ -106,12 +106,6 @@ public class PortFolioService {
         System.out.println();
         return searchPortfolioLangList;
     }
-    public Page<PortFolio> findWeeklyPopularPortfolios(Pageable pageRequest) {
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime oneWeekAgo = now.minus(1, ChronoUnit.WEEKS);
-
-        return portFolioRepository.findByHeartAtBetween(oneWeekAgo, now, pageRequest);
-    }
 
 
     public Page<PortFolio> findPortfoliosView(int page, int size){
