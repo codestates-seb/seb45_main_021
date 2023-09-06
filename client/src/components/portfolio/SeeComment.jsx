@@ -20,9 +20,11 @@ const StyleSeeComment = styled.div`
     }
     h3 {
         font-size:1.2rem;
-        cursor:pointer;
-        &:hover{
-            opacity:0.4;
+    }
+    .button {
+        &:hover {
+            cursor: pointer;
+            opacity:0.5;
         }
     }
     .row {
@@ -53,11 +55,12 @@ const StyleSeeComment = styled.div`
     }
 `
 
-const BorderLine = styled.div`
+export const BorderLine = styled.div`
     width:100%;
     height:2px;
     border-radius:5px;
     border:1.5px solid var(--black-100);
+    margin:1.3rem 0;
 `
 
 export default function SeeComment({
@@ -115,8 +118,14 @@ export default function SeeComment({
             <div className='row'>
                 {isEdit ? 
                     <>
-                        <h3 onClick={EditHandler}>작성</h3>
-                        <h3 onClick={cancelEditHandler}>취소</h3>
+                        <h3
+                            className='button'
+                            onClick={EditHandler}
+                        >작성</h3>
+                        <h3
+                            className='button'
+                            onClick={cancelEditHandler}
+                        >취소</h3>
                     </>
                 :
                     <>
@@ -128,9 +137,15 @@ export default function SeeComment({
                         </div>
                         <h3>{dateFormatter(commentData.created_At)}</h3>
                         {detailData.author.id === userId || true &&
-                            <h3 onClick={()=>setIsEdit(true)}>수정</h3>}
+                            <h3 
+                                className='button'
+                                onClick={()=>setIsEdit(true)}
+                            >수정</h3>}
                         {(isAdmin || detailData.author.id === userId) || true &&
-                            <h3 onClick={deleteHandler}>삭제</h3>}
+                            <h3 
+                                className='button'
+                                onClick={deleteHandler}
+                            >삭제</h3>}
                     </>
                 }
                 

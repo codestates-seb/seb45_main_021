@@ -32,15 +32,15 @@ const OnlyAdmin = styled.div`
 `
 
 const ApplyButton = styled.button`
-  border: 2px solid ${(props) => (props.$borderColor ? props.$borderColor : 'var(--black-100)')};
-  border-radius: 4px;
+  border: 2px solid var(--black-100);
+  border-radius: 5px;
   position: relative;
-  color: ${(props) => (props.$color ? props.$color : '')};
-  font-size: ${(props) => (props.$fontSize ? props.$fontSize : '')};
-  width: ${(props) => (props.$width ? props.$width : '')};
-  height: ${(props) => (props.$height ? props.$height : '')};
   overflow: visible;
   opacity: 0.8;
+  font-size:1.6rem;
+  &:hover{
+    opacity:1;
+  }
   transition: all.2s;
 `
 
@@ -92,15 +92,31 @@ const DummyData = {
       isEmploy : true,
       tag : ['java','javascript','C++'],
       hotline : '010-1234-5678',
-      body : '신청합니다.'},
+      body : '신청합니다.'
+    },
+    {
+      id : 7,
+      img : '',
+      userName : '신청자3',
+      email:'1234@naver.com',
+      isEmploy : true,
+      tag : ['java','javascript','C++'],
+      hotline : '010-1234-5678',
+      body : '신청합니다.'
+    }
   ]
 }
 
 export default function ProjectDetail() {
   const [detailData, setDetailData] = useState(DummyData);
+  const [isOn, setIsOn] = useState(false);
   const dispatch = useDispatch();
   const loginUserData = useSelector(state=>state.user);
   const isAdmin = true;
+
+  const isOnHandler = () => {
+    setIsOn(!isOn);
+  }
   
   // loginUserData?.userInfo.id === detailData.id
   
@@ -112,8 +128,14 @@ export default function ProjectDetail() {
       <StyleDetailContainer className='col'>
         <DetailHead detailData={detailData} type='project'/>
         {isAdmin && <OnlyAdmin className='row'>
-          <ApplyButton $fontSize={fontSize}>신청 현황 조회하기
-            <ApplyStatusContainer requestPeople={detailData.requestPeople}/>
+          <ApplyButton
+            $fontSize={fontSize}
+            onClick={isOnHandler}
+          >신청 현황 조회하기
+            <ApplyStatusContainer
+              requestPeople={detailData.requestPeople}
+              isOn={isOn}
+            />
           </ApplyButton>
           <StyleBorderButton $fontSize={fontSize}>수정</StyleBorderButton>
           <StyleBorderButton $fontSize={fontSize}>삭제</StyleBorderButton>
