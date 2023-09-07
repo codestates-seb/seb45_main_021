@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/hearts/project")
+@RequestMapping("/project/hearts")
 public class ProjectHeartController {
 
     private final ProjectHeartService projectHeartService;

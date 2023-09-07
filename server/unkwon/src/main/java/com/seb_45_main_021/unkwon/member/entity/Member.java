@@ -1,5 +1,7 @@
 package com.seb_45_main_021.unkwon.member.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.seb_45_main_021.unkwon.audit.Auditable;
 import com.seb_45_main_021.unkwon.projectcard.entity.ProjectCard;
 import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
@@ -76,6 +78,7 @@ public class Member extends Auditable {
 
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     List<Project> projects = new ArrayList<>(); // 내가 쓴 프로젝트 게시글
 
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true, fetch = FetchType.LAZY)
