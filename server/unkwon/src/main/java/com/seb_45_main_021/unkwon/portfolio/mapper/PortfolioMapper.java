@@ -2,8 +2,8 @@ package com.seb_45_main_021.unkwon.portfolio.mapper;
 
 import com.seb_45_main_021.unkwon.comment.entity.Comment;
 import com.seb_45_main_021.unkwon.member.entity.Member;
-import com.seb_45_main_021.unkwon.portfolio.dto.PortFolioDto;
-import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
+import com.seb_45_main_021.unkwon.portfolio.dto.PortfolioDto;
+import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import java.util.Arrays;
@@ -11,13 +11,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
-public interface PortFolioMapper {
+public interface PortfolioMapper {
 
-    default PortFolio portfolioPostDtoToPortfolio(PortFolioDto.Post portfolioPostDto){
+    default Portfolio portfolioPostDtoToPortfolio(PortfolioDto.Post portfolioPostDto){
         Member member = new Member();
         member.setMemberId(portfolioPostDto.getMemberId());
 
-        PortFolio portFolio = new PortFolio();
+        Portfolio portFolio = new Portfolio();
         portFolio.setTitle(portfolioPostDto.getTitle());
         portFolio.setContent(portfolioPostDto.getContent());
         portFolio.setTags(Arrays.toString(portfolioPostDto.getTags()));
@@ -31,7 +31,7 @@ public interface PortFolioMapper {
 
     @Mapping(target = "tags", expression = "java(mapping(portfolioPatchDto.getTags()))")
     @Mapping(target = "lang", expression = "java(mapping(portfolioPatchDto.getLang()))")
-    PortFolio portfolioPatchDtoToPortfolio(PortFolioDto.Patch portfolioPatchDto);
+    Portfolio portfolioPatchDtoToPortfolio(PortfolioDto.Patch portfolioPatchDto);
 
     default String mapping(String[] tags) {
         if (tags == null || tags.length == 0) {
@@ -42,9 +42,9 @@ public interface PortFolioMapper {
 
 
 
-    default PortFolioDto.Response portfolioToPortfolioResponseDto(PortFolio portFolio){
+    default PortfolioDto.Response portfolioToPortfolioResponseDto(Portfolio portFolio){
 
-        PortFolioDto.Response response = PortFolioDto.Response.builder()
+        PortfolioDto.Response response = PortfolioDto.Response.builder()
                 .portfolioId(portFolio.getPortfolioId())
                 .memberId(portFolio.getMember().getMemberId())
                 .email(portFolio.getMember().getEmail())
@@ -65,11 +65,11 @@ public interface PortFolioMapper {
 
     };
 
-    List<PortFolioDto.Response> portfoliosToPortfolioResponseDtos(List<PortFolio> portFolios);
+    List<PortfolioDto.Response> portfoliosToPortfolioResponseDtos(List<Portfolio> portfolios);
 
-    default PortFolioDto.DetailResponse portfolioToPortfolioDetailResponseDto(PortFolio portFolio){
+    default PortfolioDto.DetailResponse portfolioToPortfolioDetailResponseDto(Portfolio portFolio){
 
-        PortFolioDto.DetailResponse detailResponse = PortFolioDto.DetailResponse.builder()
+        PortfolioDto.DetailResponse detailResponse = PortfolioDto.DetailResponse.builder()
                 .portfolioId(portFolio.getPortfolioId())
                 .memberId(portFolio.getMember().getMemberId())
                 .email(portFolio.getMember().getEmail())
@@ -89,8 +89,8 @@ public interface PortFolioMapper {
 
         List<Comment> comments = portFolio.getComments();
 
-        List<PortFolioDto.CommentResponse> commentResponses =
-                comments.stream().map(comment -> PortFolioDto.CommentResponse.builder()
+        List<PortfolioDto.CommentResponse> commentResponses =
+                comments.stream().map(comment -> PortfolioDto.CommentResponse.builder()
                         .commentId(comment.getCommentId())
                         .content(comment.getContent())
                         .createdAt(comment.getCreatedAt())

@@ -8,7 +8,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class PortFolioDto {
+public class PortfolioDto {
     @Getter
     @Setter
     public static class Post{
@@ -71,7 +71,7 @@ public class PortFolioDto {
         private int view;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
-        private List<PortFolioDto.CommentResponse> comments;
+        private List<PortfolioDto.CommentResponse> comments;
         private int commentCount;
         private boolean IsComment;
         private boolean IsEmploy;

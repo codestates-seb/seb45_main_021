@@ -11,7 +11,7 @@ import com.seb_45_main_021.unkwon.member.dto.response.MemberInformResponseDto;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.member.mapper.MemberMapper;
 import com.seb_45_main_021.unkwon.member.service.MemberService;
-import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
+import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
 import com.seb_45_main_021.unkwon.project.entity.Project;
 import com.seb_45_main_021.unkwon.projectcard.mapper.ProjectCardMapper;
 import lombok.RequiredArgsConstructor;
@@ -69,7 +69,7 @@ public class MemberController {
         // 회원 개인 정보
         // 포트폴리오, 프로젝트
         responseInformDto.setProjectList(new ArrayList<Project>(), new ArrayList<Project>());
-        responseInformDto.setPortFoliolist(new ArrayList<PortFolio>(), new ArrayList<PortFolio>());
+        responseInformDto.setPortFoliolist(new ArrayList<Portfolio>(), new ArrayList<Portfolio>());
 
 //        findMember.getPortFolioList().stream()
 //                .filter(portFolio -> portFolio.isWorking())

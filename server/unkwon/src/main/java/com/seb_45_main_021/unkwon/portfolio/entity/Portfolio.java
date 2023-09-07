@@ -11,16 +11,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class PortFolio extends Auditable {
+public class Portfolio extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long portfolioId;
