@@ -49,7 +49,7 @@ const StyleHeader = styled.header`
 
 export default function Header() {
   const { toAbout, toPortfolio, toProject } = useNav();
-  const { isLogin, userInfo } = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user);
   return (
     <StyleHeader id="header">
       <Inner>
@@ -60,7 +60,7 @@ export default function Header() {
         </nav>
         <SearchBox />
         <nav className="user-actions">
-          {isLogin ? <LoginActions userInfo={userInfo} /> : <UnLoginActions />}
+          {user.isLogin ? <LoginActions userInfo={user?.userInfo} /> : <UnLoginActions />}
         </nav>
       </Inner>
     </StyleHeader>

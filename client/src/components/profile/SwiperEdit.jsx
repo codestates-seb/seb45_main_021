@@ -48,16 +48,20 @@ const Tag = styled.div`
   align-items: center;
   gap: 5px;
   position: relative;
-  border-radius: 30px;
+  border: 1px solid var(--black-400);
+  border-radius: 5px;
+  transition: all.2s;
   width: fit-content;
   height: fit-content;
-  background-color: var(--black-100);
-  color: var(--black);
   text-align: center;
   padding: 5px 10px;
   font-size: 1.2rem;
   svg {
     cursor: pointer;
+  }
+  &:hover {
+    background-color: white;
+    color: black;
   }
 `;
 

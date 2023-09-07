@@ -18,7 +18,8 @@ const StyleContainer = styled(Page)`
   align-items: center;
   gap: 2rem;
   font-size: 2rem;
-  height: 100vh;
+  height: 100%;
+  width: 100%;
   h3 {
     font-size: 5rem;
     font-weight: 700;
@@ -62,7 +63,7 @@ const StyleColContainer = styled.div`
 `;
 
 const StyleBtnContainer = styled.div`
-  width: 400px;
+  width: 30rem;
   border: 1px solid var(--black-300);
   display: flex;
   align-items: center;
@@ -194,7 +195,7 @@ export default function SignIn() {
             <Input
               label={'이메일'}
               placeholder="name@example.com"
-              width="40rem"
+              width="30rem"
               height="56.22px"
               fontSize="2rem"
               type="text"
@@ -206,7 +207,7 @@ export default function SignIn() {
               label={'비밀번호'}
               placeholder="영어,숫자,특수기호 포함 8글자 이상"
               type="password"
-              width="40rem"
+              width="30rem"
               height="56.22px"
               fontSize="2rem"
               autoComplete="off"
