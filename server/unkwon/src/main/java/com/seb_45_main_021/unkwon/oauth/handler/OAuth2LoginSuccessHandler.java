@@ -6,6 +6,7 @@ import com.seb_45_main_021.unkwon.exception.BusinessLogicException;
 import com.seb_45_main_021.unkwon.exception.ExceptionCode;
 import com.seb_45_main_021.unkwon.member.dto.response.LoginResponseDto;
 import com.seb_45_main_021.unkwon.member.entity.Member;
+import com.seb_45_main_021.unkwon.member.entity.SocialType;
 import com.seb_45_main_021.unkwon.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,18 +35,18 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     private final MemberRepository memberRepository;
     public static final String REDIRECT_URI = "http://localhost:3000/login/redirect";
 
+    private static final String GOOGLE = "GOOGLE";
+    private static final String GITHUB = "GITHUB";
+
     // http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:3000/login/redirect 요청 url
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         log.info("OAuth2 로그인 성공");
         DefaultOAuth2User oAuth2User = (DefaultOAuth2User) authentication.getPrincipal();
 
-        log.info((String) oAuth2User.getAttributes().get("email"));
-        log.info((String) oAuth2User.getAttributes().get("picture"));
-        log.info((String) oAuth2User.getAttributes().get("name"));
-
+        SocialType socialType = getSocialType(response.getHeader("socialType"));
         String email = (String) oAuth2User.getAttributes().get("email");
-        Member member = findMemberByEmail(email);
+        Member member = findMemberByEmailAndSocialType(email, socialType);
         // 토큰 생성
         // 토큰 헤더 저장 및 DB 저장
         setTokenToResponse(response, member);
@@ -68,8 +69,8 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     }
 
 
-    private Member findMemberByEmail(String email){
-        return memberRepository.findByEmail(email)
+    private Member findMemberByEmailAndSocialType(String email, SocialType socialType){
+        return memberRepository.findBySocialTypeAndEmail(socialType, email)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
     private void setMemberToResponse(Member member, HttpServletResponse response) throws IOException{
@@ -97,4 +98,12 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
         memberRepository.save(member);
     }
+
+    private SocialType getSocialType(String registrationId){
+        if(GOOGLE.equals(registrationId)){
+            return SocialType.GOOGLE;
+        }
+        return SocialType.GITHUB;
+    }
+
 }

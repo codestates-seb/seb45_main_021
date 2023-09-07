@@ -1,5 +1,6 @@
 package com.seb_45_main_021.unkwon.project.controller;
 
+import com.seb_45_main_021.unkwon.dto.MultiResponseDto;
 import com.seb_45_main_021.unkwon.project.dto.ProjectPatchDto;
 import com.seb_45_main_021.unkwon.project.dto.ProjectPostDto;
 import com.seb_45_main_021.unkwon.project.dto.ProjectRequestDto;
@@ -10,6 +11,8 @@ import com.seb_45_main_021.unkwon.project.mapper.ProjectMapper;
 import com.seb_45_main_021.unkwon.project.service.ProjectService;
 import com.seb_45_main_021.unkwon.utils.UriCreator;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -62,9 +65,9 @@ public class ProjectController {
 
     }
 
-    // 프로젝트 1개 조회
+    // 프로젝트 상세 조회
     @GetMapping("/{project-id}")
-    public ResponseEntity getProject(@PathVariable("project-id")@Positive long projectId) {
+    public ResponseEntity getProject(@PathVariable("project-id") @Positive long projectId) {
 
         Project project = projectService.findProject(projectId);
 
@@ -77,13 +80,61 @@ public class ProjectController {
     public ResponseEntity getProjects(@RequestParam(required = false, defaultValue = "1") int page,
                                       @RequestParam(required = false, defaultValue = "12") int size) {
 
-        Page<Project> projectList = projectService.findProjects(page-1,size);
-        List<ProjectResponseDto> response = projectList.stream()
-                .map(mapper::projectToProjectResponseDto)
-                .collect(Collectors.toList());
+        Page<Project> pageProjects = projectService.findProjects(page-1,size);
+        List<Project> projects = pageProjects.getContent();
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(mapper.projectsToProjectResponseDtos(projects), pageProjects),HttpStatus.OK);
 
+    }
+
+    // 태그 검색 조회
+    @GetMapping("/tagSearch")
+    public ResponseEntity getProjectsTag(@RequestParam(required = false, defaultValue = "1") int page,
+                                           @RequestParam(required = false, defaultValue = "12") int size,
+                                           @RequestParam("tag") String[] tag ){
+        Page<Project> resultSearchTags = projectService.findTagProject(page,size,tag);
+        List<ProjectResponseDto> projectResponseDtoList = mapper.projectsToProjectResponseDtos(resultSearchTags.getContent());
+
+        return new ResponseEntity(
+                new MultiResponseDto<>(projectResponseDtoList, resultSearchTags),HttpStatus.OK);
+    }
+
+    // 언어 검색 조회
+    @GetMapping("/langSearch")
+    public ResponseEntity getProjectsLang(@RequestParam(required = false, defaultValue = "1") int page,
+                                            @RequestParam(required = false, defaultValue = "12") int size,
+                                            @RequestParam("lang") String[] lang ){
+        Page<Project> resultSearchLang = projectService.findLangProject(page,size,lang);
+        List<ProjectResponseDto> projectResponseDtoList = mapper.projectsToProjectResponseDtos(resultSearchLang.getContent());
+
+        return new ResponseEntity(
+                new MultiResponseDto<>(projectResponseDtoList, resultSearchLang),HttpStatus.OK);
+    }
+
+    // 프로젝트 주간 Top10
+    @GetMapping("/weekly-popular")
+    public ResponseEntity<Page<Project>> getWeeklyPopularProjects(
+            @RequestParam(required = false, defaultValue = "1") int page,
+            @RequestParam(required = false, defaultValue = "10") int size) {
+
+        Pageable pageRequest = PageRequest.of(page - 1, size);
+        Page<Project> popularProjects = projectService.findWeeklyPopularProjects(pageRequest);
+        List<ProjectResponseDto> projectResponseDtoList = mapper.projectsToProjectResponseDtos(popularProjects.getContent());
+
+        return new ResponseEntity(
+                new MultiResponseDto<>(projectResponseDtoList,popularProjects),HttpStatus.OK);
+    }
+
+    // 프로젝트 View 정렬 조회
+    @GetMapping("/view")
+    public ResponseEntity getPortfoliosView(@RequestParam(required = false, defaultValue = "1") int page,
+                                            @RequestParam(required = false, defaultValue = "12") int size){
+        Page<Project> pageProjects = projectService.findProjectsView(page-1,size);
+        List<Project> projects = pageProjects.getContent();
+
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(mapper.projectsToProjectResponseDtos(projects), pageProjects),HttpStatus.OK);
     }
 
     // 프로젝트 삭제
@@ -116,16 +167,6 @@ public class ProjectController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // 내 프로젝트에 지원한 유저상태 조회
-    @GetMapping("/{projectId}/request")
-    public ResponseEntity getRequestPeoples(@PathVariable long projectId) {
-
-        List<ProjectStatus> requestPeoples = projectService.findRequestPeople(projectId);
-
-        return new ResponseEntity<>(requestPeoples, HttpStatus.OK);
-
-    }
-
     // 프로젝트 지원 수락
     @PatchMapping("/request/{projectStatusId}/accept")
     public ResponseEntity acceptProject(@PathVariable Long projectStatusId) {
@@ -143,6 +184,37 @@ public class ProjectController {
 
         return ResponseEntity.ok().build();
 
+    }
+
+    // 하나의 프로젝트에 대한 지원현황 조회
+    @GetMapping("/{projectId}/request")
+    public ResponseEntity getRequestPeoples(@PathVariable long projectId) {
+
+        List<ProjectStatus> requestPeoples = projectService.findProjectStatus(projectId);
+        List<ProjectRequestDto> response = requestPeoples.stream()
+                .map(mapper::projectStatusToprojectRequestDto)
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
+    }
+
+    // 내가 게시한 프로젝트 목록
+    @GetMapping("/postedBy/{memberId}")
+    public ResponseEntity getProjectsPostedBy(@PathVariable Long memberId) {
+
+        List<Project> project = projectService.getProjectsPostedBy(memberId);
+
+        return ResponseEntity.ok(mapper.projectsToProjectResponseDtos(project));
+    }
+
+    // 내가 지원한 프로젝트 목록
+    @GetMapping("/appliedBy/{memberId}")
+    public ResponseEntity getProjectsAppliedBy(@PathVariable Long memberId) {
+
+        List<Project> project = projectService.getProjectsAppliedBy(memberId);
+
+        return ResponseEntity.ok(mapper.projectsToProjectResponseDtos(project));
     }
 
 }

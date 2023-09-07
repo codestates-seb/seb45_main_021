@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class PortfolioDto {
@@ -94,5 +95,28 @@ public class PortfolioDto {
 
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
+    }
+
+    @Getter
+    @Setter
+    public static class PortFolioProfileResponseDto {
+        private Long portFolioId;
+        private String title;
+        private String createdAt;
+        private int heartCount;
+        private int view;
+
+        public PortFolioProfileResponseDto(Long portFolioId, String title, LocalDateTime createdAt, int heartCount, int view) {
+            this.portFolioId = portFolioId;
+            this.title = title;
+            setCreatedAt(createdAt);
+            this.heartCount = heartCount;
+            this.view = view;
+        }
+
+        public void setCreatedAt(LocalDateTime createdAt){
+            // YYYY-DD-MM 포맷 형식
+            this.createdAt = createdAt.format(DateTimeFormatter.ISO_DATE);
+        }
     }
 }
