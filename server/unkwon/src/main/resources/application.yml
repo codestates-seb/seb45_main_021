@@ -16,6 +16,7 @@ spring:
     properties:
       hibernate.format_sql: true
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
+
   #  h2:
 #    console:
 #      enabled: true
@@ -32,6 +33,7 @@ spring:
 #  sql:
 #    init:
 #      data-locations: classpath*:db/h2/data.sql
+
   security:
     oauth2:
       client:
@@ -42,6 +44,11 @@ spring:
             scope:
               - email
               - profile
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+
 server:
   servlet:
     encoding:
