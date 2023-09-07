@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import Page from '../components/common/Page';
 import { StyleBorderButton } from '../components/common/Buttons';
+import toast from '../components/toast/Toast';
 import Modal from '../components/common/Modal';
 
 const Container = styled(Page)`
@@ -36,6 +37,10 @@ const Container = styled(Page)`
 `;
 
 export default function NotFound() {
+  const [isOn, setIsOn] = useState(false);
+  const handleModal = () => {
+    setIsOn((prev) => !prev);
+  };
   return (
     <Container>
       <h2>404</h2>
@@ -44,6 +49,18 @@ export default function NotFound() {
       <a href="/">
         <StyleBorderButton>Home</StyleBorderButton>
       </a>
+      {isOn && (
+        <Modal
+          setIsOn={handleModal}
+          type="alert"
+          title="알림"
+          message="앙 찬섭띠"
+          checkHandler={() => console.log('hi')}
+        />
+      )}
+      <button onClick={handleModal}>모달</button>
+      <button onClick={() => toast.success('성공')}>성공</button>
+      <button onClick={() => toast.info('인포')}>인포</button>
     </Container>
   );
 }

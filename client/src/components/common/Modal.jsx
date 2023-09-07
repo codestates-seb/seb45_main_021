@@ -1,33 +1,36 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { IoIosClose } from 'react-icons/io';
 import { StyleBorderButton } from './Buttons';
 
 // 사용법
 // const [isOn, setIsOn] = useState(false);
 // const handleModal = (e) => {
-//   e.stopPropagation();
 //   setIsOn((prev) => !prev);
 // };
-// {isOn && <Modal setIsOn={setIsOn} type="confirm" title="알림" message="앙 찬섭띠" />}
+// {isOn && <Modal setIsOn={handleModal} type="confirm" title="알림" message="앙 찬섭띠" />}
 // <button onClick={handleModal}>123123</button>
 
 const Container = styled.div`
-  position: absolute;
-  margin: auto auto;
-  z-index: 10;
-  width: 50%;
-  height: fit-content;
-  background-color: #000000b0;
-  border-radius: 20px;
+  position: fixed;
+  z-index: 30;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #0000006c;
   backdrop-filter: blur(4px);
-  border: 1px solid white;
   .gap {
     gap: 2rem;
   }
   .Wrapper {
-    width: 100%;
-    height: 100%;
+    background-color: black;
+    border: 1px solid white;
+    width: 50%;
+    border-radius: 10px;
     padding: 2rem;
     gap: 10rem;
     position: relative;
@@ -75,77 +78,58 @@ const Container = styled.div`
  * @param type - type=alert or confirm
  * @param title - 타이틀 문자열 전달
  * @param message - 내용 문자열 전달
- * @param onClickHandler - type=alert 일떄 확인 버튼 누를시 전달될 함수
- * @param trueHandler - type=confirm 일때 예 버튼 누를시 전달될 함수
- * @param falseHandler - type=confirm 일때 아니오 버튼 누를시 전달될 함수
- * @description 최상단에서 불러주세요 포지션 앱솔루트 부모기준입니다.
+ * @param checkHandler - 예 버튼 누를시 전달될 함수
+ * @param cancelHandler - type=confirm 일때 아니오 버튼 누를시 전달될 함수
  * @returns {JSX.Element}
  */
-export default function Modal({
-  setIsOn,
-  type,
-  title,
-  message,
-  onClickHandler,
-  trueHandler,
-  falseHandler,
-}) {
-  const Ref = useRef(null);
-  const handler = (e) => {
-    e.stopPropagation();
-    if (!Ref.current.contains(e.target)) {
-      setIsOn(false);
-    }
-  };
-
+export default function Modal({ setIsOn, type, title, message, checkHandler, cancelHandler }) {
   useEffect(() => {
-    window.addEventListener('click', handler);
-    return () => window.removeEventListener('click', handler);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
   }, []);
 
-  if (type === 'alert') {
-    return (
-      <Container ref={Ref}>
-        <div className="Wrapper col">
-          <IoIosClose size="50" color="var(--black-100)" onClick={() => setIsOn(false)} />
-          <h2 className="title">{title}</h2>
-          <span className="message">{message}</span>
-          <div className="row button-wrapper">
-            <StyleBorderButton onClick={onClickHandler}>확인</StyleBorderButton>
-          </div>
-        </div>
-      </Container>
-    );
-  }
-  if (type === 'confirm') {
-    return (
-      <Container ref={Ref}>
-        <div className="Wrapper col">
-          <IoIosClose size="50" color="var(--black-100)" onClick={() => setIsOn(false)} />
-          <h2 className="title">{title}</h2>
-          <span className="message">{message}</span>
-          <div className="row gap button-wrapper">
+  return (
+    <Container>
+      <div className="Wrapper col">
+        <h2 className="title">{title}</h2>
+        <span className="message">{message}</span>
+        <div className="row gap button-wrapper">
+          {type === 'alert' && (
             <StyleBorderButton
-              className="yes"
               onClick={() => {
-                handler();
-                trueHandler();
+                if (checkHandler) checkHandler();
+                setIsOn();
               }}
             >
-              예
+              확인
             </StyleBorderButton>
-            <StyleBorderButton
-              className="no"
-              onClick={() => {
-                handler();
-                falseHandler();
-              }}
-            >
-              취소
-            </StyleBorderButton>
-          </div>
+          )}
+          {type === 'confirm' && (
+            <>
+              <StyleBorderButton
+                className="yes"
+                onClick={() => {
+                  if (checkHandler) checkHandler();
+                  setIsOn();
+                }}
+              >
+                예
+              </StyleBorderButton>
+              <StyleBorderButton
+                className="no"
+                onClick={() => {
+                  if (cancelHandler) cancelHandler();
+                  setIsOn();
+                }}
+              >
+                취소
+              </StyleBorderButton>
+            </>
+          )}
         </div>
-      </Container>
-    );
-  }
+      </div>
+    </Container>
+  );
 }
