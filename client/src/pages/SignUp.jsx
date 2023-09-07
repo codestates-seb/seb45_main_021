@@ -79,10 +79,25 @@ const StyleDivider = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  border-left: 1px solid var(--black-500);
   position: relative;
   height: 100%;
-  /* margin: 2rem 0; */
+
+  &::before {
+    content: '';
+    border-left: 1px solid var(--black-500);
+    position: absolute;
+    height: 40%;
+    top: 0;
+  }
+
+  &::after {
+    content: '';
+    border-left: 1px solid var(--black-500);
+    position: absolute;
+    height: 40%;
+    bottom: 0;
+  }
+
   span {
     background-color: var(--backgroundColor);
     color: var(--black-500);

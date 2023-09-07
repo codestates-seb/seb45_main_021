@@ -18,7 +18,7 @@ const StyleContainer = styled(Page)`
   align-items: center;
   gap: 2rem;
   font-size: 2rem;
-
+  height: 100vh;
   h3 {
     font-size: 5rem;
     font-weight: 700;
@@ -80,12 +80,27 @@ const StyleDivider = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  border-left: 1px solid var(--black-500);
   position: relative;
   height: 100%;
-  /* margin: 2rem 0; */
+
+  &::before {
+    content: '';
+    border-left: 1px solid var(--black-500);
+    position: absolute;
+    height: 40%;
+    top: 0;
+  }
+
+  &::after {
+    content: '';
+    border-left: 1px solid var(--black-500);
+    position: absolute;
+    height: 40%;
+    bottom: 0;
+  }
+
   span {
-    background-color: var(--backgroundColor);
+    background-color: transparent;
     color: var(--black-500);
     position: absolute;
     margin: auto;
@@ -125,6 +140,7 @@ export default function SignIn() {
                 memberId: el.data.memberId,
                 userName: el.data.username,
                 imgUrl: el.data.imgUrl,
+                socialType: el.data.socialType,
               },
             }),
           );
