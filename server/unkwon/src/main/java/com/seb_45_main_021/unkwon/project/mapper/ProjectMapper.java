@@ -1,20 +1,27 @@
 package com.seb_45_main_021.unkwon.project.mapper;
 
 import com.seb_45_main_021.unkwon.commonCode.CommonCode;
+import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.portfolio.dto.PortFolioDto;
+
 import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
 import com.seb_45_main_021.unkwon.project.dto.ProjectPatchDto;
 import com.seb_45_main_021.unkwon.project.dto.ProjectPostDto;
 import com.seb_45_main_021.unkwon.project.dto.ProjectRequestDto;
 import com.seb_45_main_021.unkwon.project.dto.ProjectResponseDto;
+
+import com.seb_45_main_021.unkwon.project.dto.*;
+
 import com.seb_45_main_021.unkwon.project.entity.Project;
 import com.seb_45_main_021.unkwon.project.entity.ProjectStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
+
 import java.util.Arrays;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -121,6 +128,7 @@ public interface ProjectMapper {
         return projectResponseDto;
     }
 
+
     default List<ProjectResponseDto> projectsToProjectResponseDtos(List<Project> projects) {
         return projects.stream()
                 .map(this::projectToProjectResponseDto)
@@ -138,6 +146,18 @@ public interface ProjectMapper {
         return String.join(",", tags);
     }
 
+
+
+//    default List<ProjectProfileResponseDto> projectToProfileResponseDto(List<Project> projectList){
+//        return projectList.stream()
+//                .map(project -> new ProjectProfileResponseDto(
+//                        project.getProjectId(),
+//                        project.getTitle(),
+//                        project.getCreatedAt(),
+//                        project.getHeartCount(),
+//                        project.getView()
+//                )).collect(Collectors.toList());
+//    }
 
 }
 

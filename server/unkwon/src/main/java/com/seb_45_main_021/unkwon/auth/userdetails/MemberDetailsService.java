@@ -4,6 +4,7 @@ import com.seb_45_main_021.unkwon.auth.utils.CustomAuthorityUtils;
 import com.seb_45_main_021.unkwon.exception.BusinessLogicException;
 import com.seb_45_main_021.unkwon.exception.ExceptionCode;
 import com.seb_45_main_021.unkwon.member.entity.Member;
+import com.seb_45_main_021.unkwon.member.entity.SocialType;
 import com.seb_45_main_021.unkwon.member.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -30,11 +31,12 @@ public class MemberDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Member findMember = memberRepository.findByEmail(email)
+
+        Member findMember = memberRepository.findBySocialTypeAndEmail(SocialType.SPEC, email)
                         .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
         // 동일 아이디 로그인 방지
-        // if(!findMember.refreshTokenIsNull()) throw new BusinessLogicException(ExceptionCode.STATUS_LOGIN);
+        if(!findMember.refreshTokenIsNull()) throw new BusinessLogicException(ExceptionCode.STATUS_LOGIN);
 
         log.info("MemberDetailsService (ID) : " + findMember.getEmail());
         log.info("MemberDetailsService (PW) : " + findMember.getPassword());

@@ -1,12 +1,14 @@
 package com.seb_45_main_021.unkwon.oauth.memberinfo;
 
+import com.seb_45_main_021.unkwon.member.entity.SocialType;
+import lombok.Getter;
+
 import java.util.Map;
 
 public class GoogleOAuth2MemberInfo extends OAuth2MemberInfo{
     public GoogleOAuth2MemberInfo(Map<String, Object> attributes){
         super(attributes);
     }
-
     @Override
     public String getId() {
         return (String) attributes.get("sub");
@@ -24,4 +26,5 @@ public class GoogleOAuth2MemberInfo extends OAuth2MemberInfo{
     public String getEmail() {
         return (String) attributes.get("email");
     }
+
 }
