@@ -6,6 +6,7 @@ import com.seb_45_main_021.unkwon.exception.BusinessLogicException;
 import com.seb_45_main_021.unkwon.exception.ExceptionCode;
 import com.seb_45_main_021.unkwon.member.dto.response.LoginResponseDto;
 import com.seb_45_main_021.unkwon.member.entity.Member;
+import com.seb_45_main_021.unkwon.member.entity.SocialType;
 import com.seb_45_main_021.unkwon.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,8 @@ public class UserAuthenticationSuccessHandler implements AuthenticationSuccessHa
 
     private final JwtTokenizer jwtTokenizer;
     private final MemberRepository memberRepository;
+
+    private static final SocialType socialType = SocialType.SPEC;
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, 
                                         HttpServletResponse response, 
@@ -33,7 +36,7 @@ public class UserAuthenticationSuccessHandler implements AuthenticationSuccessHa
         log.info("# Authenticated successfully");
         String email = ((Member) authentication.getPrincipal()).getEmail();
         // DB 에 저장된 완전한 Member 객체
-        Member member = findMemberByEmail(email);
+        Member member = findMemberByEmailAndSocialType(email);
 
         // 회원가입일 경우 아래 로직은 실행 되어서는 안된다.
         setMemberToResponse(response, member);
@@ -69,8 +72,8 @@ public class UserAuthenticationSuccessHandler implements AuthenticationSuccessHa
         memberRepository.save(member);
     }
 
-    private Member findMemberByEmail(String email){
-        return memberRepository.findByEmail(email)
+    private Member findMemberByEmailAndSocialType(String email){
+        return memberRepository.findBySocialTypeAndEmail(socialType, email)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 }

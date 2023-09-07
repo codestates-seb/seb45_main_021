@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -53,6 +54,17 @@ public class PortFolio extends Auditable {
     private String tags;
 
     private String lang;
+
+    public static List<PortFolio> getPortFolioIsEmployList(List<PortFolio> portFolioList){
+        return portFolioList.stream()
+                .filter(portFolio -> portFolio.IsEmploy)
+                .collect(Collectors.toList());
+    }
+    public static List<PortFolio> getPortFolioIsNotEmployList(List<PortFolio> portFolioList){
+        return portFolioList.stream()
+                .filter(portFolio -> !portFolio.IsEmploy)
+                .collect(Collectors.toList());
+    }
 
 
     @OneToMany(mappedBy = "portFolio", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -1,11 +1,14 @@
 package com.seb_45_main_021.unkwon.portfolio.mapper;
 
 import com.seb_45_main_021.unkwon.comment.entity.Comment;
+import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.portfolio.dto.PortFolioDto;
 import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
+import javax.sound.sampled.Port;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -106,4 +109,26 @@ public interface PortFolioMapper {
 
         return detailResponse;
     };
+
+    default List<PortFolioDto.PortFolioProfileResponseDto> portFolioListToProfileResponseDto(List<PortFolio> portFolioList){
+        return portFolioList.stream()
+                .map(portFolio -> new PortFolioDto.PortFolioProfileResponseDto(
+                        portFolio.getPortfolioId(),
+                        portFolio.getTitle(),
+                        portFolio.getCreatedAt(),
+                        portFolio.getHeartCount(),
+                        portFolio.getView()
+                )).collect(Collectors.toList());
+    }
+
+    default List<PortFolioDto.PortFolioProfileResponseDto> portFolioHeartListToProfileResponseDto(List<PortfolioHeart> portfolioHeartList){
+        return portfolioHeartList.stream()
+                .map(portfolioHeart -> new PortFolioDto.PortFolioProfileResponseDto(
+                        portfolioHeart.getPortFolio().getPortfolioId(),
+                        portfolioHeart.getPortFolio().getTitle(),
+                        portfolioHeart.getPortFolio().getCreatedAt(),
+                        portfolioHeart.getPortFolio().getHeartCount(),
+                        portfolioHeart.getPortFolio().getView()
+                )).collect(Collectors.toList());
+    }
 }

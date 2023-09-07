@@ -24,4 +24,5 @@ public interface PortfolioHeartRepository extends JpaRepository<PortfolioHeart,L
     @Query("SELECT p.portFolio FROM PortfolioHeart p WHERE p.createdAt >= :oneWeekAgo GROUP BY p.portFolio ORDER BY COUNT(p.portFolio) DESC")
     List<PortFolio> findTop10PortfoliosByHeartsLast7Days(@Param("oneWeekAgo") LocalDateTime oneWeekAgo);
 
+    List<PortfolioHeart> findByMember(Member member);
 }
