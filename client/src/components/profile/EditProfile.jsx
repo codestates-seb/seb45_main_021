@@ -52,16 +52,16 @@ export default function EditProfile({
             구직중
             <input
               type="checkbox"
-              checked={editProfile.isWorking.value}
-              onChange={(e) => setEditProfile({ ...editProfile, isWorking: { value: true } })}
+              checked={editProfile.working.value}
+              onChange={(e) => setEditProfile({ ...editProfile, working: { value: true } })}
             />
           </label>
           <label className="label">
             재직중
             <input
               type="checkbox"
-              checked={editProfile.isWorking.value === false}
-              onChange={(e) => setEditProfile({ ...editProfile, isWorking: { value: false } })}
+              checked={editProfile.working.value === false}
+              onChange={(e) => setEditProfile({ ...editProfile, working: { value: false } })}
             />
           </label>
         </div>
@@ -71,17 +71,17 @@ export default function EditProfile({
               label="태그"
               height="2.5rem"
               type="text"
-              value={editProfile.tags.curString}
+              value={editProfile.tag.curString}
               onChange={(e) =>
                 setEditProfile({
                   ...editProfile,
-                  tags: { value: [...editProfile.tags.value], curString: e.target.value },
+                  tag: { value: [...editProfile.tag.value], curString: e.target.value },
                 })
               }
               onKeyDown={handleTagKeyDown}
             />
             <div className="row tagGap">
-              {editProfile.tags.value.map((el, i) => (
+              {editProfile.tag.value.map((el, i) => (
                 <Tag key={i}>
                   {el}
                   <AiOutlineClose
@@ -90,9 +90,9 @@ export default function EditProfile({
                     onClick={() =>
                       setEditProfile({
                         ...editProfile,
-                        tags: {
-                          value: editProfile.tags.value.filter((_, idx) => i !== idx),
-                          curString: editProfile.tags.curString,
+                        tag: {
+                          value: editProfile.tag.value.filter((_, idx) => i !== idx),
+                          curString: editProfile.tag.curString,
                         },
                       })
                     }

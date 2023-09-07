@@ -5,6 +5,7 @@ import { StyleBorderButton } from '../common/Buttons';
 import { useParams } from 'react-router-dom';
 import api from '../../hooks/useAxiosInterceptor';
 import useNav from '../../hooks/useNav';
+import Tag from '../common/Tag';
 
 const SwiperCard = styled.div`
   width: 100%;
@@ -54,21 +55,6 @@ const InfoWrapper = styled.div`
     }
   }
 `;
-const Tag = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-  position: relative;
-  border-radius: 30px;
-  width: fit-content;
-  height: fit-content;
-  background-color: var(--black-100);
-  color: var(--black);
-  text-align: center;
-  padding: 5px 10px;
-  font-size: 1.2rem;
-`;
 
 const AboutMeWrapper = styled.div`
   height: 100%;
@@ -82,7 +68,7 @@ const ButtonWrapper = styled.div`
 `;
 
 export default function SwiperItem({ activePage, data, idx, handler, idxHandler }) {
-  const { userId } = useParams();
+  const { memberId } = useParams();
   const { toProfile } = useNav();
 
   const handleEdit = (type) => {
@@ -93,7 +79,7 @@ export default function SwiperItem({ activePage, data, idx, handler, idxHandler 
     console.log('삭제요청');
     api.delete(`/projectcards/${idx}`).then((el) => {
       window.alert('삭제가 완료되었습니다.');
-      toProfile(userId);
+      toProfile(memberId);
     });
   };
   return (
@@ -109,15 +95,15 @@ export default function SwiperItem({ activePage, data, idx, handler, idxHandler 
               </div>
               <div className="col gap">
                 <p className="label">연락처</p>
-                <p>{data.isWorking ? '재직중' : '구직중'}</p>
+                <p>{data.working ? '재직중' : '구직중'}</p>
               </div>
               <div className="col gap">
-                {data.tags.length !== 0 && (
+                {data.tag.length !== 0 && (
                   <>
                     <p className="label">기술</p>
                     <div className="row gap">
-                      {data.tags.map((el, i) => (
-                        <Tag key={i}>{el}</Tag>
+                      {data.tag.map((el, i) => (
+                        <Tag key={i} text={el} />
                       ))}
                     </div>
                   </>
