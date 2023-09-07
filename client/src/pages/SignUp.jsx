@@ -11,6 +11,8 @@ import { deleteUser } from '../redux/userform/userslice';
 import { useDispatch } from 'react-redux';
 
 const StyleContainer = styled(Page)`
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -61,7 +63,7 @@ const StyleColContainer = styled.div`
 `;
 
 const StyleBtnContainer = styled.div`
-  width: 400px;
+  width: 30rem;
   border: 1px solid var(--black-300);
   display: flex;
   align-items: center;
@@ -99,7 +101,7 @@ const StyleDivider = styled.div`
   }
 
   span {
-    background-color: var(--backgroundColor);
+    background-color: transparent;
     color: var(--black-500);
     position: absolute;
     margin: auto;
@@ -180,10 +182,8 @@ export default function SignUp() {
       <StyleRowContainer className="row">
         <StyleColContainer className="col colgap">
           <StyleBtnContainer onClick={handleClickGoogleBtn}>
-            <a href="https://d9fd-14-53-203-58.ngrok-free.app/oauth2/authorization/google?redirect_uri=http://localhost:3000/login/redirect">
-              <FcGoogle className="logo" size={30} />
-              <span>Google 회원가입</span>
-            </a>
+            <FcGoogle className="logo" size={30} />
+            <span>Google 회원가입</span>
           </StyleBtnContainer>
           <StyleBtnContainer>
             <AiFillGithub className="logo" size={30} />
@@ -200,7 +200,7 @@ export default function SignUp() {
             <Input
               label={'이름'}
               placeholder="이름을 입력해주세요"
-              width="40rem"
+              width="30rem"
               height="56.22px"
               fontSize="2rem"
               type="text"
@@ -211,7 +211,7 @@ export default function SignUp() {
             <Input
               label={'이메일'}
               placeholder="username@example.com"
-              width="40rem"
+              width="30rem"
               height="56.22px"
               fontSize="2rem"
               type="text"
@@ -222,7 +222,7 @@ export default function SignUp() {
             <Input
               label={'비밀번호'}
               placeholder="영어,숫자,특수기호 포함 8글자 이상"
-              width="40rem"
+              width="30rem"
               height="56.22px"
               fontSize="2rem"
               type="password"
