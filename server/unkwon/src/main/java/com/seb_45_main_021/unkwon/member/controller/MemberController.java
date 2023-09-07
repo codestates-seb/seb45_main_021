@@ -11,8 +11,8 @@ import com.seb_45_main_021.unkwon.member.dto.response.MemberInformResponseDto;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.member.mapper.MemberMapper;
 import com.seb_45_main_021.unkwon.member.service.MemberService;
-import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
-import com.seb_45_main_021.unkwon.portfolio.mapper.PortFolioMapper;
+import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
+import com.seb_45_main_021.unkwon.portfolio.mapper.PortfolioMapper;
 import com.seb_45_main_021.unkwon.project.entity.Project;
 import com.seb_45_main_021.unkwon.projectcard.mapper.ProjectCardMapper;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ public class MemberController {
     private final MemberService memberService;
     private final MemberMapper memberMapper;
     private final ProjectCardMapper projectCardMapper;
-    private final PortFolioMapper portFolioMapper;
+    private final PortfolioMapper portfolioMapper;
 
     /** 회원 가입 **/
     @PostMapping("/signup")
@@ -70,10 +70,12 @@ public class MemberController {
         // 회원 개인 정보
         // 포트폴리오, 프로젝트
         responseInformDto.setProjectList(new ArrayList<Project>(), new ArrayList<Project>());
-        responseInformDto.setPortFoliolist(
-                  portFolioMapper.portFolioListToProfileResponseDto(PortFolio.getPortFolioIsEmployList(findMember.getPortfolios()))
-                , portFolioMapper.portFolioListToProfileResponseDto(PortFolio.getPortFolioIsNotEmployList(findMember.getPortfolios()))
+
+        responseInformDto.setPortfoliolist(
+                  portfolioMapper.portFolioListToProfileResponseDto(Portfolio.getPortfolioIsEmployList(findMember.getPortfolios()))
+                , portfolioMapper.portFolioListToProfileResponseDto(Portfolio.getPortfolioIsNotEmployList(findMember.getPortfolios()))
         );
+
 
         // 1. 로그인 상태
         // 2. 자기 자신의 프로필 조회
@@ -81,7 +83,7 @@ public class MemberController {
             // 찜 리스트, 프로젝트 카드
             List<PortfolioHeart> portfolioHeartList = memberService.getPortfolioInHeart(findMember);
             // List<ProjectHeart> projectHeartList = memberService.getProjectInHeart(findMember);
-            responseInformDto.setPortfolioHeartList(portFolioMapper.portFolioHeartListToProfileResponseDto(portfolioHeartList));
+            responseInformDto.setPortfolioHeartList(portfolioMapper.portFolioHeartListToProfileResponseDto(portfolioHeartList));
             //responseInformDto.setProjectHeartList(portFolioMapper.projectHeartListToProfileResponseDto(projectHeartList));
             responseInformDto.setProjectCardList(projectCardMapper.projectCardListToProjectCardResponseDto(findMember.getProjectCardList()));
         }

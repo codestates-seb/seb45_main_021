@@ -1,11 +1,9 @@
 package com.seb_45_main_021.unkwon.project.mapper;
 
 import com.seb_45_main_021.unkwon.commonCode.CommonCode;
-import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
-import com.seb_45_main_021.unkwon.member.entity.Member;
-import com.seb_45_main_021.unkwon.portfolio.dto.PortFolioDto;
 
-import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
+import com.seb_45_main_021.unkwon.member.entity.Member;
+import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
 import com.seb_45_main_021.unkwon.project.dto.ProjectPatchDto;
 import com.seb_45_main_021.unkwon.project.dto.ProjectPostDto;
 import com.seb_45_main_021.unkwon.project.dto.ProjectRequestDto;
@@ -137,7 +135,7 @@ public interface ProjectMapper {
 
     @Mapping(target = "tags", expression = "java(mapping(projectPatchDto.getTags()))")
     @Mapping(target = "lang", expression = "java(mapping(projectPatchDto.getLang()))")
-    PortFolio projectPatchDtoToPortfolio(ProjectPatchDto projectPatchDto);
+    Portfolio projectPatchDtoToPortfolio(ProjectPatchDto projectPatchDto);
 
     default String mapping(String[] tags) {
         if (tags == null || tags.length == 0) {

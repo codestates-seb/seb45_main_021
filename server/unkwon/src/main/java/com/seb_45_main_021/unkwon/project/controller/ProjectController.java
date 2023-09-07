@@ -1,8 +1,6 @@
 package com.seb_45_main_021.unkwon.project.controller;
 
 import com.seb_45_main_021.unkwon.dto.MultiResponseDto;
-import com.seb_45_main_021.unkwon.portfolio.dto.PortFolioDto;
-import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
 import com.seb_45_main_021.unkwon.project.dto.ProjectPatchDto;
 import com.seb_45_main_021.unkwon.project.dto.ProjectPostDto;
 import com.seb_45_main_021.unkwon.project.dto.ProjectRequestDto;

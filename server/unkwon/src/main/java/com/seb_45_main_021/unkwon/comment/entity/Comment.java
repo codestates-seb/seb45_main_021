@@ -3,7 +3,7 @@ package com.seb_45_main_021.unkwon.comment.entity;
 
 import com.seb_45_main_021.unkwon.audit.Auditable;
 import com.seb_45_main_021.unkwon.member.entity.Member;
-import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
+import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,5 +30,5 @@ public class Comment extends Auditable {
 
     @ManyToOne
     @JoinColumn(name = "PORTFOLIO_ID")
-    private PortFolio portFolio;
+    private Portfolio portFolio;
 }

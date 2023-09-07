@@ -1,7 +1,6 @@
 package com.seb_45_main_021.unkwon.heart.entity;
 
 import com.seb_45_main_021.unkwon.member.entity.Member;
-import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
 import com.seb_45_main_021.unkwon.project.entity.Project;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

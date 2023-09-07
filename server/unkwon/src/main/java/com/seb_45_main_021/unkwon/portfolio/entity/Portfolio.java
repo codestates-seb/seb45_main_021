@@ -11,9 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,7 +19,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PortFolio extends Auditable {
+public class Portfolio extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long portfolioId;
@@ -55,12 +53,12 @@ public class PortFolio extends Auditable {
 
     private String lang;
 
-    public static List<PortFolio> getPortFolioIsEmployList(List<PortFolio> portFolioList){
+    public static List<Portfolio> getPortfolioIsEmployList(List<Portfolio> portFolioList){
         return portFolioList.stream()
                 .filter(portFolio -> portFolio.IsEmploy)
                 .collect(Collectors.toList());
     }
-    public static List<PortFolio> getPortFolioIsNotEmployList(List<PortFolio> portFolioList){
+    public static List<Portfolio> getPortfolioIsNotEmployList(List<Portfolio> portFolioList){
         return portFolioList.stream()
                 .filter(portFolio -> !portFolio.IsEmploy)
                 .collect(Collectors.toList());

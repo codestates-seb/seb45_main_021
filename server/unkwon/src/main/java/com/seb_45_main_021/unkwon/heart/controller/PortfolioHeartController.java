@@ -2,13 +2,12 @@ package com.seb_45_main_021.unkwon.heart.controller;
 
 import com.seb_45_main_021.unkwon.dto.MultiResponseDto;
 import com.seb_45_main_021.unkwon.heart.dto.PortfolioHeartDto;
-import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
 import com.seb_45_main_021.unkwon.heart.service.PortfolioHeartService;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.member.service.MemberService;
-import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
-import com.seb_45_main_021.unkwon.portfolio.mapper.PortFolioMapper;
-import com.seb_45_main_021.unkwon.portfolio.service.PortFolioService;
+import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
+import com.seb_45_main_021.unkwon.portfolio.mapper.PortfolioMapper;
+import com.seb_45_main_021.unkwon.portfolio.service.PortfolioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,16 +22,16 @@ import java.util.List;
 public class PortfolioHeartController {
 
     private final PortfolioHeartService portfolioHeartService;
-    private final PortFolioService portFolioService;
+    private final PortfolioService portfolioService;
     private final MemberService memberService;
-    private final PortFolioMapper mapper;
+    private final PortfolioMapper mapper;
 
 
 
     @Autowired
-    public PortfolioHeartController(PortfolioHeartService portfolioHeartService, PortFolioService portFolioService, MemberService memberService, PortFolioMapper mapper) {
+    public PortfolioHeartController(PortfolioHeartService portfolioHeartService, PortfolioService portfolioService, MemberService memberService, PortfolioMapper mapper) {
         this.portfolioHeartService = portfolioHeartService;
-        this.portFolioService = portFolioService;
+        this.portfolioService = portfolioService;
         this.memberService = memberService;
 
 
@@ -46,7 +45,7 @@ public class PortfolioHeartController {
         Long memberId = Long.valueOf(portfolioHeartDto.getMemberId());
         Member member = memberService.findVerifiedMember(memberId);
 
-        PortFolio portFolio = portFolioService.findByPortfolioId(portfolioId);
+        Portfolio portFolio = portfolioService.findByPortfolioId(portfolioId);
         if (portFolio == null) {
             return ResponseEntity.notFound().build();
         }
@@ -61,19 +60,19 @@ public class PortfolioHeartController {
         }
     }
     @GetMapping("/memberLikes/{memberId}")
-    public ResponseEntity<Page<PortFolio>> getHeartedPortfoliosByMemberId(@PathVariable Long memberId,
+    public ResponseEntity<Page<Portfolio>> getHeartedPortfoliosByMemberId(@PathVariable Long memberId,
                                                                           @RequestParam(required = false, defaultValue = "1") int page,
                                                                           @RequestParam(required = false, defaultValue = "12") int size ) {
-        Page<PortFolio> heartedPortfolios = portfolioHeartService.getHeartedPortfoliosByMemberId(memberId, PageRequest.of(page - 1, size));
-        List<PortFolio> portFolios = heartedPortfolios.getContent();
+        Page<Portfolio> heartedPortfolios = portfolioHeartService.getHeartedPortfoliosByMemberId(memberId, PageRequest.of(page - 1, size));
+        List<Portfolio> portfolios = heartedPortfolios.getContent();
 
         return new ResponseEntity(
-                new MultiResponseDto<>(mapper.portfoliosToPortfolioResponseDtos(portFolios),heartedPortfolios),HttpStatus.OK);
+                new MultiResponseDto<>(mapper.portfoliosToPortfolioResponseDtos(portfolios),heartedPortfolios),HttpStatus.OK);
     }
 
     @GetMapping("/weekly-top")
-    public ResponseEntity<List<PortFolio>> getTop10PortfoliosByHeartsLast7Days() {
-        List<PortFolio> top10Portfolios = portfolioHeartService.getTop10PortfoliosByHeartsLast7Days();
+    public ResponseEntity<List<Portfolio>> getTop10PortfoliosByHeartsLast7Days() {
+        List<Portfolio> top10Portfolios = portfolioHeartService.getTop10PortfoliosByHeartsLast7Days();
         return new ResponseEntity<>(top10Portfolios, HttpStatus.OK);
     }
 

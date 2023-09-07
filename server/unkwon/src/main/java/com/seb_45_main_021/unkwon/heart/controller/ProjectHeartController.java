@@ -5,7 +5,6 @@ import com.seb_45_main_021.unkwon.heart.dto.ProjectHeartDto;
 import com.seb_45_main_021.unkwon.heart.service.ProjectHeartService;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.member.service.MemberService;
-import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
 import com.seb_45_main_021.unkwon.project.entity.Project;
 import com.seb_45_main_021.unkwon.project.mapper.ProjectMapper;
 import com.seb_45_main_021.unkwon.project.service.ProjectService;

@@ -6,7 +6,6 @@ import com.seb_45_main_021.unkwon.exception.BusinessLogicException;
 import com.seb_45_main_021.unkwon.exception.ExceptionCode;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.member.repository.MemberRepository;
-import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
 import com.seb_45_main_021.unkwon.project.entity.Project;
 import com.seb_45_main_021.unkwon.project.entity.ProjectStatus;
 import com.seb_45_main_021.unkwon.project.repository.ProjectRepository;

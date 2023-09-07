@@ -1,12 +1,9 @@
 package com.seb_45_main_021.unkwon.heart.service;
 
-import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
 import com.seb_45_main_021.unkwon.heart.entity.ProjectHeart;
-import com.seb_45_main_021.unkwon.heart.repository.PortfolioHeartRepository;
 import com.seb_45_main_021.unkwon.heart.repository.ProjectHeartRepository;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.member.repository.MemberRepository;
-import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
 import com.seb_45_main_021.unkwon.project.entity.Project;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

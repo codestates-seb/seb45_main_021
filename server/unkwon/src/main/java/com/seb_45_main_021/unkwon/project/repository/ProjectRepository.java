@@ -1,6 +1,5 @@
 package com.seb_45_main_021.unkwon.project.repository;
 
-import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
 import com.seb_45_main_021.unkwon.project.entity.Project;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
