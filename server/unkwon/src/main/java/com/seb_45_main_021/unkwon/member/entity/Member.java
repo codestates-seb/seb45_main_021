@@ -1,5 +1,6 @@
 package com.seb_45_main_021.unkwon.member.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.seb_45_main_021.unkwon.audit.Auditable;
 import com.seb_45_main_021.unkwon.project.entity.ProjectStatus;
 import com.seb_45_main_021.unkwon.projectcard.entity.ProjectCard;
@@ -45,7 +46,7 @@ public class Member extends Auditable {
     private String aboutMe; // 자기 소개
 
     private String imgUrl; // 이미지 URL
-    
+
     private int age; // 사용자 나이
 
     private boolean isWorking;
@@ -65,7 +66,8 @@ public class Member extends Auditable {
     List<ProjectCard> projectCardList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
-    @OrderBy("created_at desc") // 최신순으로 정렬
+    @OrderBy("created_at desc")
+    @JsonManagedReference
     List<PortFolio> portfolios = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
@@ -73,6 +75,7 @@ public class Member extends Auditable {
     List<Project> projects = new ArrayList<>(); // 내가 쓴 프로젝트 게시글
 
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<PortfolioHeart> portfolioHearts;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
