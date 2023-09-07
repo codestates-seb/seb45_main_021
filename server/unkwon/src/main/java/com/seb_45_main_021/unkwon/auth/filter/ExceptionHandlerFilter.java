@@ -22,7 +22,6 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try{
-            log.info("ExceptionHandlerFilter");
             filterChain.doFilter(request, response);
             // 서명, 타임 아웃, 잘못된 토큰의 경우로 나누어야한다.
         } catch (JwtException e){

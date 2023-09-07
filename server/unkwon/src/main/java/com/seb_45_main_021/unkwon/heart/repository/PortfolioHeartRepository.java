@@ -19,4 +19,5 @@ public interface PortfolioHeartRepository extends JpaRepository<PortfolioHeart,L
 
     List<PortfolioHeart> findByPortFolio(PortFolio portFolio);
 
+    List<PortfolioHeart> findByMember(Member member);
 }

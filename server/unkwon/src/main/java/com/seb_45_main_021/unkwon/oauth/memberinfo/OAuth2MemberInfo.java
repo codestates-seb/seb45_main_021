@@ -2,7 +2,7 @@ package com.seb_45_main_021.unkwon.oauth.memberinfo;
 
 import java.util.Map;
 
-public abstract  class OAuth2MemberInfo {
+public abstract class OAuth2MemberInfo {
     protected Map<String, Object> attributes;
 
     public OAuth2MemberInfo(Map<String, Object> attributes) {

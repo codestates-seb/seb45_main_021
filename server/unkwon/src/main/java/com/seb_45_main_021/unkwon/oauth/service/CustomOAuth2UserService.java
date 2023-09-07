@@ -33,7 +33,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     private final MemberRepository memberRepository;
     private final CustomAuthorityUtils authorityUtils;
 
-    // private final HttpServletResponse response;
+    private final HttpServletResponse response;
     private static final String GOOGLE = "google";
     private static final String GITHUB = "github";
 
@@ -51,12 +51,11 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         Map<String, Object> attributes = oAuth2User.getAttributes(); // API 가 제공하는 JSON 값( 유저 정보 )
 
-
         // 소셜 타입에 따라 유저 정보를 통해 객체 생성
         OauthAttribute oauthAttribute = OauthAttribute.of(socialType, userNameAttributeName, attributes, authorityUtils);
 
         Member member = getMember(oauthAttribute, socialType);
-        // response.setHeader("memberId", String.valueOf(member.getMemberId()));
+        response.setHeader("socialType", String.valueOf(socialType));
 
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(member.getRoles().get(0))),
@@ -85,7 +84,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         if(!findMember.refreshTokenIsNull()) throw new BusinessLogicException(ExceptionCode.STATUS_LOGIN);
 
         // 로그인
-        return updateUsernameAndImgUrl(findMember, attribute);
+        return findMember;
     }
 
     private Member saveMember(OauthAttribute attribute, SocialType socialType){
