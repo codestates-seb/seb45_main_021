@@ -4,7 +4,7 @@ import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
 import com.seb_45_main_021.unkwon.heart.repository.PortfolioHeartRepository;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.member.repository.MemberRepository;
-import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
+import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -27,7 +27,7 @@ public class PortfolioHeartService {
     private final MemberRepository memberRepository;
 
 
-    public PortfolioHeart heart(Member member, PortFolio portFolio){
+    public PortfolioHeart heart(Member member, Portfolio portFolio){
         PortfolioHeart portfolioHeart = new PortfolioHeart(true,member,portFolio);
 
         portfolioHeart.setCreatedAt(new Date());
@@ -36,16 +36,16 @@ public class PortfolioHeartService {
         return portfolioHeartRepository.save(portfolioHeart);
     }
 
-    public void unheart(Member member, PortFolio portFolio){
+    public void unheart(Member member, Portfolio portFolio){
         portFolio.setHeartCount(portFolio.getHeartCount()-1);
 
         portfolioHeartRepository.delete(portfolioHeartRepository.findByPortFolioAndMember(portFolio,member));
     }
 
-    public boolean isHeartPost(Member member, PortFolio portFolio){
+    public boolean isHeartPost(Member member, Portfolio portFolio){
         return portfolioHeartRepository.existsByPortFolioAndMember(portFolio,member);
     }
-    public Page<PortFolio> getHeartedPortfoliosByMemberId(Long memberId, Pageable pageable) {
+    public Page<Portfolio> getHeartedPortfoliosByMemberId(Long memberId, Pageable pageable) {
         Member member = memberRepository.findById(memberId).orElse(null);
         if (member == null) {
             throw new EntityNotFoundException("Member not found");
@@ -55,7 +55,7 @@ public class PortfolioHeartService {
                 .map(PortfolioHeart::getPortFolio);
     }
 
-    public List<PortfolioHeart> getHeartByPortfolio(PortFolio portFolio){
+    public List<PortfolioHeart> getHeartByPortfolio(Portfolio portFolio){
         return portfolioHeartRepository.findByPortFolio(portFolio);
     }
 }

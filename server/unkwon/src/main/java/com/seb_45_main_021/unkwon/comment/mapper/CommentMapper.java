@@ -4,7 +4,7 @@ package com.seb_45_main_021.unkwon.comment.mapper;
 import com.seb_45_main_021.unkwon.comment.dto.CommentDto;
 import com.seb_45_main_021.unkwon.comment.entity.Comment;
 import com.seb_45_main_021.unkwon.member.entity.Member;
-import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
+import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public interface CommentMapper {
         Member member = new Member();
         member.setMemberId(commentPostDto.getMemberId());
 
-        PortFolio portFolio =new PortFolio();
+        Portfolio portFolio = new Portfolio();
         portFolio.setPortfolioId(commentPostDto.getPortfolioId());
 
         Comment comment = new Comment();

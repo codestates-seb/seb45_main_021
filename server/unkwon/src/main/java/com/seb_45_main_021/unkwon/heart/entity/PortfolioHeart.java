@@ -1,7 +1,7 @@
 package com.seb_45_main_021.unkwon.heart.entity;
 
 import com.seb_45_main_021.unkwon.member.entity.Member;
-import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
+import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,7 +25,7 @@ public class PortfolioHeart {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PORTFOLIO_ID")
-    private PortFolio portFolio;
+    private Portfolio portFolio;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
@@ -34,7 +34,7 @@ public class PortfolioHeart {
 
     public PortfolioHeart(boolean status,
                           Member member,
-                          PortFolio portFolio) {
+                          Portfolio portFolio) {
         this.status = status;
         this.member = member;
         this.portFolio = portFolio;

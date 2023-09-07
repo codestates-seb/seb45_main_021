@@ -5,13 +5,12 @@ import com.seb_45_main_021.unkwon.dto.MultiInformResponseDto;
 import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
 import com.seb_45_main_021.unkwon.member.dto.request.MemberInformUpdateDto;
 import com.seb_45_main_021.unkwon.member.dto.request.MemberPasswordUpdateDto;
-import com.seb_45_main_021.unkwon.heart.service.PortfolioHeartService;
 import com.seb_45_main_021.unkwon.member.dto.request.MemberSignupDto;
 import com.seb_45_main_021.unkwon.member.dto.response.MemberInformResponseDto;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.member.mapper.MemberMapper;
 import com.seb_45_main_021.unkwon.member.service.MemberService;
-import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
+import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
 import com.seb_45_main_021.unkwon.portfolio.mapper.PortFolioMapper;
 import com.seb_45_main_021.unkwon.project.entity.Project;
 import com.seb_45_main_021.unkwon.projectcard.mapper.ProjectCardMapper;
@@ -71,8 +70,8 @@ public class MemberController {
         // 포트폴리오, 프로젝트
         responseInformDto.setProjectList(new ArrayList<Project>(), new ArrayList<Project>());
         responseInformDto.setPortFoliolist(
-                  portFolioMapper.portFolioListToProfileResponseDto(PortFolio.getPortFolioIsEmployList(findMember.getPortfolios()))
-                , portFolioMapper.portFolioListToProfileResponseDto(PortFolio.getPortFolioIsNotEmployList(findMember.getPortfolios()))
+                  portFolioMapper.portFolioListToProfileResponseDto(Portfolio.getPortfolioIsEmployList(findMember.getPortfolios()))
+                , portFolioMapper.portFolioListToProfileResponseDto(Portfolio.getPortfolioIsNotEmployList(findMember.getPortfolios()))
         );
 
         // 1. 로그인 상태

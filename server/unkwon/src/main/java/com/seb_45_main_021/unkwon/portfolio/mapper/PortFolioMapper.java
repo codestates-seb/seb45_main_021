@@ -4,11 +4,10 @@ import com.seb_45_main_021.unkwon.comment.entity.Comment;
 import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.portfolio.dto.PortFolioDto;
-import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
+import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import javax.sound.sampled.Port;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,11 +15,11 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface PortFolioMapper {
 
-    default PortFolio portfolioPostDtoToPortfolio(PortFolioDto.Post portfolioPostDto){
+    default Portfolio portfolioPostDtoToPortfolio(PortFolioDto.Post portfolioPostDto){
         Member member = new Member();
         member.setMemberId(portfolioPostDto.getMemberId());
 
-        PortFolio portFolio = new PortFolio();
+        Portfolio portFolio = new Portfolio();
         portFolio.setTitle(portfolioPostDto.getTitle());
         portFolio.setContent(portfolioPostDto.getContent());
         portFolio.setTags(Arrays.toString(portfolioPostDto.getTags()));
@@ -34,7 +33,7 @@ public interface PortFolioMapper {
 
     @Mapping(target = "tags", expression = "java(mapping(portfolioPatchDto.getTags()))")
     @Mapping(target = "lang", expression = "java(mapping(portfolioPatchDto.getLang()))")
-    PortFolio portfolioPatchDtoToPortfolio(PortFolioDto.Patch portfolioPatchDto);
+    Portfolio portfolioPatchDtoToPortfolio(PortFolioDto.Patch portfolioPatchDto);
 
     default String mapping(String[] tags) {
         if (tags == null || tags.length == 0) {
@@ -45,7 +44,7 @@ public interface PortFolioMapper {
 
 
 
-    default PortFolioDto.Response portfolioToPortfolioResponseDto(PortFolio portFolio){
+    default PortFolioDto.Response portfolioToPortfolioResponseDto(Portfolio portFolio){
 
         PortFolioDto.Response response = PortFolioDto.Response.builder()
                 .portfolioId(portFolio.getPortfolioId())
@@ -68,9 +67,9 @@ public interface PortFolioMapper {
 
     };
 
-    List<PortFolioDto.Response> portfoliosToPortfolioResponseDtos(List<PortFolio> portFolios);
+    List<PortFolioDto.Response> portfoliosToPortfolioResponseDtos(List<Portfolio> portFolios);
 
-    default PortFolioDto.DetailResponse portfolioToPortfolioDetailResponseDto(PortFolio portFolio){
+    default PortFolioDto.DetailResponse portfolioToPortfolioDetailResponseDto(Portfolio portFolio){
 
         PortFolioDto.DetailResponse detailResponse = PortFolioDto.DetailResponse.builder()
                 .portfolioId(portFolio.getPortfolioId())
@@ -110,7 +109,7 @@ public interface PortFolioMapper {
         return detailResponse;
     };
 
-    default List<PortFolioDto.PortFolioProfileResponseDto> portFolioListToProfileResponseDto(List<PortFolio> portFolioList){
+    default List<PortFolioDto.PortFolioProfileResponseDto> portFolioListToProfileResponseDto(List<Portfolio> portFolioList){
         return portFolioList.stream()
                 .map(portFolio -> new PortFolioDto.PortFolioProfileResponseDto(
                         portFolio.getPortfolioId(),

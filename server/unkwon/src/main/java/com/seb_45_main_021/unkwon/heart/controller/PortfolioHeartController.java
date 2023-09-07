@@ -5,7 +5,7 @@ import com.seb_45_main_021.unkwon.heart.dto.PortfolioHeartDto;
 import com.seb_45_main_021.unkwon.heart.service.PortfolioHeartService;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.member.service.MemberService;
-import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
+import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
 import com.seb_45_main_021.unkwon.portfolio.mapper.PortFolioMapper;
 import com.seb_45_main_021.unkwon.portfolio.service.PortFolioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class PortfolioHeartController {
         Long memberId = Long.valueOf(portfolioHeartDto.getMemberId());
         Member member = memberService.findVerifiedMember(memberId);
 
-        PortFolio portFolio = portFolioService.findByPortfolioId(portfolioId);
+        Portfolio portFolio = portFolioService.findByPortfolioId(portfolioId);
         if (portFolio == null) {
             return ResponseEntity.notFound().build();
         }
@@ -60,11 +60,11 @@ public class PortfolioHeartController {
         }
     }
     @GetMapping("/memberLikes/{memberId}")
-    public ResponseEntity<Page<PortFolio>> getHeartedPortfoliosByMemberId(@PathVariable Long memberId,
+    public ResponseEntity<Page<Portfolio>> getHeartedPortfoliosByMemberId(@PathVariable Long memberId,
                                                                           @RequestParam(required = false, defaultValue = "1") int page,
                                                                           @RequestParam(required = false, defaultValue = "12") int size ) {
-        Page<PortFolio> heartedPortfolios = portfolioHeartService.getHeartedPortfoliosByMemberId(memberId, PageRequest.of(page - 1, size));
-        List<PortFolio> portFolios = heartedPortfolios.getContent();
+        Page<Portfolio> heartedPortfolios = portfolioHeartService.getHeartedPortfoliosByMemberId(memberId, PageRequest.of(page - 1, size));
+        List<Portfolio> portFolios = heartedPortfolios.getContent();
 
         return new ResponseEntity(
                 new MultiResponseDto<>(mapper.portfoliosToPortfolioResponseDtos(portFolios),heartedPortfolios),HttpStatus.OK);

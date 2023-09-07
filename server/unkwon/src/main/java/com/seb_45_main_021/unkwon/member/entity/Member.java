@@ -1,10 +1,10 @@
 package com.seb_45_main_021.unkwon.member.entity;
 
 import com.seb_45_main_021.unkwon.audit.Auditable;
+import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
 import com.seb_45_main_021.unkwon.project.entity.ProjectStatus;
 import com.seb_45_main_021.unkwon.projectcard.entity.ProjectCard;
 import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
-import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
 import com.seb_45_main_021.unkwon.project.entity.Project;
 import lombok.*;
 
@@ -66,7 +66,7 @@ public class Member extends Auditable {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     @OrderBy("created_at desc") // 최신순으로 정렬
-    List<PortFolio> portfolios = new ArrayList<>();
+    List<Portfolio> portfolios = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     @OrderBy("created_at desc") // 최신순으로 정렬

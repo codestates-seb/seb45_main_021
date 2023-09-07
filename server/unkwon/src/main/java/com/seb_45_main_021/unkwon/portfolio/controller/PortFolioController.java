@@ -3,14 +3,13 @@ package com.seb_45_main_021.unkwon.portfolio.controller;
 import com.seb_45_main_021.unkwon.dto.MultiResponseDto;
 import com.seb_45_main_021.unkwon.dto.SingleResponseDto;
 import com.seb_45_main_021.unkwon.portfolio.dto.PortFolioDto;
-import com.seb_45_main_021.unkwon.portfolio.entity.PortFolio;
+import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
 import com.seb_45_main_021.unkwon.portfolio.mapper.PortFolioMapper;
 import com.seb_45_main_021.unkwon.portfolio.service.PortFolioService;
 import com.seb_45_main_021.unkwon.utils.UriCreator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,10 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 
 
@@ -45,7 +40,7 @@ public class PortFolioController {
     //포트폴리오 생성
     @PostMapping
     public ResponseEntity postPortfolio(@RequestBody @Valid PortFolioDto.Post portfolioPostDto){
-        PortFolio portFolio = portFolioService.createPortfolio(mapper.portfolioPostDtoToPortfolio(portfolioPostDto));
+        Portfolio portFolio = portFolioService.createPortfolio(mapper.portfolioPostDtoToPortfolio(portfolioPostDto));
 
         URI location = UriCreator.createUri(PORTFOLIO_DEFAULT_URL, portFolio.getPortfolioId());
 
@@ -59,7 +54,7 @@ public class PortFolioController {
 
         portfolioPatchDto.setPortfolioId(portfolioId);
 
-        PortFolio portFolio = portFolioService.updatePortfolio(mapper.portfolioPatchDtoToPortfolio(portfolioPatchDto));
+        Portfolio portFolio = portFolioService.updatePortfolio(mapper.portfolioPatchDtoToPortfolio(portfolioPatchDto));
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(
@@ -70,7 +65,7 @@ public class PortFolioController {
     @GetMapping("/{portfolio-id}")
     public ResponseEntity getPortfolio (@PathVariable("portfolio-id") @Positive long portfolioId){
 
-        PortFolio portFolio = portFolioService.findPortfolio(portfolioId);
+        Portfolio portFolio = portFolioService.findPortfolio(portfolioId);
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(
@@ -81,8 +76,8 @@ public class PortFolioController {
     @GetMapping
     public ResponseEntity getPortfolios(@RequestParam(required = false, defaultValue = "1") int page,
                                         @RequestParam(required = false, defaultValue = "12") int size){
-        Page<PortFolio> pagePortFolios = portFolioService.findPortfolios(page-1,size);
-        List<PortFolio> portFolios = pagePortFolios.getContent();
+        Page<Portfolio> pagePortFolios = portFolioService.findPortfolios(page-1,size);
+        List<Portfolio> portFolios = pagePortFolios.getContent();
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(mapper.portfoliosToPortfolioResponseDtos(portFolios), pagePortFolios),HttpStatus.OK);
@@ -93,7 +88,7 @@ public class PortFolioController {
     public ResponseEntity getPortfoliosTag(@RequestParam(required = false, defaultValue = "1") int page,
                                         @RequestParam(required = false, defaultValue = "12") int size,
                                         @RequestParam("tag") String[] tag ){
-        Page<PortFolio> resultSearchTags = portFolioService.findTagPortfolio(page,size,tag);
+        Page<Portfolio> resultSearchTags = portFolioService.findTagPortfolio(page,size,tag);
         List<PortFolioDto.Response> portfolioResponseDtoList = mapper.portfoliosToPortfolioResponseDtos(resultSearchTags.getContent());
 
         return new ResponseEntity(
@@ -103,7 +98,7 @@ public class PortFolioController {
     public ResponseEntity getPortfoliosLang(@RequestParam(required = false, defaultValue = "1") int page,
                                             @RequestParam(required = false, defaultValue = "12") int size,
                                             @RequestParam("lang") String[] lang ){
-        Page<PortFolio> resultSearchLang = portFolioService.findLangPortfolio(page,size,lang);
+        Page<Portfolio> resultSearchLang = portFolioService.findLangPortfolio(page,size,lang);
         List<PortFolioDto.Response> portfolioResponseDtoList = mapper.portfoliosToPortfolioResponseDtos(resultSearchLang.getContent());
 
         return new ResponseEntity(
@@ -111,12 +106,12 @@ public class PortFolioController {
     }
 
     @GetMapping("/weekly-popular")
-    public ResponseEntity<Page<PortFolio>> getWeeklyPopularPortfolios(
+    public ResponseEntity<Page<Portfolio>> getWeeklyPopularPortfolios(
             @RequestParam(required = false, defaultValue = "1") int page,
             @RequestParam(required = false, defaultValue = "10") int size) {
 
         Pageable pageRequest = PageRequest.of(page - 1, size);
-        Page<PortFolio> popularPortfolios = portFolioService.findWeeklyPopularPortfolios(pageRequest);
+        Page<Portfolio> popularPortfolios = portFolioService.findWeeklyPopularPortfolios(pageRequest);
         List<PortFolioDto.Response> portfolioResponseDtoList = mapper.portfoliosToPortfolioResponseDtos(popularPortfolios.getContent());
 
         return new ResponseEntity(
@@ -128,8 +123,8 @@ public class PortFolioController {
     @GetMapping("/view")
     public ResponseEntity getPortfoliosView(@RequestParam(required = false, defaultValue = "1") int page,
                                             @RequestParam(required = false, defaultValue = "12") int size){
-        Page<PortFolio> pagePortFolios = portFolioService.findPortfoliosView(page-1,size);
-        List<PortFolio> portFolios = pagePortFolios.getContent();
+        Page<Portfolio> pagePortFolios = portFolioService.findPortfoliosView(page-1,size);
+        List<Portfolio> portFolios = pagePortFolios.getContent();
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(mapper.portfoliosToPortfolioResponseDtos(portFolios), pagePortFolios),HttpStatus.OK);
