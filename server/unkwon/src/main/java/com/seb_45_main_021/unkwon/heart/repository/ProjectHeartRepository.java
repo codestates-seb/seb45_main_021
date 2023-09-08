@@ -15,6 +15,8 @@ public interface ProjectHeartRepository extends JpaRepository<ProjectHeart, Long
 
     Page<ProjectHeart> findByMember(Member member, Pageable pageable);
 
+    List<ProjectHeart> findByMember(Member member);
+
     boolean existsByProjectAndMember(Project project, Member member);
 
     List<ProjectHeart> findByProject(Project project);

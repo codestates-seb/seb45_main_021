@@ -2,7 +2,10 @@ package com.seb_45_main_021.unkwon.project.mapper;
 
 import com.seb_45_main_021.unkwon.commonCode.CommonCode;
 
+import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
+import com.seb_45_main_021.unkwon.heart.entity.ProjectHeart;
 import com.seb_45_main_021.unkwon.member.entity.Member;
+import com.seb_45_main_021.unkwon.portfolio.dto.PortfolioDto;
 import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
 import com.seb_45_main_021.unkwon.project.dto.ProjectPatchDto;
 import com.seb_45_main_021.unkwon.project.dto.ProjectPostDto;
@@ -15,7 +18,6 @@ import com.seb_45_main_021.unkwon.project.entity.Project;
 import com.seb_45_main_021.unkwon.project.entity.ProjectStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
 
 
 import java.util.Arrays;
@@ -146,16 +148,40 @@ public interface ProjectMapper {
 
 
 
-//    default List<ProjectProfileResponseDto> projectToProfileResponseDto(List<Project> projectList){
-//        return projectList.stream()
-//                .map(project -> new ProjectProfileResponseDto(
-//                        project.getProjectId(),
-//                        project.getTitle(),
-//                        project.getCreatedAt(),
-//                        project.getHeartCount(),
-//                        project.getView()
-//                )).collect(Collectors.toList());
-//    }
+    default List<ProjectProfileResponseDto> projectToProfileResponseDto(List<Project> projectList){
+        return projectList.stream()
+                .map(project -> new ProjectProfileResponseDto(
+                        project.getProjectId(),
+                        project.getTitle(),
+                        project.getCreatedAt(),
+                        project.getHeartCount(),
+                        project.getView()
+                )).collect(Collectors.toList());
+    }
+
+    default List<ProjectProfileResponseDto> projectHeartListToProfileResponseDto(List<ProjectHeart> projectHeartList){
+        return projectHeartList.stream()
+                .map(projectHeart -> new ProjectProfileResponseDto(
+                        projectHeart.getProject().getProjectId(),
+                        projectHeart.getProject().getTitle(),
+                        projectHeart.getProject().getCreatedAt(),
+                        projectHeart.getProject().getHeartCount(),
+                        projectHeart.getProject().getView(),
+                        projectHeart.getMember()
+                )).collect(Collectors.toList());
+    }
+
+    default List<ProjectProfileResponseDto> supportedProjectsToProfileResponseDto(List<ProjectStatus> projectStatusList){
+        return projectStatusList.stream()
+                .map(projectStatus -> new ProjectProfileResponseDto(
+                        projectStatus.getProject().getProjectId(),
+                        projectStatus.getProject().getTitle(),
+                        projectStatus.getProject().getCreatedAt(),
+                        projectStatus.getProject().getHeartCount(),
+                        projectStatus.getProject().getView(),
+                        projectStatus.getMember()
+                )).collect(Collectors.toList());
+    }
 
 }
 

@@ -1,5 +1,7 @@
 package com.seb_45_main_021.unkwon.project.dto;
 
+import com.seb_45_main_021.unkwon.dto.Author;
+import com.seb_45_main_021.unkwon.member.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +15,7 @@ public class ProjectProfileResponseDto {
     private String createdAt;
     private int heartCount;
     private int view;
+    private Author author;
 
     public ProjectProfileResponseDto(Long projectId, String title, LocalDateTime createdAt, int heartCount, int view) {
         this.projectId = projectId;
@@ -20,6 +23,18 @@ public class ProjectProfileResponseDto {
         setCreatedAt(createdAt);
         this.heartCount = heartCount;
         this.view = view;
+    }
+
+    public ProjectProfileResponseDto(Long projectId, String title, LocalDateTime createdAt, int heartCount, int view, Member member) {
+        this.projectId = projectId;
+        this.title = title;
+        setCreatedAt(createdAt);
+        this.heartCount = heartCount;
+        this.view = view;
+        author = Author.builder()
+                .username(member.getUsername())
+                .memberId(member.getMemberId())
+                .build();
     }
 
     public void setCreatedAt(LocalDateTime createdAt){
