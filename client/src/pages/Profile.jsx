@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
 import userDefaultImg from '../static/images/userDefaultImg.jpeg';
 import ProfileCard from '../components/profile/ProfileCard';
@@ -10,6 +10,8 @@ import AnchorMenu from '../components/profile/AnchorMenu';
 import Page from '../components/common/Page';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import OverView from '../components/profile/OverView';
+import api from '../hooks/useAxiosInterceptor';
 
 const StyleContainer = styled(Page)`
   gap: 2rem;
@@ -34,6 +36,23 @@ const StyleContainer = styled(Page)`
     background-color: none;
   }
 `;
+
+// const TabWrapper = styled.div`
+//   width: 100%;
+//   font-size: 5rem;
+//   display: flex;
+// `;
+
+// const Tab = styled.span`
+//   flex-grow: 1;
+//   text-align: center;
+//   vertical-align: middle;
+//   padding: 2rem 0;
+//   cursor: pointer;
+//   border-bottom: 5px solid;
+//   transition: all 0.4s;
+//   border-color: ${(props) => (props.$active === 'true' ? 'var(--black-100)' : 'var(--black-500)')};
+// `;
 
 const data = {
   profile: {
@@ -198,7 +217,6 @@ const data = {
       email: 'dbauddls12@naver.com',
       userImg: userDefaultImg,
       userName: '유명인',
-      title: '안녕하세요 자신있는 개발자입니다.',
       aboutMe: '자기소개 이렇게 적는게 맞는걸까요오오오드용액 가버렷 컽컽컽 !!@!@',
       tell: '010-1111-2222',
       tag: ['JavaScript', 'React', 'CSS'],
@@ -208,7 +226,6 @@ const data = {
       email: 'dbauddls12@naver.com',
       userImg: userDefaultImg,
       userName: '유명인',
-      title: '안녕하세요 자신없는 개발자입니다.',
       aboutMe: '내가 자신없으면 너가 뭘 할 수 있는데 으이 ?!!?',
       tell: '010-3333-2222',
       tag: [],
@@ -220,9 +237,45 @@ const data = {
 export default function Profile() {
   const { memberId } = useParams();
   const user = useSelector((state) => state.user);
+  const [curTab, setCurTab] = useState('detail');
+
+  // useEffect(() => {
+  //   try {
+  //     api
+  //       .get(`/members/${memberId}/${user.isLogin ? user.userInfo.memberId : 0}`)
+  //       .then((el) => console.log(el));
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }, []);
+
   return (
     <StyleContainer>
       <ProfileCard id="profile" data={data.profile} />
+      {/* <TabWrapper className="row">
+        <Tab
+          $active={curTab === 'overview' ? 'true' : 'false'}
+          onClick={() => setCurTab('overview')}
+        >
+          Overview
+        </Tab>
+        <Tab
+          className="tab"
+          $active={curTab === 'detail' ? 'true' : 'false'}
+          onClick={() => setCurTab('detail')}
+        >
+          Detail
+        </Tab>
+      </TabWrapper> */}
+      {/* {curTab === 'overview' && (
+        <OverView
+          data={{
+            addproject: data.project[0].length,
+            attendproject: data.project[1].length,
+            portfolio: data.portfolio,
+          }}
+        />
+      )} */}
       <Project id="project" data={data.project} />
       <Portfolio id="portfolio" data={data.portfolio} />
       {user.isLogin && Number(memberId) === user.userInfo.memberId && (
@@ -231,7 +284,6 @@ export default function Profile() {
           <ProjectCard id="projectCard" data={data.projectCard} />
         </>
       )}
-
       <AnchorMenu />
     </StyleContainer>
   );

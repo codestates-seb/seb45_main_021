@@ -29,7 +29,6 @@ const Container = styled.div`
   .Wrapper {
     background-color: black;
     border: 1px solid white;
-    width: 50%;
     border-radius: 10px;
     padding: 2rem;
     gap: 10rem;
@@ -75,14 +74,23 @@ const Container = styled.div`
 /**
  *
  * @param setIsOn - useState 세터 함수 그대로 전달
- * @param type - type=alert or confirm
- * @param title - 타이틀 문자열 전달
- * @param message - 내용 문자열 전달
- * @param checkHandler - 예 버튼 누를시 전달될 함수
- * @param cancelHandler - type=confirm 일때 아니오 버튼 누를시 전달될 함수
+ * @param type - type=alert or confirm or children
+ * @param title - 타이틀 문자열 전달 (alert,confirm)
+ * @param message - 내용 문자열 전달 (alert,confirm)
+ * @param children - 자식 요소 엘리먼트 렌더링 (children)
+ * @param checkHandler - 예 버튼 누를시 전달될 함수 (alert,confirm,children)
+ * @param cancelHandler - type=confirm 일때 아니오 버튼 누를시 전달될 함수 (confirm,children)
  * @returns {JSX.Element}
  */
-export default function Modal({ setIsOn, type, title, message, checkHandler, cancelHandler }) {
+export default function Modal({
+  setIsOn,
+  type,
+  title,
+  message,
+  checkHandler,
+  cancelHandler,
+  children,
+}) {
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => {
@@ -93,21 +101,10 @@ export default function Modal({ setIsOn, type, title, message, checkHandler, can
   return (
     <Container>
       <div className="Wrapper col">
-        <h2 className="title">{title}</h2>
-        <span className="message">{message}</span>
-        <div className="row gap button-wrapper">
-          {type === 'alert' && (
-            <StyleBorderButton
-              onClick={() => {
-                if (checkHandler) checkHandler();
-                setIsOn();
-              }}
-            >
-              확인
-            </StyleBorderButton>
-          )}
-          {type === 'confirm' && (
-            <>
+        {type === 'children' && (
+          <>
+            {children}
+            <div className="row gap button-wrapper">
               <StyleBorderButton
                 className="yes"
                 onClick={() => {
@@ -126,9 +123,49 @@ export default function Modal({ setIsOn, type, title, message, checkHandler, can
               >
                 취소
               </StyleBorderButton>
-            </>
-          )}
-        </div>
+            </div>
+          </>
+        )}
+        {type !== 'children' && (
+          <>
+            <h2 className="title">{title}</h2>
+            <span className="message">{message}</span>
+            <div className="row gap button-wrapper">
+              {type === 'alert' && (
+                <StyleBorderButton
+                  onClick={() => {
+                    if (checkHandler) checkHandler();
+                    setIsOn();
+                  }}
+                >
+                  확인
+                </StyleBorderButton>
+              )}
+              {type === 'confirm' && (
+                <>
+                  <StyleBorderButton
+                    className="yes"
+                    onClick={() => {
+                      if (checkHandler) checkHandler();
+                      setIsOn();
+                    }}
+                  >
+                    예
+                  </StyleBorderButton>
+                  <StyleBorderButton
+                    className="no"
+                    onClick={() => {
+                      if (cancelHandler) cancelHandler();
+                      setIsOn();
+                    }}
+                  >
+                    취소
+                  </StyleBorderButton>
+                </>
+              )}
+            </div>
+          </>
+        )}
       </div>
     </Container>
   );

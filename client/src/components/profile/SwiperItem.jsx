@@ -90,10 +90,6 @@ export default function SwiperItem({ activePage, data, idx, handler, idxHandler 
             <img className="userImg" src={data.userImg} alt="" />
             <div className="col gap">
               <div className="col gap">
-                <p className="label">제목</p>
-                <p>{data.title}</p>
-              </div>
-              <div className="col gap">
                 <p className="label">연락처</p>
                 <p>{data.working ? '재직중' : '구직중'}</p>
               </div>

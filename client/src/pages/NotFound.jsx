@@ -52,10 +52,9 @@ export default function NotFound() {
       {isOn && (
         <Modal
           setIsOn={handleModal}
-          type="alert"
-          title="알림"
-          message="앙 찬섭띠"
+          type="children"
           checkHandler={() => console.log('hi')}
+          children={<div>123123</div>}
         />
       )}
       <button onClick={handleModal}>모달</button>
