@@ -44,7 +44,6 @@ public class PortfolioHeartController {
                                          @RequestBody PortfolioHeartDto portfolioHeartDto) {
         Long memberId = Long.valueOf(portfolioHeartDto.getMemberId());
         Member member = memberService.findVerifiedMember(memberId);
-
         Portfolio portFolio = portfolioService.findByPortfolioId(portfolioId);
         if (portFolio == null) {
             return ResponseEntity.notFound().build();
@@ -64,6 +63,7 @@ public class PortfolioHeartController {
                                                                           @RequestParam(required = false, defaultValue = "1") int page,
                                                                           @RequestParam(required = false, defaultValue = "12") int size ) {
         Page<Portfolio> heartedPortfolios = portfolioHeartService.getHeartedPortfoliosByMemberId(memberId, PageRequest.of(page - 1, size));
+
         List<Portfolio> portfolios = heartedPortfolios.getContent();
 
         return new ResponseEntity(

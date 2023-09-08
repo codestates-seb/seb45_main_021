@@ -57,12 +57,10 @@ public class PortfolioHeartService {
         return portfolioHeartRepository.findByMember(member, pageable)
                 .map(PortfolioHeart::getPortFolio);
     }
-
     public List<Portfolio> getTop10PortfoliosByHeartsLast7Days() {
         LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7);
         return portfolioHeartRepository.findTop10PortfoliosByHeartsLast7Days(oneWeekAgo);
     }
-
 
     public List<PortfolioHeart> getHeartByPortfolio(Portfolio portFolio){
         return portfolioHeartRepository.findByPortFolio(portFolio);

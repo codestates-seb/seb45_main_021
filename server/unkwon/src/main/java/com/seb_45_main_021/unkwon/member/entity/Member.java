@@ -70,7 +70,7 @@ public class Member extends Auditable {
     List<ProjectCard> projectCardList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
-    @OrderBy("created_at desc")
+    @OrderBy("created_at desc") // 최신순으로 정렬
     @JsonManagedReference
     List<Portfolio> portfolios = new ArrayList<>();
 

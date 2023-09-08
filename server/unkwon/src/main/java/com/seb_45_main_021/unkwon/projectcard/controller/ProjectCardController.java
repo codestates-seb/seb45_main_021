@@ -2,6 +2,7 @@ package com.seb_45_main_021.unkwon.projectcard.controller;
 
 import com.seb_45_main_021.unkwon.projectcard.dto.request.ProjectCardPatchDto;
 import com.seb_45_main_021.unkwon.projectcard.dto.request.ProjectCardPostDto;
+import com.seb_45_main_021.unkwon.projectcard.entity.ProjectCard;
 import com.seb_45_main_021.unkwon.projectcard.service.ProjectCardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.util.List;
 
 @RestController
 @RequestMapping("/projectcards")
@@ -26,6 +28,11 @@ public class ProjectCardController {
         projectCardService.postProjectCard(dto);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{member-id}")
+    public void getProjectCards(@PathVariable("member-id") @Positive Long memberId){
+        List<ProjectCard> projectCardList = projectCardService.getProjectCards(memberId);
     }
 
     // 카드 수정
