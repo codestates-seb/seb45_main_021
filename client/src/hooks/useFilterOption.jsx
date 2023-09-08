@@ -1,12 +1,13 @@
-import { useEffect, useState, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-
+import { useDispatch } from 'react-redux';
+import { clearPage } from '../redux/usePage/pageSlice';
+import { useEffect } from 'react';
 const DEFAULT_OPTIONS = {
   lang: 'all',
   sort: 'latest',
   employ: false,
   keyword: '',
-  type: 'project',
+  searchType: 'project',
 };
 
 export default function useFilterOption() {
@@ -14,53 +15,55 @@ export default function useFilterOption() {
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const pageType = location.pathname.split('/')[1];
-  const firstRendering = useRef(true);
-
-  const initialOptions = {
+  const dispatch = useDispatch();
+  const options = {
     lang: queryParams.get('lang') || DEFAULT_OPTIONS.lang,
     sort: queryParams.get('sort') || DEFAULT_OPTIONS.sort,
     employ: queryParams.get('employ') === 'true' || false,
     keyword: queryParams.get('keyword') || DEFAULT_OPTIONS.keyword,
-    type: queryParams.get('type') || DEFAULT_OPTIONS.type,
+    searchType: queryParams.get('searchType') || DEFAULT_OPTIONS.searchType,
   };
 
-  const [options, setOptions] = useState(initialOptions);
+  const { searchType, lang, sort, employ, keyword } = options;
+
+  // useEffect(() => {
+  //   dispatch(clearPage());
+  // }, [options, pageType, searchType]);
 
   const optionHandler = (name, value) => {
-    setOptions((prevOptions) => ({ ...prevOptions, [name]: value }));
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    urlSearchParams.set(name, value);
+    const newUrl = `${window.location.pathname}?${urlSearchParams.toString()}`;
+    navigate(newUrl);
   };
 
-  const clearOptions = () => {
-    setOptions(DEFAULT_OPTIONS);
+  const getApiUrl = (pageNum) => {
+    const type = pageType === 'search' ? searchType : pageType;
+    if (employ && type === 'portfolios') return 'employ 트루 리스트';
+    let newUrl = `${type}/search`;
+    const params = [];
+
+    if (keyword !== DEFAULT_OPTIONS.keyword) {
+      params.push(`tags=${keyword}`);
+    }
+    if (lang !== DEFAULT_OPTIONS.lang) {
+      params.push(`lang=${lang}`);
+    }
+    if (sort !== DEFAULT_OPTIONS.sort) {
+      params.push(`sort=heartCount,DESC`);
+    }
+    if (pageNum !== 0) {
+      params.push(`page=${pageNum}`);
+    }
+    params.forEach((el, i) => (newUrl += `${i === 0 ? '?' : '&'}${el}`));
+    return newUrl;
   };
 
-  useEffect(() => {
-    const newParams = new URLSearchParams();
-    Object.entries(options).forEach(([key, value]) => {
-      if (value !== DEFAULT_OPTIONS[key]) {
-        newParams.set(key, value);
-      }
-    });
-
-    if (pageType === 'search') {
-      newParams.set('type', options.type);
-    }
-    const newPath =
-      newParams.toString() === ''
-        ? `/${pageType.toLowerCase()}`
-        : `/${pageType.toLowerCase()}?${newParams.toString()}`;
-    navigate(newPath);
-  }, [options, pageType, navigate]);
-
-  useEffect(() => {
-    if (!firstRendering.current) {
-      clearOptions();
-    } else {
-      firstRendering.current = false;
-    }
-  }, [pageType]);
-
-  useEffect(() => optionHandler('employ', false), [options.type]);
-
-  return [options, optionHandler];
+  return {
+    options,
+    pageType,
+    searchType,
+    optionHandler,
+    getApiUrl,
+  };
 }

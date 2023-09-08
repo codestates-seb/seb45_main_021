@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 /**
  * @description
@@ -15,20 +15,22 @@ import { useNavigate } from 'react-router-dom';
  * @returns {function} toPortfolioWrite - navigate('/portfolio/write');
  * @returns {function} toPortfolioDetail - navigate(`/portfolio/detail/${id}`);
  */
+
 export default function useNav() {
   const navigate = useNavigate();
+  const type = useLocation().pathname.split('/')[1];
 
   const toAbout = () => navigate('/');
   const toSignin = () => navigate('/signin');
   const toSignup = () => navigate('/signup');
-  const toProject = () => navigate('/project');
-  const toPortfolio = () => navigate('/portfolio');
+  const toProject = () => type !== 'projects' && navigate('/projects');
+  const toPortfolio = () => type !== 'portfolios' && navigate('/portfolios');
   const toProjectWrite = () => navigate('/project/write');
   const toPortfolioWrite = () => navigate('/portfolio/write');
   const toProjectDetail = (id) => navigate(`/project/detail/${id}`);
   const toPortfolioDetail = (id) => navigate(`/project/detail/${id}`);
   const toProfile = (id) => navigate(`/profile/${id}`);
-  const toSearch = (text, type) => navigate(`/search?type=${type}&keyword=${text}`);
+  const toSearch = (text, type) => navigate(`/search?keyword=${text}&searchType=projects`);
 
   return {
     toAbout,

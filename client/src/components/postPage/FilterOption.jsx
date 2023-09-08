@@ -16,8 +16,8 @@ const StyleFilterOption = styled.div`
   }
 `;
 
-export default function FilterOption({ optionHandler, option, type }) {
-  const { employ, lang, sort } = option;
+export default function FilterOption({ optionHandler, options, pageType }) {
+  const { employ, lang, sort } = options;
 
   let defaultLanguages;
 
@@ -46,7 +46,7 @@ export default function FilterOption({ optionHandler, option, type }) {
         onClickHandler={(value) => optionHandler('sort', value)}
       />
 
-      {type === 'portfolio' && (
+      {pageType === 'portfolios' && (
         <CheckBox
           value={employ}
           boxSize="25px"
