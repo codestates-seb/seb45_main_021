@@ -13,6 +13,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +58,7 @@ public class Project {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
-    private String closedAt; // 마감일 (유저 입력)
+    private LocalDate closedAt; // 마감일 (유저 입력)
 
     @Column(columnDefinition = "TEXT")
     private String tags;
