@@ -1,17 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { styled } from 'styled-components';
-import { BsCamera } from 'react-icons/bs';
 import useNav from '../../hooks/useNav';
 import { useParams } from 'react-router-dom';
 import api from '../../hooks/useAxiosInterceptor';
-import { updateUser, deleteUser } from '../../redux/userform/userSlice';
+import { deleteUser } from '../../redux/userform/userSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import EditPassword from './EditPassword';
 import EditProfile from './EditProfile';
 import Withdrawal from './Withdrawal';
 import ShowProfile from './ShowProfile';
 import { isValidPassword } from './isValid';
-import userDefaultImg from '../../static/images/userDefaultImg.jpeg';
 
 const StyleProfileContainer = styled.div`
   display: flex;
@@ -24,7 +22,7 @@ const StyleProfileContainer = styled.div`
   }
   .withdrawal {
     position: relative;
-    height: 100%;
+    height: 30vh;
     h3 {
       color: var(--error);
     }
@@ -47,41 +45,43 @@ const StyleProfileContainer = styled.div`
     align-items: center;
   }
   .tagGap {
-    font-size: 1.6rem;
     gap: 1rem;
   }
-  .imgContainer {
-    width: 50%;
-    height: 50%;
+  .imgWrapper {
     position: relative;
-    .userImg {
-      width: 100%;
-      height: 100%;
-      border-radius: 10px;
-      &:hover {
-        filter: brightness(0.8);
-      }
+    width: 50%;
+    height: 100%;
+  }
+  .userImg {
+    width: 100%;
+    border-radius: 20px;
+    &:hover {
+      filter: brightness(0.8);
     }
-    .editImg {
-      position: absolute;
-      top: -20px;
-      right: -20px;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background-color: var(--black-100);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transition: all 0.2s;
+  }
+  .editImg {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    bottom: 10px;
+    right: 10px;
+    border-radius: 50%;
+    background-color: var(--black-100);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s;
+    cursor: pointer;
+    &:active {
+      transform: translateY(2px);
+    }
+    svg {
       cursor: pointer;
-      &:active {
-        transform: translateY(2px);
-      }
-      svg {
-        cursor: pointer;
-      }
     }
+  }
+  .ProfileEdit {
+    width: 100%;
+    height: 100%;
   }
 
   .infoContainer {
@@ -92,7 +92,6 @@ const StyleProfileContainer = styled.div`
     justify-content: space-between;
     gap: 2rem;
     position: relative;
-
     .editProfile {
       position: absolute;
       top: 2rem;
@@ -112,15 +111,33 @@ const StyleProfileContainer = styled.div`
       font-size: 3rem;
       font-weight: 700;
     }
+    .editwrapper {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      color: var(--error);
+      gap: 3rem;
+      padding: 1rem 0;
+    }
 
     .gap {
-      gap: 1rem;
+      gap: 2rem;
     }
     .infoInner {
       position: relative;
+      padding-left: 3rem;
+      width: 100%;
       .info {
+        height: 100%;
         gap: 2rem;
-        font-size: 1.5rem;
+        font-size: 2rem;
+        display: flex;
+        justify-content: space-between;
+        p {
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          font-family: var(--nanum);
+        }
       }
     }
   }
@@ -185,13 +202,11 @@ export default function ProfileCard({ id, data }) {
         ...editProfile,
         tag: {
           value: [...editProfile.tag.value, editProfile.tag.curString],
-          curString: editProfile.tag.curString,
+          curString: '',
         },
       });
     }
   };
-
-  useEffect(() => {}, []);
 
   const handleEditProfile = () => {
     console.log('프로필 수정 요청');
@@ -273,48 +288,16 @@ export default function ProfileCard({ id, data }) {
     }
   };
 
-  const fileInputRef = React.createRef();
-
-  const handleClickUserImg = () => {
-    fileInputRef.current.click();
-  };
-
-  const handleFileChange = (e) => {
-    console.log('유저 이미지 교체 요청');
-    const file = e.target.files[0];
-    api.patch(`/members/profileImg/${memberId}`).then((el) => {
-      setProfile({ ...profile, userImg: el.data.imgUrl });
-      dispatch(updateUser({ userInfo: { ...user.userInfo, imgUrl: el.data.imgUrl } }));
-    });
-    console.log(file);
-  };
-
   return (
-    <StyleProfileContainer id={id} className="row">
-      <div className="imgContainer">
-        <img
-          className="userImg"
-          src={profile.userImg ? profile.userImg : userDefaultImg}
-          alt="userImage"
-        />
-        {user.isLogin && Number(memberId) === user.userInfo.memberId && (
-          <>
-            <input
-              type="file"
-              accept=".png, .jpg, .jpeg"
-              className="hidden"
-              onChange={handleFileChange}
-              ref={fileInputRef}
-            />
-            <div className="editImg" onClick={handleClickUserImg}>
-              <BsCamera color="black" size="30" />
-            </div>
-          </>
-        )}
-      </div>
+    <StyleProfileContainer id={id}>
       <div className="infoContainer col">
         {!isEdit.profile && !isEdit.password && !isEdit.withDrawal && (
-          <ShowProfile profile={profile} isEdit={isEdit} setIsEdit={setIsEdit} />
+          <ShowProfile
+            profile={profile}
+            isEdit={isEdit}
+            setIsEdit={setIsEdit}
+            setProfile={setProfile}
+          />
         )}
         {isEdit.profile && user.isLogin && Number(memberId) === user.userInfo.memberId && (
           <EditProfile

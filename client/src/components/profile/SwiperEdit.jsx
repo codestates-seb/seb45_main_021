@@ -69,9 +69,8 @@ export default function SwiperEdit({ data, idx, handler, type }) {
   const [temp, setTemp] = useState({
     ...data,
     tell: { value: data.tell, error: '' },
-    tag: data.tag,
     aboutMe: { value: data.aboutMe, error: '' },
-    title: { value: data.title, error: '' },
+    tag: data.tag,
     curString: '',
   });
   const { toProfile } = useNav();
@@ -92,7 +91,6 @@ export default function SwiperEdit({ data, idx, handler, type }) {
       if (isvalidPhone && temp.title.value.length <= 20 && temp.aboutMe.value.length <= 200) {
         api
           .patch(`/projectcards/${idx}`, {
-            title: temp.title.value,
             tag: temp.tag,
             tell: temp.tell.value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'),
             aboutMe: temp.aboutMe.value,
@@ -103,8 +101,6 @@ export default function SwiperEdit({ data, idx, handler, type }) {
           });
       } else if (!isvalidPhone) {
         setTemp({ ...temp, tell: { ...temp.tell, error: '숫자만 입력해주세요.' } });
-      } else if (temp.title.value.length > 20) {
-        setTemp({ ...temp, title: { ...temp.title, error: '20 글자 이하로 입력해주세요.' } });
       } else if (temp.aboutMe.value.length > 200) {
         setTemp({
           ...temp,
@@ -112,10 +108,9 @@ export default function SwiperEdit({ data, idx, handler, type }) {
         });
       }
     } else if (type === 'new') {
-      if (isvalidPhone && temp.title.value.length <= 20 && temp.aboutMe.value.length <= 200) {
+      if (isvalidPhone && temp.aboutMe.value.length <= 200) {
         api
           .post(`/projectcards/${idx}`, {
-            title: temp.title.value,
             tag: temp.tag,
             tell: temp.tell.value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'),
             aboutMe: temp.aboutMe.value,
@@ -150,15 +145,6 @@ export default function SwiperEdit({ data, idx, handler, type }) {
         <AiOutlineCloseCircle color={'var(--error)'} size={40} onClick={handleClickCancel} />
       </div>
       <h3>{`카드 ${type === 'fetch' ? '수정' : '생성'}`}</h3>
-      <Input
-        label="제목"
-        width="100%"
-        type="text"
-        placeholder="20글자까지 작성이 가능합니다."
-        value={temp.title.value || ''}
-        error={temp.title.error}
-        onChange={(e) => setTemp({ ...temp, title: { ...temp.title, value: e.target.value } })}
-      />
       <Input
         label="자기소개"
         width="100%"
