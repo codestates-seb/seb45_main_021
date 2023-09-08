@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import {HiX} from 'react-icons/hi'
 
@@ -148,12 +148,17 @@ export default function FileInput({
     width,
     height,
     number,
-    setDataForm,
+    handleInputChange,
     handleErrorChange,
     clearError,
+    defaultImgs = [],
 }) {
     const [imgs,setImgs] = useState([]);
     const [isDrag, setIsDrag] = useState(false);
+
+    useEffect(()=>{
+        setImgs([...defaultImgs]);
+    },[defaultImgs])
     
     const saveImgToFile = (files) => {
         const formData = new FormData();
@@ -161,7 +166,7 @@ export default function FileInput({
             for(let i = 0; i < files.length; i++) {
                 formData.append('file',files[i]);
             }
-            setDataForm(null,formData, number===1?'titleImg':'imgs');
+            handleInputChange(null,formData, number===1 ? 'titleImg' : 'imgs');
             if(number === 1) {
                 clearError('titleImg');
             }
@@ -170,16 +175,18 @@ export default function FileInput({
         }
     };
 
+    //이미지를 url주소로 바꿔주는 함수 미리보기에 사용
     const readImgToUrl = (file) => {
         return new Promise(resolve => {
             const reader = new FileReader();
+            reader.readAsDataURL(file);
             reader.onload = (e) => {
                 resolve(e.target.result);
             };
-            reader.readAsDataURL(file);
         })
     }
 
+    //이미지를 url주소로 바꾸고 imgs에 넣어주는 함수
     const fileChanger = async (file) => {
         if (file && file.length <= (number - imgs.length)) {
             const tempUrls = [];
@@ -187,19 +194,20 @@ export default function FileInput({
                 const imgUrl = await readImgToUrl(file[i]);
                 tempUrls.unshift(imgUrl);
             }
-            setImgs([ ...tempUrls,...imgs]);
+            setImgs([ ...tempUrls, ...imgs]);
         } else {
-            //정상적이지 않은 수의 파일을 올리거나 개수 정해진 것 보다 많이 올릴경우
             alert('정상적인 파일 또는 개수를 맞춰서 올려주세요.');
         }
     }
 
+    //fileChanger로 imgs에 넣고 saveImgToFile로 dataForm에 저장
     const fileClickHandler = (e) => {
         const selectedFile = Array.from(e.target.files);
         fileChanger(selectedFile);
         saveImgToFile(selectedFile);
     };
 
+    //imgs에 클릭된 index를 조회하면서 데이터 지움
     const deleteImgHandler = (idx) => {
         const newImgs = imgs.filter((el,id)=>id!==idx);
         setImgs(newImgs);

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import Input from '../common/Input';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AiOutlineClose, AiOutlineCloseCircle } from 'react-icons/ai';
 
 
@@ -32,8 +32,17 @@ const Tag = styled.div`
   }
 `;
 
-export default function EnterTag({width, height, placeholder, dataform, setDataForm}) {
-    const [tags,setTags] = useState([]);
+export default function EnterTag({
+    width,
+    height,
+    placeholder,
+    defaultTags = [],
+    handleInputChange
+}) {
+    const [tags,setTags] = useState(defaultTags);
+    useEffect(()=>{
+        setTags(defaultTags)
+    },[defaultTags])
 
     const enterTagHandler = (e) => {
         if(e.code === 'Enter' || e.code === 'NumpadEnter') {
@@ -57,7 +66,7 @@ export default function EnterTag({width, height, placeholder, dataform, setDataF
                 type='text'
                 onKeyDown={(e)=>{
                     enterTagHandler(e);
-                    setDataForm(null,tags,'tags')
+                    handleInputChange(null,tags,'tags')
                 }}
             >
             </Input>
@@ -71,7 +80,7 @@ export default function EnterTag({width, height, placeholder, dataform, setDataF
                             onClick={()=>{
                                 const newTags = tags.filter((_,i)=>i!==idx);
                                 setTags(newTags)
-                                setDataForm(null,newTags,'tags');
+                                handleInputChange(null,newTags,'tags');
                             }}
                         />
                     </Tag>

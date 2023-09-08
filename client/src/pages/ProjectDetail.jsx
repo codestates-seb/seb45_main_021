@@ -6,6 +6,7 @@ import DetailBody from '../components/PfPjPublic/DetailBody';
 import { StyleBorderButton } from '../components/common/Buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import ApplyStatusContainer from '../components/project/ApplyStatusContainer';
+import JoinStatusContainet from '../components/project/JoinStatusContainet';
 
 export const StyleDetailWrapper = styled(Page)`
   padding-top:6rem;
@@ -22,6 +23,40 @@ export const StyleDetailContainer = styled.div`
   border-radius:10px;
   padding:4rem;
   margin-bottom:2rem;
+
+  .join-people {
+    flex:4;
+    overflow:auto;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .request-people {
+    flex:6;
+    overflow:auto;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .vertical-line {
+    margin:0 3rem;
+    height:auto;
+    border:3px solid var(--black-300);
+    border-radius:10px;
+  }
+
+  .status {
+    height:500px;
+    overflow:auto;
+    h2 {
+      font-size:1.6rem;
+      font-weight: var(--nanum-semi-bold);
+      margin-bottom:1rem;
+    }
+  }
+
 `
 
 const OnlyAdmin = styled.div`
@@ -31,24 +66,17 @@ const OnlyAdmin = styled.div`
   margin-bottom:1rem;
 `
 
-const ApplyButton = styled.button`
-  border: 2px solid var(--black-100);
-  border-radius: 5px;
-  position: relative;
-  overflow: visible;
-  opacity: 0.8;
-  font-size:1.6rem;
-  &:hover{
-    opacity:1;
-  }
-  transition: all.2s;
-`
-
 const DummyData = {
   id : 1,
   title : '프론트엔드 리액트를 사용하여 프로젝트,포트폴리오 공유 프로젝트입니다.',
   totalPeople:5,
-  joinPeople:['1','2','3'],
+  joinPeople:[{
+    id : 15,
+  },{
+    id : 16,
+  },{
+    id : 21,
+  }],
   created_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
   modified_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
   closed_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
@@ -118,9 +146,6 @@ export default function ProjectDetail() {
     setIsOn(!isOn);
   }
   
-  // loginUserData?.userInfo.id === detailData.id
-  
-  // const loginUserData = 
   const fontSize = '1.6rem'
 
   return (
@@ -128,19 +153,29 @@ export default function ProjectDetail() {
       <StyleDetailContainer className='col'>
         <DetailHead detailData={detailData} type='project'/>
         {isAdmin && <OnlyAdmin className='row'>
-          <ApplyButton
+          <StyleBorderButton
             $fontSize={fontSize}
             onClick={isOnHandler}
-          >신청 현황 조회하기
-            <ApplyStatusContainer
-              requestPeople={detailData.requestPeople}
-              isOn={isOn}
-            />
-          </ApplyButton>
+          >{isOn ? '프로젝트 조회' : '현황 조회'}
+          </StyleBorderButton>
           <StyleBorderButton $fontSize={fontSize}>수정</StyleBorderButton>
           <StyleBorderButton $fontSize={fontSize}>삭제</StyleBorderButton>
         </OnlyAdmin>}
+        {isAdmin && isOn ? 
+        <div className='row status'>
+          <div className='join-people'>
+            <h2>참가자 현황</h2>
+            <JoinStatusContainet joinPeople={detailData.joinPeople}/>
+          </div>
+          <div className='vertical-line'/>
+          <div className='request-people'>
+            <h2>신청자 현황</h2>
+            <ApplyStatusContainer requestPeople={detailData.requestPeople}/>
+          </div>
+        </div>
+        : 
         <DetailBody detailData={detailData} type='project'/>
+        }
       </StyleDetailContainer>
     </StyleDetailWrapper>
   );

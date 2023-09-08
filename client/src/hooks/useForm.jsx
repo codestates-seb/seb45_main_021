@@ -16,5 +16,5 @@ export default function useForm(initialState) {
     setFormData(initialState);
   }
 
-  return [formData, handleInputChange, clearForm];
+  return [formData, handleInputChange, clearForm, setFormData];
 }

@@ -44,7 +44,7 @@ export default function DetailBody({
                         title={'검색 키워드'}
                         component={
                             detailData.tag.map(item=>
-                                <Tag key={item} text={`#${item}`} type={'project'}/>
+                                <Tag key={item} text={item} type={'project'}/>
                             )
                         }
                     />

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import defaultImg from '../../static/images/userDefaultImg.jpeg'
 import Tag from '../common/Tag';
+import useNav from '../../hooks/useNav';
 
 const StyleApplyCard = styled.div`
     width:100%;
@@ -19,6 +20,10 @@ const StyleApplyCard = styled.div`
             width:100%;
             height:auto;
             object-fit:cover;    
+        }
+        &:hover {
+            cursor:pointer;
+            opacity:0.4;
         }
     }
     .data-box {
@@ -67,13 +72,17 @@ export default function ApplyCard({
     cardData,
 }) {
     const [isOn, setIsOn] = useState(false);
+    const {toProfile} = useNav();
     const isOnHandler = () => {
         setIsOn(!isOn);
     }
     return (
         <StyleApplyCard className='col'>
             <div className='row'>
-                <div className='image-container col'>
+                <div
+                    className='image-container col'
+                    onClick={()=>toProfile(cardData.id)}
+                >
                     <img src={cardData?.img.length === 0 ? defaultImg : cardData.img} alt='신청자이미지'/>
                     <p>{cardData?.userName}</p>
                 </div>
@@ -85,7 +94,7 @@ export default function ApplyCard({
                         <div className='tag-box row'>
                             {cardData.tag.map((item,idx)=>
                                 <Tag
-                                    keys={idx}
+                                    key={idx}
                                     text={item}
                                     size={'1.2rem'}
                                     padding={'0.4rem'}
@@ -114,11 +123,3 @@ export default function ApplyCard({
         </StyleApplyCard>
     );
 }
-
-// id : 6,
-//       img : '',
-//       userName : '신청자2',
-//       isEmploy : false,
-//       tag : ['java','javascript','C++'],
-//       hotline : '010-1234-5678',
-//       body : '신청합니다.'},
