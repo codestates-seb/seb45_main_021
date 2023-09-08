@@ -46,6 +46,7 @@ public class Portfolio extends Auditable {
     private Member member;
 
     @OneToMany(mappedBy = "portFolio", cascade = CascadeType.REMOVE)
+    @JsonManagedReference
     List<Comment> comments;
 
     @Column(columnDefinition = "TEXT")

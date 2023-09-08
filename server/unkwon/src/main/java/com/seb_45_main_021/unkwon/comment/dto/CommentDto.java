@@ -46,7 +46,7 @@ public class CommentDto {
         private long commentId;
         private String content;
 
-        private long answerId;
+        private long portfolioId;
 
         private long memberId;
         private String email;

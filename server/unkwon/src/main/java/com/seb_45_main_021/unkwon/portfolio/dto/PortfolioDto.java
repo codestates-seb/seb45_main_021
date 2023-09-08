@@ -64,6 +64,14 @@ public class PortfolioDto {
     @Getter
     @Setter
     @Builder
+    public static class TopResponse{
+        private long portfolioId;
+        private String title;
+    }
+
+    @Getter
+    @Setter
+    @Builder
     public static class DetailResponse{
         private long memberId;
         private String email;

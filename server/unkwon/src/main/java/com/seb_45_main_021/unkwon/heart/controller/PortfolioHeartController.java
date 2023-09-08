@@ -5,6 +5,7 @@ import com.seb_45_main_021.unkwon.heart.dto.PortfolioHeartDto;
 import com.seb_45_main_021.unkwon.heart.service.PortfolioHeartService;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.member.service.MemberService;
+import com.seb_45_main_021.unkwon.portfolio.dto.PortfolioDto;
 import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
 import com.seb_45_main_021.unkwon.portfolio.mapper.PortfolioMapper;
 import com.seb_45_main_021.unkwon.portfolio.service.PortfolioService;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/portfolio/hearts")
@@ -26,15 +28,11 @@ public class PortfolioHeartController {
     private final MemberService memberService;
     private final PortfolioMapper mapper;
 
-
-
     @Autowired
     public PortfolioHeartController(PortfolioHeartService portfolioHeartService, PortfolioService portfolioService, MemberService memberService, PortfolioMapper mapper) {
         this.portfolioHeartService = portfolioHeartService;
         this.portfolioService = portfolioService;
         this.memberService = memberService;
-
-
         this.mapper = mapper;
     }
 
@@ -44,17 +42,19 @@ public class PortfolioHeartController {
                                          @RequestBody PortfolioHeartDto portfolioHeartDto) {
         Long memberId = Long.valueOf(portfolioHeartDto.getMemberId());
         Member member = memberService.findVerifiedMember(memberId);
-        Portfolio portFolio = portfolioService.findByPortfolioId(portfolioId);
-        if (portFolio == null) {
+
+        Portfolio portfolio = portfolioService.findByPortfolioId(portfolioId);
+        if (portfolio == null) {
+
             return ResponseEntity.notFound().build();
         }
 
-        if (!portfolioHeartService.isHeartPost(member, portFolio)) {
-            portfolioHeartService.heart(member, portFolio);
+        if (!portfolioHeartService.isHeartPost(member, portfolio)) {
+            portfolioHeartService.heart(member, portfolio);
 
             return ResponseEntity.ok("hearted");
         } else {
-            portfolioHeartService.unheart(member, portFolio);
+            portfolioHeartService.unheart(member, portfolio);
             return ResponseEntity.ok("unhearted");
         }
     }
@@ -71,9 +71,16 @@ public class PortfolioHeartController {
     }
 
     @GetMapping("/weekly-top")
-    public ResponseEntity<List<Portfolio>> getTop10PortfoliosByHeartsLast7Days() {
+    public ResponseEntity<List<PortfolioDto.TopResponse>> getTop10PortfoliosByHeartsLast7Days() {
         List<Portfolio> top10Portfolios = portfolioHeartService.getTop10PortfoliosByHeartsLast7Days();
-        return new ResponseEntity<>(top10Portfolios, HttpStatus.OK);
+        List<PortfolioDto.TopResponse> portfolioDtosTopResponse = top10Portfolios.stream()
+                .map(portfolio -> PortfolioDto.TopResponse.builder()
+                        .portfolioId(portfolio.getPortfolioId())
+                        .title(portfolio.getTitle())
+                        .build())
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(portfolioDtosTopResponse, HttpStatus.OK);
     }
 
 //    @GetMapping("/portfolioLikes/{portfolioId}")
