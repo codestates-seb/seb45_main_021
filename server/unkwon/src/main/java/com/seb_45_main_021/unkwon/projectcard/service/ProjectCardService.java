@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,6 +36,12 @@ public class ProjectCardService {
         findMember.setProjectCardList(projectCard);
 
         projectCardRepository.save(projectCard);
+    }
+
+    public List<ProjectCard> getProjectCards(Long memberId){
+        Member findMember = memberService.findVerifiedMember(memberId);
+
+        return findMember.getProjectCardList();
     }
 
     public void updateProjectCard(ProjectCardPatchDto dto){

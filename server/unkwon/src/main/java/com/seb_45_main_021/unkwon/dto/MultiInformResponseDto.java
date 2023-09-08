@@ -1,10 +1,8 @@
 package com.seb_45_main_021.unkwon.dto;
 
-import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
 import com.seb_45_main_021.unkwon.member.dto.response.MemberInformResponseDto;
 import com.seb_45_main_021.unkwon.portfolio.dto.PortfolioDto;
-import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
-import com.seb_45_main_021.unkwon.project.entity.Project;
+import com.seb_45_main_021.unkwon.project.dto.ProjectProfileResponseDto;
 import com.seb_45_main_021.unkwon.projectcard.dto.response.ProjectCardResponseDto;
 import lombok.Getter;
 
@@ -14,26 +12,28 @@ import java.util.List;
 @Getter
 public class MultiInformResponseDto {
     private MemberInformResponseDto profile;
-    private List<List<Project>> project = new ArrayList<>();
-    private List<List<PortfolioDto.PortFolioProfileResponseDto>> portFolio = new ArrayList();
-    private List<PortfolioDto.PortFolioProfileResponseDto> portfolioHeart = new ArrayList<>();
-    // private List<ProjectHeart> heart = new ArrayList<>();
-    private List<ProjectCardResponseDto> projectCard;
-    private final int INDEX = 1;
+    private List<List<ProjectProfileResponseDto>> project = new ArrayList<>(); // 신청한 프로젝트의 경우 사용자 정보 필요
+    private List<List<PortfolioDto.PortfolioProfileResponseDto>> portFolio = new ArrayList();  // 필요 없음.
+    private List<PortfolioDto.PortfolioProfileResponseDto> portfolioHeart = new ArrayList<>(); // 필요 있음
+    private List<ProjectProfileResponseDto> projectHeart = new ArrayList<>(); // 필요 있음
+    private List<ProjectCardResponseDto> projectCard = new ArrayList<>();
 
-    public void setProjectList(List<Project> list1, List<Project> list2) {
+    public void setProjectList(List<ProjectProfileResponseDto> list1, List<ProjectProfileResponseDto> list2) {
         this.project.add(list1);
         this.project.add(list2);
     }
 
-    public void setPortfoliolist(List<PortfolioDto.PortFolioProfileResponseDto> list1, List<PortfolioDto.PortFolioProfileResponseDto> list2) {
-
+    public void setPortfoliolist(List<PortfolioDto.PortfolioProfileResponseDto> list1, List<PortfolioDto.PortfolioProfileResponseDto> list2) {
         this.portFolio.add(list1);
         this.portFolio.add(list2);
     }
 
-    public void setPortfolioHeartList(List<PortfolioDto.PortFolioProfileResponseDto> list) {
+    public void setPortfolioHeartList(List<PortfolioDto.PortfolioProfileResponseDto> list) {
         this.portfolioHeart = list;
+    }
+
+    public void setProjectHeartList(List<ProjectProfileResponseDto> list) {
+        this.projectHeart = list;
     }
 
     public void setProjectCardList(List<ProjectCardResponseDto> projectCardList){

@@ -6,7 +6,9 @@ import com.seb_45_main_021.unkwon.auth.utils.CustomAuthorityUtils;
 import com.seb_45_main_021.unkwon.exception.BusinessLogicException;
 import com.seb_45_main_021.unkwon.exception.ExceptionCode;
 import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
+import com.seb_45_main_021.unkwon.heart.entity.ProjectHeart;
 import com.seb_45_main_021.unkwon.heart.repository.PortfolioHeartRepository;
+import com.seb_45_main_021.unkwon.heart.repository.ProjectHeartRepository;
 import com.seb_45_main_021.unkwon.member.dto.request.MemberInformUpdateDto;
 import com.seb_45_main_021.unkwon.member.dto.request.MemberPasswordUpdateDto;
 import com.seb_45_main_021.unkwon.member.dto.request.MemberSignupDto;
@@ -14,6 +16,8 @@ import com.seb_45_main_021.unkwon.member.dto.response.MemberInformResponseDto;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.member.entity.SocialType;
 import com.seb_45_main_021.unkwon.member.repository.MemberRepository;
+import com.seb_45_main_021.unkwon.project.entity.ProjectStatus;
+import com.seb_45_main_021.unkwon.project.repository.ProjectStatusRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +31,8 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PortfolioHeartRepository portfolioHeartRepository;
+    private final ProjectHeartRepository projectHeartRepository;
+    private final ProjectStatusRepository projectStatusRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
 
@@ -68,6 +74,12 @@ public class MemberService {
         // 찜 리스트 (내가 좋아요한 프로젝트, 포트폴리오 리스트 가져오기) 다대다 매핑
         return portfolioHeartRepository.findByMember(member);
     }
+
+    public List<ProjectHeart> getProjectInHeart(Member member){
+        return projectHeartRepository.findByMember(member);
+    }
+
+    public List<ProjectStatus> getSupportedProjects(Member member) {return projectStatusRepository.findByMember(member);}
 
     /** 회원 정보 수정(개인 정보) **/
     public void updateMemberInform(MemberInformUpdateDto dto, UsernamePasswordAuthenticationToken authentication){
