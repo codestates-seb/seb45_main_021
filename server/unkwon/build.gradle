@@ -45,6 +45,8 @@ dependencies {
 
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
+	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0' // 스웨거 세팅
+
 }
 
 tasks.named('test') {

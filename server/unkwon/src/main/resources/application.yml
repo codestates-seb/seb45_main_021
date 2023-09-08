@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/han_db
+    url: jdbc:mysql://localhost:3306/kim_db
     username: root
-    password: gks0923
+    password: aass0357!!
 
   jpa:
     open-in-view: true
@@ -17,7 +17,7 @@ spring:
       hibernate.format_sql: true
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
 
-  #  h2:
+#  h2:
 #    console:
 #      enabled: true
 #      path: /h2
@@ -61,3 +61,32 @@ jwt:
     secret: ${JWT_SECRET_KEY}
   access-token-expiration-minutes: 420
   refresh-token-expiration-minutes: 420
+
+springdoc:
+  # 기본값: application/json
+  # request media type 의 기본 값
+  default-consumes-media-type: application/json
+
+  # 기본값: */*
+  # response media type 의 기본 값
+  default-produces-media-type: application/json
+
+  # 스웨거에서 제공하는 ui 라이브러리 설정
+  swagger-ui:
+
+    #   기본 값 : /swagger-ui.html
+    #   Swagger HTML 문서 경로
+    path: /swagger-ui.html
+
+    #   swagger-ui를 사용할 것인지 여부
+    enabled: true
+
+  # 스웨거 api문서 설정
+  api-docs:
+
+    #   기본값 : /v3/api-docs
+    #   spring boot 웹 애플리케이션의 api를 OpenAPI 3을 이용하여 json 형식화 한것의 경로
+    path: /swagger/api-docs
+
+    #   스웨거 api문서를 사용할지 여부
+    enabled: true
