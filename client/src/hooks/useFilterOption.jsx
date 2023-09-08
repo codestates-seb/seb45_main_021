@@ -1,7 +1,4 @@
 import { useLocation, useNavigate } from 'react-router';
-import { useDispatch } from 'react-redux';
-import { clearPage } from '../redux/usePage/pageSlice';
-import { useEffect } from 'react';
 const DEFAULT_OPTIONS = {
   lang: 'all',
   sort: 'latest',
@@ -15,7 +12,6 @@ export default function useFilterOption() {
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const pageType = location.pathname.split('/')[1];
-  const dispatch = useDispatch();
   const options = {
     lang: queryParams.get('lang') || DEFAULT_OPTIONS.lang,
     sort: queryParams.get('sort') || DEFAULT_OPTIONS.sort,
@@ -26,10 +22,6 @@ export default function useFilterOption() {
 
   const { searchType, lang, sort, employ, keyword } = options;
 
-  // useEffect(() => {
-  //   dispatch(clearPage());
-  // }, [options, pageType, searchType]);
-
   const optionHandler = (name, value) => {
     const urlSearchParams = new URLSearchParams(window.location.search);
     urlSearchParams.set(name, value);
@@ -39,8 +31,8 @@ export default function useFilterOption() {
 
   const getApiUrl = (pageNum) => {
     const type = pageType === 'search' ? searchType : pageType;
-    if (employ && type === 'portfolios') return 'employ 트루 리스트';
     let newUrl = `${type}/search`;
+    if (employ && type === 'portfolios') newUrl += '/employ';
     const params = [];
 
     if (keyword !== DEFAULT_OPTIONS.keyword) {
