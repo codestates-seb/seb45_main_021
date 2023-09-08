@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-
+import useQueryClear from './useQueryClear';
 /**
  * @description
  * import useNav from '~~'
@@ -19,12 +19,22 @@ import { useNavigate, useLocation } from 'react-router-dom';
 export default function useNav() {
   const navigate = useNavigate();
   const type = useLocation().pathname.split('/')[1];
-
+  const queryClear = useQueryClear();
   const toAbout = () => navigate('/');
   const toSignin = () => navigate('/signin');
   const toSignup = () => navigate('/signup');
-  const toProject = () => type !== 'projects' && navigate('/projects');
-  const toPortfolio = () => type !== 'portfolios' && navigate('/portfolios');
+  const toProject = () => {
+    if (type !== 'projects') {
+      navigate('/projects');
+      queryClear();
+    }
+  };
+  const toPortfolio = () => {
+    if (type !== 'portfolios') {
+      navigate('/portfolios');
+      queryClear();
+    }
+  };
   const toProjectWrite = () => navigate('/project/write');
   const toPortfolioWrite = () => navigate('/portfolio/write');
   const toProjectEdit = (id) => navigate(`/project/edit/${id}`);
@@ -32,7 +42,10 @@ export default function useNav() {
   const toProjectDetail = (id) => navigate(`/project/detail/${id}`);
   const toPortfolioDetail = (id) => navigate(`/project/detail/${id}`);
   const toProfile = (id) => navigate(`/profile/${id}`);
-  const toSearch = (text, type) => navigate(`/search?keyword=${text}&searchType=projects`);
+  const toSearch = (text) => {
+    navigate(`/search?keyword=${text}&searchType=projects`);
+    queryClear();
+  };
 
   return {
     toAbout,
