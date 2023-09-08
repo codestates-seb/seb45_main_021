@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components'
 import DetailHead from '../components/PfPjPublic/DetailHead';
 import DetailBody from '../components/PfPjPublic/DetailBody';
@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { StyleDetailWrapper, StyleDetailContainer } from './ProjectDetail';
 import AnchorToComment from '../components/portfolio/AncholToComment';
 import Comment from '../components/portfolio/Comment';
+import useNav from '../hooks/useNav';
 
 const OnlyAdmin = styled.div`
   width:100%;
@@ -30,6 +31,7 @@ const DummyData = {
     userName : '박찬섭', 
     id : 1,
   },
+  isComments : true,
   comments : [{
     created_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
     modified_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
@@ -80,27 +82,38 @@ export default function ProjectDetail() {
   const [detailData, setDetailData] = useState(DummyData);
   const dispatch = useDispatch();
   const loginUserData = useSelector(state=>state.user);
-  const isAdmin = loginUserData?.userInfo === detailData.id;
-  // loginUserData?.userInfo === detailData.id
-  
-  // const loginUserData = 
+  const isAdmin = true;
+  const {toPortfolioEdit} = useNav();
+  // loginUserData?.userInfo === detailData.id 
   const fontSize = '1.6rem'
+
+  useEffect(()=>{
+    setDetailData({...DummyData})
+  },[])
 
   return (
     <StyleDetailWrapper>
       <StyleDetailContainer className='col'>
         <DetailHead detailData={detailData} type='portfolio'/>
         {isAdmin && <OnlyAdmin className='row'>
-          <StyleBorderButton $fontSize={fontSize}>수정</StyleBorderButton>
+          <StyleBorderButton
+            $fontSize={fontSize}
+            onClick={()=>toPortfolioEdit(detailData.id)}
+          >수정</StyleBorderButton>
           <StyleBorderButton $fontSize={fontSize}>삭제</StyleBorderButton>
         </OnlyAdmin>}
-        <DetailBody detailData={detailData}  type='portfolio'/>
+        <DetailBody
+          detailData={detailData} 
+          type='portfolio'
+        />
         <AnchorToComment/>
       </StyleDetailContainer>
-      <Comment
-        isAdmin={isAdmin}
-        detailData={detailData}
-      />
+      {detailData.isComments &&
+        <Comment
+          isAdmin={isAdmin}
+          detailData={detailData}
+        />
+      }
     </StyleDetailWrapper>
   );
 }

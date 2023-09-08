@@ -66,10 +66,6 @@ export default function ProjectWrite() {
   const [dataForm, handleInputChange] = useForm(projectWriteInitData);
   const [errors, handleErrorChange, clearError, setErrors] = useError(projectErrorInitData, projectWriteRule);
 
-  useEffect(()=>{
-
-  })
-
   const width = '100%';
   const height = '30rem';
 
@@ -95,25 +91,34 @@ export default function ProjectWrite() {
     {value : '10', label : '10'},
   ]
 
-  const mergedObjectDataForm = (obj) => {
-    const requestData = new FormData();
-    for(const key in obj) {
-      if(obj[key] instanceof FormData) {
-        // for(const [subkey, subValue] of obj[key].entries()) {
-        //   requestData.append(`${key}[]`, subValue);
-        // }
-        for(let i = 0; i < obj[key].length; i++) {
-          console.log(obj[key][i]);
-        }
-      } else {
-        requestData.append(key,JSON.stringify(obj[key]));
-      }
+  const fileHeader = {
+    headers : {
+      'Content-Type': 'multipart/form-data',
+      withCredentials: true
     }
-    return requestData;
+  }
+
+  const mergedObjectDataForm = (obj) => {
+    const formData = new FormData();
+
+    for (const key in obj) {
+        const value = obj[key];
+        if (value instanceof FormData) {
+          for (const subValue of value.values()) {
+            formData.append(key, subValue);
+          }
+        } else {
+          // 값이 FormData가 아닌 경우 직렬화하여 새로운 FormData에 추가
+          formData.append(key, JSON.stringify(value));
+        }
+      }
+
+    return formData;
   }
 
   //errors에 하나라도 있으면 오류 뱉음
   const subMitHandler = () => {
+    console.log(dataForm);
     if(Object.keys(errors).length) {
       console.log('유효성검사에 문제가 존재함');
       const newError = {...errors};
@@ -124,31 +129,16 @@ export default function ProjectWrite() {
       window.scrollTo(0,0);
     } else {
       const requestData = mergedObjectDataForm(dataForm);
-
-      for(const [key,value] of requestData.entries()) {
-        // if(value instanceof FormData) {
-        //   for(const [subkey,subValue] of value.entries()) {
-        //     console.log()
-        //   }
-        // }
-        console.log(key, value);
+      for(const value of requestData.entries()) {
+        console.log(value);
       }
-      
-      // const fileHeader = {
-      //   headers : {
-      //     'Content-Type': 'multipart/form-data',
-      //     withCredentials: true
-      //   }
-      // }
+    
       // api.post('/projects',dataForm,fileHeader)
       // .then((res)=>{
-      //   api.post('/projects',)
       // })
       // .catch(err=>{
       //   console.log(err);
       // })
-      // console.log(jsonData);
-      // console.log(fileData);
     }
   }
   
@@ -219,7 +209,13 @@ export default function ProjectWrite() {
             name='마감 날짜'
           />
           
-          <EnterTag width="100%" height="3.5rem" placeholder="태그는 최대 3개까지 등록이 가능합니다." dataForm={dataForm} handleInputChange={handleInputChange}/>
+          <EnterTag
+            width="100%"
+            height="3.5rem"
+            placeholder="태그는 최대 3개까지 등록이 가능합니다."
+            dataForm={dataForm}
+            handleInputChange={handleInputChange}
+          />
           
           <Input
             label={'기획서'}

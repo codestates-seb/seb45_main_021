@@ -41,13 +41,16 @@ export default function EnterTag({
 }) {
     const [tags,setTags] = useState(defaultTags);
     useEffect(()=>{
-        setTags(defaultTags)
+        if(defaultTags.length) {
+            setTags(defaultTags)
+        }
     },[defaultTags])
 
     const enterTagHandler = (e) => {
         if(e.code === 'Enter' || e.code === 'NumpadEnter') {
             if(tags.length < 3 && tags.indexOf(e.target.value) === -1) {
                 setTags([e.target.value,...tags]);
+                handleInputChange(null,[e.target.value,...tags],'tags')
             }
             setTimeout(()=>{
                 e.target.value = '';
@@ -64,10 +67,7 @@ export default function EnterTag({
                 height={height}
                 placeholder={placeholder}
                 type='text'
-                onKeyDown={(e)=>{
-                    enterTagHandler(e);
-                    handleInputChange(null,tags,'tags')
-                }}
+                onKeyDown={(e)=>enterTagHandler(e)}
             >
             </Input>
             <div className='row'>

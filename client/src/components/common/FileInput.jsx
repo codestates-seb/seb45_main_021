@@ -151,22 +151,30 @@ export default function FileInput({
     handleInputChange,
     handleErrorChange,
     clearError,
-    defaultImgs = [],
+    dataForm,
+    defaultImgs=[],
+    setWillDeleteImgs,
 }) {
     const [imgs,setImgs] = useState([]);
     const [isDrag, setIsDrag] = useState(false);
+    const fileKey = number===1 ? 'titleImg' : 'imgs';
 
+    //사용자가 드래그또는클릭으로 사진을 업로드시 미리보기 화면은 readImgToUrl을통해 img의 소스에 넣어서 보여주느것
+    //서버에 보낼때 단순 추가일경우 파일을 보냄 수정시에 이미 존재하는 이미지를 지우고싶다면 받아온 url을 보내면 될것
+    //서버에 이미지를 추가적으로 넣고싶다 그러면 파일 삭제하고싶다 그러면 url로 보냄
     useEffect(()=>{
-        setImgs([...defaultImgs]);
+        if(defaultImgs.length) {
+            setImgs(defaultImgs);
+        }
     },[defaultImgs])
     
     const saveImgToFile = (files) => {
         const formData = new FormData();
         try {
             for(let i = 0; i < files.length; i++) {
-                formData.append('file',files[i]);
+                formData.append(fileKey,files[i]);
             }
-            handleInputChange(null,formData, number===1 ? 'titleImg' : 'imgs');
+            handleInputChange(null,formData, fileKey);
             if(number === 1) {
                 clearError('titleImg');
             }
@@ -211,6 +219,21 @@ export default function FileInput({
     const deleteImgHandler = (idx) => {
         const newImgs = imgs.filter((el,id)=>id!==idx);
         setImgs(newImgs);
+        if(setWillDeleteImgs) {
+            setWillDeleteImgs((prev)=>{
+                return {...prev, [fileKey] : [...prev[fileKey], imgs[idx]]}
+            })
+        } else {
+            const tempFiles = dataForm[fileKey].getAll(fileKey);
+            const newForm = dataForm[fileKey];
+            newForm.delete(fileKey);
+            for(let i = 0; i < tempFiles.length; i++) {
+                if(i !== idx) {
+                    newForm.append(fileKey,tempFiles[i]);
+                }
+            }
+            handleInputChange(null,newForm,fileKey);
+        }
         if(number===1){
             handleErrorChange(null,true,'titleImg');
         }

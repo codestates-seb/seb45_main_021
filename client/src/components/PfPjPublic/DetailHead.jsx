@@ -84,17 +84,18 @@ export default function DetailHead({
             <h2 className='project-detail'>{type==='project'?'PROJECT':'PORTFOLIO'}</h2>
             <h1 className='project-detail-title'>{detailData.title}</h1>
             <div className='row'>
-                <div className='row author-wrapper'
+                <div
+                    className='row author-wrapper'
                     onClick={()=>toProfile(detailData.author.id)}
                 >
-                    <img src={detailData.author.img.length === 0 ? defaultImg : detailData.author.img} alt='작성자이미지'></img>
+                    <img src={detailData.author.img.length === 0 ? defaultImg : detailData.author.img} alt='작성자이미지'/>
                     <h3>{detailData.author.userName}</h3>
                 </div>
                 <h3>{dateFormatter(detailData.created_At)}</h3>
                 <Like
                     likes={detailData.likes}
                     size={'1.6rem'}
-                ></Like>
+                />
             </div>
             <Border/>
             <HiX

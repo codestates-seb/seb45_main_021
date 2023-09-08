@@ -7,6 +7,7 @@ import { StyleBorderButton } from '../components/common/Buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import ApplyStatusContainer from '../components/project/ApplyStatusContainer';
 import JoinStatusContainet from '../components/project/JoinStatusContainet';
+import useNav from '../hooks/useNav';
 
 export const StyleDetailWrapper = styled(Page)`
   padding-top:6rem;
@@ -141,6 +142,7 @@ export default function ProjectDetail() {
   const dispatch = useDispatch();
   const loginUserData = useSelector(state=>state.user);
   const isAdmin = true;
+  const {toProjectEdit} = useNav();
 
   const isOnHandler = () => {
     setIsOn(!isOn);
@@ -158,8 +160,13 @@ export default function ProjectDetail() {
             onClick={isOnHandler}
           >{isOn ? '프로젝트 조회' : '현황 조회'}
           </StyleBorderButton>
-          <StyleBorderButton $fontSize={fontSize}>수정</StyleBorderButton>
-          <StyleBorderButton $fontSize={fontSize}>삭제</StyleBorderButton>
+          <StyleBorderButton
+            $fontSize={fontSize}
+            onClick={()=>toProjectEdit(detailData.id)}>수정
+          </StyleBorderButton>
+          <StyleBorderButton
+            $fontSize={fontSize}>삭제
+          </StyleBorderButton>
         </OnlyAdmin>}
         {isAdmin && isOn ? 
         <div className='row status'>

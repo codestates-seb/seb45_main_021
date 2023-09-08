@@ -27,6 +27,8 @@ export default function useNav() {
   const toPortfolio = () => type !== 'portfolios' && navigate('/portfolios');
   const toProjectWrite = () => navigate('/project/write');
   const toPortfolioWrite = () => navigate('/portfolio/write');
+  const toProjectEdit = (id) => navigate(`/project/edit/${id}`);
+  const toPortfolioEdit = (id) => navigate(`/portfolio/edit/${id}`);
   const toProjectDetail = (id) => navigate(`/project/detail/${id}`);
   const toPortfolioDetail = (id) => navigate(`/project/detail/${id}`);
   const toProfile = (id) => navigate(`/profile/${id}`);
@@ -40,6 +42,8 @@ export default function useNav() {
     toProject,
     toProjectWrite,
     toPortfolioWrite,
+    toProjectEdit,
+    toPortfolioEdit,
     toProjectDetail,
     toPortfolioDetail,
     toProfile,

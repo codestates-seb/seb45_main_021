@@ -1,5 +1,4 @@
 import { styled } from "styled-components";
-import ProGress from "../common/ProGress";
 
 const StyleSelectBox = styled.div`
     margin-bottom:0px !important;

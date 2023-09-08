@@ -135,6 +135,8 @@ export default function ProjectEdit() {
   const {toProject} = useNav();
   const [dataForm, handleInputChange, clearForm, setDataForm] = useForm(projectWriteInitData);
   const [errors, handleErrorChange, clearError, setErrors] = useError(projectErrorInitData , projectWriteRule);
+  const [willDeletedImgs, setWillDeleteImgs] = useState({titleImg : [], imgs : [],});
+  console.log(willDeletedImgs);
   console.log(dataForm);
 
   useEffect(()=>{
@@ -222,29 +224,31 @@ export default function ProjectEdit() {
 
           <SelectBox
             text={'사용할 언어를 선택 해주세요.'}
-            component={<Select
-              width={width}
-              options={languagesOptions}
-              defaultLabel={dataForm.language}
-              onClickHandler={(e)=>{
-                handleInputChange(null,e,'language')
-                handleErrorChange(null,e,'language',checkValidations)
-              }}
-            />}
+            component={
+              <Select
+                width={width}
+                options={languagesOptions}
+                defaultLabel={dataForm.language}
+                onClickHandler={(e)=>{
+                  handleInputChange(null,e,'language')
+                  handleErrorChange(null,e,'language',checkValidations)
+                }}
+              />}
             error={errors.language}
             name='언어'
           />
 
           <SelectBox
             text={'프로젝트 마감 날짜를 선택 해 주세요. (모집 시작은 작성일 기준입니다.)'}
-            component={<div className='data-select-container row'>
-              <DateSelect
-                defaultDate={new Date(dataForm.closed_At)}
-                width={width}
-                handleInputChange={handleInputChange}
-                setErrors={handleErrorChange}
-              />
-            </div>}
+            component={
+              <div className='data-select-container row'>
+                <DateSelect
+                  defaultDate={new Date(dataForm.closed_At)}
+                  width={width}
+                  handleInputChange={handleInputChange}
+                  setErrors={handleErrorChange}
+                />
+              </div>}
             error={errors.closed_At}
             name='마감 날짜'
           />
@@ -315,6 +319,7 @@ export default function ProjectEdit() {
             handleErrorChange={handleErrorChange}
             clearError={clearError}
             defaultImgs={dataForm.titleImg}
+            setWillDeleteImgs={setWillDeleteImgs}
           />
 
           <FileInput
@@ -325,6 +330,7 @@ export default function ProjectEdit() {
             dataForm={dataForm}
             handleInputChange={handleInputChange}
             defaultImgs={dataForm.imgs}
+            setWillDeleteImgs={setWillDeleteImgs}
           />
 
         </div>
