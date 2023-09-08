@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Page from '../components/common/Page';
-import WriteHeader from '../components/project/WriteHeader';
-import Language from './../components/common/LanguageTag';
 import DetailHead from '../components/project/DetailHead';
 import DetailBody from '../components/project/DetailBody';
 

@@ -37,7 +37,7 @@ const StyleOneWeekTopTenList = styled.div`
   }
 `;
 
-export default function OneWeekTopTenList({ type }) {
+export default function OneWeekTopTenList({ pageType }) {
   const [topTenList, setTopTenList] = useState([...list.portfolios]);
   const [isSpread, setIsSpread] = useState(false);
 
@@ -49,7 +49,7 @@ export default function OneWeekTopTenList({ type }) {
 
   useEffect(() => {
     // TopTenList를 받아와서, setTopTenList를 해야함
-  }, [type]);
+  }, [pageType]);
 
   return (
     <StyleOneWeekTopTenList onClick={(e) => e.stopPropagation()} $isSpread={isSpread}>
@@ -57,7 +57,7 @@ export default function OneWeekTopTenList({ type }) {
       <button onClick={() => setIsSpread((prev) => !prev)}>{isSpread ? '접기' : '펼치기'}</button>
       {isSpread ? (
         topTenList.map((item, i) => (
-          <OneWeekTopTenItem key={item.id} type={type} ranking={i + 1} item={item} />
+          <OneWeekTopTenItem key={item.id} pageType={pageType} ranking={i + 1} item={item} />
         ))
       ) : (
         <Swiper
@@ -70,7 +70,7 @@ export default function OneWeekTopTenList({ type }) {
         >
           {topTenList.map((item, i) => (
             <SwiperSlide key={item.id}>
-              <OneWeekTopTenItem type={type} ranking={i + 1} item={item} />
+              <OneWeekTopTenItem pageType={pageType} ranking={i + 1} item={item} />
             </SwiperSlide>
           ))}
         </Swiper>
