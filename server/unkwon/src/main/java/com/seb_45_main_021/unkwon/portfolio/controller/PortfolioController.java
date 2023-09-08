@@ -78,7 +78,7 @@ public class PortfolioController {
     @GetMapping("/search")
     public ResponseEntity searchPortfolios(@RequestParam(required = false)String[] tags,
                                            @RequestParam(required = false)String[] lang,
-                                           @PageableDefault(size = 12,sort = "portfolioId",direction = Sort.Direction.DESC)Pageable pageable
+                                           @PageableDefault(size = 12,page =0,sort = "portfolioId",direction = Sort.Direction.DESC)Pageable pageable
                                            ){
 
         Page<Portfolio> result = portfolioService.findPortfolios(tags, lang, pageable);
@@ -93,7 +93,7 @@ public class PortfolioController {
     @GetMapping("/employ/search")
     public ResponseEntity employSearchPortfolios(@RequestParam(required = false)String[] tags,
                                            @RequestParam(required = false)String[] lang,
-                                           @PageableDefault(size = 12,sort = "portfolioId",direction = Sort.Direction.DESC)Pageable pageable
+                                           @PageableDefault(size = 12,page=0,sort = "portfolioId",direction = Sort.Direction.DESC)Pageable pageable
     ){
 
         Page<Portfolio> result = portfolioService.findIsEmployPortfolios(tags, lang, pageable);
