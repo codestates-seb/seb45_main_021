@@ -7,7 +7,7 @@ import Input from '../components/common/Input';
 import api from '../hooks/useAxiosInterceptor';
 import Page from '../components/common/Page';
 import { isValidEmail, isValidPassword } from '../components/profile/isValid';
-import { deleteUser } from '../redux/userform/userslice';
+import { deleteUser } from '../redux/userform/userSlice';
 import { useDispatch } from 'react-redux';
 
 const StyleContainer = styled(Page)`

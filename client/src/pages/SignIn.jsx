@@ -7,7 +7,7 @@ import { AiFillGithub } from 'react-icons/ai';
 import Input from '../components/common/Input';
 import api from '../hooks/useAxiosInterceptor';
 import { useDispatch } from 'react-redux';
-import { updateUser, deleteUser } from '../redux/userform/userslice';
+import { updateUser, deleteUser } from '../redux/userform/userSlice';
 import { isValidEmail, isValidPassword } from '../components/profile/isValid';
 import userDefaultImg from '../static/images/userDefaultImg.jpeg';
 
@@ -18,8 +18,6 @@ const StyleContainer = styled(Page)`
   align-items: center;
   gap: 2rem;
   font-size: 2rem;
-  height: 100%;
-  width: 100%;
   h3 {
     font-size: 5rem;
     font-weight: 700;
@@ -63,13 +61,14 @@ const StyleColContainer = styled.div`
 `;
 
 const StyleBtnContainer = styled.div`
-  width: 30rem;
+  width: 40rem;
+  height: 56.22px;
   border: 1px solid var(--black-300);
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s;
-  padding: 1.2rem 0;
+  padding: 2rem 4rem;
   border-radius: 10px;
   font-weight: 700;
   &:hover {
@@ -195,7 +194,7 @@ export default function SignIn() {
             <Input
               label={'이메일'}
               placeholder="name@example.com"
-              width="30rem"
+              width="40rem"
               height="56.22px"
               fontSize="2rem"
               type="text"
@@ -207,7 +206,7 @@ export default function SignIn() {
               label={'비밀번호'}
               placeholder="영어,숫자,특수기호 포함 8글자 이상"
               type="password"
-              width="30rem"
+              width="40rem"
               height="56.22px"
               fontSize="2rem"
               autoComplete="off"

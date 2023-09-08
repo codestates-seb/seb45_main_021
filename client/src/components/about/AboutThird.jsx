@@ -22,7 +22,7 @@ const StyleAboutThird = styled.section`
     right: 0;
     left: 0;
     margin: auto;
-    flex-direction: ${(props) => (props.$column ? 'column' : 'row')};
+    flex-direction: ${(props) => (props.$column === 'true' ? 'column' : 'row')};
   }
 
   .info-item {
@@ -38,7 +38,7 @@ const StyleAboutThird = styled.section`
     letter-spacing: 0.5rem;
     gap: 3.5rem;
     font-family: var(--monoton);
-    ${(props) => props.$column && 'align-items:center;'}
+    align-items: ${(props) => (props.$column === 'true' ? 'center' : '')};
   }
 
   button {
@@ -73,11 +73,10 @@ export default function AboutThird({ activePage }) {
   const rotationY = (location.x / window.innerWidth) * 2 * maxRotation - maxRotation;
 
   return (
-    <StyleAboutThird>
+    <StyleAboutThird $column={user.isLogin ? 'true' : 'false'}>
       <VideoPlayer src={video} />
       <div
         className="rotation-box"
-        $column={user.isLogin}
         style={{
           transform: `rotateX(${-rotationX}deg) rotateY(${rotationY}deg)`,
         }}
@@ -92,7 +91,7 @@ export default function AboutThird({ activePage }) {
             </>
           )}
         </div>
-        <div className="info-item col" $column={user.isLogin}>
+        <div className="info-item col">
           {stringArr.map((str, i) => (
             <div key={i}>
               <span>{str.slice(0, 1)}</span>
