@@ -1,5 +1,7 @@
 package com.seb_45_main_021.unkwon.portfolio.dto;
 
+import com.seb_45_main_021.unkwon.dto.Author;
+import com.seb_45_main_021.unkwon.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,7 +34,8 @@ public class PortfolioDto {
         private String content;
         private String[] tags;
         private String[] lang;
-
+        private boolean IsEmploy;
+        private boolean IsComment;
 
     }
 
@@ -57,6 +60,14 @@ public class PortfolioDto {
         private String[] lang;
         private int heartCount;
 
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    public static class TopResponse{
+        private long portfolioId;
+        private String title;
     }
 
     @Getter
@@ -99,19 +110,32 @@ public class PortfolioDto {
 
     @Getter
     @Setter
-    public static class PortFolioProfileResponseDto {
+    public static class PortfolioProfileResponseDto {
         private Long portFolioId;
         private String title;
         private String createdAt;
         private int heartCount;
         private int view;
+        private Author author;
 
-        public PortFolioProfileResponseDto(Long portFolioId, String title, LocalDateTime createdAt, int heartCount, int view) {
+        public PortfolioProfileResponseDto(Long portFolioId, String title, LocalDateTime createdAt, int heartCount, int view) {
             this.portFolioId = portFolioId;
             this.title = title;
             setCreatedAt(createdAt);
             this.heartCount = heartCount;
             this.view = view;
+        }
+
+        public PortfolioProfileResponseDto(Long portFolioId, String title, LocalDateTime createdAt, int heartCount, int view, Member member) {
+            this.portFolioId = portFolioId;
+            this.title = title;
+            setCreatedAt(createdAt);
+            this.heartCount = heartCount;
+            this.view = view;
+            author = Author.builder()
+                    .username(member.getUsername())
+                    .memberId(member.getMemberId())
+                    .build();
         }
 
         public void setCreatedAt(LocalDateTime createdAt){

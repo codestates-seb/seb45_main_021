@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.seb_45_main_021.unkwon.audit.Auditable;
+import com.seb_45_main_021.unkwon.comment.entity.Comment;
 import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
 import com.seb_45_main_021.unkwon.project.entity.ProjectStatus;
 
@@ -70,9 +71,13 @@ public class Member extends Auditable {
     List<ProjectCard> projectCardList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
-    @OrderBy("created_at desc")
+    @OrderBy("created_at desc") // 최신순으로 정렬
     @JsonManagedReference
     List<Portfolio> portfolios = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    @JsonManagedReference
+    List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     @JsonIgnore
