@@ -6,8 +6,8 @@ import com.seb_45_main_021.unkwon.heart.service.PortfolioHeartService;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.member.service.MemberService;
 import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
-import com.seb_45_main_021.unkwon.portfolio.mapper.PortFolioMapper;
-import com.seb_45_main_021.unkwon.portfolio.service.PortFolioService;
+import com.seb_45_main_021.unkwon.portfolio.mapper.PortfolioMapper;
+import com.seb_45_main_021.unkwon.portfolio.service.PortfolioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,20 +18,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/hearts")
+@RequestMapping("/portfolio/hearts")
 public class PortfolioHeartController {
 
     private final PortfolioHeartService portfolioHeartService;
-    private final PortFolioService portFolioService;
+    private final PortfolioService portfolioService;
     private final MemberService memberService;
-    private final PortFolioMapper mapper;
+    private final PortfolioMapper mapper;
 
 
 
     @Autowired
-    public PortfolioHeartController(PortfolioHeartService portfolioHeartService, PortFolioService portFolioService, MemberService memberService, PortFolioMapper mapper) {
+    public PortfolioHeartController(PortfolioHeartService portfolioHeartService, PortfolioService portfolioService, MemberService memberService, PortfolioMapper mapper) {
         this.portfolioHeartService = portfolioHeartService;
-        this.portFolioService = portFolioService;
+        this.portfolioService = portfolioService;
         this.memberService = memberService;
 
 
@@ -44,8 +44,7 @@ public class PortfolioHeartController {
                                          @RequestBody PortfolioHeartDto portfolioHeartDto) {
         Long memberId = Long.valueOf(portfolioHeartDto.getMemberId());
         Member member = memberService.findVerifiedMember(memberId);
-
-        Portfolio portFolio = portFolioService.findByPortfolioId(portfolioId);
+        Portfolio portFolio = portfolioService.findByPortfolioId(portfolioId);
         if (portFolio == null) {
             return ResponseEntity.notFound().build();
         }
@@ -64,10 +63,17 @@ public class PortfolioHeartController {
                                                                           @RequestParam(required = false, defaultValue = "1") int page,
                                                                           @RequestParam(required = false, defaultValue = "12") int size ) {
         Page<Portfolio> heartedPortfolios = portfolioHeartService.getHeartedPortfoliosByMemberId(memberId, PageRequest.of(page - 1, size));
-        List<Portfolio> portFolios = heartedPortfolios.getContent();
+
+        List<Portfolio> portfolios = heartedPortfolios.getContent();
 
         return new ResponseEntity(
-                new MultiResponseDto<>(mapper.portfoliosToPortfolioResponseDtos(portFolios),heartedPortfolios),HttpStatus.OK);
+                new MultiResponseDto<>(mapper.portfoliosToPortfolioResponseDtos(portfolios),heartedPortfolios),HttpStatus.OK);
+    }
+
+    @GetMapping("/weekly-top")
+    public ResponseEntity<List<Portfolio>> getTop10PortfoliosByHeartsLast7Days() {
+        List<Portfolio> top10Portfolios = portfolioHeartService.getTop10PortfoliosByHeartsLast7Days();
+        return new ResponseEntity<>(top10Portfolios, HttpStatus.OK);
     }
 
 //    @GetMapping("/portfolioLikes/{portfolioId}")

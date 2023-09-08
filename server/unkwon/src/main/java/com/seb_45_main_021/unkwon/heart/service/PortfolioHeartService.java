@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -30,9 +30,12 @@ public class PortfolioHeartService {
     public PortfolioHeart heart(Member member, Portfolio portFolio){
         PortfolioHeart portfolioHeart = new PortfolioHeart(true,member,portFolio);
 
-        portfolioHeart.setCreatedAt(new Date());
 
-        portFolio.setHeartCount(portFolio.getHeartCount()+1);
+        LocalDateTime localDateTime = LocalDateTime.now(); // 현재 시간을 나타내는 LocalDateTime 객체를 얻습니다.
+        portfolioHeart.setCreatedAt(localDateTime); // 포트폴리오 하트의 생성일자를 설정합니다.
+        portFolio.setHeartCount(portFolio.getHeartCount() + 1);
+
+
         return portfolioHeartRepository.save(portfolioHeart);
     }
 
@@ -53,6 +56,10 @@ public class PortfolioHeartService {
 
         return portfolioHeartRepository.findByMember(member, pageable)
                 .map(PortfolioHeart::getPortFolio);
+    }
+    public List<Portfolio> getTop10PortfoliosByHeartsLast7Days() {
+        LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7);
+        return portfolioHeartRepository.findTop10PortfoliosByHeartsLast7Days(oneWeekAgo);
     }
 
     public List<PortfolioHeart> getHeartByPortfolio(Portfolio portFolio){

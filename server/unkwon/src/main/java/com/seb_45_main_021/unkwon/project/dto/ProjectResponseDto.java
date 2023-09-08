@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -13,39 +15,25 @@ import java.util.List;
 @Builder
 public class ProjectResponseDto {
     private long projectId;
-
+    private int view;
     private long memberId;
-
     private String title;
-
     private int totalPeople;
 
-
-//    private List<ProjectJoinPeople> projectJoinPeople = new ArrayList<>();
-
-
-//    private List<Member> requestPeople;
-
     private LocalDateTime createdAt;
-
     private LocalDateTime modifiedAt;
-
-    private LocalDateTime closedAt;
-
-    private String language;
-
-
-//    private List<Tag> tag = new ArrayList<>();
-
-
+    private String closedAt;
     private String body;
 
+    private List<Long> joinPeople;
+
+    private List<Long> requestPeople;
 
 //    private List<Image> images;
 
-
     private String description;
+    private String[] tags;
+    private String[] lang;
+    private int heartCount;
 
-
-//    private List<ProjectLike> likes;
 }

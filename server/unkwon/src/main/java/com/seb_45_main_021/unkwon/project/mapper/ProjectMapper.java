@@ -1,14 +1,26 @@
 package com.seb_45_main_021.unkwon.project.mapper;
 
 import com.seb_45_main_021.unkwon.commonCode.CommonCode;
+
 import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
+import com.seb_45_main_021.unkwon.heart.entity.ProjectHeart;
 import com.seb_45_main_021.unkwon.member.entity.Member;
-import com.seb_45_main_021.unkwon.portfolio.dto.PortFolioDto;
+import com.seb_45_main_021.unkwon.portfolio.dto.PortfolioDto;
+import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
+import com.seb_45_main_021.unkwon.project.dto.ProjectPatchDto;
+import com.seb_45_main_021.unkwon.project.dto.ProjectPostDto;
+import com.seb_45_main_021.unkwon.project.dto.ProjectRequestDto;
+import com.seb_45_main_021.unkwon.project.dto.ProjectResponseDto;
+
 import com.seb_45_main_021.unkwon.project.dto.*;
+
 import com.seb_45_main_021.unkwon.project.entity.Project;
 import com.seb_45_main_021.unkwon.project.entity.ProjectStatus;
 import org.mapstruct.Mapper;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.Mapping;
+
+
+import java.util.Arrays;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,9 +37,11 @@ public interface ProjectMapper {
 
         project.setTitle(projectPostDto.getTitle());
         project.setTotalPeople(projectPostDto.getTotalPeople());
-        project.setLanguage(projectPostDto.getLanguage());
+        project.setLang(Arrays.toString(projectPostDto.getLang()));
+        project.setTags(Arrays.toString(projectPostDto.getTags()));
         project.setBody(projectPostDto.getBody());
         project.setDescription(projectPostDto.getDescription());
+        project.setClosedAt(projectPostDto.getClosedAt());
 
         return project;
     }
@@ -38,7 +52,8 @@ public interface ProjectMapper {
         project.setProjectId(projectPatchDto.getProjectId());
         project.setTitle(projectPatchDto.getTitle());
         project.setTotalPeople(projectPatchDto.getTotalPeople());
-        project.setLanguage(projectPatchDto.getLanguage());
+        project.setLang(Arrays.toString(projectPatchDto.getLang()));
+        project.setTags(Arrays.toString(projectPatchDto.getTags()));
         project.setBody(projectPatchDto.getBody());
         project.setDescription(projectPatchDto.getDescription());
 
@@ -62,6 +77,34 @@ public interface ProjectMapper {
 
         return projectStatus;
     }
+
+    default ProjectRequestDto projectStatusToprojectRequestDto(ProjectStatus projectStatus) {
+        ProjectRequestDto projectRequestDto = new ProjectRequestDto();
+
+        if (projectStatus.getProject() != null) {
+            long projectId = projectStatus.getProject().getProjectId();
+            projectRequestDto.setProjectId(projectId);
+        }
+
+        if (projectStatus.getMember() != null) {
+            long memberId = projectStatus.getMember().getMemberId();
+            projectRequestDto.setMemberId(memberId);
+        }
+
+        if (projectStatus.getCommonCode() != null) {
+            long commonCodeId = projectStatus.getCommonCode().getCodeId();
+            projectRequestDto.setCommonCodeId(commonCodeId);
+        }
+
+        if (projectStatus.getCommonCode() !=null) {
+            String codeName = projectStatus.getCommonCode().getCodeName();
+            projectRequestDto.setCodeName(codeName);
+        }
+
+        return projectRequestDto;
+
+    }
+
     default ProjectResponseDto projectToProjectResponseDto(Project project) {
 
         ProjectResponseDto projectResponseDto = ProjectResponseDto.builder()
@@ -69,26 +112,76 @@ public interface ProjectMapper {
                 .memberId(project.getMember().getMemberId())
                 .title(project.getTitle())
                 .totalPeople(project.getTotalPeople())
+                .joinPeople(project.getJoinPeople())
+                .requestPeople(project.getRequestPeople())
                 .createdAt(project.getCreatedAt())
                 .modifiedAt(project.getModifiedAt())
                 .closedAt(project.getClosedAt())
-                .language(project.getLanguage())
+                .lang(new String[]{project.getLang()})
+                .tags(new String[]{project.getTags()})
                 .body(project.getBody())
                 .description(project.getDescription())
+                .heartCount(project.getHeartCount())
+                .view(project.getView())
                 .build();
 
         return projectResponseDto;
     }
 
-//    default List<ProjectProfileResponseDto> projectToProfileResponseDto(List<Project> projectList){
-//        return projectList.stream()
-//                .map(project -> new ProjectProfileResponseDto(
-//                        project.getProjectId(),
-//                        project.getTitle(),
-//                        project.getCreatedAt(),
-//                        project.getHeartCount(),
-//                        project.getView()
-//                )).collect(Collectors.toList());
-//    }
+
+    default List<ProjectResponseDto> projectsToProjectResponseDtos(List<Project> projects) {
+        return projects.stream()
+                .map(this::projectToProjectResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    @Mapping(target = "tags", expression = "java(mapping(projectPatchDto.getTags()))")
+    @Mapping(target = "lang", expression = "java(mapping(projectPatchDto.getLang()))")
+    Portfolio projectPatchDtoToPortfolio(ProjectPatchDto projectPatchDto);
+
+    default String mapping(String[] tags) {
+        if (tags == null || tags.length == 0) {
+            return null;
+        }
+        return String.join(",", tags);
+    }
+
+
+
+    default List<ProjectProfileResponseDto> projectToProfileResponseDto(List<Project> projectList){
+        return projectList.stream()
+                .map(project -> new ProjectProfileResponseDto(
+                        project.getProjectId(),
+                        project.getTitle(),
+                        project.getCreatedAt(),
+                        project.getHeartCount(),
+                        project.getView()
+                )).collect(Collectors.toList());
+    }
+
+    default List<ProjectProfileResponseDto> projectHeartListToProfileResponseDto(List<ProjectHeart> projectHeartList){
+        return projectHeartList.stream()
+                .map(projectHeart -> new ProjectProfileResponseDto(
+                        projectHeart.getProject().getProjectId(),
+                        projectHeart.getProject().getTitle(),
+                        projectHeart.getProject().getCreatedAt(),
+                        projectHeart.getProject().getHeartCount(),
+                        projectHeart.getProject().getView(),
+                        projectHeart.getMember()
+                )).collect(Collectors.toList());
+    }
+
+    default List<ProjectProfileResponseDto> supportedProjectsToProfileResponseDto(List<ProjectStatus> projectStatusList){
+        return projectStatusList.stream()
+                .map(projectStatus -> new ProjectProfileResponseDto(
+                        projectStatus.getProject().getProjectId(),
+                        projectStatus.getProject().getTitle(),
+                        projectStatus.getProject().getCreatedAt(),
+                        projectStatus.getProject().getHeartCount(),
+                        projectStatus.getProject().getView(),
+                        projectStatus.getMember()
+                )).collect(Collectors.toList());
+    }
+
 }
 

@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.Arrays;
+import java.util.List;
 
 @Entity
 @Getter
@@ -45,5 +46,14 @@ public class ProjectCard extends Auditable {
 
     public void setTag(String[] tags){
         this.tag = Arrays.toString(tags);
+    }
+    public static List<ProjectCard> changeLocation(List<ProjectCard> projectCardList){
+        while(projectCardList.size() != 3) {projectCardList.add(new ProjectCard());}
+        ProjectCard temp = projectCardList.get(0);
+        projectCardList.add(0, projectCardList.get(1));
+        projectCardList.remove(1);
+        projectCardList.add(1, temp);
+        projectCardList.remove(2);
+        return projectCardList;
     }
 }

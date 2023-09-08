@@ -7,8 +7,6 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PortfolioHeartDto {
+public class ProjectHeartDto {
     private String memberId;
-
-
 }

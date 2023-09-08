@@ -1,5 +1,8 @@
 package com.seb_45_main_021.unkwon.project.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.seb_45_main_021.unkwon.commonCode.CommonCode;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import lombok.AllArgsConstructor;
@@ -20,10 +23,12 @@ public class ProjectStatus { // 프로젝트 지원정보
     private Long projectStatusId;
     @ManyToOne
     @JoinColumn(name = "projectId")
+    @JsonBackReference
     private Project project;
 
     @ManyToOne
     @JoinColumn(name = "memberId")
+    @JsonIgnore
     private Member member;
 
     @ManyToOne

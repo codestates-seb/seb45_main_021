@@ -17,7 +17,7 @@ public interface CommentMapper {
         Member member = new Member();
         member.setMemberId(commentPostDto.getMemberId());
 
-        Portfolio portFolio = new Portfolio();
+        Portfolio portFolio =new Portfolio();
         portFolio.setPortfolioId(commentPostDto.getPortfolioId());
 
         Comment comment = new Comment();
