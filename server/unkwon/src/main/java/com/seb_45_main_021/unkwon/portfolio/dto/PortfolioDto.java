@@ -59,7 +59,7 @@ public class PortfolioDto {
         private String[] tags;
         private String[] lang;
         private int heartCount;
-
+        private boolean IsEmploy;
     }
 
     @Getter

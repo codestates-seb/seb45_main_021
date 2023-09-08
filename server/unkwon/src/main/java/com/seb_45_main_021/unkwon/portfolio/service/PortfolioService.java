@@ -113,9 +113,58 @@ public class PortfolioService {
             return portfolioRepository.findAll(pageable);
         }
     }
+
+    //조회기능 + 구직여부 (언어,태그,인기순)
+    public Page<Portfolio> findIsEmployPortfolios(String[] tags,String[] lang, Pageable pageable){
+
+        if(tags != null && lang != null){
+            Arrays.sort(tags);
+            Arrays.sort(lang);
+
+            StringBuilder tagsLikeQueryBuilder = new StringBuilder("");
+
+            for (int i = 0; i < tags.length; i++) {
+                String temp = "%"+ tags[i] + "%";
+                tagsLikeQueryBuilder.append(temp);
+            }
+
+            StringBuilder langsLikeQueryBuilder = new StringBuilder("");
+
+            for (int i = 0; i < lang.length; i++) {
+                String temp = "%" + lang[i] + "%";
+                langsLikeQueryBuilder.append(temp);
+            }
+            return portfolioRepository.findByTagsAndLangAndIsEmploy(tagsLikeQueryBuilder.toString(),langsLikeQueryBuilder.toString(),pageable);
+        }
+        else if(tags != null){
+            Arrays.sort(tags);
+
+            StringBuilder tagLikeQueryBuilder = new StringBuilder("");
+
+            for (int i = 0; i < tags.length; i++) {
+                String temp = "%"+ tags[i] + "%";
+                tagLikeQueryBuilder.append(temp);
+            }
+            return portfolioRepository.findByTagsAndIsEmploy(tagLikeQueryBuilder.toString(),pageable);
+        }
+        else if(lang != null){
+            Arrays.sort(lang);
+
+            StringBuilder langLikeQueryBuilder = new StringBuilder("");
+
+            for (int i = 0; i < lang.length; i++) {
+                String temp = "%" + lang[i] + "%";
+                langLikeQueryBuilder.append(temp);
+            }
+            return portfolioRepository.findByLangAndIsEmploy(langLikeQueryBuilder.toString(),pageable);
+        }
+        else {
+            return portfolioRepository.findEmployedPortfolios(pageable);
+        }
+    }
+
     // 좋아요 수가 가장 많은 포트폴리오 10개 가져오기
     public Page<Portfolio> getTop10PortfoliosByLikes(Pageable pageable) {
-        // 좋아요 수가 많은 순서로 정렬하고 상위 10개를 가져오는 쿼리를 작성
         return portfolioRepository.findTop10ByOrderByHeartCountDesc(pageable);
     }
 
