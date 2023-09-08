@@ -21,18 +21,18 @@ const StyleSearchButton = styled.div`
   }
 `;
 
-export default function SearchTabButton({ option, optionHandler, type }) {
+export default function SearchTabButton({ optionHandler, searchType }) {
   return (
     <StyleSearchButton>
       <div
-        className={type === 'project' ? 'active' : ''}
-        onClick={() => optionHandler('type', 'project')}
+        className={searchType === 'projects' ? 'active' : ''}
+        onClick={() => optionHandler('searchType', 'projects')}
       >
         프로젝트
       </div>
       <div
-        className={type === 'portfolio' ? 'active' : ''}
-        onClick={() => optionHandler('type', 'portfolio')}
+        className={searchType === 'portfolios' ? 'active' : ''}
+        onClick={() => optionHandler('searchType', 'portfolios')}
       >
         포트폴리오
       </div>
