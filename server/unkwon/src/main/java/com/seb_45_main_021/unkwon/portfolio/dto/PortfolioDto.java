@@ -34,7 +34,8 @@ public class PortfolioDto {
         private String content;
         private String[] tags;
         private String[] lang;
-
+        private boolean IsEmploy;
+        private boolean IsComment;
 
     }
 

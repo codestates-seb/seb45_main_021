@@ -39,7 +39,6 @@ public class Portfolio extends Auditable {
 
     private boolean IsEmploy = true;
 
-
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
     @JsonBackReference

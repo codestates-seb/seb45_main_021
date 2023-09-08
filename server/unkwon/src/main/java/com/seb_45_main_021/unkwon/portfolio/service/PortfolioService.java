@@ -51,6 +51,8 @@ public class PortfolioService {
                 .ifPresent(lang-> findPortfolio.setLang(lang));
         Optional.ofNullable(portFolio.isIsEmploy())
                 .ifPresent(IsEmploy -> findPortfolio.setIsEmploy(IsEmploy));
+        Optional.ofNullable(portFolio.isIsComment())
+                .ifPresent(IsComment -> findPortfolio.setIsComment(IsComment));
 
         return portfolioRepository.save(findPortfolio);
     }
