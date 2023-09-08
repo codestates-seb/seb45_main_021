@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -48,6 +49,8 @@ public class PortfolioService {
                 .ifPresent(tags -> findPortfolio.setTags(tags));
         Optional.ofNullable(portFolio.getLang())
                 .ifPresent(lang-> findPortfolio.setLang(lang));
+        Optional.ofNullable(portFolio.isIsEmploy())
+                .ifPresent(IsEmploy -> findPortfolio.setIsEmploy(IsEmploy));
 
         return portfolioRepository.save(findPortfolio);
     }
@@ -107,6 +110,11 @@ public class PortfolioService {
         else {
             return portfolioRepository.findAll(pageable);
         }
+    }
+    // 좋아요 수가 가장 많은 포트폴리오 10개 가져오기
+    public Page<Portfolio> getTop10PortfoliosByLikes(Pageable pageable) {
+        // 좋아요 수가 많은 순서로 정렬하고 상위 10개를 가져오는 쿼리를 작성
+        return portfolioRepository.findTop10ByOrderByHeartCountDesc(pageable);
     }
 
     public void deletePortfolio(long portfolioId){

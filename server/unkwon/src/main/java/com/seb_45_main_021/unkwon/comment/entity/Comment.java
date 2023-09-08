@@ -1,6 +1,7 @@
 package com.seb_45_main_021.unkwon.comment.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.seb_45_main_021.unkwon.audit.Auditable;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
@@ -26,9 +27,11 @@ public class Comment extends Auditable {
 
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
+    @JsonBackReference
     private Member member;
 
     @ManyToOne
     @JoinColumn(name = "PORTFOLIO_ID")
+    @JsonBackReference
     private Portfolio portFolio;
 }

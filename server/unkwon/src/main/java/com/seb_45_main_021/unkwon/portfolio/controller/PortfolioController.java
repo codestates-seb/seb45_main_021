@@ -8,6 +8,7 @@ import com.seb_45_main_021.unkwon.portfolio.mapper.PortfolioMapper;
 import com.seb_45_main_021.unkwon.portfolio.service.PortfolioService;
 import com.seb_45_main_021.unkwon.utils.UriCreator;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -73,6 +74,7 @@ public class PortfolioController {
                         mapper.portfolioToPortfolioDetailResponseDto(portFolio)), HttpStatus.OK);
     }
 
+    //포트폴리오 검색기능
     @GetMapping("/search")
     public ResponseEntity searchPortfolios(@RequestParam(required = false)String[] tags,
                                            @RequestParam(required = false)String[] lang,
@@ -87,7 +89,19 @@ public class PortfolioController {
                 new MultiResponseDto<>(portfolioResponseDtos,result),HttpStatus.OK);
 
     }
+    //포트폴리오 Top10
+    @GetMapping("/top10")
+    public ResponseEntity getTop10PortfoliosByLikes(@RequestParam(defaultValue = "0") int page,
+                                                    @RequestParam(defaultValue = "10") int size) {
 
+        PageRequest pageable = PageRequest.of(page, size);
+        Page<Portfolio> result = portfolioService.getTop10PortfoliosByLikes(pageable);
+
+        List<PortfolioDto.Response> portfolioResponseDtos = mapper.portfoliosToPortfolioResponseDtos(result.getContent());
+
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(portfolioResponseDtos,result),HttpStatus.OK);
+    }
 
     //포트폴리오 삭제
     @DeleteMapping("/{portfolio-id}")
