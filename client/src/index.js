@@ -8,7 +8,7 @@ import { createGlobalStyle } from 'styled-components';
 import { Provider } from 'react-redux';
 import { store, persistor } from './redux/store';
 import { PersistGate } from 'redux-persist/integration/react';
-
+import { QueryClient, QueryClientProvider } from 'react-query';
 const Global = createGlobalStyle`
  html{
   font-size: 10px;
@@ -30,17 +30,27 @@ const Global = createGlobalStyle`
   cursor:text;
   resize:none;
  }
- 
 `;
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      staleTime: 60000,
+    },
+  },
+});
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
-  <BrowserRouter>
-    <Global />
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <App />
-      </PersistGate>
-    </Provider>
-  </BrowserRouter>,
+  <QueryClientProvider client={queryClient}>
+    <BrowserRouter>
+      <Global />
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <App />
+        </PersistGate>
+      </Provider>
+    </BrowserRouter>
+  </QueryClientProvider>,
 );

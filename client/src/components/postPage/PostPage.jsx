@@ -1,13 +1,16 @@
+import { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router';
+import { useInfiniteQuery } from 'react-query';
+import styled from 'styled-components';
 import TextCoverOver from '../common/TextCoverOver';
 import OneWeekTopTenList from './OneWeekTopTenList';
 import FilterOption from './FilterOption';
-import styled from 'styled-components';
-import Page from '../common/Page';
-import { useNavigate } from 'react-router';
-import { useEffect, useRef, useState } from 'react';
 import SearchTabButton from '../search/SearchTabButton';
+import Page from '../common/Page';
 import mokData from '../../static/portfolio.json';
-
+import { useObserver } from '../../hooks/useObserver';
+import useQueryClear from '../../hooks/useQueryClear';
+import scollToTop from '../../utils/scrollToTop';
 const StylePostList = styled(Page)`
   h3 {
     text-align: center;
@@ -35,60 +38,57 @@ const StylePostList = styled(Page)`
   .hidden {
     display: none;
   }
+  .ref {
+    height: 100px;
+    background-color: white;
+  }
 `;
 
 export default function PostPage({ options, optionHandler, pageType, getApiUrl }) {
   const navigate = useNavigate();
-  const containerRef = useRef(null);
-  const [pageCount, setPageCount] = useState({ currentPage: 0, maxPage: 0 });
+  const bottomTarget = useRef(null);
   const { searchType } = options;
-  const [postData, setPostData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const { currentPage, maxPage } = pageCount;
+  const firstRendering = useRef(true);
+  const queryClear = useQueryClear();
+
+  const fetchPostData = async ({ pageParam = 0 }) => {
+    console.log(getApiUrl(pageParam));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    return {
+      type: getApiUrl(pageParam),
+      data: mokData.portfolios,
+      currentPage: pageParam,
+      maxPage: 4,
+    };
+  };
 
   useEffect(() => {
-    setPageCount((prevCount) => ({ ...prevCount, currentPage: 0 }));
-    setPostData([]);
-  }, [options, pageType, options.searchType]);
+    if (!firstRendering.current) {
+      queryClear();
+      scollToTop(true);
+    } else firstRendering.current = false;
+  }, [options, pageType, searchType]);
 
-  useEffect(() => {
-    console.log('데이터 요청', getApiUrl(currentPage), currentPage);
-    setIsLoading(true);
-    setTimeout(() => {
-      setPostData((prevData) => [...prevData, ...mokData.portfolios]);
-      setIsLoading(false);
-      setPageCount((prevCount) => ({ ...prevCount, maxPage: 4 }));
-    }, 1000);
-  }, [currentPage]);
+  const { data, error, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery(['posts', pageType, options], fetchPostData, {
+      getNextPageParam: (lastPage) => {
+        return lastPage.currentPage <= lastPage.maxPage ? lastPage.currentPage + 1 : undefined;
+      },
+    });
 
-  useEffect(() => {
-    const options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1,
-    };
+  const onIntersect = ([entry]) => entry.isIntersecting && fetchNextPage();
 
-    const handleIntersection = (entries) => {
-      entries.forEach((entry) => {
-        console.log(maxPage, currentPage);
-        if (entry.isIntersecting) {
-          setPageCount((prevCount) => ({ ...prevCount, currentPage: prevCount.currentPage + 1 }));
-          console.log('스크롤 이벤트 감지');
-        }
-      });
-    };
+  useObserver({
+    target: bottomTarget,
+    onIntersect,
+  });
 
-    const observer = new IntersectionObserver(handleIntersection, options);
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
+  const postData = data?.pages.flatMap((page) => page.data).map((el) => el);
 
-    return () => {
-      if (containerRef.current) {
-        observer.unobserve(containerRef.current);
-      }
-    };
-  }, []);
+  if (error) {
+    console.log(error);
+    return;
+  }
 
   return (
     <StylePostList>
@@ -107,15 +107,17 @@ export default function PostPage({ options, optionHandler, pageType, getApiUrl }
           pageType={pageType === 'search' ? searchType : pageType}
         />
       </div>
-      {postData.map((el, i) => (
+      {postData?.map((el, i) => (
         <div key={i} className="content" onClick={() => navigate(`/project/detail/${el.id}`)}>
           {el.title}
         </div>
       ))}
-      {isLoading && <div className="loading">로딩중입니다</div>}
-      <div ref={containerRef} className={`${isLoading || maxPage <= currentPage ? 'hidden' : ''}`}>
-        scroll감지 박스
-      </div>
+
+      {(isLoading || isFetchingNextPage) && <div className="loading">로딩중입니다</div>}
+      <div
+        ref={bottomTarget}
+        className={`${isFetchingNextPage || !hasNextPage ? 'hidden' : 'ref'}`}
+      />
     </StylePostList>
   );
 }
