@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const StyleToggleContainer = styled.div`
@@ -51,11 +51,18 @@ export default function ToggleButton({
   onClickHandler,
   rest,
 }) {
-  const [isOn, setisOn] = useState(defaultValue);
+  const [isOn, setIsOn] = useState(defaultValue);
   const handleToggleClick = () => {
-    setisOn(!isOn);
+    setIsOn(!isOn);
     onClickHandler && onClickHandler(!isOn);
   };
+  
+  useEffect(()=>{
+    if(defaultValue !== undefined) {
+        setIsOn(defaultValue);
+    }
+  },[defaultValue])
+
   return (
     <>
       <StyleToggleContainer

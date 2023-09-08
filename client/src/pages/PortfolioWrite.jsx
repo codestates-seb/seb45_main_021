@@ -7,22 +7,22 @@ import { StyleBorderButton } from '../components/common/Buttons';
 import  useForm  from '../hooks/useForm';
 import Page from './../components/common/Page';
 import useNav from '../hooks/useNav';
-import EnterTag from '../components/project/EnterTag';
-import WriteHeader from '../components/project/WriteHeader';
-import SelectBox from '../components/project/SelectBox';
+import EnterTag from '../components/PfPjPublic/EnterTag';
+import WriteHeader from '../components/PfPjPublic/WriteHeader';
+import SelectBox from '../components/PfPjPublic/SelectBox';
 import useError from '../hooks/useError';
 import { checkValidations } from '../utils/checkValidations';
 import ProGress from '../components/common/ProGress';
 import ToggleButton from '../components/common/ToggleButton';
+import languages from '../static/languages';
+import { portFolioErrorInitData, portFolioWriteInitData, portFolioWriteRule } from '../static/portFolioInit';
 
 const StyleProjectWrite = styled(Page)`
   height:auto;
   background-color: transparent;
   padding-top:6rem;
   font-size:1.6rem;
-  * {
-    border-radius:4px;
-  }
+
   .margin-top-remove {
     margin-top:-20px !important;
   }
@@ -65,56 +65,21 @@ const StyleProjectWrite = styled(Page)`
 
 export default function PortfolioWrite() {
   const {toPortfolio} = useNav();
+  const [dataForm,handleInputChange] = useForm(portFolioWriteInitData);
+  const [errors, handleErrorChange, clearError, setErrors ] = useError(portFolioErrorInitData , portFolioWriteRule);
 
-  const initialState = {
-    title:'',
-    language : '',
-    isComments : false,
-    tags : [],
-    body : '',
-    titleImg : '',
-    imgs : new FormData(),
-    author : {}
-  }
-
-  const initialError = {
-    title : false,
-    body : false,
-    language : false,
-    titleImg: false,
-  }
-
-  const validationRules = {
-    title : {
-      min : 10,
-      max : 30,
-    },
-    language : {
-      min : 1,
-      max : 1,
-    },
-    body : {
-      min : 200,
-      max : 1000,
-    },
-  }
-  
-  const [dataForm,setDataForm] = useForm(initialState, validationRules);
-  const [errors, handleErrorChange, clearError, setErrors ] = useError(initialError ,validationRules);
-  console.log(dataForm);
   const width = '100%';
-  const height = '90rem';
+  const height = '70rem';
 
   //테스트용 언어 옵션들
-  const languagesOptions = [
-    {value : '', label : '-'},
-    {value : 'JAVA', label : 'JAVA'},
-    {value : 'JAVASCRIPT', label : 'JAVASCRIPT'},
-    {value : 'C++', label : 'C++'},
-    {value : 'C#', label : 'C#'},
-    {value : 'RUBY', label : 'RUBY'},
-    {value : 'GO', label : 'GO'},
-  ]
+  const languagesOptions = (() => {
+    const arr = [];
+    arr.push({value : '', label : '-'});
+    for(let i = 0; i < languages.length; i++) {
+      arr.push({value: languages[i], label : languages[i]});
+    }
+    return arr;
+  })()
 
   //errors에 하나라도 있으면 오류 뱉음
   const subMitHandler = () => {
@@ -128,6 +93,7 @@ export default function PortfolioWrite() {
       window.scrollTo(0,0);
     } else {
       console.log('유효성검사에 문제없음');
+      console.log(dataForm);
     }
   }
 
@@ -141,7 +107,7 @@ export default function PortfolioWrite() {
             label={'포트폴리오 제목'}
             width={'100%'}
             onChange={(e)=>{
-              setDataForm(null,e.target.value,'title');
+              handleInputChange(null,e.target.value,'title');
               handleErrorChange(null,e.target.value,'title',checkValidations);
             }}
             placeholder={'최소 10 글자 최대 30글자까지 입력 가능 합니다. (필수)'}
@@ -153,7 +119,7 @@ export default function PortfolioWrite() {
             width={'100%'}
             height={'1.2rem'}
             fontSize={'1.2rem'}
-            comPleteNum={validationRules.title.max}
+            comPleteNum={portFolioWriteRule.title.max}
             proGressNum={dataForm.title.length ?? 0}
             error={dataForm.title.length < 10 ? true : false}
           />
@@ -165,7 +131,7 @@ export default function PortfolioWrite() {
               options={languagesOptions}
               defaultLabel={'-'}
               onClickHandler={(e)=>{
-                setDataForm(null,e,'language')
+                handleInputChange(null,e,'language')
                 handleErrorChange(null,e,'language',checkValidations)
               }}
             />}
@@ -180,16 +146,17 @@ export default function PortfolioWrite() {
                 width='10rem'
                 height='5rem'
                 onClickHandler={()=>{
-                  setDataForm(null, !dataForm.isComments, 'isComments')
+                  handleInputChange(null, !dataForm.isComments, 'isComments')
                 }}
                 defaultValue={dataForm.isComments}
+                hideError={true}
               />
             }
-            margin={false}
             hideError={true}
+            customText={dataForm.isComments ? '허용됨' : '허용되지 않음'}
           />
           
-          <EnterTag width="100%" height="3.5rem" placeholder="태그는 최대 3개까지 등록이 가능합니다." dataForm={dataForm} setDataForm={setDataForm}/>
+          <EnterTag width="100%" height="3.5rem" placeholder="태그는 최대 3개까지 등록이 가능합니다." dataForm={dataForm} handleInputChange={handleInputChange}/>
           
           <Input
             label={'포트폴리오 본문'}
@@ -197,7 +164,7 @@ export default function PortfolioWrite() {
             height={height}
             type={'textarea'}
             onChange={(e)=>{
-              setDataForm(null,e.target.value, 'body')
+              handleInputChange(null,e.target.value, 'body')
               handleErrorChange(null,e.target.value,'body',checkValidations)
             }}
             placeholder={'최소 200 ~ 1000글자까지 입력 가능합니다. (필수)'}
@@ -209,7 +176,7 @@ export default function PortfolioWrite() {
             width={'100%'}
             height={'1.2rem'}
             fontSize={'1.2rem'}
-            comPleteNum={validationRules.body.max}
+            comPleteNum={portFolioWriteRule.body.max}
             proGressNum={dataForm.body.length ?? 0}
             error={dataForm.body.length < 100 ? true : false}
           />
@@ -223,7 +190,7 @@ export default function PortfolioWrite() {
             height={'65rem'}
             number={1}
             dataForm={dataForm}
-            setDataForm={setDataForm}
+            handleInputChange={handleInputChange}
             handleErrorChange={handleErrorChange}
             clearError={clearError}
           />
@@ -234,7 +201,7 @@ export default function PortfolioWrite() {
             height={'65rem'}
             number={7}
             dataForm={dataForm}
-            setDataForm={setDataForm}
+            handleInputChange={handleInputChange}
           />
         </div>
       </div>

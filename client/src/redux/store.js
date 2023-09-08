@@ -1,5 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import userSlice from './userform/userSlice';
+import userSlice from './userForm/userSlice';
 import pageSlice from './usePage/pageSlice';
 import {
   persistStore,

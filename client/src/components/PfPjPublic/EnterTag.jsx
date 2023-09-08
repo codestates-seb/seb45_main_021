@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import Input from '../common/Input';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AiOutlineClose, AiOutlineCloseCircle } from 'react-icons/ai';
 
 
@@ -32,13 +32,25 @@ const Tag = styled.div`
   }
 `;
 
-export default function EnterTag({width, height, placeholder, dataform, setDataForm}) {
-    const [tags,setTags] = useState([]);
+export default function EnterTag({
+    width,
+    height,
+    placeholder,
+    defaultTags = [],
+    handleInputChange
+}) {
+    const [tags,setTags] = useState(defaultTags);
+    useEffect(()=>{
+        if(defaultTags.length) {
+            setTags(defaultTags)
+        }
+    },[defaultTags])
 
     const enterTagHandler = (e) => {
         if(e.code === 'Enter' || e.code === 'NumpadEnter') {
             if(tags.length < 3 && tags.indexOf(e.target.value) === -1) {
                 setTags([e.target.value,...tags]);
+                handleInputChange(null,[e.target.value,...tags],'tags')
             }
             setTimeout(()=>{
                 e.target.value = '';
@@ -55,10 +67,7 @@ export default function EnterTag({width, height, placeholder, dataform, setDataF
                 height={height}
                 placeholder={placeholder}
                 type='text'
-                onKeyDown={(e)=>{
-                    enterTagHandler(e);
-                    setDataForm(null,tags,'tags')
-                }}
+                onKeyDown={(e)=>enterTagHandler(e)}
             >
             </Input>
             <div className='row'>
@@ -71,7 +80,7 @@ export default function EnterTag({width, height, placeholder, dataform, setDataF
                             onClick={()=>{
                                 const newTags = tags.filter((_,i)=>i!==idx);
                                 setTags(newTags)
-                                setDataForm(null,newTags,'tags');
+                                handleInputChange(null,newTags,'tags');
                             }}
                         />
                     </Tag>

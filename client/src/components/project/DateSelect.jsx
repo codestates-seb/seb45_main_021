@@ -1,14 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Select from "../common/Select";
 import { checkValidations } from "../../utils/checkValidations";
 
 export default function DateSelect ({defaultDate ,width, setDataForm, setErrors}) {
     const time = new Date()
-    const [resetDate, setResetDate] = useState([
-        defaultDate.getFullYear(),
-        defaultDate.getMonth()+1,
-        defaultDate.getDate(),
-    ])
+    const [resetDate, setResetDate] = useState([]);
+
+    useEffect(()=>{
+        setResetDate([
+            defaultDate.getFullYear(),
+            defaultDate.getMonth()+1,
+            defaultDate.getDate(),
+        ])
+    },[defaultDate]);
     
     const yearOptions = () => {
         const options = []

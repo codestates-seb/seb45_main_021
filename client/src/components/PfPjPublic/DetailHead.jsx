@@ -2,20 +2,14 @@ import React from 'react';
 import styled from 'styled-components'
 import defaultImg from '../../static/images/userDefaultImg.jpeg'
 import Like from '../common/Like';
-import { dateFormatter } from './../../utils/dateFormatter';
+import { dateFormatter } from '../../utils/dateFormatter';
 import useNav from '../../hooks/useNav';
 import {HiX} from 'react-icons/hi'
-import Tag from '../common/Tag';
 
 const StyleDetailHead = styled.div`
     height : auto;
     padding-bottom:1rem;
-    position:relative;    
-
-    * {
-        border-radius: 4px;
-        transition:all 0.2s;
-    }
+    position:relative;
 
     .project-detail {
         font-size:3rem;
@@ -76,10 +70,6 @@ const Border = styled.div`
     border-bottom : 3px solid var(--black-300);
 `
 
-const TagAdminBox = styled.div`
-    
-`
-
 export default function DetailHead({
     type='project',
     height='15rem',
@@ -94,27 +84,23 @@ export default function DetailHead({
             <h2 className='project-detail'>{type==='project'?'PROJECT':'PORTFOLIO'}</h2>
             <h1 className='project-detail-title'>{detailData.title}</h1>
             <div className='row'>
-                <div className='row author-wrapper'
+                <div
+                    className='row author-wrapper'
                     onClick={()=>toProfile(detailData.author.id)}
                 >
-                    <img src={detailData.author.img.length === 0 ? defaultImg : detailData.author.img} alt='작성자이미지'></img>
+                    <img src={detailData.author.img.length === 0 ? defaultImg : detailData.author.img} alt='작성자이미지'/>
                     <h3>{detailData.author.userName}</h3>
                 </div>
                 <h3>{dateFormatter(detailData.created_At)}</h3>
                 <Like
                     likes={detailData.likes}
                     size={'1.6rem'}
-                ></Like>
+                />
             </div>
             <Border/>
             <HiX
                 onClick={()=>type==='project' ? toProject() : toPortfolio()}
             />
-            <TagAdminBox className='row'>
-                {detailData.tag.map(text=>
-                    <Tag key={text} text={text} type={type}/>
-                )}
-            </TagAdminBox>
         </StyleDetailHead>
     )
 }

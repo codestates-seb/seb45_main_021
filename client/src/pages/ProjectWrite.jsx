@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { styled } from 'styled-components';
 import Input from '../components/common/Input';
 import Select from '../components/common/Select';
@@ -8,24 +8,26 @@ import  useForm  from '../hooks/useForm';
 import DateSelect from '../components/project/DateSelect';
 import Page from './../components/common/Page';
 import useNav from '../hooks/useNav';
-import EnterTag from '../components/project/EnterTag';
-import WriteHeader from '../components/project/WriteHeader';
-import SelectBox from '../components/project/SelectBox';
+import EnterTag from '../components/PfPjPublic/EnterTag';
+import WriteHeader from '../components/PfPjPublic/WriteHeader';
+import SelectBox from '../components/PfPjPublic/SelectBox';
 import useError from '../hooks/useError';
 import { checkValidations } from '../utils/checkValidations';
 import ProGress from '../components/common/ProGress';
+import languages from '../static/languages'
+import api from '../hooks/useAxiosInterceptor';
+import { projectErrorInitData, projectWriteInitData, projectWriteRule } from '../static/projectInit';
 
 const StyleProjectWrite = styled(Page)`
   height:auto;
   background-color: transparent;
   padding-top:6rem;
   font-size:1.6rem;
-  * {
-    border-radius:4px;
-  }
+
   .margin-top-remove {
     margin-top:-20px !important;
   }
+
   .input-container {
     flex:5;
     height:100%;
@@ -60,76 +62,21 @@ const StyleProjectWrite = styled(Page)`
 `
 
 export default function ProjectWrite() {
-  const today = new Date(); // 현재 날짜.
-  const oneWeekLater = new Date(today.setDate(today.getDate() + 7));
   const {toProject} = useNav();
-
-  //수정시에 initialState의 값만 조절해주면 됌
-  const initialState = {
-    title:'',
-    language : '',
-    totalPeople : '',
-    closed_At : oneWeekLater,
-    tags : [],
-    body : '',
-    description : '',
-    titleImg : new FormData(),
-    imgs : new FormData(),
-    author : {}
-  }
-
-  const initialError = {
-    title : false,
-    body : false,
-    language : false,
-    totalPeople : false,
-    titleImg: false,
-  }
-
-  //min과 max의 값이 같으면 값의 존재유무확인, min과 max가 다르면 길이 확인
-  const validationRules = {
-    title : {
-      min : 10,
-      max : 30,
-    },
-    language : {
-      min : 1,
-      max : 1,
-    },
-    totalPeople : {
-      min : 1,
-      max : 1,
-    },
-    closed_At : {
-      min : 1,
-      max : 1,
-    },
-    body : {
-      min : 100,
-      max : 500,
-    },
-    description : {
-      min : 0,
-      max : 200,
-    }
-  }
-  
-  const [dataForm, setDataForm, clearForm] = useForm(initialState);
-  const [errors, handleErrorChange, clearError, setErrors] = useError(initialError ,validationRules);
+  const [dataForm, handleInputChange] = useForm(projectWriteInitData);
+  const [errors, handleErrorChange, clearError, setErrors] = useError(projectErrorInitData, projectWriteRule);
 
   const width = '100%';
   const height = '30rem';
 
-  //테스트용 언어 옵션들
-  const languagesOptions = [
-    {value : '', label : '-'},
-    {value : 'JAVA', label : 'JAVA'},
-    {value : 'JAVASCRIPT', label : 'JAVASCRIPT'},
-    {value : 'C++', label : 'C++'},
-    {value : 'C#', label : 'C#'},
-    {value : 'RUBY', label : 'RUBY'},
-    {value : 'GO', label : 'GO'},
-  ]
+  const languagesOptions = (() => {
+      const arr = [];
+      arr.push({value : '', label : '-'});
+      for(let i = 0; i < languages.length; i++) {
+        arr.push({value: languages[i], label : languages[i]});
+      }
+      return arr;
+  })()
 
   const totalPeopleOptions = [
     {value : '', label : '-'},
@@ -144,8 +91,34 @@ export default function ProjectWrite() {
     {value : '10', label : '10'},
   ]
 
+  const fileHeader = {
+    headers : {
+      'Content-Type': 'multipart/form-data',
+      withCredentials: true
+    }
+  }
+
+  const mergedObjectDataForm = (obj) => {
+    const formData = new FormData();
+
+    for (const key in obj) {
+        const value = obj[key];
+        if (value instanceof FormData) {
+          for (const subValue of value.values()) {
+            formData.append(key, subValue);
+          }
+        } else {
+          // 값이 FormData가 아닌 경우 직렬화하여 새로운 FormData에 추가
+          formData.append(key, JSON.stringify(value));
+        }
+      }
+
+    return formData;
+  }
+
   //errors에 하나라도 있으면 오류 뱉음
   const subMitHandler = () => {
+    console.log(dataForm);
     if(Object.keys(errors).length) {
       console.log('유효성검사에 문제가 존재함');
       const newError = {...errors};
@@ -155,7 +128,17 @@ export default function ProjectWrite() {
       setErrors(newError);
       window.scrollTo(0,0);
     } else {
-      console.log('유효성검사에 문제없음');
+      const requestData = mergedObjectDataForm(dataForm);
+      for(const value of requestData.entries()) {
+        console.log(value);
+      }
+    
+      // api.post('/projects',dataForm,fileHeader)
+      // .then((res)=>{
+      // })
+      // .catch(err=>{
+      //   console.log(err);
+      // })
     }
   }
   
@@ -169,23 +152,23 @@ export default function ProjectWrite() {
             label={'프로젝트 제목'}
             width={'100%'}
             onChange={(e)=>{
-              setDataForm(null,e.target.value,'title');
+              handleInputChange(null,e.target.value,'title');
               handleErrorChange(null,e.target.value,'title',checkValidations);
             }}
             placeholder={'최소 10 글자 최대 30글자까지 입력 가능 합니다. (필수)'}
             type='text'
             maxLength={30}
           />
+
           <ProGress
             className={'margin-top-remove'}
             width={'100%'}
             height={'1.2rem'}
             fontSize={'1.2rem'}
-            comPleteNum={validationRules.title.max}
+            comPleteNum={projectWriteRule.title.max}
             proGressNum={dataForm.title.length ?? 0}
             error={dataForm.title.length < 10 ? true : false}
           />
-
 
           <SelectBox
             text={'사용할 언어를 선택 해주세요.'}
@@ -194,7 +177,7 @@ export default function ProjectWrite() {
               options={languagesOptions}
               defaultLabel={'-'}
               onClickHandler={(e)=>{
-                setDataForm(null,e,'language')
+                handleInputChange(null,e,'language')
                 handleErrorChange(null,e,'language',checkValidations)
               }}
             />}
@@ -209,7 +192,7 @@ export default function ProjectWrite() {
               options={totalPeopleOptions}
               defaultLabel={'-'}
               onClickHandler={(e)=>{
-                setDataForm(null,e, 'totalPeople')
+                handleInputChange(null,e, 'totalPeople')
                 handleErrorChange(null,e,'totalPeople',checkValidations)
               }}
             />}
@@ -220,13 +203,19 @@ export default function ProjectWrite() {
           <SelectBox
             text={'프로젝트 마감 날짜를 선택 해 주세요. (모집 시작은 작성일 기준입니다.)'}
             component={<div className='data-select-container row'>
-              <DateSelect defaultDate={oneWeekLater} width={width} setDataForm={setDataForm} setErrors={handleErrorChange}/>
+              <DateSelect defaultDate={dataForm.closed_At} width={width} handleInputChange={handleInputChange} setErrors={handleErrorChange}/>
             </div>}
             error={errors.closed_At}
             name='마감 날짜'
           />
           
-          <EnterTag width="100%" height="3.5rem" placeholder="태그는 최대 3개까지 등록이 가능합니다." dataForm={dataForm} setDataForm={setDataForm}/>
+          <EnterTag
+            width="100%"
+            height="3.5rem"
+            placeholder="태그는 최대 3개까지 등록이 가능합니다."
+            dataForm={dataForm}
+            handleInputChange={handleInputChange}
+          />
           
           <Input
             label={'기획서'}
@@ -234,7 +223,7 @@ export default function ProjectWrite() {
             height={height}
             type={'textarea'}
             onChange={(e)=>{
-              setDataForm(null,e.target.value, 'body')
+              handleInputChange(null,e.target.value, 'body')
               handleErrorChange(null,e.target.value,'body',checkValidations)
             }}
             placeholder={'최소 100 ~ 500글자까지 입력 가능합니다. (필수)'}
@@ -245,7 +234,7 @@ export default function ProjectWrite() {
             width={'100%'}
             height={'1.2rem'}
             fontSize={'1.2rem'}
-            comPleteNum={validationRules.body.max}
+            comPleteNum={projectWriteRule.body.max}
             proGressNum={dataForm.body.length ?? 0}
             error={dataForm.body.length < 100 ? true : false}
           />
@@ -256,7 +245,7 @@ export default function ProjectWrite() {
             height={height}
             type={'textarea'}
             onChange={(e)=>{
-              setDataForm(null,e.target.value, 'description')
+              handleInputChange(null,e.target.value, 'description')
               handleErrorChange(null,e.target.value, 'description', checkValidations)
             }}
             placeholder={'최대 200글자까지 입력 가능합니다. (선택)'}
@@ -267,7 +256,7 @@ export default function ProjectWrite() {
             width={'100%'}
             height={'1.2rem'}
             fontSize={'1.2rem'}
-            comPleteNum={validationRules.description.max}
+            comPleteNum={projectWriteRule.description.max}
             proGressNum={dataForm.description.length ?? 0}
             error={dataForm.description.length > 200 ? true : false}
           />
@@ -280,7 +269,7 @@ export default function ProjectWrite() {
             height={'65rem'}
             number={1}
             dataForm={dataForm}
-            setDataForm={setDataForm}
+            handleInputChange={handleInputChange}
             handleErrorChange={handleErrorChange}
             clearError={clearError}
           />
@@ -291,8 +280,9 @@ export default function ProjectWrite() {
             height={'65rem'}
             number={7}
             dataForm={dataForm}
-            setDataForm={setDataForm}
+            handleInputChange={handleInputChange}
           />
+
         </div>
       </div>
       <div className='submit-box'>
