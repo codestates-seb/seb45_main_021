@@ -1,29 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { styled } from 'styled-components';
-import { PiUploadSimple } from 'react-icons/pi';
 import useNav from '../../hooks/useNav';
 import { useParams } from 'react-router-dom';
 import api from '../../hooks/useAxiosInterceptor';
-import { updateUser, deleteUser } from '../../redux/userForm/userSlice';
+import { deleteUser } from '../../redux/userForm/userSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import EditPassword from './EditPassword';
 import EditProfile from './EditProfile';
 import Withdrawal from './Withdrawal';
 import ShowProfile from './ShowProfile';
 import { isValidPassword } from './isValid';
-import userDefaultImg from '../../static/images/userDefaultImg.jpeg';
 
 const StyleProfileContainer = styled.div`
   display: flex;
-  padding-top: 3rem;
   gap: 5rem;
+  padding: 1rem;
+  padding-top: 3rem;
   font-size: 2rem;
   .label {
     font-size: 1.5rem;
   }
   .withdrawal {
     position: relative;
-    height: 100%;
+    height: 30vh;
     h3 {
       color: var(--error);
     }
@@ -46,40 +45,43 @@ const StyleProfileContainer = styled.div`
     align-items: center;
   }
   .tagGap {
-    font-size: 1.6rem;
     gap: 1rem;
   }
-  .imgContainer {
-    width: 40%;
+  .imgWrapper {
     position: relative;
-    .userImg {
-      width: 100%;
-      height: 100%;
-      border-radius: 10px;
-      &:hover {
-        filter: brightness(0.8);
-      }
+    width: 50%;
+    height: 100%;
+  }
+  .userImg {
+    width: 100%;
+    border-radius: 20px;
+    &:hover {
+      filter: brightness(0.8);
     }
-    .editImg {
-      position: absolute;
-      top: -20px;
-      right: -20px;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background-color: var(--black-100);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transition: all 0.2s;
+  }
+  .editImg {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    bottom: 10px;
+    right: 10px;
+    border-radius: 50%;
+    background-color: var(--black-100);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s;
+    cursor: pointer;
+    &:active {
+      transform: translateY(2px);
+    }
+    svg {
       cursor: pointer;
-      &:active {
-        transform: translateY(2px);
-      }
-      svg {
-        cursor: pointer;
-      }
     }
+  }
+  .ProfileEdit {
+    width: 100%;
+    height: 100%;
   }
 
   .infoContainer {
@@ -90,7 +92,6 @@ const StyleProfileContainer = styled.div`
     justify-content: space-between;
     gap: 2rem;
     position: relative;
-
     .editProfile {
       position: absolute;
       top: 2rem;
@@ -110,47 +111,35 @@ const StyleProfileContainer = styled.div`
       font-size: 3rem;
       font-weight: 700;
     }
+    .editwrapper {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      color: var(--error);
+      gap: 3rem;
+      padding: 1rem 0;
+    }
 
     .gap {
-      gap: 1rem;
+      gap: 2rem;
     }
     .infoInner {
       position: relative;
+      padding-left: 3rem;
+      width: 100%;
       .info {
+        height: 100%;
         gap: 2rem;
+        font-size: 2rem;
+        display: flex;
+        justify-content: space-between;
+        p {
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          font-family: var(--nanum);
+        }
       }
     }
-  }
-`;
-
-const EditTagContainer = styled.div`
-  margin-top: 2rem;
-  gap: 2rem;
-  p {
-    cursor: pointer;
-    color: var(--error);
-    &:hover {
-      color: #ed5a5f;
-    }
-  }
-`;
-
-const Tag = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-  position: relative;
-  border-radius: 30px;
-  width: fit-content;
-  height: fit-content;
-  background-color: var(--black-100);
-  color: var(--black);
-  text-align: center;
-  padding: 5px 10px;
-  font-size: 1.2rem;
-  svg {
-    cursor: pointer;
   }
 `;
 
@@ -161,11 +150,11 @@ export default function ProfileCard({ id, data }) {
     email: data.email,
     userName: data.userName,
     userImg: data.userImg,
-    isWorking: data.isWorking,
+    working: data.working,
     age: data.age,
-    tags: data.tags,
+    tag: data.tag,
     aboutMe: data.aboutMe,
-    created_At: data.created_At,
+    createdAt: data.createdAt,
   });
   const [editProfile, setEditProfile] = useState({
     aboutMe: {
@@ -179,12 +168,12 @@ export default function ProfileCard({ id, data }) {
     age: {
       value: profile.age,
     },
-    tags: {
-      value: profile.tags,
+    tag: {
+      value: profile.tag,
       curString: '',
     },
-    isWorking: {
-      value: profile.isWorking,
+    working: {
+      value: profile.working,
     },
   });
   const [editPassword, setEditPassword] = useState({
@@ -201,25 +190,23 @@ export default function ProfileCard({ id, data }) {
       error: '',
     },
   });
-  const { userId } = useParams();
+  const { memberId } = useParams();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
 
   const handleTagKeyDown = (e) => {
     if (e.code !== 'Enter' && e.code !== 'NumpadEnter') return;
     e.preventDefault();
-    if (editProfile.tags.value.length <= 2) {
+    if (editProfile.tag.value.length <= 2) {
       setEditProfile({
         ...editProfile,
-        tags: {
-          value: [...editProfile.tags.value, editProfile.tags.curString],
-          curString: editProfile.tags.curString,
+        tag: {
+          value: [...editProfile.tag.value, editProfile.tag.curString],
+          curString: '',
         },
       });
     }
   };
-
-  useEffect(() => {}, []);
 
   const handleEditProfile = () => {
     console.log('프로필 수정 요청');
@@ -228,12 +215,12 @@ export default function ProfileCard({ id, data }) {
         aboutMe: editProfile.aboutMe.value,
         userName: editProfile.userName.value,
         age: editProfile.age.value,
-        tags: editProfile.tags.value,
-        isWorking: editProfile.isWorking.value,
+        tag: editProfile.tag.value,
+        working: editProfile.working.value,
       };
-      api.patch(`members/${userId}`, responseBody).then(() => {
+      api.patch(`members/${memberId}`, responseBody).then(() => {
         console.log('프로필 수정 성공');
-        toProfile(userId);
+        toProfile(memberId);
       });
     } catch (error) {
       console.log(error);
@@ -257,7 +244,7 @@ export default function ProfileCard({ id, data }) {
           newPassword2: { ...editPassword.newPassword, error: '' },
         });
         api
-          .patch(`/members/password/${userId}`, {
+          .patch(`/members/password/${memberId}`, {
             prevPassword: editPassword.prevPassword,
             newPassword: editPassword.newPassword,
           })
@@ -294,63 +281,25 @@ export default function ProfileCard({ id, data }) {
   const handleClickWithdrawal = () => {
     console.log('회원탈퇴 요청');
     if (window.confirm('정말 탈퇴하시겠습니까 ?')) {
-      api.delete(`/members/${userId}`).then((el) => console.log(el));
+      api.delete(`/members/${memberId}`).then((el) => console.log(el));
       dispatch(deleteUser());
       alert('이용해주셔서 감사합니다.');
       toAbout();
     }
   };
 
-  const fileInputRef = React.createRef();
-
-  const handleClickUserImg = () => {
-    fileInputRef.current.click();
-  };
-
-  const handleFileChange = (e) => {
-    console.log('유저 이미지 교체 요청');
-    const file = e.target.files[0];
-    api.patch(`/members/profileImg/${userId}`).then((el) => {
-      setProfile({ ...profile, userImg: el.data.imgUrl });
-      dispatch(updateUser({ userInfo: { ...user.userInfo, imgUrl: el.data.imgUrl } }));
-    });
-    console.log(file);
-  };
-
   return (
-    <StyleProfileContainer id={id} className="row">
-      <div className="imgContainer">
-        <img
-          className="userImg"
-          src={profile.userImg ? profile.userImg : userDefaultImg}
-          alt="userImage"
-        />
-        {user.isLogin && Number(userId) === user.userInfo.memberId && (
-          <>
-            <input
-              type="file"
-              accept=".png, .jpg, .jpeg"
-              className="hidden"
-              onChange={handleFileChange}
-              ref={fileInputRef}
-            />
-            <div className="editImg" onClick={handleClickUserImg}>
-              <PiUploadSimple color="black" size="30" />
-            </div>
-          </>
-        )}
-      </div>
+    <StyleProfileContainer id={id}>
       <div className="infoContainer col">
         {!isEdit.profile && !isEdit.password && !isEdit.withDrawal && (
           <ShowProfile
             profile={profile}
             isEdit={isEdit}
             setIsEdit={setIsEdit}
-            Tag={Tag}
-            EditTagContainer={EditTagContainer}
+            setProfile={setProfile}
           />
         )}
-        {isEdit.profile && user.isLogin && Number(userId) === user.userInfo.memberId && (
+        {isEdit.profile && user.isLogin && Number(memberId) === user.userInfo.memberId && (
           <EditProfile
             editProfile={editProfile}
             setEditProfile={setEditProfile}
@@ -358,10 +307,9 @@ export default function ProfileCard({ id, data }) {
             setIsEdit={setIsEdit}
             handleTagKeyDown={handleTagKeyDown}
             handleEditProfile={handleEditProfile}
-            Tag={Tag}
           />
         )}
-        {isEdit.password && user.isLogin && Number(userId) === user.userInfo.memberId && (
+        {isEdit.password && user.isLogin && Number(memberId) === user.userInfo.memberId && (
           <EditPassword
             isEdit={isEdit}
             setIsEdit={setIsEdit}
@@ -370,7 +318,7 @@ export default function ProfileCard({ id, data }) {
             handleEditPassword={handleEditPassword}
           />
         )}
-        {isEdit.withDrawal && user.isLogin && Number(userId) === user.userInfo.memberId && (
+        {isEdit.withDrawal && user.isLogin && Number(memberId) === user.userInfo.memberId && (
           <Withdrawal
             handleClickWithdrawal={handleClickWithdrawal}
             isEdit={isEdit}

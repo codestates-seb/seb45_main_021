@@ -7,7 +7,8 @@ const StyleFilterOption = styled.div`
   display: flex;
   width: 100%;
   gap: 15px;
-  align-items: center;
+  height: 47px;
+  align-items: end;
   justify-content: end;
   z-index: 1;
   .select {
@@ -15,8 +16,8 @@ const StyleFilterOption = styled.div`
   }
 `;
 
-export default function FilterOption({ optionHandler, option, type }) {
-  const { employ, lang, sort } = option;
+export default function FilterOption({ optionHandler, options, pageType }) {
+  const { employ, lang, sort } = options;
 
   let defaultLanguages;
 
@@ -28,7 +29,7 @@ export default function FilterOption({ optionHandler, option, type }) {
   });
 
   return (
-    <StyleFilterOption>
+    <StyleFilterOption className="filter-option">
       <Select
         className="selected-box"
         width="20rem"
@@ -45,7 +46,7 @@ export default function FilterOption({ optionHandler, option, type }) {
         onClickHandler={(value) => optionHandler('sort', value)}
       />
 
-      {type === 'portfolio' && (
+      {pageType === 'portfolios' && (
         <CheckBox
           value={employ}
           boxSize="25px"

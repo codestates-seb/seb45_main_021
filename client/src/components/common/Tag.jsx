@@ -10,6 +10,9 @@ const StyleTag = styled.div`
   display: inline;
   transition: all.2s;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
   &:hover {
     background-color: white;
     color: black;
@@ -25,11 +28,11 @@ const StyleTag = styled.div`
  * @returns {JSX.Element}
  */
 
-export default function Tag({ text, type, size, padding }) {
+export default function Tag({ text, type, size, padding, edit }) {
   const { toSearch } = useNav();
 
   return (
-    <StyleTag $padding={padding} $size={size} onClick={() => toSearch(text, type)}>
+    <StyleTag $padding={padding} $size={size} onClick={() => !edit && toSearch(text, type)}>
       {text}
     </StyleTag>
   );

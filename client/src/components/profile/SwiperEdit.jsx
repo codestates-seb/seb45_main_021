@@ -48,59 +48,59 @@ const Tag = styled.div`
   align-items: center;
   gap: 5px;
   position: relative;
-  border-radius: 30px;
+  border: 1px solid var(--black-400);
+  border-radius: 5px;
+  transition: all.2s;
   width: fit-content;
   height: fit-content;
-  background-color: var(--black-100);
-  color: var(--black);
   text-align: center;
   padding: 5px 10px;
   font-size: 1.2rem;
   svg {
     cursor: pointer;
   }
+  &:hover {
+    background-color: white;
+    color: black;
+  }
 `;
 
 export default function SwiperEdit({ data, idx, handler, type }) {
   const [temp, setTemp] = useState({
     ...data,
-    phone: { value: data.phone, error: '' },
-    tags: data.tags,
+    tell: { value: data.tell, error: '' },
     aboutMe: { value: data.aboutMe, error: '' },
-    title: { value: data.title, error: '' },
+    tag: data.tag,
     curString: '',
   });
   const { toProfile } = useNav();
-  const { userId } = useParams();
+  const { memberId } = useParams();
 
   useEffect(() => {
-    if (temp.tags === undefined) {
+    if (temp.tag[0] === undefined) {
       setTemp({
         ...temp,
-        tags: [],
+        tag: [],
       });
     }
   }, []);
 
   const handleClickSubmit = () => {
-    const isvalidPhone = isValidPhone(temp.phone.value.replace(/-/g, ''));
+    const isvalidPhone = isValidPhone(temp.tell.value.replace(/-/g, ''));
     if (type === 'fetch') {
       if (isvalidPhone && temp.title.value.length <= 20 && temp.aboutMe.value.length <= 200) {
         api
           .patch(`/projectcards/${idx}`, {
-            title: temp.title.value,
-            tag: temp.tags,
-            tell: temp.phone.value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'),
+            tag: temp.tag,
+            tell: temp.tell.value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'),
             aboutMe: temp.aboutMe.value,
           })
           .then((el) => {
             window.alert('수정완료.');
-            toProfile(userId);
+            toProfile(memberId);
           });
       } else if (!isvalidPhone) {
-        setTemp({ ...temp, phone: { ...temp.phone, error: '숫자만 입력해주세요.' } });
-      } else if (temp.title.value.length > 20) {
-        setTemp({ ...temp, title: { ...temp.title, error: '20 글자 이하로 입력해주세요.' } });
+        setTemp({ ...temp, tell: { ...temp.tell, error: '숫자만 입력해주세요.' } });
       } else if (temp.aboutMe.value.length > 200) {
         setTemp({
           ...temp,
@@ -108,17 +108,16 @@ export default function SwiperEdit({ data, idx, handler, type }) {
         });
       }
     } else if (type === 'new') {
-      if (isvalidPhone && temp.title.value.length <= 20 && temp.aboutMe.value.length <= 200) {
+      if (isvalidPhone && temp.aboutMe.value.length <= 200) {
         api
           .post(`/projectcards/${idx}`, {
-            title: temp.title.value,
-            tag: temp.tags,
-            tell: temp.phone.value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'),
+            tag: temp.tag,
+            tell: temp.tell.value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'),
             aboutMe: temp.aboutMe.value,
           })
           .then((el) => {
             window.alert('생성완료.');
-            toProfile(userId);
+            toProfile(memberId);
           });
       }
     }
@@ -131,10 +130,10 @@ export default function SwiperEdit({ data, idx, handler, type }) {
   const handleTagKeyDown = (e) => {
     if (e.code !== 'Enter' && e.code !== 'NumpadEnter') return;
     e.preventDefault();
-    if (temp.tags?.length <= 2) {
+    if (temp.tag?.length <= 2) {
       setTemp({
         ...temp,
-        tags: [...temp.tags, temp.curString],
+        tag: [...temp.tag, temp.curString],
         curString: '',
       });
     }
@@ -146,15 +145,6 @@ export default function SwiperEdit({ data, idx, handler, type }) {
         <AiOutlineCloseCircle color={'var(--error)'} size={40} onClick={handleClickCancel} />
       </div>
       <h3>{`카드 ${type === 'fetch' ? '수정' : '생성'}`}</h3>
-      <Input
-        label="제목"
-        width="100%"
-        type="text"
-        placeholder="20글자까지 작성이 가능합니다."
-        value={temp.title.value || ''}
-        error={temp.title.error}
-        onChange={(e) => setTemp({ ...temp, title: { ...temp.title, value: e.target.value } })}
-      />
       <Input
         label="자기소개"
         width="100%"
@@ -170,9 +160,9 @@ export default function SwiperEdit({ data, idx, handler, type }) {
         width="100%"
         type="text"
         placeholder="- 없이 숫자만 입력해주세요."
-        value={temp.phone.value.replace(/-/g, '') || ''}
-        error={temp.phone.error}
-        onChange={(e) => setTemp({ ...temp, phone: { ...temp.phone, value: e.target.value } })}
+        value={temp.tell.value.replace(/-/g, '') || ''}
+        error={temp.tell.error}
+        onChange={(e) => setTemp({ ...temp, tell: { ...temp.tell, value: e.target.value } })}
       />
       <div className="tagwrapper">
         <Input
@@ -191,7 +181,7 @@ export default function SwiperEdit({ data, idx, handler, type }) {
           onKeyDown={handleTagKeyDown}
         />
         <div className="row gap">
-          {temp.tags?.map((el, i) => (
+          {temp.tag?.map((el, i) => (
             <Tag key={i}>
               {el}
               <AiOutlineClose
@@ -200,7 +190,7 @@ export default function SwiperEdit({ data, idx, handler, type }) {
                 onClick={() =>
                   setTemp({
                     ...temp,
-                    tags: temp.tags.filter((_, idx) => i !== idx),
+                    tag: temp.tag.filter((_, idx) => i !== idx),
                   })
                 }
               />

@@ -30,7 +30,7 @@ const Global = createGlobalStyle`
   cursor:text;
   resize:none;
  }
- 
+
 `;
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

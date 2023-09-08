@@ -3,11 +3,10 @@ import { styled } from 'styled-components';
 import Select from '../common/Select';
 import ListItem from './ListItem';
 import Page from '../common/Page';
-import { tablet, mobile } from '../../static/theme';
 
 const StyleContainer = styled(Page)`
   width: 100%;
-  background-color: var(--black-800);
+  background-color: #00000046;
   gap: 2rem;
   padding: 1rem;
   position: relative;
@@ -40,41 +39,31 @@ const StyleContainer = styled(Page)`
       height: 5rem;
     }
   }
-  .listHeader {
+  table {
+    width: 100%;
+    font-size: 1.5rem;
+    table-layout: fixed;
+  }
+
+  th {
+    padding: 2rem;
     border-bottom: 1px solid var(--black-100);
   }
-  .listWrapper {
-    width: 100%;
-    list-style: none;
-    .title {
-      flex-shrink: 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      width: 60rem;
-      ${tablet} {
-        width: 40rem;
-      }
-      ${mobile} {
-        width: 20rem;
-      }
+  td {
+    padding: 1rem;
+    text-align: center;
+    vertical-align: middle;
+    height: 50px;
+    svg {
+      margin-right: 5px;
+      vertical-align: middle;
     }
-    .views {
-      ${tablet} {
-        display: none;
-      }
-      ${mobile} {
-        display: none;
-      }
-    }
-    .likes {
-      ${tablet} {
-        display: none;
-      }
-      ${mobile} {
-        display: none;
-      }
-    }
+  }
+  td:nth-child(1) {
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 `;
 
@@ -105,20 +94,23 @@ export default function LikeList({ id, data }) {
           fontSize="2rem"
         />
       </div>
-      <ul className="listWrapper col">
-        <li className="listHeader row">
-          <span className="title">제목</span>
-          <span className="author">작성자</span>
-          <span className="created_At">작성시간</span>
-          <span className="views">조회수</span>
-          <span className="likes">좋아요</span>
-        </li>
-        {filter.value === 'portfolio'
-          ? PortFolio.map((el, i) => <ListItem key={i} data={el} type="좋아요/포트폴리오" />)
-          : filter.value === 'project'
-          ? Project.map((el, i) => <ListItem key={i} data={el} type="좋아요/프로젝트" />)
-          : null}
-      </ul>
+      <table>
+        <thead>
+          <tr>
+            <th className="title">제목</th>
+            <th className="author">작성자</th>
+            <th className="created_At">작성시간</th>
+            <th className="views">조회수</th>
+            <th className="likes">좋아요</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filter.value === 'portfolio' &&
+            PortFolio.map((el, i) => <ListItem key={i} data={el} type="좋아요/포트폴리오" />)}
+          {filter.value === 'project' &&
+            Project.map((el, i) => <ListItem key={i} data={el} type="좋아요/프로젝트" />)}
+        </tbody>
+      </table>
     </StyleContainer>
   );
 }

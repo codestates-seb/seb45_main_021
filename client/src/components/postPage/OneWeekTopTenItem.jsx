@@ -19,11 +19,11 @@ const StyleOneWeekTopTenItem = styled.div`
     }
   }
 `;
-export default function OneWeekTopTenItem({ item, ranking, type }) {
+export default function OneWeekTopTenItem({ item, ranking, pageType }) {
   const { title, id } = item;
   const { toProjectDetail, toPortfolioDetail } = useNav();
   const toDetail = () => {
-    type === 'project' ? toProjectDetail(id) : toPortfolioDetail(id);
+    pageType === 'project' ? toProjectDetail(id) : toPortfolioDetail(id);
   };
 
   return (

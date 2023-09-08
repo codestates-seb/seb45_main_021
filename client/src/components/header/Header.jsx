@@ -2,7 +2,7 @@ import React from 'react';
 import useNav from '../../hooks/useNav';
 import { StyleBottomButton } from '../common/Buttons';
 import { styled } from 'styled-components';
-import SearchInput from './SearchInput';
+import SearchBox from './SearchBox';
 import Inner from '../common/Inner';
 import LoginActions from './LoginActions';
 import UnLoginActions from './UnLoginActions';
@@ -39,15 +39,17 @@ const StyleHeader = styled.header`
     align-items: center;
     gap: 1.5rem;
     img {
+      cursor: pointer;
       margin-right: 5px;
       width: 35px;
+      border: 1px solid var(--black-800);
     }
   }
 `;
 
 export default function Header() {
   const { toAbout, toPortfolio, toProject } = useNav();
-  const { isLogin, userInfo } = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user);
   return (
     <StyleHeader id="header">
       <Inner>
@@ -56,9 +58,9 @@ export default function Header() {
           <StyleBottomButton onClick={toProject}>프로젝트</StyleBottomButton>
           <StyleBottomButton onClick={toPortfolio}>포트폴리오</StyleBottomButton>
         </nav>
-        <SearchInput />
+        <SearchBox />
         <nav className="user-actions">
-          {isLogin ? <LoginActions userInfo={userInfo} /> : <UnLoginActions />}
+          {user.isLogin ? <LoginActions userInfo={user?.userInfo} /> : <UnLoginActions />}
         </nav>
       </Inner>
     </StyleHeader>
