@@ -1,6 +1,7 @@
 package com.seb_45_main_021.unkwon.comment.controller;
 
 
+import com.seb_45_main_021.unkwon.auth.userdetails.MemberInfo;
 import com.seb_45_main_021.unkwon.comment.dto.CommentDto;
 import com.seb_45_main_021.unkwon.comment.entity.Comment;
 import com.seb_45_main_021.unkwon.comment.mapper.CommentMapper;
@@ -10,6 +11,7 @@ import com.seb_45_main_021.unkwon.utils.UriCreator;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,13 +50,15 @@ public class CommentController {
     // 댓글 수정
     @PatchMapping("/{comment-id}")
     public ResponseEntity patchComment(@PathVariable("comment-id") @Positive long commentId,
-                                       @Valid @RequestBody CommentDto.PatchDto commentPatchDto) {
+                                       @Valid @RequestBody CommentDto.PatchDto commentPatchDto,
+                                       UsernamePasswordAuthenticationToken token) {
+        MemberInfo memberInfo = (MemberInfo) token.getPrincipal();
 
         commentPatchDto.setCommentId(commentId);
 
         Comment comment = mapper.commentPatchDtoToComment(commentPatchDto);
 
-        Comment updateComment = commentService.updateComment(comment/*, accessToken*/);
+        Comment updateComment = commentService.updateComment(comment,memberInfo);
 
         CommentDto.ResponseDto responseDto = mapper.commentToCommentResponseDto(updateComment);
 
@@ -64,9 +68,10 @@ public class CommentController {
 
     // 댓글 삭제
     @DeleteMapping("/{comment-id}")
-    public ResponseEntity deleteComment(@PathVariable("comment-id") @Positive long commentId/*,
-                                        @RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken*/) {
-        commentService.deleteComment(commentId/*, accessToken*/);
+    public ResponseEntity deleteComment(@PathVariable("comment-id") @Positive long commentId,
+                                        UsernamePasswordAuthenticationToken token) {
+        MemberInfo memberInfo = (MemberInfo) token.getPrincipal();
+        commentService.deleteComment(commentId,memberInfo);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

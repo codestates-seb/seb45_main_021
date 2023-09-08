@@ -1,10 +1,12 @@
 package com.seb_45_main_021.unkwon.comment.service;
 
 
+import com.seb_45_main_021.unkwon.auth.userdetails.MemberInfo;
 import com.seb_45_main_021.unkwon.comment.entity.Comment;
 import com.seb_45_main_021.unkwon.comment.repository.CommentRepository;
 import com.seb_45_main_021.unkwon.exception.BusinessLogicException;
 import com.seb_45_main_021.unkwon.exception.ExceptionCode;
+import com.seb_45_main_021.unkwon.member.entity.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,19 +33,6 @@ public class CommentService {
 
     }
 
-//    public void checkMemberId(long memberId, String accessToken) {
-//
-//        String secretKey = jwtTokenizer.getSecretKey();
-//        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(secretKey);
-//
-//        long findMemberId = jwtTokenizer.getMemberIdFromAccessToken(accessToken, base64EncodedSecretKey);
-//
-//        if (memberId != findMemberId) {
-//            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_MATCHED);
-//        }
-//    }
-
-
     // 댓글 생성
     public Comment createComment(Comment comment) {
         return commentRepository.save(comment);
@@ -51,11 +40,12 @@ public class CommentService {
 
 
     // 댓글 수정
-    public Comment updateComment(Comment comment/*, String accessToken*/) {
+    public Comment updateComment(Comment comment, MemberInfo memberInfo) {
 
         Comment findComment = findVerifiedComment(comment.getCommentId());
 
-//        checkMemberId(findComment.getMember().getMemberId(), accessToken);
+        Member findMember = findComment.getMember();
+        findMember.checkMemberId(memberInfo);
 
         Optional.ofNullable(comment.getContent())
                 .ifPresent(content -> findComment.setContent(content));
@@ -66,10 +56,12 @@ public class CommentService {
 
 
     // 댓글 삭제
-    public void deleteComment(long commentId/*, String accessToken*/) {
+    public void deleteComment(long commentId,MemberInfo memberInfo) {
         Comment findComment = findVerifiedComment(commentId);
 
-//        checkMemberId(findComment.getMember().getMemberId(), accessToken);
+        Member findMember = findComment.getMember();
+
+        findMember.checkMemberId(memberInfo);
 
         commentRepository.delete(findComment);
     }

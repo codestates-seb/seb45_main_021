@@ -1,7 +1,9 @@
 package com.seb_45_main_021.unkwon.portfolio.controller;
 
+import com.seb_45_main_021.unkwon.auth.userdetails.MemberInfo;
 import com.seb_45_main_021.unkwon.dto.MultiResponseDto;
 import com.seb_45_main_021.unkwon.dto.SingleResponseDto;
+import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.portfolio.dto.PortfolioDto;
 import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
 import com.seb_45_main_021.unkwon.portfolio.mapper.PortfolioMapper;
@@ -14,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,11 +55,14 @@ public class PortfolioController {
     //포트폴리오 수정
     @PatchMapping("/{portfolio-id}")
     public ResponseEntity updatePortfolio(@PathVariable("portfolio-id")@Positive long portfolioId,
-                                          @Valid @RequestBody PortfolioDto.Patch portfolioPatchDto){
+                                          @Valid @RequestBody PortfolioDto.Patch portfolioPatchDto,
+                                          UsernamePasswordAuthenticationToken token){
+
+        MemberInfo memberInfo = (MemberInfo) token.getPrincipal();
 
         portfolioPatchDto.setPortfolioId(portfolioId);
 
-        Portfolio portFolio = portfolioService.updatePortfolio(mapper.portfolioPatchDtoToPortfolio(portfolioPatchDto));
+        Portfolio portFolio = portfolioService.updatePortfolio(mapper.portfolioPatchDtoToPortfolio(portfolioPatchDto),memberInfo);
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(
@@ -120,9 +126,12 @@ public class PortfolioController {
 
     //포트폴리오 삭제
     @DeleteMapping("/{portfolio-id}")
-    public ResponseEntity deletePortfolio(@PathVariable("portfolio-id") @Positive long portfolioId){
+    public ResponseEntity deletePortfolio(@PathVariable("portfolio-id") @Positive long portfolioId,
+                                          UsernamePasswordAuthenticationToken token){
 
-        portfolioService.deletePortfolio(portfolioId);
+        MemberInfo memberInfo = (MemberInfo) token.getPrincipal();
+
+        portfolioService.deletePortfolio(portfolioId,memberInfo);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

@@ -1,7 +1,7 @@
 package com.seb_45_main_021.unkwon.heart.controller;
 
+import com.seb_45_main_021.unkwon.auth.userdetails.MemberInfo;
 import com.seb_45_main_021.unkwon.dto.MultiResponseDto;
-import com.seb_45_main_021.unkwon.heart.dto.PortfolioHeartDto;
 import com.seb_45_main_021.unkwon.heart.service.PortfolioHeartService;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.member.service.MemberService;
@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,13 +40,13 @@ public class PortfolioHeartController {
     @PostMapping("/{portfolioId}")
     @ResponseBody
     public ResponseEntity heartPortfolio(@PathVariable Long portfolioId,
-                                         @RequestBody PortfolioHeartDto portfolioHeartDto) {
-        Long memberId = Long.valueOf(portfolioHeartDto.getMemberId());
+                                         UsernamePasswordAuthenticationToken token) {
+        MemberInfo memberInfo = (MemberInfo) token.getPrincipal();
+        Long memberId = memberInfo.getMemberId();
         Member member = memberService.findVerifiedMember(memberId);
 
         Portfolio portfolio = portfolioService.findByPortfolioId(portfolioId);
         if (portfolio == null) {
-
             return ResponseEntity.notFound().build();
         }
 

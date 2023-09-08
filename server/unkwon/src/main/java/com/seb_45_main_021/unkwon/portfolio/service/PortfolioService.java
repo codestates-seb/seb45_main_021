@@ -1,27 +1,29 @@
 package com.seb_45_main_021.unkwon.portfolio.service;
 
+import com.seb_45_main_021.unkwon.auth.jwt.JwtTokenizer;
+import com.seb_45_main_021.unkwon.auth.userdetails.MemberInfo;
 import com.seb_45_main_021.unkwon.exception.BusinessLogicException;
 import com.seb_45_main_021.unkwon.exception.ExceptionCode;
+import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
 import com.seb_45_main_021.unkwon.portfolio.repository.PortfolioRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional
 public class PortfolioService {
     private final PortfolioRepository portfolioRepository;
+    private final JwtTokenizer jwtTokenizer;
 
-    public PortfolioService(PortfolioRepository portfolioRepository) {
+    public PortfolioService(PortfolioRepository portfolioRepository, JwtTokenizer jwtTokenizer) {
         this.portfolioRepository = portfolioRepository;
+        this.jwtTokenizer = jwtTokenizer;
     }
 
     public Portfolio findByPortfolioId(long portfolioId){
@@ -32,14 +34,21 @@ public class PortfolioService {
         return findPortfolio;
     }
 
+
+
+
     public Portfolio createPortfolio(Portfolio portFolio){
 
         return portfolioRepository.save(portFolio);
     }
 
-    public Portfolio updatePortfolio(Portfolio portFolio){
+    public Portfolio updatePortfolio(Portfolio portFolio,MemberInfo memberInfo){
 
         Portfolio findPortfolio = findByPortfolioId(portFolio.getPortfolioId());
+
+        Member findMember = findPortfolio.getMember();
+
+        findMember.checkMemberId(memberInfo);
 
         Optional.ofNullable(portFolio.getTitle())
                 .ifPresent(title -> findPortfolio.setTitle(title));
@@ -168,9 +177,13 @@ public class PortfolioService {
         return portfolioRepository.findTop10ByOrderByHeartCountDesc(pageable);
     }
 
-    public void deletePortfolio(long portfolioId){
-        Portfolio portFolio = findByPortfolioId(portfolioId);
+    public void deletePortfolio(long portfolioId,MemberInfo memberInfo){
+        Portfolio portfolio = findByPortfolioId(portfolioId);
 
-        portfolioRepository.delete(portFolio);
+        Member findMember = portfolio.getMember();
+
+        findMember.checkMemberId(memberInfo);
+
+        portfolioRepository.delete(portfolio);
     }
 }
