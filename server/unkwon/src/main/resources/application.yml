@@ -5,6 +5,7 @@ spring:
     username: root
     password: aass0357!!
 
+
   jpa:
     open-in-view: true
     hibernate:
@@ -44,6 +45,11 @@ spring:
             scope:
               - email
               - profile
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+
 server:
   servlet:
     encoding:

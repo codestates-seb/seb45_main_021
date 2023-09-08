@@ -89,6 +89,21 @@ public class PortfolioController {
                 new MultiResponseDto<>(portfolioResponseDtos,result),HttpStatus.OK);
 
     }
+
+    @GetMapping("/employ/search")
+    public ResponseEntity employSearchPortfolios(@RequestParam(required = false)String[] tags,
+                                           @RequestParam(required = false)String[] lang,
+                                           @PageableDefault(size = 12,sort = "portfolioId",direction = Sort.Direction.DESC)Pageable pageable
+    ){
+
+        Page<Portfolio> result = portfolioService.findIsEmployPortfolios(tags, lang, pageable);
+
+        List<PortfolioDto.Response> portfolioResponseDtos = mapper.portfoliosToPortfolioResponseDtos(result.getContent());
+
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(portfolioResponseDtos,result),HttpStatus.OK);
+
+    }
     //포트폴리오 Top10
     @GetMapping("/top10")
     public ResponseEntity getTop10PortfoliosByLikes(@RequestParam(defaultValue = "0") int page,
