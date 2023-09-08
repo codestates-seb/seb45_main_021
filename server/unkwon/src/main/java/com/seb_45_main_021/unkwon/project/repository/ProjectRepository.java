@@ -1,5 +1,6 @@
 package com.seb_45_main_021.unkwon.project.repository;
 
+import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
 import com.seb_45_main_021.unkwon.project.entity.Project;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,17 +21,18 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     List<Project> findProjectsByAppliedMemberId(Long memberId);
 
     @Query(
-            value = "SELECT * FROM PROJECT AS p WHERE p.tags LIKE :likeQuery",
-            countQuery = "SELECT COUNT(*) FROM PROJECT AS p WHERE p.tags LIKE :likeQuery",
+            value = "SELECT * FROM PROJECT AS p WHERE p.tags LIKE :tagLikeQuery",
+            countQuery = "SELECT COUNT(*) FROM PROJECT AS p WHERE p.tags LIKE :tagLikeQuery",
             nativeQuery = true)
-    Page<Project> getSearchProjectList(String likeQuery, Pageable pageable);
-
+    Page<Project> findByTags(String tagLikeQuery, Pageable pageable);
     @Query(
-            value = "SELECT * FROM PROJECT AS p WHERE p.lang LIKE :likeQuery",
-            countQuery = "SELECT COUNT(*) FROM PROJECT AS p WHERE p.lang LIKE :likeQuery",
+            value = "SELECT * FROM PROJECT AS p WHERE p.lang LIKE :langLikeQuery",
+            countQuery = "SELECT COUNT(*) FROM PROJECT AS p WHERE p.lang LIKE :langLikeQuery",
             nativeQuery = true)
-    Page<Project> getSearchProjectList1(String likeQuery, Pageable pageable);
-    @Query("SELECT p FROM Project p WHERE p.heartAt BETWEEN :startDate AND :endDate ORDER BY p.heartCount DESC")
-    Page<Project> findByHeartAtBetween(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
+    Page<Project> findByLang(String langLikeQuery,Pageable pageable);
+    @Query(value = "SELECT * FROM PROJECT AS p WHERE p.tags LIKE :tagLikeQuery AND p.lang LIKE :langLikeQuery",
+            countQuery = "SELECT COUNT(*) FROM PROJECT AS p WHERE p.tags LIKE :tagsLike AND p.lang LIKE :langsLike",
+            nativeQuery = true)
+    Page<Project> findByTagsAndLang(String tagLikeQuery, String langLikeQuery,Pageable pageable);
 
 }
