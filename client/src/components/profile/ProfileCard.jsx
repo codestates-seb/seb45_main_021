@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
-import { PiUploadSimple } from 'react-icons/pi';
+import { BsCamera } from 'react-icons/bs';
 import useNav from '../../hooks/useNav';
 import { useParams } from 'react-router-dom';
 import api from '../../hooks/useAxiosInterceptor';
@@ -51,7 +51,8 @@ const StyleProfileContainer = styled.div`
     gap: 1rem;
   }
   .imgContainer {
-    width: 40%;
+    width: 50%;
+    height: 50%;
     position: relative;
     .userImg {
       width: 100%;
@@ -306,7 +307,7 @@ export default function ProfileCard({ id, data }) {
               ref={fileInputRef}
             />
             <div className="editImg" onClick={handleClickUserImg}>
-              <PiUploadSimple color="black" size="30" />
+              <BsCamera color="black" size="30" />
             </div>
           </>
         )}

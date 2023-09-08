@@ -12,13 +12,27 @@ import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 const StyleContainer = styled(Page)`
-  width: 100%;
-  height: 100%;
   gap: 2rem;
   padding-top: 6rem;
   display: flex;
   flex-direction: column;
   position: relative;
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: transparent !important;
+    padding: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 20px;
+    background-color: var(--black-100);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: none;
+  }
 `;
 
 const data = {
