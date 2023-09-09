@@ -1185,7 +1185,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="334" parent="302" name="memberId">
-      <AutoIncrement>2</AutoIncrement>
+      <AutoIncrement>8</AutoIncrement>
       <DasType>bigint|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -1283,7 +1283,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <Type>btree</Type>
     </index>
     <column id="356" parent="304" name="portfolioId">
-      <AutoIncrement>2</AutoIncrement>
+      <AutoIncrement>4</AutoIncrement>
       <DasType>bigint|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -1431,7 +1431,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="388" parent="306" name="projectId">
-      <AutoIncrement>15</AutoIncrement>
+      <AutoIncrement>24</AutoIncrement>
       <DasType>bigint|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -1511,7 +1511,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="406" parent="307" name="projectCardId">
-      <AutoIncrement>1</AutoIncrement>
+      <AutoIncrement>3</AutoIncrement>
       <DasType>bigint|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -1620,7 +1620,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="429" parent="309" name="projectStatusId">
-      <AutoIncrement>13</AutoIncrement>
+      <AutoIncrement>26</AutoIncrement>
       <DasType>bigint|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -1641,117 +1641,130 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <DasType>bigint|0s</DasType>
       <Position>5</Position>
     </column>
-    <foreign-key id="434" parent="309" name="FK7tycwjowym95o5belhsjv78wc">
+    <column id="434" parent="309" name="projectCardId">
+      <DasType>bigint|0s</DasType>
+      <Position>6</Position>
+    </column>
+    <foreign-key id="435" parent="309" name="FK7tycwjowym95o5belhsjv78wc">
       <ColNames>memberId</ColNames>
       <RefColNames>memberId</RefColNames>
       <RefTableName>Member</RefTableName>
     </foreign-key>
-    <foreign-key id="435" parent="309" name="FKjypjakol96vqwebqki1hse6h3">
+    <foreign-key id="436" parent="309" name="FKjypjakol96vqwebqki1hse6h3">
       <ColNames>projectId</ColNames>
       <RefColNames>projectId</RefColNames>
       <RefTableName>Project</RefTableName>
     </foreign-key>
-    <foreign-key id="436" parent="309" name="FKtl3slvnpqmsu1s995pgeduh7l">
+    <foreign-key id="437" parent="309" name="FKtl3slvnpqmsu1s995pgeduh7l">
       <ColNames>statusCodeId</ColNames>
       <RefColNames>codeId</RefColNames>
       <RefTableName>CommonCode</RefTableName>
     </foreign-key>
-    <foreign-key id="437" parent="309" name="FKq0obgjnulg9d7v40ik4ld8mbv">
+    <foreign-key id="438" parent="309" name="FKq0obgjnulg9d7v40ik4ld8mbv">
       <ColNames>commonCodeId</ColNames>
       <RefColNames>codeId</RefColNames>
       <RefTableName>CommonCode</RefTableName>
     </foreign-key>
-    <index id="438" parent="309" name="PRIMARY">
+    <foreign-key id="439" parent="309" name="FKrko8qhyfctxt07ygfmxgws3qt">
+      <ColNames>projectCardId</ColNames>
+      <RefColNames>projectCardId</RefColNames>
+      <RefTableName>ProjectCard</RefTableName>
+    </foreign-key>
+    <index id="440" parent="309" name="PRIMARY">
       <ColNames>projectStatusId</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="439" parent="309" name="FK7tycwjowym95o5belhsjv78wc">
+    <index id="441" parent="309" name="FK7tycwjowym95o5belhsjv78wc">
       <ColNames>memberId</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="440" parent="309" name="FKjypjakol96vqwebqki1hse6h3">
+    <index id="442" parent="309" name="FKjypjakol96vqwebqki1hse6h3">
       <ColNames>projectId</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="441" parent="309" name="FKtl3slvnpqmsu1s995pgeduh7l">
+    <index id="443" parent="309" name="FKtl3slvnpqmsu1s995pgeduh7l">
       <ColNames>statusCodeId</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="442" parent="309" name="FKq0obgjnulg9d7v40ik4ld8mbv">
+    <index id="444" parent="309" name="FKq0obgjnulg9d7v40ik4ld8mbv">
       <ColNames>commonCodeId</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="443" parent="309" name="PRIMARY">
+    <index id="445" parent="309" name="FKrko8qhyfctxt07ygfmxgws3qt">
+      <ColNames>projectCardId</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="446" parent="309" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="444" parent="310" name="Project_projectId">
+    <column id="447" parent="310" name="Project_projectId">
       <DasType>bigint|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="445" parent="310" name="joinPeople">
+    <column id="448" parent="310" name="joinPeople">
       <DasType>bigint|0s</DasType>
       <Position>2</Position>
     </column>
-    <foreign-key id="446" parent="310" name="FK1qiv9ntta8f0cqd3fbxy12b0a">
+    <foreign-key id="449" parent="310" name="FK1qiv9ntta8f0cqd3fbxy12b0a">
       <ColNames>Project_projectId</ColNames>
       <RefColNames>projectId</RefColNames>
       <RefTableName>Project</RefTableName>
     </foreign-key>
-    <index id="447" parent="310" name="FK1qiv9ntta8f0cqd3fbxy12b0a">
+    <index id="450" parent="310" name="FK1qiv9ntta8f0cqd3fbxy12b0a">
       <ColNames>Project_projectId</ColNames>
       <Type>btree</Type>
     </index>
-    <column id="448" parent="311" name="Project_projectId">
+    <column id="451" parent="311" name="Project_projectId">
       <DasType>bigint|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="449" parent="311" name="projectHearts_projectHeartId">
+    <column id="452" parent="311" name="projectHearts_projectHeartId">
       <DasType>bigint|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <foreign-key id="450" parent="311" name="FKsk0ihwd914hi5xb0e3laawifq">
+    <foreign-key id="453" parent="311" name="FKsk0ihwd914hi5xb0e3laawifq">
       <ColNames>Project_projectId</ColNames>
       <RefColNames>projectId</RefColNames>
       <RefTableName>Project</RefTableName>
     </foreign-key>
-    <foreign-key id="451" parent="311" name="FK5l0rmmguoeh9kgspm2ce7b62w">
+    <foreign-key id="454" parent="311" name="FK5l0rmmguoeh9kgspm2ce7b62w">
       <ColNames>projectHearts_projectHeartId</ColNames>
       <RefColNames>projectHeartId</RefColNames>
       <RefTableName>ProjectHeart</RefTableName>
     </foreign-key>
-    <index id="452" parent="311" name="UK_dw6flnx8swxng7q84w8vta2vq">
+    <index id="455" parent="311" name="UK_dw6flnx8swxng7q84w8vta2vq">
       <ColNames>projectHearts_projectHeartId</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="453" parent="311" name="FKsk0ihwd914hi5xb0e3laawifq">
+    <index id="456" parent="311" name="FKsk0ihwd914hi5xb0e3laawifq">
       <ColNames>Project_projectId</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="454" parent="311" name="UK_dw6flnx8swxng7q84w8vta2vq">
+    <key id="457" parent="311" name="UK_dw6flnx8swxng7q84w8vta2vq">
       <UnderlyingIndexName>UK_dw6flnx8swxng7q84w8vta2vq</UnderlyingIndexName>
     </key>
-    <column id="455" parent="312" name="Project_projectId">
+    <column id="458" parent="312" name="Project_projectId">
       <DasType>bigint|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="456" parent="312" name="requestPeople">
+    <column id="459" parent="312" name="requestPeople">
       <DasType>bigint|0s</DasType>
       <Position>2</Position>
     </column>
-    <foreign-key id="457" parent="312" name="FKchkjvjgo3q16b937g1d6bsgf1">
+    <foreign-key id="460" parent="312" name="FKchkjvjgo3q16b937g1d6bsgf1">
       <ColNames>Project_projectId</ColNames>
       <RefColNames>projectId</RefColNames>
       <RefTableName>Project</RefTableName>
     </foreign-key>
-    <index id="458" parent="312" name="FKchkjvjgo3q16b937g1d6bsgf1">
+    <index id="461" parent="312" name="FKchkjvjgo3q16b937g1d6bsgf1">
       <ColNames>Project_projectId</ColNames>
       <Type>btree</Type>
     </index>

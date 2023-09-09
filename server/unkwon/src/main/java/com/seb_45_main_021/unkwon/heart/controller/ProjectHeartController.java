@@ -5,6 +5,7 @@ import com.seb_45_main_021.unkwon.heart.dto.ProjectHeartDto;
 import com.seb_45_main_021.unkwon.heart.service.ProjectHeartService;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.member.service.MemberService;
+import com.seb_45_main_021.unkwon.project.dto.response.ProjectTopResponse;
 import com.seb_45_main_021.unkwon.project.entity.Project;
 import com.seb_45_main_021.unkwon.project.mapper.ProjectMapper;
 import com.seb_45_main_021.unkwon.project.service.ProjectService;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/project/hearts")
@@ -36,6 +38,7 @@ public class ProjectHeartController {
 
     }
 
+    // 프로젝트 좋아요 & 좋아요 취소
     @PostMapping("/{projectId}")
     @ResponseBody
     public ResponseEntity heartProject(@PathVariable Long projectId,
@@ -68,6 +71,20 @@ public class ProjectHeartController {
 
         return new ResponseEntity(
                 new MultiResponseDto<>(mapper.projectsToProjectResponseDtos(projects),heartedProjects), HttpStatus.OK);
+    }
+
+    // 프로젝트 주간 인기 게시물
+    @GetMapping("/weekly-top")
+    public ResponseEntity<List<ProjectTopResponse>> getTop10ProjectsByHeartsLast7Days() {
+        List<Project> top10Projects = projectHeartService.getTop10ProjectsByHeartsLast7Days();
+        List<ProjectTopResponse> projectDtosTopResponse = top10Projects.stream()
+                .map(project -> ProjectTopResponse.builder()
+                        .projectId(project.getProjectId())
+                        .title(project.getTitle())
+                        .build())
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(projectDtosTopResponse, HttpStatus.OK);
     }
 
 }
