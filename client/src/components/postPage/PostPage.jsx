@@ -17,8 +17,8 @@ const StylePostList = styled(Page)`
     margin-top: 50px;
   }
   .user-action {
+    display: flex;
     margin-top: 50px;
-    position: relative;
   }
   .infinite {
     border: 1px solid white;

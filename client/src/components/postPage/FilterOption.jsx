@@ -5,9 +5,8 @@ import CheckBox from '../common/CheckBox';
 
 const StyleFilterOption = styled.div`
   display: flex;
-  width: 100%;
   gap: 15px;
-  height: 47px;
+  height: 40px;
   align-items: end;
   justify-content: end;
   z-index: 1;
