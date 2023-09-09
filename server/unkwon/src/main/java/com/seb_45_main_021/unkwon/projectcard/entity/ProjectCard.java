@@ -2,6 +2,7 @@ package com.seb_45_main_021.unkwon.projectcard.entity;
 
 import com.seb_45_main_021.unkwon.audit.Auditable;
 import com.seb_45_main_021.unkwon.member.entity.Member;
+import com.seb_45_main_021.unkwon.project.entity.ProjectStatus;
 import lombok.*;
 
 import javax.persistence.*;
@@ -35,6 +36,10 @@ public class ProjectCard extends Auditable {
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID", nullable = false)
     private Member member;
+
+    @ManyToOne
+    @JoinColumn(name = "PROJECT_STATUS_ID")
+    private ProjectStatus projectStatus;
 
     public ProjectCard(String tell, String title, String aboutMe, Member member, String[] tags) {
         this.title = title;

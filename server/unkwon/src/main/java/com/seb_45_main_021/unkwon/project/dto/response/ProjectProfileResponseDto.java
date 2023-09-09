@@ -1,4 +1,4 @@
-package com.seb_45_main_021.unkwon.project.dto;
+package com.seb_45_main_021.unkwon.project.dto.response;
 
 import com.seb_45_main_021.unkwon.dto.Author;
 import com.seb_45_main_021.unkwon.member.entity.Member;

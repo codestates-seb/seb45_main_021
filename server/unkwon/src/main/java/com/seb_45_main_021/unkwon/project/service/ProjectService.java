@@ -6,15 +6,19 @@ import com.seb_45_main_021.unkwon.exception.BusinessLogicException;
 import com.seb_45_main_021.unkwon.exception.ExceptionCode;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.member.repository.MemberRepository;
+import com.seb_45_main_021.unkwon.project.dto.response.ProjectApplicationStatusResponseDto;
 import com.seb_45_main_021.unkwon.project.entity.Project;
 import com.seb_45_main_021.unkwon.project.entity.ProjectStatus;
 import com.seb_45_main_021.unkwon.project.repository.ProjectRepository;
 import com.seb_45_main_021.unkwon.project.repository.ProjectStatusRepository;
+import com.seb_45_main_021.unkwon.projectcard.dto.response.ProjectCardResponseDto;
+import com.seb_45_main_021.unkwon.projectcard.entity.ProjectCard;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -75,12 +79,15 @@ public class ProjectService {
         findProject.setView(findProject.getView()+1);
         projectRepository.save(findProject);
 
+        // joinPeople 찾기 : '수락됨' 상태의 멤버만 포함
         List<Long> joinPeople = findProject.getProjectStatuses().stream()
                 .filter(ps -> "수락됨".equals(ps.getCommonCode().getCodeValue()))
                 .map(ps -> ps.getMember().getMemberId())
                 .collect(Collectors.toList());
 
+        // requestPeople 찾기: '수락 대기중' 상태의 멤버만 포함
         List<Long> requestPeople = findProject.getProjectStatuses().stream()
+                .filter(ps -> "수락 대기중".equals(ps.getCommonCode().getCodeValue()))
                 .map(ps -> ps.getMember().getMemberId())
                 .collect(Collectors.toList());
 
@@ -88,6 +95,32 @@ public class ProjectService {
         findProject.setRequestPeople(requestPeople);
 
         return findProject;
+    }
+
+    // 특정 프로젝트의 지원현황 조회
+    public ProjectApplicationStatusResponseDto getApplicationStatus(Long projectId) {
+        List<ProjectStatus> acceptedStatuses = projectStatusRepository.findByProject_ProjectIdAndCommonCode_CodeId(projectId, 2L);
+        List<ProjectStatus> waitingStatuses = projectStatusRepository.findByProject_ProjectIdAndCommonCode_CodeId(projectId, 1L);
+
+        List<Member> acceptedMembers = acceptedStatuses.stream()
+                .map(ProjectStatus::getMember)
+                .collect(Collectors.toList());
+
+        List<ProjectCard> waitingCards = waitingStatuses.stream()
+                .map(ProjectStatus::getProjectCard)
+                .collect(Collectors.toList());
+
+        ProjectApplicationStatusResponseDto response = new ProjectApplicationStatusResponseDto();
+        response.setJoinPeople(acceptedMembers.stream().map(member -> new ProjectApplicationStatusResponseDto.JoinPeopleResponseDto(member.getMemberId(), member.getImgUrl(), member.getUsername())).collect(Collectors.toList()));
+        response.setRequestPeople(waitingCards.stream().map(projectCard -> new ProjectCardResponseDto(
+                projectCard.getProjectCardId(),
+                projectCard.getTitle(),
+                projectCard.getAboutMe(),
+                projectCard.getTell(),
+                projectCard.getTag()
+        )).collect(Collectors.toList()));
+
+        return response;
     }
 
     // 프로젝트 조회기능 (언어, 태그, 인기순)
@@ -150,6 +183,39 @@ public class ProjectService {
     // 프로젝트 지원
     public ProjectStatus applyForProject(ProjectStatus projectStatus) {
 
+        Long memberId = projectStatus.getMember().getMemberId();
+        Long projectId = projectStatus.getProject().getProjectId();
+//        Long projectCardId = projectStatus.getProjectcard().getProjectCardId();
+
+        // 0. 해당 memberId와 projectId 조합으로 이미 존재하는 projectStatus 가 있는지 확인
+        Optional<ProjectStatus> existingStatus = projectStatusRepository.findByMember_MemberIdAndProject_ProjectId(memberId, projectId);
+        if (existingStatus.isPresent()) {
+            throw new BusinessLogicException(ExceptionCode.ALREADY_APPLIED);
+        }
+
+        // 1. 지원하는 프로젝트 찾기
+        Project project = projectRepository.findById(projectStatus.getProject().getProjectId())
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PROJECT_NOT_FOUND));
+
+        // 2. '수락 대기중' 상태코드가 존재하는지 검증
+        CommonCode acceptedStatus = commonCodeRepository.findByCodeId(1L)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMMON_CODE_NOT_FOUND));
+
+        // 3. '수락 대기중' 상태코드 넣기
+        projectStatus.setCommonCode(acceptedStatus);
+
+        // 4. 해당 프로젝트 requestPeople 리스트에 지원자의 memberId를 추가
+        List<Long> requestPeople = project.getRequestPeople();
+        if (requestPeople == null) {
+            requestPeople = new ArrayList<>();
+        }
+        requestPeople.add(projectStatus.getMember().getMemberId());
+        project.setRequestPeople(requestPeople);
+
+        // 5. 변경된 Project 엔터티를 저장
+        projectRepository.save(project);
+
+        // 6. 변경된 projectStatus 저장 및 반환
         return projectStatusRepository.save(projectStatus);
     }
 
@@ -258,7 +324,7 @@ public class ProjectService {
         return findMember;
     }
 
-    //    // 전체 프로젝트 조회
+//    // 전체 프로젝트 조회
 //    public Page<Project> findProjects(int page, int size) {
 //
 //        return projectRepository.findAll(

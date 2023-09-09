@@ -1,21 +1,18 @@
 package com.seb_45_main_021.unkwon.project.mapper;
 
-import com.seb_45_main_021.unkwon.commonCode.CommonCode;
-
-import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
 import com.seb_45_main_021.unkwon.heart.entity.ProjectHeart;
 import com.seb_45_main_021.unkwon.member.entity.Member;
-import com.seb_45_main_021.unkwon.portfolio.dto.PortfolioDto;
 import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
-import com.seb_45_main_021.unkwon.project.dto.ProjectPatchDto;
-import com.seb_45_main_021.unkwon.project.dto.ProjectPostDto;
-import com.seb_45_main_021.unkwon.project.dto.ProjectRequestDto;
-import com.seb_45_main_021.unkwon.project.dto.ProjectResponseDto;
+import com.seb_45_main_021.unkwon.project.dto.request.ProjectPatchDto;
+import com.seb_45_main_021.unkwon.project.dto.request.ProjectPostDto;
+import com.seb_45_main_021.unkwon.project.dto.request.ProjectRequestDto;
+import com.seb_45_main_021.unkwon.project.dto.response.ProjectProfileResponseDto;
+import com.seb_45_main_021.unkwon.project.dto.response.ProjectResponseDto;
 
-import com.seb_45_main_021.unkwon.project.dto.*;
-
+import com.seb_45_main_021.unkwon.project.dto.response.ProjectStatusResponseDto;
 import com.seb_45_main_021.unkwon.project.entity.Project;
 import com.seb_45_main_021.unkwon.project.entity.ProjectStatus;
+import com.seb_45_main_021.unkwon.projectcard.entity.ProjectCard;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -71,37 +68,39 @@ public interface ProjectMapper {
         member.setMemberId(projectRequestDto.getMemberId());
         projectStatus.setMember(member);
 
-        CommonCode commonCode = new CommonCode();
-        commonCode.setCodeId(projectRequestDto.getCommonCodeId());
-        projectStatus.setCommonCode(commonCode);
+        ProjectCard projectCard = new ProjectCard();
+        projectCard.setProjectCardId((projectRequestDto.getProjectCardId()));
+        projectStatus.setProjectCard(projectCard);
 
         return projectStatus;
     }
 
-    default ProjectRequestDto projectStatusToprojectRequestDto(ProjectStatus projectStatus) {
-        ProjectRequestDto projectRequestDto = new ProjectRequestDto();
+    default ProjectStatusResponseDto projectStatusToProjectStatusResponseDto(ProjectStatus projectStatus) {
+        ProjectStatusResponseDto projectRequestResponseDto = new ProjectStatusResponseDto();
 
         if (projectStatus.getProject() != null) {
             long projectId = projectStatus.getProject().getProjectId();
-            projectRequestDto.setProjectId(projectId);
+            projectRequestResponseDto.setProjectId(projectId);
         }
 
         if (projectStatus.getMember() != null) {
             long memberId = projectStatus.getMember().getMemberId();
-            projectRequestDto.setMemberId(memberId);
+            String imgUrl = projectStatus.getMember().getImgUrl();
+            String userName = projectStatus.getMember().getUsername();
+            projectRequestResponseDto.setMemberId(memberId);
         }
 
         if (projectStatus.getCommonCode() != null) {
             long commonCodeId = projectStatus.getCommonCode().getCodeId();
-            projectRequestDto.setCommonCodeId(commonCodeId);
+            projectRequestResponseDto.setCommonCodeId(commonCodeId);
         }
 
         if (projectStatus.getCommonCode() !=null) {
             String codeName = projectStatus.getCommonCode().getCodeName();
-            projectRequestDto.setCodeName(codeName);
+            projectRequestResponseDto.setCodeName(codeName);
         }
 
-        return projectRequestDto;
+        return projectRequestResponseDto;
 
     }
 
@@ -128,7 +127,6 @@ public interface ProjectMapper {
         return projectResponseDto;
     }
 
-
     default List<ProjectResponseDto> projectsToProjectResponseDtos(List<Project> projects) {
         return projects.stream()
                 .map(this::projectToProjectResponseDto)
@@ -145,7 +143,6 @@ public interface ProjectMapper {
         }
         return String.join(",", tags);
     }
-
 
 
     default List<ProjectProfileResponseDto> projectToProfileResponseDto(List<Project> projectList){

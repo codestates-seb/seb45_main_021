@@ -2,6 +2,7 @@ package com.seb_45_main_021.unkwon.project.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
 import com.seb_45_main_021.unkwon.heart.entity.ProjectHeart;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import lombok.AllArgsConstructor;
@@ -75,16 +76,14 @@ public class Project {
     @Column(nullable = false)
     private int view;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProjectHeart> projectHearts;
-
     private int heartCount = 0;
-
-    @Column(name = "heart_at")
-    private LocalDateTime heartAt; // 프로젝트가 좋아요를 받은 날짜 및 시간
 
     @ManyToOne
     @JoinColumn(name = "memberId")
     private Member member;
+
+    @OneToMany(mappedBy = "portFolio", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<PortfolioHeart> portfolioHearts = new ArrayList<>();
 
 }

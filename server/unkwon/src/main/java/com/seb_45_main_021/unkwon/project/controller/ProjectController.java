@@ -1,19 +1,18 @@
 package com.seb_45_main_021.unkwon.project.controller;
 
 import com.seb_45_main_021.unkwon.dto.MultiResponseDto;
-import com.seb_45_main_021.unkwon.portfolio.dto.PortfolioDto;
-import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
-import com.seb_45_main_021.unkwon.project.dto.ProjectPatchDto;
-import com.seb_45_main_021.unkwon.project.dto.ProjectPostDto;
-import com.seb_45_main_021.unkwon.project.dto.ProjectRequestDto;
-import com.seb_45_main_021.unkwon.project.dto.ProjectResponseDto;
+import com.seb_45_main_021.unkwon.project.dto.request.ProjectPatchDto;
+import com.seb_45_main_021.unkwon.project.dto.request.ProjectPostDto;
+import com.seb_45_main_021.unkwon.project.dto.request.ProjectRequestDto;
+import com.seb_45_main_021.unkwon.project.dto.response.ProjectApplicationStatusResponseDto;
+import com.seb_45_main_021.unkwon.project.dto.response.ProjectResponseDto;
+import com.seb_45_main_021.unkwon.project.dto.response.ProjectStatusResponseDto;
 import com.seb_45_main_021.unkwon.project.entity.Project;
 import com.seb_45_main_021.unkwon.project.entity.ProjectStatus;
 import com.seb_45_main_021.unkwon.project.mapper.ProjectMapper;
 import com.seb_45_main_021.unkwon.project.service.ProjectService;
 import com.seb_45_main_021.unkwon.utils.UriCreator;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -144,18 +143,31 @@ public class ProjectController {
 
     }
 
-    // 하나의 프로젝트에 대한 지원현황 조회
+    // 하나의 프로젝트에 대한 projectStatus 조회
     @GetMapping("/{projectId}/request")
     public ResponseEntity getRequestPeoples(@PathVariable long projectId) {
 
+        // projectStatus(project, member, commonCode) 목록 가져오기
         List<ProjectStatus> requestPeoples = projectService.findProjectStatus(projectId);
-        List<ProjectRequestDto> response = requestPeoples.stream()
-                .map(mapper::projectStatusToprojectRequestDto)
+
+        // 가져온 projectStatus 에서 ProjectRequestResponseDto 구성하기
+        List<ProjectStatusResponseDto> response = requestPeoples.stream()
+                .map(mapper::projectStatusToProjectStatusResponseDto)
                 .collect(Collectors.toList());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
+
+    // 특정 프로젝트의 지원현황 조회
+    @GetMapping("/{projectId}/application-status")
+    public ResponseEntity<ProjectApplicationStatusResponseDto> getApplicationStatus(@PathVariable Long projectId) {
+
+        ProjectApplicationStatusResponseDto response = projectService.getApplicationStatus(projectId);
+
+        return ResponseEntity.ok(response);
+    }
+
 
     // 내가 게시한 프로젝트 목록
     @GetMapping("/postedBy/{memberId}")
