@@ -10,8 +10,7 @@ import Page from '../common/Page';
 import mokData from '../../static/portfolio.json';
 import { useObserver } from '../../hooks/useObserver';
 import useQueryClear from '../../hooks/useQueryClear';
-import scollToTop from '../../utils/scrollToTop';
-
+import ToTopButton from '../common/ToTopButton';
 const StylePostList = styled(Page)`
   h3 {
     text-align: center;
@@ -66,7 +65,6 @@ export default function PostPage({ options, optionHandler, pageType, getApiUrl }
   useEffect(() => {
     if (!firstRendering.current) {
       queryClear();
-      scollToTop(true);
     } else firstRendering.current = false;
   }, [options, pageType, searchType]);
 
@@ -119,6 +117,7 @@ export default function PostPage({ options, optionHandler, pageType, getApiUrl }
         ref={bottomTarget}
         className={`${isFetchingNextPage || !hasNextPage ? 'hidden' : 'ref'}`}
       />
+      <ToTopButton />
     </StylePostList>
   );
 }
