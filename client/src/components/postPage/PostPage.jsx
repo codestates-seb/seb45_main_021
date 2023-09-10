@@ -12,6 +12,7 @@ import useQueryClear from '../../hooks/useQueryClear';
 import PostList from './PostList';
 import ToTopButton from '../common/ToTopButton';
 import PostSkeletonLoading from './PostSkeletonLoading';
+import Modal from '../common/Modal';
 const StylePostList = styled(Page)`
   h3 {
     text-align: center;
@@ -83,6 +84,7 @@ export default function PostPage({ options, optionHandler, pageType, getApiUrl }
     console.log(error);
     return;
   }
+
   return (
     <StylePostList>
       {pageType === 'search' ? (
@@ -103,7 +105,6 @@ export default function PostPage({ options, optionHandler, pageType, getApiUrl }
       {!!postData?.length && (
         <PostList postData={postData} type={pageType === 'search' ? searchType : pageType} />
       )}
-
       {(isLoading || isFetchingNextPage) && <PostSkeletonLoading />}
       <div
         ref={bottomTarget}

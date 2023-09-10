@@ -39,7 +39,6 @@ export default function PostSkeletonLoading() {
             width={'100%'}
             height={220}
             animation="wave"
-            className="img"
           />
           <div className="content-box col">
             <Skeleton

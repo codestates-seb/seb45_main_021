@@ -121,6 +121,8 @@ export default function SearchBox() {
           autoComplete="off"
           value={searchInput.keyword}
           ref={inputRef}
+          maxLength={20}
+          placeholder="태그를 검색해보세요"
         />
         <button className="search-button">
           <HiOutlineSearch size={22} />

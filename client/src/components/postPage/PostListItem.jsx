@@ -9,7 +9,6 @@ import DateUser from '../common/DateUser';
 
 const StylePostListItem = styled.li`
   border-radius: 3px;
-  position: relative;
   overflow: hidden;
   background-color: var(--backgroundColor);
   min-height: 320px;

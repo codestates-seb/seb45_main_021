@@ -1,93 +1,82 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { StyleBorderButton } from './Buttons';
+import { createPortal } from 'react-dom';
 
-// 사용법
-// const [isOn, setIsOn] = useState(false);
-// const handleModal = (e) => {
-//   setIsOn((prev) => !prev);
-// };
-// {isOn && <Modal setIsOn={handleModal} type="confirm" title="알림" message="앙 찬섭띠" />}
-// <button onClick={handleModal}>123123</button>
-
-const Container = styled.div`
+const StyleModal = styled.div`
   position: fixed;
   z-index: 30;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #0000006c;
-  backdrop-filter: blur(4px);
-  .gap {
-    gap: 2rem;
-  }
-  .Wrapper {
-    background-color: black;
-    border: 1px solid white;
-    border-radius: 10px;
-    padding: 2rem;
-    gap: 10rem;
-    position: relative;
-    svg {
-      position: absolute;
-      width: fit-content;
-      height: fit-content;
-      top: 1rem;
-      right: 1rem;
-      cursor: pointer;
+  background-color: #0000007d;
+  .modal-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 500px;
+    background-color: #323232;
+    border-radius: 3px;
+    font-weight: var(--nanum-semi-bold);
+    animation: slideIn 0.3s ease;
+    h4 {
+      padding: 22px;
+      font-size: 1.8rem;
     }
-    h2 {
-      font-size: 5rem;
-      color: var(--black-100);
-    }
-    span {
-      font-size: 2rem;
-    }
-    button {
-      display: flex;
-      justify-content: center;
-      width: 20rem;
-      height: 50px;
-      border-color: green;
-      color: green;
-    }
-    .yes {
-      border-color: var(--error);
-      color: var(--error);
-    }
-    .no {
-      border-color: green;
-      color: green;
+    p {
+      font-size: 1.6rem;
+      padding: 22px;
+      color: var(--black-200);
+      line-height: 10px;
     }
     .button-wrapper {
-      width: 100%;
-      align-items: center;
-      justify-content: center;
+      display: flex;
+      justify-content: end;
+      margin-top: 15px;
+      padding: 8px;
+      button {
+        border-radius: 5px;
+        padding: 8px 15px;
+        &:hover {
+          background-color: var(--black-700);
+        }
+      }
+    }
+  }
+  @keyframes slideIn {
+    0% {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
     }
   }
 `;
+
 /**
  *
- * @param setIsOn - useState 세터 함수 그대로 전달
+ * @param isOpen - 모달의 열거 상태를 전달
+ * @param setIsOpen - setter 함수 그대로 전달
  * @param type - type=alert or confirm or children
  * @param title - 타이틀 문자열 전달 (alert,confirm)
- * @param message - 내용 문자열 전달 (alert,confirm)
+ * @param body - 내용 문자열 전달 (alert,confirm)
  * @param children - 자식 요소 엘리먼트 렌더링 (children)
- * @param checkHandler - 예 버튼 누를시 전달될 함수 (alert,confirm,children)
- * @param cancelHandler - type=confirm 일때 아니오 버튼 누를시 전달될 함수 (confirm,children)
+ * @param confirmHandler - 확인 버튼 클릭시 실행할 함수
+ * @param cancelHandler - 취소 버튼 클릭시 실행할 함수
  * @returns {JSX.Element}
  */
+
 export default function Modal({
-  setIsOn,
-  type,
+  setIsOpen,
+  type = 'confirm',
   title,
-  message,
-  checkHandler,
+  body,
+  confirmHandler,
   cancelHandler,
   children,
 }) {
@@ -98,75 +87,38 @@ export default function Modal({
     };
   }, []);
 
-  return (
-    <Container>
-      <div className="Wrapper col">
-        {type === 'children' && (
+  const modalCloser = () => setIsOpen(false);
+
+  const confirmOnClickHandler = () => {
+    if (confirmHandler) {
+      console.log(confirmHandler);
+      confirmHandler();
+    }
+    modalCloser(false);
+  };
+
+  const cancelOnClickHandler = () => {
+    if (cancelHandler) cancelHandler();
+    modalCloser(false);
+  };
+
+  return createPortal(
+    <StyleModal onClick={modalCloser}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        {children ? (
+          { children }
+        ) : (
           <>
-            {children}
-            <div className="row gap button-wrapper">
-              <StyleBorderButton
-                className="yes"
-                onClick={() => {
-                  if (checkHandler) checkHandler();
-                  setIsOn();
-                }}
-              >
-                예
-              </StyleBorderButton>
-              <StyleBorderButton
-                className="no"
-                onClick={() => {
-                  if (cancelHandler) cancelHandler();
-                  setIsOn();
-                }}
-              >
-                취소
-              </StyleBorderButton>
-            </div>
+            <h4>{title}</h4>
+            <p>{body}</p>
           </>
         )}
-        {type !== 'children' && (
-          <>
-            <h2 className="title">{title}</h2>
-            <span className="message">{message}</span>
-            <div className="row gap button-wrapper">
-              {type === 'alert' && (
-                <StyleBorderButton
-                  onClick={() => {
-                    if (checkHandler) checkHandler();
-                    setIsOn();
-                  }}
-                >
-                  확인
-                </StyleBorderButton>
-              )}
-              {type === 'confirm' && (
-                <>
-                  <StyleBorderButton
-                    className="yes"
-                    onClick={() => {
-                      if (checkHandler) checkHandler();
-                      setIsOn();
-                    }}
-                  >
-                    예
-                  </StyleBorderButton>
-                  <StyleBorderButton
-                    className="no"
-                    onClick={() => {
-                      if (cancelHandler) cancelHandler();
-                      setIsOn();
-                    }}
-                  >
-                    취소
-                  </StyleBorderButton>
-                </>
-              )}
-            </div>
-          </>
-        )}
+        <div className="button-wrapper">
+          <button onClick={confirmOnClickHandler}>확인</button>
+          {type === 'confirm' && <button onClick={cancelOnClickHandler}>취소</button>}
+        </div>
       </div>
-    </Container>
+    </StyleModal>,
+    document.getElementById('modal'),
   );
 }

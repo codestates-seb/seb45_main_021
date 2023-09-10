@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import PostListItem from './PostListItem';
-import { mobile, desktop, tablet } from '../../static/theme.js';
+import { desktop, tablet } from '../../static/theme.js';
 const StylePostList = styled.ul`
   padding-top: 25px;
   display: grid;

@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { FaRegHeart } from 'react-icons/fa';
 import { styled } from 'styled-components';
-
+import Modal from './Modal';
+import useNav from '../../hooks/useNav';
 const StyleLike = styled.div`
   display: flex;
   font-size: ${(props) => props.$size || '2rem'};
@@ -26,36 +27,41 @@ const StyleLike = styled.div`
  */
 
 export default function Like({ likes, size, unLikePost, likePost, postId }) {
-  const user = { name: 'myeongin' };
+  const user = {};
   const [userLikes, setUserLikes] = useState([1, 3, 4, 5, 6, 7, 8, 9, 10]);
   const isUserLiked = userLikes.includes(+postId);
-
+  const [isOpen, setIsOpen] = useState(false);
+  const { toSignin } = useNav();
   // ?? 여기서 해당 유저 정보 객체에 하트 리스트를 업데이트 한다고해서 리스트에 있는 하트가 업데이트 되는가?
   // 만약 안된다면 어떻게 할 것인가?
 
   const unLikePostHandler = () => {
-    // 유저 정보의 좋아요 리스트에서, 해당 포스트 아이디 빼기
     setUserLikes((prevLikes) => prevLikes.filter((id) => +id !== +postId));
     // 서버에다가 좋아요 해제 요청
     // unLikePost();
   };
   const likePostHandler = () => {
-    // 유저 정보의 좋아요 리스트에서, 해당 포스트 아이디 넣기
     setUserLikes((prevLikes) => [...prevLikes, +postId]);
     // 서버에다가 좋아요 업데이트 요청
     // likePost();
   };
 
   const likeUpdateHandler = () => {
-    if (!user) {
-      // user가 존재하지 않는다면, 로그인이 필요한 서비스 모달 띄우기
-    } else {
-      isUserLiked ? unLikePostHandler() : likePostHandler();
-    }
+    if (!user.name) {
+      setIsOpen(true);
+    } else isUserLiked ? unLikePostHandler() : likePostHandler();
   };
-
   return (
     <StyleLike $size={size}>
+      {isOpen && (
+        <Modal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          title="로그인이 필요한 서비스입니다"
+          body="로그인 페이지로 이동하시겠습니까?"
+          confirmHandler={toSignin}
+        />
+      )}
       <FaRegHeart
         onClick={likeUpdateHandler}
         color={isUserLiked ? '#ff0000' : 'var(--black-100)'}
