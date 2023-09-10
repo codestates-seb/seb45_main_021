@@ -46,13 +46,15 @@ export default function About() {
   const handleSlideChange = (swiper) => {
     const header = document.getElementById('header');
     setActivePage(swiper.activeIndex);
-    header.style.top = swiper.activeIndex === 0 ? '0' : '-100%';
+    header.style.opacity = swiper.activeIndex === 0 ? '1' : '0';
+    header.style.visibility = swiper.activeIndex === 0 ? 'visible' : 'hidden';
   };
 
   useEffect(() => {
     return () => {
       const header = document.getElementById('header');
-      header.style.top = '0';
+      header.style.opacity = '1';
+      header.style.visibility = 'visible';
     };
   }, []);
 

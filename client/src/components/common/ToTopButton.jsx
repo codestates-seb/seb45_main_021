@@ -15,8 +15,8 @@ const StyleToTopButton = styled.button`
   right: 10vw;
   border-radius: 50%;
   transition: all.2s;
-  opacity: ${(props) => (props.isVisible ? '1' : '0')};
-  visibility: ${(props) => (props.isVisible ? 'visible' : 'hidden')};
+  opacity: ${(props) => (props.$isVisible ? '1' : '0')};
+  visibility: ${(props) => (props.$isVisible ? 'visible' : 'hidden')};
   &:hover {
     border-radius: 10px;
   }
@@ -45,7 +45,7 @@ export default function ToTopButton() {
   };
 
   return (
-    <StyleToTopButton isVisible={isVisible} onClick={() => scrollToTop(true)}>
+    <StyleToTopButton $isVisible={isVisible} onClick={() => scrollToTop(true)}>
       <BiArrowToTop size="35px" />
     </StyleToTopButton>
   );

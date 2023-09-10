@@ -40,10 +40,10 @@ export default function useNav() {
   const toProjectEdit = (id) => navigate(`/project/edit/${id}`);
   const toPortfolioEdit = (id) => navigate(`/portfolio/edit/${id}`);
   const toProjectDetail = (id) => navigate(`/project/detail/${id}`);
-  const toPortfolioDetail = (id) => navigate(`/project/detail/${id}`);
+  const toPortfolioDetail = (id) => navigate(`/portfolio/detail/${id}`);
   const toProfile = (id) => navigate(`/profile/${id}`);
-  const toSearch = (text) => {
-    navigate(`/search?keyword=${text}&searchType=projects`);
+  const toSearch = (text, type) => {
+    navigate(`/search?keyword=${text}&searchType=${type}`);
     queryClear();
   };
 

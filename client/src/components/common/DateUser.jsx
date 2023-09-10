@@ -24,7 +24,7 @@ export default function DateUser({ date, size, user }) {
   const { id, name } = user;
   const { toProfile } = useNav();
   return (
-    <StyleDateUser $size={size}>
+    <StyleDateUser $size={size} className="date-user">
       <span className="user" onClick={() => toProfile(id)}>
         {name}
       </span>

@@ -41,7 +41,7 @@ const StyleDropMenu = styled.div`
   opacity: ${(props) => (props.$isOn ? '1' : '0')};
   max-height: ${(props) => (props.$isOn ? '120px' : '0')};
   transition: all 0.3s;
-
+  backdrop-filter: blur(10px);
   &::-webkit-scrollbar {
     width: 6px;
   }
