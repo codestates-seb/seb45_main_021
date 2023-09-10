@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 import { store, persistor } from './redux/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { desktop, tablet, mobile } from './static/theme';
 const Global = createGlobalStyle`
  html{
   font-size: 10px;
@@ -29,6 +30,18 @@ const Global = createGlobalStyle`
   outline:none;
   cursor:text;
   resize:none;
+ }
+
+ ${desktop} {
+    html {
+      --inner : 80%;
+    }
+ }
+ 
+ ${mobile} {
+    html {
+      --inner : 90%;
+    }
  }
 `;
 
