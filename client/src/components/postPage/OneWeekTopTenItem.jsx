@@ -8,17 +8,14 @@ const StyleOneWeekTopTenItem = styled.div`
   font-weight: var(--nanum-semi-bold);
   gap: 3px;
   text-align: start !important;
-  &:not(:last-child) {
-    margin-bottom: 25px;
-  }
+  padding-top: 2px;
+  display: flex;
+  padding-top: 13px;
   .title {
     cursor: pointer;
-    border-bottom: 1px solid transparent;
-    &:hover {
-      border-color: var(--black-100);
-    }
   }
 `;
+
 export default function OneWeekTopTenItem({ item, ranking, pageType }) {
   const { title, id } = item;
   const { toProjectDetail, toPortfolioDetail } = useNav();
