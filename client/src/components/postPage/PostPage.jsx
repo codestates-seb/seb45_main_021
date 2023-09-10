@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router';
 import { useInfiniteQuery } from 'react-query';
 import styled from 'styled-components';
 import TextCoverOver from '../common/TextCoverOver';
@@ -10,20 +9,19 @@ import Page from '../common/Page';
 import mokData from '../../static/portfolio.json';
 import { useObserver } from '../../hooks/useObserver';
 import useQueryClear from '../../hooks/useQueryClear';
+import PostList from './PostList';
 import ToTopButton from '../common/ToTopButton';
+import PostSkeletonLoading from './PostSkeletonLoading';
 const StylePostList = styled(Page)`
   h3 {
     text-align: center;
-    margin-top: 50px;
+    margin-top: 70px;
   }
   .user-action {
     display: flex;
-    margin-top: 50px;
-  }
-  .infinite {
-    border: 1px solid white;
-    margin-top: 120px;
-    height: 1000px;
+    margin-top: 70px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid var(--black-100);
   }
   .content {
     height: 200px;
@@ -32,20 +30,16 @@ const StylePostList = styled(Page)`
     background-color: #2d2d2d;
   }
   .loading {
+    margin-top: 25px;
     height: 700px;
     background-color: gray;
   }
   .hidden {
     display: none;
   }
-  .ref {
-    height: 100px;
-    background-color: white;
-  }
 `;
 
 export default function PostPage({ options, optionHandler, pageType, getApiUrl }) {
-  const navigate = useNavigate();
   const bottomTarget = useRef(null);
   const { searchType } = options;
   const firstRendering = useRef(true);
@@ -73,6 +67,7 @@ export default function PostPage({ options, optionHandler, pageType, getApiUrl }
       getNextPageParam: (lastPage) => {
         return lastPage.currentPage <= lastPage.maxPage ? lastPage.currentPage + 1 : undefined;
       },
+      staleTime: 10000,
     });
 
   const onIntersect = ([entry]) => entry.isIntersecting && fetchNextPage();
@@ -88,7 +83,6 @@ export default function PostPage({ options, optionHandler, pageType, getApiUrl }
     console.log(error);
     return;
   }
-
   return (
     <StylePostList>
       {pageType === 'search' ? (
@@ -106,13 +100,11 @@ export default function PostPage({ options, optionHandler, pageType, getApiUrl }
           pageType={pageType === 'search' ? searchType : pageType}
         />
       </div>
-      {postData?.map((el, i) => (
-        <div key={i} className="content" onClick={() => navigate(`/project/detail/${el.id}`)}>
-          {el.title}
-        </div>
-      ))}
+      {!!postData?.length && (
+        <PostList postData={postData} type={pageType === 'search' ? searchType : pageType} />
+      )}
 
-      {(isLoading || isFetchingNextPage) && <div className="loading">로딩중입니다</div>}
+      {(isLoading || isFetchingNextPage) && <PostSkeletonLoading />}
       <div
         ref={bottomTarget}
         className={`${isFetchingNextPage || !hasNextPage ? 'hidden' : 'ref'}`}

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { FaRegHeart } from 'react-icons/fa';
 import { styled } from 'styled-components';
 
@@ -24,15 +25,32 @@ const StyleLike = styled.div`
  * @returns {JSX.Element}
  */
 
-export default function Like({ likes, size, unlikePost, likePost }) {
-  const user = null; // 종범이형이 만든 유저 객체의 아이디 뽑아오는 함수
-  const isUserLiked = likes.includes(user);
+export default function Like({ likes, size, unLikePost, likePost, postId }) {
+  const user = { name: 'myeongin' };
+  const [userLikes, setUserLikes] = useState([1, 3, 4, 5, 6, 7, 8, 9, 10]);
+  const isUserLiked = userLikes.includes(+postId);
+
+  // ?? 여기서 해당 유저 정보 객체에 하트 리스트를 업데이트 한다고해서 리스트에 있는 하트가 업데이트 되는가?
+  // 만약 안된다면 어떻게 할 것인가?
+
+  const unLikePostHandler = () => {
+    // 유저 정보의 좋아요 리스트에서, 해당 포스트 아이디 빼기
+    setUserLikes((prevLikes) => prevLikes.filter((id) => +id !== +postId));
+    // 서버에다가 좋아요 해제 요청
+    // unLikePost();
+  };
+  const likePostHandler = () => {
+    // 유저 정보의 좋아요 리스트에서, 해당 포스트 아이디 넣기
+    setUserLikes((prevLikes) => [...prevLikes, +postId]);
+    // 서버에다가 좋아요 업데이트 요청
+    // likePost();
+  };
 
   const likeUpdateHandler = () => {
     if (!user) {
       // user가 존재하지 않는다면, 로그인이 필요한 서비스 모달 띄우기
     } else {
-      isUserLiked ? unlikePost() : likePost();
+      isUserLiked ? unLikePostHandler() : likePostHandler();
     }
   };
 
@@ -42,7 +60,7 @@ export default function Like({ likes, size, unlikePost, likePost }) {
         onClick={likeUpdateHandler}
         color={isUserLiked ? '#ff0000' : 'var(--black-100)'}
       />
-      <span>{likes.length}</span>
+      <span>{likes}</span>
     </StyleLike>
   );
 }
