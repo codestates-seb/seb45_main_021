@@ -16,6 +16,7 @@ import ProGress from '../components/common/ProGress';
 import ToggleButton from '../components/common/ToggleButton';
 import languages from '../static/languages';
 import { portFolioErrorInitData, portFolioWriteInitData, portFolioWriteRule } from '../static/portFolioInit';
+import SubmitBox from '../components/PfPjPublic/SubmitBox';
 
 const StyleProjectWrite = styled(Page)`
   height:auto;
@@ -286,10 +287,14 @@ export default function PortfolioEdit() {
           />
         </div>
       </div>
-      <div className='submit-box'>
-        <StyleBorderButton onClick={subMitHandler}>수정</StyleBorderButton>
-        <StyleBorderButton onClick={toPortfolio}>취소</StyleBorderButton>
-      </div>
+      <SubmitBox
+        submitTitle={'작성 확인'}
+        submitMessage={'댓글 허락하지 않음 선택 시 기존의 댓글들도 보이지 않습니다.'}
+        submitCheckHandler={subMitHandler}
+        cancelTitle={'취소 확인'}
+        cancelMessage={'취소시 작성한 내용은 저장되지 않습니다.'}
+        cancelCheckHandler ={toPortfolio}
+      />
     </StyleProjectWrite>
   );
 }

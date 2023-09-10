@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import TextBox from './TextBox';
 import Tag from '../common/Tag';
 import { dateFormatter } from '../../utils/dateFormatter';
 import { StyleBorderButton } from '../common/Buttons';
+import Modal from '../common/Modal';
+import SubmitCardContainer from '../project/SubmitCardContainer';
+import api from '../../hooks/useAxiosInterceptor';
+import { useSelector } from 'react-redux';
 
 
 export const StyleDetailBody = styled.div`
+    width:100%; 
     .post-data-box {
         flex:4;
         height:auto;
@@ -32,9 +37,28 @@ export default function DetailBody({
     detailData,
     type,
 }) {
-    
+    const [isOnProjectCard, setIsOnProjectCard] = useState(false);
+    const [selectedCard, setSelectedCard] = useState(null);
+    const [isPossibleApply, setIsPossibleApply] = useState(false);
+    const userInfo = useSelector((state)=>state.user);
+
+    useEffect(()=>{
+
+    },[])
+
     return (
         <StyleDetailBody className='row'>
+            {isOnProjectCard && <Modal
+                type={'children'}
+                children={
+                    <SubmitCardContainer
+                        cardList={detailData.requestPeople}
+                        isForSubmit={true}
+                        selectedCard={selectedCard}
+                        setSelectedCard={setSelectedCard}
+                    />}
+                setIsOn={()=>setIsOnProjectCard(!isOnProjectCard)}
+            />}
             <div className='post-data-box col'>
                     <TextBox
                         title={'개발 언어'}
@@ -72,11 +96,15 @@ export default function DetailBody({
                             <p>{`${detailData.totalPeople}명 / ${detailData.joinPeople?.length}명`}</p>
                         }
                     />}
-                {type === 'project' 
-                ?<div className='sticky-box'>
-                    <StyleBorderButton $width={'100%'}>프로젝트 신청하기</StyleBorderButton>
+                {type === 'project' &&
+                <div className='sticky-box'>
+                    <StyleBorderButton 
+                        $width={'100%'}
+                        onClick={()=>setIsOnProjectCard(!isOnProjectCard)}
+                        >프로젝트 신청하기
+                    </StyleBorderButton>
                 </div>
-                : undefined}
+                }
             </div>
             <div className='image-data-box col'>
                 {detailData.imgs.map((url,idx)=>

@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import defaultImg from '../../static/images/userDefaultImg.jpeg'
 import Tag from '../common/Tag';
-import useNav from '../../hooks/useNav';
 
-const StyleApplyCard = styled.div`
+const StyleForSubmitCard = styled.div`
     width:100%;
     padding:2rem;
+    height:300px;
     background-color:rgba(50,50,50,0.8);
+    opacity:${props => props.$selectedCard ? '0.5' : '1'};
+    position:relative;
     .image-container {
         flex:1.3;
         overflow:hidden;
@@ -20,10 +22,6 @@ const StyleApplyCard = styled.div`
             width:100%;
             height:auto;
             object-fit:cover;    
-        }
-        &:hover {
-            cursor:pointer;
-            opacity:0.4;
         }
     }
     .data-box {
@@ -43,46 +41,53 @@ const StyleApplyCard = styled.div`
         font-size:1.5rem;
         font-weight:var(--nanum-normal);
     }
-    .button {
-        &:hover {
-            cursor: pointer;
-            opacity:0.5;
-        }
-    }
     .accept-reject-box {
         margin:1rem;
         gap:1rem;
+    }
+    &:hover{
+        cursor: pointer;
+        opacity:0.5;
+    }
+    &:hover * {
+        pointer-events: none; 
+    }
+    .display-selected {
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform:translate(-50%,-50%);
+        font-size:3rem;
+        font-weight: var(--nanum-bold);
     }
 `
 
 const IntroduceBox = styled.div`
     width:100%;
     /* background-color:white; */
-    height:${props=>props.$isOn ? '10rem' : '0'};
-    overflow:hidden;
+    height: 100%;
     border: 1px solid var(--black-300);
     margin-top:2rem;
-
     > p {
         padding:1rem;
     }
 `
 
-export default function ApplyCard({
+export default function ForSubmitCard({
     cardData,
+    idx,
+    selectedCard,
+    setSelectedCard
 }) {
-    const [isOn, setIsOn] = useState(false);
-    const {toProfile} = useNav();
-    const isOnHandler = () => {
-        setIsOn(!isOn);
-    }
     return (
-        <StyleApplyCard className='col'>
+        <StyleForSubmitCard
+            $selectedCard={selectedCard}
+            className='col'
+            onClick={()=>setSelectedCard(idx)}
+        >  
+            {selectedCard && <p className='display-selected'>카드 선택됨</p>}
             <div className='row'>
-                <div
-                    className='image-container col'
-                    onClick={()=>toProfile(cardData.id)}
-                >
+                <div className='image-container col'>
                     <img src={cardData?.img.length === 0 ? defaultImg : cardData.img} alt='신청자이미지'/>
                     <p>{cardData?.userName}</p>
                 </div>
@@ -104,22 +109,11 @@ export default function ApplyCard({
                         </div>
                     </div>
                     <p>{`연락처 : ${cardData?.hotline}`}</p>
-                    <p
-                        className='see-more-box button'
-                        onClick={isOnHandler}
-                    >{isOn ? '닫기' : '더보기'}</p>
                 </div>
             </div>
-            <IntroduceBox
-                className='row'
-                $isOn={isOn}
-            >
+            <IntroduceBox className='row'>
                 <p>{cardData.body}</p>
             </IntroduceBox>
-            <div className='row accept-reject-box'>
-                <p className='button'>수락</p>
-                <p className='button'>거절</p>
-            </div>
-        </StyleApplyCard>
+        </StyleForSubmitCard>
     );
 }

@@ -8,6 +8,7 @@ import { StyleDetailWrapper, StyleDetailContainer } from './ProjectDetail';
 import AnchorToComment from '../components/portfolio/AncholToComment';
 import Comment from '../components/portfolio/Comment';
 import useNav from '../hooks/useNav';
+import Modal from '../components/common/Modal';
 
 const OnlyAdmin = styled.div`
   width:100%;
@@ -80,6 +81,7 @@ const DummyData = {
 
 export default function ProjectDetail() {
   const [detailData, setDetailData] = useState(DummyData);
+  const [isOnDeleteAlert,setIsOnDeleteAlert] = useState(false);
   const dispatch = useDispatch();
   const loginUserData = useSelector(state=>state.user);
   const isAdmin = true;
@@ -93,14 +95,24 @@ export default function ProjectDetail() {
 
   return (
     <StyleDetailWrapper>
+       {isOnDeleteAlert && <Modal
+        type={'confirm'}
+        title={'정말 삭제 하시겠습니까?'}
+        message={'삭제된 내용은 복귀, 열람이 불가능합니다.'}
+        setIsOn={()=>setIsOnDeleteAlert(!isOnDeleteAlert)}
+        checkHandler={()=>{}}
+      />}
       <StyleDetailContainer className='col'>
         <DetailHead detailData={detailData} type='portfolio'/>
         {isAdmin && <OnlyAdmin className='row'>
           <StyleBorderButton
             $fontSize={fontSize}
-            onClick={()=>toPortfolioEdit(detailData.id)}
-          >수정</StyleBorderButton>
-          <StyleBorderButton $fontSize={fontSize}>삭제</StyleBorderButton>
+            onClick={()=>toPortfolioEdit(detailData.id)}>수정
+          </StyleBorderButton>
+          <StyleBorderButton
+            $fontSize={fontSize}
+            onClick={()=>setIsOnDeleteAlert(!isOnDeleteAlert)}>삭제
+          </StyleBorderButton>
         </OnlyAdmin>}
         <DetailBody
           detailData={detailData} 

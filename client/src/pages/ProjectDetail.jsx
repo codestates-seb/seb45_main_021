@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components'
 import Page from '../components/common/Page';
 import DetailHead from '../components/PfPjPublic/DetailHead';
 import DetailBody from '../components/PfPjPublic/DetailBody';
 import { StyleBorderButton } from '../components/common/Buttons';
 import { useDispatch, useSelector } from 'react-redux';
-import ApplyStatusContainer from '../components/project/ApplyStatusContainer';
+import SubmitCardContainer from '../components/project/SubmitCardContainer';
 import JoinStatusContainet from '../components/project/JoinStatusContainet';
 import useNav from '../hooks/useNav';
+import Modal from '../components/common/Modal';
+import api from '../hooks/useAxiosInterceptor';
 
 export const StyleDetailWrapper = styled(Page)`
   padding-top:6rem;
@@ -122,53 +124,58 @@ const DummyData = {
       tag : ['java','javascript','C++'],
       hotline : '010-1234-5678',
       body : '신청합니다.'
-    },
-    {
-      id : 7,
-      img : '',
-      userName : '신청자3',
-      email:'1234@naver.com',
-      isEmploy : true,
-      tag : ['java','javascript','C++'],
-      hotline : '010-1234-5678',
-      body : '신청합니다.'
     }
   ]
 }
 
 export default function ProjectDetail() {
   const [detailData, setDetailData] = useState(DummyData);
-  const [isOn, setIsOn] = useState(false);
+  const [isOnDetail, setIsOnDetail] = useState(false);
+  const [isOnDeleteAlert, setIsOnDeleteAlert] = useState(false);
+  const [isPossibleApply, setIsPossibleApply] = useState(false);
+  const {toProjectEdit} = useNav();
   const dispatch = useDispatch();
+  //현재 로그인 한 유저 정보
   const loginUserData = useSelector(state=>state.user);
   const isAdmin = true;
-  const {toProjectEdit} = useNav();
-
-  const isOnHandler = () => {
-    setIsOn(!isOn);
-  }
-  
   const fontSize = '1.6rem'
+
+  useEffect(()=>{
+    // api.get()
+    // .then((res)=>{
+      setDetailData({...DummyData});
+      
+    // })
+    
+  },[])
 
   return (
     <StyleDetailWrapper>
+      {isOnDeleteAlert && <Modal
+        type={'confirm'}
+        title={'정말 삭제 하시겠습니까?'}
+        message={'삭제된 내용은 복귀, 열람이 불가능합니다.'}
+        setIsOn={()=>setIsOnDeleteAlert(!isOnDeleteAlert)}
+        checkHandler={()=>{}}
+      />}
       <StyleDetailContainer className='col'>
         <DetailHead detailData={detailData} type='project'/>
         {isAdmin && <OnlyAdmin className='row'>
           <StyleBorderButton
             $fontSize={fontSize}
-            onClick={isOnHandler}
-          >{isOn ? '프로젝트 조회' : '현황 조회'}
+            onClick={()=>setIsOnDetail(!isOnDetail)}
+          >{isOnDetail ? '프로젝트 조회' : '현황 조회'}
           </StyleBorderButton>
           <StyleBorderButton
             $fontSize={fontSize}
             onClick={()=>toProjectEdit(detailData.id)}>수정
           </StyleBorderButton>
           <StyleBorderButton
+            onClick={()=>setIsOnDeleteAlert(!isOnDeleteAlert)}
             $fontSize={fontSize}>삭제
           </StyleBorderButton>
         </OnlyAdmin>}
-        {isAdmin && isOn ? 
+        {isAdmin && isOnDetail ? 
         <div className='row status'>
           <div className='join-people'>
             <h2>참가자 현황</h2>
@@ -177,7 +184,7 @@ export default function ProjectDetail() {
           <div className='vertical-line'/>
           <div className='request-people'>
             <h2>신청자 현황</h2>
-            <ApplyStatusContainer requestPeople={detailData.requestPeople}/>
+            <SubmitCardContainer cardList={detailData.requestPeople}/>
           </div>
         </div>
         : 

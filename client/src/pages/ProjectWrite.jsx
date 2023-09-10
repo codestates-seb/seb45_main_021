@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import Input from '../components/common/Input';
 import Select from '../components/common/Select';
@@ -17,6 +17,8 @@ import ProGress from '../components/common/ProGress';
 import languages from '../static/languages'
 import api from '../hooks/useAxiosInterceptor';
 import { projectErrorInitData, projectWriteInitData, projectWriteRule } from '../static/projectInit';
+import Modal from '../components/common/Modal';
+import SubmitBox from '../components/PfPjPublic/SubmitBox';
 
 const StyleProjectWrite = styled(Page)`
   height:auto;
@@ -65,6 +67,8 @@ export default function ProjectWrite() {
   const {toProject} = useNav();
   const [dataForm, handleInputChange] = useForm(projectWriteInitData);
   const [errors, handleErrorChange, clearError, setErrors] = useError(projectErrorInitData, projectWriteRule);
+  const [isCancelModalOn,setIsCancelModalOn] = useState(false);
+  const [isConfirmWrite,setIsConfirmWrite] = useState(false);
 
   const width = '100%';
   const height = '30rem';
@@ -285,10 +289,14 @@ export default function ProjectWrite() {
 
         </div>
       </div>
-      <div className='submit-box'>
-        <StyleBorderButton onClick={subMitHandler}>게시</StyleBorderButton>
-        <StyleBorderButton onClick={toProject}>취소</StyleBorderButton>
-      </div>
+      <SubmitBox
+        submitTitle={'작성 확인'}
+        submitMessage={'모집 인원은 수정 할 수 없습니다.'}
+        submitCheckHandler={subMitHandler}
+        cancelTitle={'취소 확인'}
+        cancelMessage={'취소시 작성한 내용은 저장되지 않습니다.'}
+        cancelCheckHandler ={toProject}
+      />
     </StyleProjectWrite>
   );
 }
