@@ -176,70 +176,76 @@ export default function SignUp() {
   }, []);
 
   return (
-    <StyleContainer>
-      <h3>회원가입</h3>
-      <div className="row gap bottom">
-        <span>이미 회원이신가요 ?</span>
-        <p onClick={toSignin}>&nbsp;로그인</p>
-      </div>
-      <StyleRowContainer className="row">
-        <StyleColContainer className="col colgap">
-          <StyleBtnContainer onClick={handleClickGoogleBtn}>
-            <FcGoogle className="logo" size={30} />
-            <span>Google 회원가입</span>
-          </StyleBtnContainer>
-          <StyleBtnContainer>
-            <AiFillGithub className="logo" size={30} />
-            <span>Github 회원가입</span>
-          </StyleBtnContainer>
-        </StyleColContainer>
-        <div>
-          <StyleDivider>
-            <span>OR</span>
-          </StyleDivider>
-        </div>
-        <div>
-          <form className="formGap col">
-            <Input
-              label={'이름'}
-              placeholder="이름을 입력해주세요"
-              width="30rem"
-              height="56.22px"
-              fontSize="2rem"
-              type="text"
-              value={username}
-              onChange={handleChangeName}
-              error={error.username}
-            />
-            <Input
-              label={'이메일'}
-              placeholder="username@example.com"
-              width="30rem"
-              height="56.22px"
-              fontSize="2rem"
-              type="text"
-              value={email}
-              onChange={handleChangeEmail}
-              error={error.email}
-            />
-            <Input
-              label={'비밀번호'}
-              placeholder="영어,숫자,특수기호 포함 8글자 이상"
-              width="30rem"
-              height="56.22px"
-              fontSize="2rem"
-              type="password"
-              autoComplete="off"
-              value={password}
-              onChange={handleChangePassword}
-              error={error.password}
-            />
-            <StyleBtnContainer onClick={handleSubmitForm}>
-              <span>회원가입</span>
-            </StyleBtnContainer>
-          </form>
-        </div>
-      </StyleRowContainer>
-    </StyleContainer>
+    <>
+      {isSubmit ? (
+        <Spinner />
+      ) : (
+        <StyleContainer>
+          <h3>회원가입</h3>
+          <div className="row gap bottom">
+            <span>이미 회원이신가요 ?</span>
+            <p onClick={toSignin}>&nbsp;로그인</p>
+          </div>
+          <StyleRowContainer className="row">
+            <StyleColContainer className="col colgap">
+              <StyleBtnContainer onClick={handleClickGoogleBtn}>
+                <FcGoogle className="logo" size={30} />
+                <span>Google 회원가입</span>
+              </StyleBtnContainer>
+              <StyleBtnContainer>
+                <AiFillGithub className="logo" size={30} />
+                <span>Github 회원가입</span>
+              </StyleBtnContainer>
+            </StyleColContainer>
+            <div>
+              <StyleDivider>
+                <span>OR</span>
+              </StyleDivider>
+            </div>
+            <div>
+              <form className="formGap col">
+                <Input
+                  label={'이름'}
+                  placeholder="이름을 입력해주세요"
+                  width="30rem"
+                  height="56.22px"
+                  fontSize="2rem"
+                  type="text"
+                  value={username}
+                  onChange={handleChangeName}
+                  error={error.username}
+                />
+                <Input
+                  label={'이메일'}
+                  placeholder="username@example.com"
+                  width="30rem"
+                  height="56.22px"
+                  fontSize="2rem"
+                  type="text"
+                  value={email}
+                  onChange={handleChangeEmail}
+                  error={error.email}
+                />
+                <Input
+                  label={'비밀번호'}
+                  placeholder="영어,숫자,특수기호 포함 8글자 이상"
+                  width="30rem"
+                  height="56.22px"
+                  fontSize="2rem"
+                  type="password"
+                  autoComplete="off"
+                  value={password}
+                  onChange={handleChangePassword}
+                  error={error.password}
+                />
+                <StyleBtnContainer onClick={handleSubmitForm}>
+                  <span>회원가입</span>
+                </StyleBtnContainer>
+              </form>
+            </div>
+          </StyleRowContainer>
+        </StyleContainer>
+      )}
+    </>
   );
 }
