@@ -1,13 +1,16 @@
 package com.seb_45_main_021.unkwon.portfolio.service;
 
+import com.seb_45_main_021.unkwon.auth.userdetails.MemberInfo;
 import com.seb_45_main_021.unkwon.exception.BusinessLogicException;
 import com.seb_45_main_021.unkwon.exception.ExceptionCode;
+import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
 import com.seb_45_main_021.unkwon.portfolio.repository.PortfolioRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,8 +40,8 @@ public class PortfolioService {
     }
 
     public Portfolio updatePortfolio(Portfolio portFolio){
-
         Portfolio findPortfolio = findByPortfolioId(portFolio.getPortfolioId());
+
 
         Optional.ofNullable(portFolio.getTitle())
                 .ifPresent(title -> findPortfolio.setTitle(title));
@@ -99,9 +102,9 @@ public class PortfolioService {
             StringBuilder langLikeQueryBuilder = new StringBuilder("");
 
             for (int i = 0; i < lang.length; i++) {
-            String temp = "%" + lang[i] + "%";
-            langLikeQueryBuilder.append(temp);
-        }
+                String temp = "%" + lang[i] + "%";
+                langLikeQueryBuilder.append(temp);
+            }
             return portfolioRepository.findByLang(langLikeQueryBuilder.toString(),pageable);
         }
         else {

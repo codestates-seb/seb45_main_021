@@ -5,14 +5,12 @@ import lombok.Getter;
 @Getter
 public class ProjectCardResponseDto {
     private Long projectCardId;
-    private String title;
     private String[] tag;
     private String tell;
     private String aboutMe;
 
-    public ProjectCardResponseDto(Long projectCardId, String title, String aboutMe, String tell, String tag) {
+    public ProjectCardResponseDto(Long projectCardId, String aboutMe, String tell, String tag) {
         this.projectCardId = projectCardId;
-        this.title = title;
         this.aboutMe = aboutMe;
         this.tell = tell;
         this.tag = setTag(tag);

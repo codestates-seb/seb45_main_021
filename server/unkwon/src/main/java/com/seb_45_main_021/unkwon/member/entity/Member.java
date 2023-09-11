@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.seb_45_main_021.unkwon.audit.Auditable;
+import com.seb_45_main_021.unkwon.auth.userdetails.MemberInfo;
+import com.seb_45_main_021.unkwon.exception.BusinessLogicException;
+import com.seb_45_main_021.unkwon.exception.ExceptionCode;
 import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
 import com.seb_45_main_021.unkwon.project.entity.ProjectStatus;
 
@@ -128,5 +131,9 @@ public class Member extends Auditable {
     public void updateUsernameAndImgUrl(String username, String imgUrl){
         this.username = username;
         this.imgUrl = imgUrl;
+    }
+
+    public void checkMemberId(MemberInfo memberInfo){
+        if(this.memberId != memberInfo.getMemberId()) throw new BusinessLogicException(ExceptionCode.DIFFERENT_MEMBER);
     }
 }

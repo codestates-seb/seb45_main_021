@@ -13,11 +13,11 @@ public interface PortfolioRepository extends JpaRepository<Portfolio,Long> {
 //    Page<Portfolio> getSearchPortfolioList(String likeQuery, Pageable pageable);
 //
 
-//    Page<Portfolio> getSearchPortfolioList1(String likeQuery, Pageable pageable);
+    //    Page<Portfolio> getSearchPortfolioList1(String likeQuery, Pageable pageable);
     @Query(
-        value = "SELECT * FROM PORTFOLIO AS p WHERE p.tags LIKE :tagLikeQuery",
-        countQuery = "SELECT COUNT(*) FROM PORTFOLIO AS p WHERE p.tags LIKE :tagLikeQuery",
-        nativeQuery = true)
+            value = "SELECT * FROM PORTFOLIO AS p WHERE p.tags LIKE :tagLikeQuery",
+            countQuery = "SELECT COUNT(*) FROM PORTFOLIO AS p WHERE p.tags LIKE :tagLikeQuery",
+            nativeQuery = true)
     Page<Portfolio> findByTags(String tagLikeQuery,Pageable pageable);
     @Query(
             value = "SELECT * FROM PORTFOLIO AS p WHERE p.lang LIKE :langLikeQuery",

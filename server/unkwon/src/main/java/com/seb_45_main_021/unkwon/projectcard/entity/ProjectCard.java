@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -18,8 +19,6 @@ public class ProjectCard extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long projectCardId;
 
-    @Column(nullable = false)
-    private String title;
 
     // 태그
     @Column(nullable = false, columnDefinition = "TEXT")
@@ -36,8 +35,7 @@ public class ProjectCard extends Auditable {
     @JoinColumn(name = "MEMBER_ID", nullable = false)
     private Member member;
 
-    public ProjectCard(String tell, String title, String aboutMe, Member member, String[] tags) {
-        this.title = title;
+    public ProjectCard(String tell, String aboutMe, Member member, String[] tags) {
         this.tell = tell;
         this.aboutMe = aboutMe;
         this.member = member;
@@ -48,12 +46,7 @@ public class ProjectCard extends Auditable {
         this.tag = Arrays.toString(tags);
     }
     public static List<ProjectCard> changeLocation(List<ProjectCard> projectCardList){
-        while(projectCardList.size() != 3) {projectCardList.add(new ProjectCard());}
-        ProjectCard temp = projectCardList.get(0);
-        projectCardList.add(0, projectCardList.get(1));
-        projectCardList.remove(1);
-        projectCardList.add(1, temp);
-        projectCardList.remove(2);
+        if(projectCardList.size() > 1){ Collections.swap(projectCardList, 0, 1); }
         return projectCardList;
     }
 }

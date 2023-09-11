@@ -6,6 +6,8 @@ import com.seb_45_main_021.unkwon.auth.handler.UserAuthenticationFailureHandler;
 import com.seb_45_main_021.unkwon.auth.handler.UserAuthenticationSuccessHandler;
 import com.seb_45_main_021.unkwon.auth.jwt.JwtTokenizer;
 import com.seb_45_main_021.unkwon.auth.utils.CustomAuthorityUtils;
+import com.seb_45_main_021.unkwon.heart.repository.PortfolioHeartRepository;
+import com.seb_45_main_021.unkwon.heart.repository.ProjectHeartRepository;
 import com.seb_45_main_021.unkwon.member.repository.MemberRepository;
 import com.seb_45_main_021.unkwon.oauth.handler.OAuth2LoginFailureHandler;
 import com.seb_45_main_021.unkwon.oauth.handler.OAuth2LoginSuccessHandler;
@@ -39,6 +41,8 @@ public class SecurityConfiguration {
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
     private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
     private final MemberRepository memberRepository;
+    private final PortfolioHeartRepository portfolioHeartRepository;
+    private final ProjectHeartRepository projectHeartRepository;
 
 
     @Bean
@@ -102,7 +106,7 @@ public class SecurityConfiguration {
 
             JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
             jwtAuthenticationFilter.setFilterProcessesUrl("/members/login");
-            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new UserAuthenticationSuccessHandler(jwtTokenizer, memberRepository));
+            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new UserAuthenticationSuccessHandler(jwtTokenizer, memberRepository, portfolioHeartRepository, projectHeartRepository));
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new UserAuthenticationFailureHandler());
 
             JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
