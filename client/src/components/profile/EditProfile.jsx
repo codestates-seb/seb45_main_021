@@ -71,7 +71,7 @@ export default function EditProfile({
               label="태그"
               height="3rem"
               type="text"
-              placeholder="태그는 최대 3개까지 등록이 가능합니다. 엔터로 등록해주세요."
+              placeholder="태그는 최대 중복제외 3개까지 등록이 가능합니다."
               value={editProfile.tag.curString}
               onChange={(e) => {
                 setEditProfile({

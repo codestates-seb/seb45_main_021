@@ -3,6 +3,7 @@ import { styled } from 'styled-components';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { FaRegEye } from 'react-icons/fa';
 import useNav from '../../hooks/useNav';
+import Skeleton from '@mui/material/Skeleton';
 
 const ItemContainer = styled.tr`
   border-bottom: 1px solid #bdbdbd6e;

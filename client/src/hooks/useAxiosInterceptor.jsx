@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateUser, deleteUser } from '../redux/userForm/userSlice';
+import { updateUser, deleteUser } from '../redux/userform/userSlice';
 import useNav from '../hooks/useNav';
 
 const instance = axios.create({

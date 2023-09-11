@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import api from '../../hooks/useAxiosInterceptor';
 import useNav from '../../hooks/useNav';
 import Tag from '../common/Tag';
+import Skeleton from '@mui/material/Skeleton';
 
 const SwiperCard = styled.div`
   width: 100%;
@@ -32,6 +33,7 @@ const SwiperCard = styled.div`
 `;
 
 const SwiperNullCard = styled(SwiperCard)`
+  height: 100%;
   svg {
     cursor: pointer;
     position: absolute;
@@ -67,7 +69,7 @@ const ButtonWrapper = styled.div`
   justify-content: space-between;
 `;
 
-export default function SwiperItem({ activePage, data, idx, handler, idxHandler }) {
+export default function SwiperItem({ activePage, data, idx, handler, idxHandler, isLoading }) {
   const { memberId } = useParams();
   const { toProfile } = useNav();
 
@@ -84,50 +86,58 @@ export default function SwiperItem({ activePage, data, idx, handler, idxHandler 
   };
   return (
     <>
-      {data.userName ? (
-        <SwiperCard className="col gap" $active={activePage === idx ? true : false}>
-          <InfoWrapper className="row gap">
-            <img className="userImg" src={data.userImg} alt="" />
-            <div className="col gap">
-              <div className="col gap">
-                <p className="label">연락처</p>
-                <p>{data.working ? '재직중' : '구직중'}</p>
-              </div>
-              <div className="col gap">
-                {data.tag.length !== 0 && (
-                  <>
-                    <p className="label">기술</p>
-                    <div className="row gap">
-                      {data.tag.map((el, i) => (
-                        <Tag key={i} text={el} />
-                      ))}
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-          </InfoWrapper>
-          <AboutMeWrapper className="gap">
-            <h3>자기소개</h3>
-            <p className="about">{data.aboutMe}</p>
-          </AboutMeWrapper>
-          <ButtonWrapper className="row gap">
-            <StyleBorderButton
-              onClick={() => handleEdit('fetch')}
-              $width="50%"
-              $borderColor="green"
-            >
-              수정
-            </StyleBorderButton>
-            <StyleBorderButton $width="50%" $borderColor="red" onClick={deleteHandler}>
-              삭제
-            </StyleBorderButton>
-          </ButtonWrapper>
-        </SwiperCard>
+      {isLoading ? (
+        <Skeleton width="100%" height="100%" style={{ borderRadius: '3rem' }} />
       ) : (
-        <SwiperNullCard $active={activePage === idx ? true : false}>
-          <LiaPlusSolid onClick={() => handleEdit('new')} size={'10rem'} />
-        </SwiperNullCard>
+        <>
+          {data.userName ? (
+            <SwiperCard className="col gap" $active={activePage === idx ? true : false}>
+              <InfoWrapper className="row gap">
+                <img className="userImg" src={data.userImg} alt="" />
+                <div className="col gap">
+                  <div className="col gap">
+                    <p className="label">연락처</p>
+                    <p>{data.tell}</p>
+                    <p className="label">상태</p>
+                    <p>{data.working ? '재직중' : '구직중'}</p>
+                  </div>
+                  <div className="col gap">
+                    {data.tag.length !== 0 && (
+                      <>
+                        <p className="label">기술</p>
+                        <div className="row gap">
+                          {data.tag.map((el, i) => (
+                            <Tag key={i} text={el} />
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </InfoWrapper>
+              <AboutMeWrapper className="gap">
+                <h3>자기소개</h3>
+                <p className="about">{data.aboutMe}</p>
+              </AboutMeWrapper>
+              <ButtonWrapper className="row gap">
+                <StyleBorderButton
+                  onClick={() => handleEdit('fetch')}
+                  $width="50%"
+                  $borderColor="green"
+                >
+                  수정
+                </StyleBorderButton>
+                <StyleBorderButton $width="50%" $borderColor="red" onClick={deleteHandler}>
+                  삭제
+                </StyleBorderButton>
+              </ButtonWrapper>
+            </SwiperCard>
+          ) : (
+            <SwiperNullCard $active={activePage === idx ? true : false}>
+              <LiaPlusSolid onClick={() => handleEdit('new')} size={'10rem'} />
+            </SwiperNullCard>
+          )}
+        </>
       )}
     </>
   );
