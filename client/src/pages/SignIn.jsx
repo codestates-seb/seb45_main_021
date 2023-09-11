@@ -7,9 +7,10 @@ import { AiFillGithub } from 'react-icons/ai';
 import Input from '../components/common/Input';
 import api from '../hooks/useAxiosInterceptor';
 import { useDispatch } from 'react-redux';
-import { updateUser, deleteUser } from '../redux/userForm/userSlice';
+import { updateUser, deleteUser } from '../redux/userform/userSlice';
 import { isValidEmail, isValidPassword } from '../components/profile/isValid';
 import userDefaultImg from '../static/images/userDefaultImg.jpeg';
+import Spinner from '../components/common/Spinner';
 
 const StyleContainer = styled(Page)`
   display: flex;
@@ -115,6 +116,7 @@ export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState({ email: '', password: '' });
+  const [isSubmit, setIsSubmit] = useState(false);
   const { toSignup } = useNav();
   const dispatch = useDispatch();
 
@@ -130,6 +132,7 @@ export default function SignIn() {
     try {
       const isvalidEmail = isValidEmail(email);
       const isvalidPassword = isValidPassword(password);
+      setIsSubmit(true);
       if (isvalidEmail && isvalidPassword) {
         setError({ email: '', password: '' });
         api.post('/members/login', { email, password }).then((el) => {
@@ -159,6 +162,7 @@ export default function SignIn() {
       console.log(error);
       setError({ email: '다시 확인해주세요.', password: '다시 확인해주세요.' });
     }
+    setIsSubmit(false);
   };
 
   useEffect(() => {
@@ -167,59 +171,65 @@ export default function SignIn() {
   }, []);
 
   return (
-    <StyleContainer>
-      <h3>로그인</h3>
-      <div className="row gap bottom">
-        <span>회원가입이 필요하신가요 ?</span>
-        <p onClick={toSignup}>&nbsp;회원가입</p>
-      </div>
-      <StyleRowContainer className="row">
-        <StyleColContainer className="col colgap">
-          <StyleBtnContainer>
-            <FcGoogle className="logo" size={30} />
-            <span>Google 로그인</span>
-          </StyleBtnContainer>
-          <StyleBtnContainer>
-            <AiFillGithub className="logo" size={30} />
-            <span>Github 로그인</span>
-          </StyleBtnContainer>
-        </StyleColContainer>
-        <div>
-          <StyleDivider>
-            <span>OR</span>
-          </StyleDivider>
-        </div>
-        <div>
-          <form className="formGap col colgap">
-            <Input
-              label={'이메일'}
-              placeholder="name@example.com"
-              width="40rem"
-              height="56.22px"
-              fontSize="2rem"
-              type="text"
-              value={email}
-              onChange={handleChangeEmail}
-              error={error.email}
-            />
-            <Input
-              label={'비밀번호'}
-              placeholder="영어,숫자,특수기호 포함 8글자 이상"
-              type="password"
-              width="40rem"
-              height="56.22px"
-              fontSize="2rem"
-              autoComplete="off"
-              value={password}
-              onChange={handleChangePassword}
-              error={error.password}
-            />
-            <StyleBtnContainer onClick={handleSubmitForm}>
-              <span>로그인</span>
-            </StyleBtnContainer>
-          </form>
-        </div>
-      </StyleRowContainer>
-    </StyleContainer>
+    <>
+      {isSubmit ? (
+        <Spinner />
+      ) : (
+        <StyleContainer>
+          <h3>로그인</h3>
+          <div className="row gap bottom">
+            <span>회원가입이 필요하신가요 ?</span>
+            <p onClick={toSignup}>&nbsp;회원가입</p>
+          </div>
+          <StyleRowContainer className="row">
+            <StyleColContainer className="col colgap">
+              <StyleBtnContainer>
+                <FcGoogle className="logo" size={30} />
+                <span>Google 로그인</span>
+              </StyleBtnContainer>
+              <StyleBtnContainer>
+                <AiFillGithub className="logo" size={30} />
+                <span>Github 로그인</span>
+              </StyleBtnContainer>
+            </StyleColContainer>
+            <div>
+              <StyleDivider>
+                <span>OR</span>
+              </StyleDivider>
+            </div>
+            <div>
+              <form className="formGap col colgap">
+                <Input
+                  label={'이메일'}
+                  placeholder="name@example.com"
+                  width="40rem"
+                  height="56.22px"
+                  fontSize="2rem"
+                  type="text"
+                  value={email}
+                  onChange={handleChangeEmail}
+                  error={error.email}
+                />
+                <Input
+                  label={'비밀번호'}
+                  placeholder="영어,숫자,특수기호 포함 8글자 이상"
+                  type="password"
+                  width="40rem"
+                  height="56.22px"
+                  fontSize="2rem"
+                  autoComplete="off"
+                  value={password}
+                  onChange={handleChangePassword}
+                  error={error.password}
+                />
+                <StyleBtnContainer onClick={handleSubmitForm}>
+                  <span>로그인</span>
+                </StyleBtnContainer>
+              </form>
+            </div>
+          </StyleRowContainer>
+        </StyleContainer>
+      )}
+    </>
   );
 }

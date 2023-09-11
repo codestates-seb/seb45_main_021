@@ -7,18 +7,29 @@ import Inner from '../common/Inner';
 import LoginActions from './LoginActions';
 import UnLoginActions from './UnLoginActions';
 import { useSelector } from 'react-redux';
+import { mobile, tablet, desktop, custom } from '../../static/theme.js';
 
 const StyleHeader = styled.header`
   padding: 10px 0;
   z-index: 10;
-  top: 0;
-  width: 100%;
   transition: 0.6s;
   backdrop-filter: blur(5px);
+  position: relative;
   .inner {
     display: flex;
+    justify-content: space-between;
     align-items: center;
     gap: 3rem;
+    position: relative;
+    ${mobile} {
+      gap: 0;
+    }
+    ${custom(900)} {
+      .page-actions,
+      .user-actions {
+        display: none;
+      }
+    }
   }
   h1 {
     font-family: var(--monoton);
@@ -54,7 +65,9 @@ export default function Header() {
       <Inner>
         <h1 onClick={toAbout}>SPEC</h1>
         <nav className="page-actions">
-          <StyleBottomButton onClick={toProject}>프로젝트</StyleBottomButton>
+          <StyleBottomButton $font-size="1px" onClick={toProject}>
+            프로젝트
+          </StyleBottomButton>
           <StyleBottomButton onClick={toPortfolio}>포트폴리오</StyleBottomButton>
         </nav>
         <SearchBox />

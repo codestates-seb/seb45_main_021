@@ -2,7 +2,8 @@ import { styled } from 'styled-components';
 import Select from '../common/Select';
 import { languagesOption, sortOption } from '../../static/options.js';
 import CheckBox from '../common/CheckBox';
-import { tablet, mobile } from '../../static/theme.js';
+import { mobile } from '../../static/theme.js';
+
 const StyleFilterOption = styled.div`
   display: flex;
   gap: 15px;
@@ -10,7 +11,7 @@ const StyleFilterOption = styled.div`
   z-index: 1;
   width: 100%;
   align-items: end;
-
+  padding-bottom: 20px;
   .select {
     position: static;
   }
@@ -18,27 +19,23 @@ const StyleFilterOption = styled.div`
     margin-left: auto;
   }
 
-  ${tablet} {
-    .check-box {
-      margin-left: 0;
-    }
-  }
   ${mobile} {
     flex-wrap: wrap;
+    padding-bottom: 95px;
     justify-content: space-between;
     .select-container {
       width: calc(50% - 8px);
+    }
+    .check-box {
+      margin-left: 0;
     }
   }
 `;
 
 export default function FilterOption({ optionHandler, options, pageType }) {
-  const { employ, lang, sort } = options;
-
   let defaultLanguages;
 
   languagesOption.forEach((item) => {
-    if (item.value === lang) {
       defaultLanguages = item.label;
       return;
     }

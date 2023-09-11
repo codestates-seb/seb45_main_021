@@ -25,7 +25,7 @@ const StylePostList = styled(Page)`
       margin-top: 50px;
     }
     ${tablet} {
-      margin-top: 30px;
+      margin-top: 50px;
       flex-direction: column;
       align-items: start;
       gap: 10px;
@@ -40,10 +40,6 @@ const StylePostList = styled(Page)`
     ${tablet} {
       margin-top: 20px;
     }
-  }
-  .loading {
-    margin-top: 25px;
-    background-color: gray;
   }
   .hidden {
     display: none;

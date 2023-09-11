@@ -3,6 +3,7 @@ import { styled } from 'styled-components';
 import Select from '../common/Select';
 import ListItem from './ListItem';
 import Page from '../common/Page';
+import Skeleton from '@mui/material/Skeleton';
 
 const StyleContainer = styled(Page)`
   width: 100%;
@@ -32,7 +33,6 @@ const StyleContainer = styled(Page)`
     font-size: 1.5rem;
     table-layout: fixed;
   }
-
   th {
     padding: 2rem;
     border-bottom: 1px solid var(--black-100);
@@ -55,7 +55,7 @@ const StyleContainer = styled(Page)`
   }
 `;
 
-export default function Project({ id, data }) {
+export default function Project({ id, data, isLoading }) {
   const [filter, setfilter] = useState({
     defaultLabel: '등록한 프로젝트',
     value: 'add',
@@ -75,27 +75,64 @@ export default function Project({ id, data }) {
     <StyleContainer id={id} className="col">
       <h2>프로젝트</h2>
       <div className="filterWrapper">
-        <Select
-          defaultLabel={filter.defaultLabel}
-          options={filter.options}
-          onClickHandler={handleClickFilter}
-          width="30rem"
-          fontSize="2rem"
-        />
+        {isLoading ? (
+          <Skeleton width="30rem" height="40px" />
+        ) : (
+          <Select
+            defaultLabel={filter.defaultLabel}
+            options={filter.options}
+            onClickHandler={handleClickFilter}
+            width="25rem"
+            fontSize="2rem"
+          />
+        )}
       </div>
       <table>
         <thead>
           <tr>
-            <th className="title">제목</th>
-            {filter.value === 'attend' && <th className="author">작성자</th>}
-            <th className="created_At">작성시간</th>
-            <th className="views">조회수</th>
-            <th className="likes">좋아요</th>
+            {isLoading ? (
+              <>
+                <th>
+                  <Skeleton width="100%" height="50px" />
+                </th>
+                <th>
+                  <Skeleton width="100%" height="50px" />
+                </th>
+                <th>
+                  <Skeleton width="100%" height="50px" />
+                </th>
+                <th>
+                  <Skeleton width="100%" height="50px" />
+                </th>
+              </>
+            ) : (
+              <>
+                <th className="title">제목</th>
+                {filter.value === 'attend' && <th className="author">작성자</th>}
+                <th className="created_At">작성시간</th>
+                <th className="views">조회수</th>
+                <th className="likes">좋아요</th>
+              </>
+            )}
           </tr>
         </thead>
         <tbody>
-          {filter.value === 'add' &&
-            add.map((el, i) => <ListItem key={i} data={el} type="프로젝트" />)}
+          {isLoading ? (
+            <tr>
+              <td>
+                <Skeleton width="100%" height="40px" />
+              </td>
+              <td>
+                <Skeleton width="100%" height="40px" />
+              </td>
+              <td>
+                <Skeleton width="100%" height="40px" />
+              </td>
+            </tr>
+          ) : (
+            filter.value === 'add' &&
+            add.map((el, i) => <ListItem key={i} data={el} type="프로젝트" />)
+          )}
           {filter.value === 'attend' &&
             attend.map((el, i) => <ListItem key={i} data={el} type="프로젝트" />)}
         </tbody>

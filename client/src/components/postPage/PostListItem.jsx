@@ -15,9 +15,9 @@ const StylePostListItem = styled.li`
   transition: all.1s;
   backdrop-filter: blur(10px);
   box-shadow: 0 2px 10px 2px #ffffff11;
+  position: relative;
   &:hover {
     box-shadow: 0 5px 10px 2px #ffffff11;
-    transform: translateY(-3px);
   }
   img {
     cursor: pointer;

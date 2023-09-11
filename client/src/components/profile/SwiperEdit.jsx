@@ -17,13 +17,8 @@ const SwiperCard = styled.div`
   transition: all 0.4s;
   position: relative;
   display: flex;
-  gap: 5rem;
-  .btn {
-    position: absolute;
-    right: 2rem;
-    left: 2rem;
-    bottom: 2rem;
-  }
+  justify-content: space-between;
+  gap: 1rem;
   .cancel {
     display: flex;
     position: absolute;
@@ -77,7 +72,15 @@ export default function SwiperEdit({ data, idx, handler, type }) {
   const { memberId } = useParams();
 
   useEffect(() => {
-    if (temp.tag[0] === undefined) {
+    if (type === 'new') {
+      setTemp({
+        tell: { value: '', error: '' },
+        aboutMe: { value: '', error: '' },
+        tag: [],
+        curString: '',
+      });
+    }
+    if (type === 'fetch' && temp.tag[0] === undefined) {
       setTemp({
         ...temp,
         tag: [],
@@ -100,7 +103,7 @@ export default function SwiperEdit({ data, idx, handler, type }) {
             toProfile(memberId);
           });
       } else if (!isvalidPhone) {
-        setTemp({ ...temp, tell: { ...temp.tell, error: '숫자만 입력해주세요.' } });
+        setTemp({ ...temp, tell: { ...temp.tell, error: '-를 제외한 전화번호를 입력해주세요.' } });
       } else if (temp.aboutMe.value.length > 200) {
         setTemp({
           ...temp,
@@ -119,6 +122,13 @@ export default function SwiperEdit({ data, idx, handler, type }) {
             window.alert('생성완료.');
             toProfile(memberId);
           });
+      } else if (!isvalidPhone) {
+        setTemp({ ...temp, tell: { ...temp.tell, error: '-를 제외한 전화번호를 입력해주세요.' } });
+      } else if (temp.aboutMe.value.length > 200) {
+        setTemp({
+          ...temp,
+          abooutMe: { ...temp.abooutMe, error: '200 글자 이하로 입력해주세요.' },
+        });
       }
     }
   };
@@ -130,12 +140,17 @@ export default function SwiperEdit({ data, idx, handler, type }) {
   const handleTagKeyDown = (e) => {
     if (e.code !== 'Enter' && e.code !== 'NumpadEnter') return;
     e.preventDefault();
-    if (temp.tag?.length <= 2) {
-      setTemp({
-        ...temp,
-        tag: [...temp.tag, temp.curString],
-        curString: '',
-      });
+    if (temp.curString.length <= 10 && temp.curString.length > 0) {
+      if (
+        temp.tag?.length <= 2 &&
+        temp.tag.filter((el) => el.toLowerCase() === temp.curString.toLowerCase()).length === 0
+      ) {
+        setTemp({
+          ...temp,
+          tag: [...temp.tag, temp.curString],
+          curString: '',
+        });
+      }
     }
   };
 
@@ -160,7 +175,7 @@ export default function SwiperEdit({ data, idx, handler, type }) {
         width="100%"
         type="text"
         placeholder="- 없이 숫자만 입력해주세요."
-        value={temp.tell.value.replace(/-/g, '') || ''}
+        value={type === 'new' ? temp.tell.value || '' : temp.tell.value.replace(/-/g, '') || ''}
         error={temp.tell.error}
         onChange={(e) => setTemp({ ...temp, tell: { ...temp.tell, value: e.target.value } })}
       />
@@ -170,7 +185,7 @@ export default function SwiperEdit({ data, idx, handler, type }) {
           width="100%"
           height="3.5rem"
           type="text"
-          placeholder="태그는 최대 3개까지 등록이 가능합니다."
+          placeholder="태그는 최대 중복제외 3개까지 등록이 가능합니다."
           value={temp.curString || ''}
           onChange={(e) =>
             setTemp({

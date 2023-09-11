@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { createPortal } from 'react-dom';
-
+import { mobile } from '../../static/theme';
 const StyleModal = styled.div`
   position: fixed;
   z-index: 30;
@@ -20,6 +20,10 @@ const StyleModal = styled.div`
     min-width: 500px;
     background-color: #323232;
     border-radius: 3px;
+    ${mobile} {
+      min-width: 200px;
+      width: 95%;
+    }
     font-weight: var(--nanum-semi-bold);
     animation: slideIn 0.3s ease;
     h4 {
@@ -45,6 +49,9 @@ const StyleModal = styled.div`
         }
       }
     }
+  }
+  .children {
+    padding: 2rem;
   }
   @keyframes slideIn {
     0% {
@@ -106,7 +113,7 @@ export default function Modal({
     <StyleModal onClick={modalCloser}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         {children ? (
-          { children }
+          <div className="children">{children}</div>
         ) : (
           <>
             <h4>{title}</h4>

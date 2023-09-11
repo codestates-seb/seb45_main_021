@@ -1,14 +1,16 @@
 import React from 'react';
 import { styled } from 'styled-components';
-import { desktop, tablet, mobile } from '../../static/theme.js';
+import { tablet, mobile } from '../../static/theme.js';
 
 const StyleSearchButton = styled.div`
   display: flex;
   position: relative;
   background-color: #1a1f1b;
-  border-radius: 3px;
+  border-radius: 50px;
+  overflow: hidden;
   width: 30%;
   .tab-toggle {
+    transition: all.1s;
     position: absolute;
     background-color: #fafafa25;
     width: 50%;
@@ -27,6 +29,10 @@ const StyleSearchButton = styled.div`
   }
   ${tablet} {
     width: 100%;
+    margin-bottom: 20px;
+  }
+  ${mobile} {
+    margin-bottom: 0;
   }
 `;
 
