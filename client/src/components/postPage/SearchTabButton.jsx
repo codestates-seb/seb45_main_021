@@ -1,29 +1,39 @@
 import React from 'react';
 import { styled } from 'styled-components';
+import { desktop, tablet, mobile } from '../../static/theme.js';
 
 const StyleSearchButton = styled.div`
-  margin-top: 50px;
   display: flex;
+  position: relative;
+  background-color: #1a1f1b;
+  border-radius: 3px;
+  width: 30%;
+  .tab-toggle {
+    position: absolute;
+    background-color: #fafafa25;
+    width: 50%;
+    height: 45px;
+    border-radius: 3px;
+    left: ${(props) => (props.$isProject ? '0' : '50%')};
+  }
   div {
     flex: 1;
-    height: 90px;
-    border: 1px solid var(--black-800);
-    border-bottom: 1px solid var(--black-100);
+    cursor: pointer;
     transition: all.2s;
     text-align: center;
-    line-height: 90px;
     font-size: 2rem;
-    &.active {
-      border-color: var(--black-100);
-
-      border-bottom: none;
-    }
+    height: 45px;
+    line-height: 45px;
+  }
+  ${tablet} {
+    width: 100%;
   }
 `;
 
 export default function SearchTabButton({ optionHandler, searchType }) {
   return (
-    <StyleSearchButton>
+    <StyleSearchButton $isProject={searchType === 'projects'}>
+      <div className="tab-toggle"></div>
       <div
         className={searchType === 'projects' ? 'active' : ''}
         onClick={() => optionHandler('searchType', 'projects')}

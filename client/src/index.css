@@ -28,7 +28,6 @@ html {
   --shadow: #00000020;
   --center: 0 auto;
   --backgroundColor: #00000099;
-  height: 100vh;
 }
 
 .hidden {

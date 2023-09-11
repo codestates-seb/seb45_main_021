@@ -57,7 +57,7 @@ export default function Like({ likes, size, unLikePost, likePost, postId }) {
         <Modal
           isOpen={isOpen}
           setIsOpen={setIsOpen}
-          title="로그인이 필요한 서비스입니다"
+          title="로그인이 필요한 서비스입니다."
           body="로그인 페이지로 이동하시겠습니까?"
           confirmHandler={toSignin}
         />

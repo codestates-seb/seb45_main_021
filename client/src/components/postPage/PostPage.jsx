@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import TextCoverOver from '../common/TextCoverOver';
 import OneWeekTopTenList from './OneWeekTopTenList';
 import FilterOption from './FilterOption';
-import SearchTabButton from '../search/SearchTabButton';
+import SearchTabButton from './SearchTabButton';
 import Page from '../common/Page';
 import mokData from '../../static/portfolio.json';
 import { useObserver } from '../../hooks/useObserver';
@@ -12,27 +12,37 @@ import useQueryClear from '../../hooks/useQueryClear';
 import PostList from './PostList';
 import ToTopButton from '../common/ToTopButton';
 import PostSkeletonLoading from './PostSkeletonLoading';
-import Modal from '../common/Modal';
+import { desktop, tablet } from '../../static/theme.js';
 const StylePostList = styled(Page)`
-  h3 {
-    text-align: center;
+  .top-menu {
     margin-top: 70px;
+    display: flex;
+    align-items: center;
+    h3 {
+      flex: 1;
+    }
+    ${desktop} {
+      margin-top: 50px;
+    }
+    ${tablet} {
+      margin-top: 30px;
+      flex-direction: column;
+      align-items: start;
+      gap: 10px;
+    }
   }
   .user-action {
     display: flex;
     margin-top: 70px;
-    padding-bottom: 25px;
-    border-bottom: 1px solid var(--black-100);
-  }
-  .content {
-    height: 200px;
-    margin: 10px;
-    box-sizing: content-box;
-    background-color: #2d2d2d;
+    ${desktop} {
+      margin-top: 50px;
+    }
+    ${tablet} {
+      margin-top: 20px;
+    }
   }
   .loading {
     margin-top: 25px;
-    height: 700px;
     background-color: gray;
   }
   .hidden {
@@ -87,15 +97,24 @@ export default function PostPage({ options, optionHandler, pageType, getApiUrl }
 
   return (
     <StylePostList>
-      {pageType === 'search' ? (
-        <SearchTabButton searchType={searchType} optionHandler={optionHandler} options={options} />
-      ) : (
+      <div className="top-menu">
         <h3>
-          <TextCoverOver text={pageType.toUpperCase()} fontSize="7rem" />
+          <TextCoverOver
+            text={pageType === 'search' ? options.keyword : pageType.toUpperCase()}
+            fontSize="5rem"
+          />
         </h3>
-      )}
+        {pageType !== 'search' ? (
+          <OneWeekTopTenList pageType={pageType} />
+        ) : (
+          <SearchTabButton
+            searchType={searchType}
+            optionHandler={optionHandler}
+            options={options}
+          />
+        )}
+      </div>
       <div className="user-action">
-        {pageType !== 'search' && <OneWeekTopTenList pageType={pageType} />}
         <FilterOption
           options={options}
           optionHandler={optionHandler}
