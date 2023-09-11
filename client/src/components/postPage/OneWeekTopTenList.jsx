@@ -7,13 +7,14 @@ import { Autoplay } from 'swiper/modules';
 import OneWeekTopTenItem from './OneWeekTopTenItem';
 
 const StyleOneWeekTopTenList = styled.div`
-  flex: 1;
+  padding-bottom: 10px;
   .swiper-wrapper {
-    height: 40px;
+    height: 30px;
   }
   h5 {
-    font-size: 1.4rem;
-    font-weight: var(--nanum-semi-bold);
+    padding-bottom: 5px;
+    font-size: 1.8rem;
+    font-weight: var(--nanum-bold);
     left: 0;
   }
 `;
@@ -27,6 +28,7 @@ export default function OneWeekTopTenList({ pageType }) {
 
   return (
     <StyleOneWeekTopTenList onClick={(e) => e.stopPropagation()}>
+      <h5>주간 인기 게시글</h5>
       <Swiper
         modules={[Autoplay]}
         slidesPerView={1}

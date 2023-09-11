@@ -3,7 +3,7 @@ import useNav from '../../hooks/useNav';
 import { styled } from 'styled-components';
 
 const StyleOneWeekTopTenItem = styled.div`
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   display: flex;
   font-weight: var(--nanum-semi-bold);
   gap: 3px;

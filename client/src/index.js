@@ -34,13 +34,14 @@ const Global = createGlobalStyle`
  }
  ${desktop} {
     html {
-      --inner : 80%;
+      --inner : 85%;
+      font-size:8.5px;
     }
  }
  
  ${mobile} {
     html {
-      --inner : 90%;
+      --inner : 95%;
     }
  }
 `;
