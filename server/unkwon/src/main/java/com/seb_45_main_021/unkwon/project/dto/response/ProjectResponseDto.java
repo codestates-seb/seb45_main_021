@@ -1,4 +1,4 @@
-package com.seb_45_main_021.unkwon.project.dto;
+package com.seb_45_main_021.unkwon.project.dto.response;
 
 import com.seb_45_main_021.unkwon.project.entity.ProjectStatus;
 import lombok.Builder;
@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class ProjectResponseDto {
 
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-    private String closedAt;
+    private LocalDate closedAt;
     private String body;
 
     private List<Long> joinPeople;

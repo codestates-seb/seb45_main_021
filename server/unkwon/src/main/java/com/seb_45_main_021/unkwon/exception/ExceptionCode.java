@@ -17,7 +17,8 @@ public enum ExceptionCode {
     PROJECT_NOT_FOUND(404, "Project not found"),
     PROJECT_STATUS_NOT_FOUND(404, "Project Status not found"),
     COMMON_CODE_NOT_FOUND(404, "Common Code not found"),
-    CARD_LIMIT_OVER(422, "Card Limit Over");
+    CARD_LIMIT_OVER(422, "Card Limit Over"),
+    ALREADY_APPLIED(401, "Already applied");
 
 
 

@@ -1,5 +1,6 @@
 package com.seb_45_main_021.unkwon.heart.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.project.entity.Project;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 @Entity
 @Getter
@@ -22,15 +24,17 @@ public class ProjectHeart {
 
     private boolean status = false;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
+    @Column(columnDefinition = "TIMESTAMP")
+    private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PROJECT_ID")
+    @JsonBackReference
     private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
+    @JsonBackReference
     private Member member;
 
 

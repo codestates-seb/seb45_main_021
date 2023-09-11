@@ -39,13 +39,13 @@ public class Portfolio extends Auditable {
 
     private boolean IsEmploy = true;
 
-
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
     @JsonBackReference
     private Member member;
 
     @OneToMany(mappedBy = "portFolio", cascade = CascadeType.REMOVE)
+    @JsonManagedReference
     List<Comment> comments;
 
     @Column(columnDefinition = "TEXT")

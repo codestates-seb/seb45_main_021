@@ -59,6 +59,7 @@ public interface PortfolioMapper {
                 .tags(new String[]{portFolio.getTags()})
                 .lang(new String[]{portFolio.getLang()})
                 .heartCount(portFolio.getHeartCount())
+                .IsEmploy(portFolio.isIsEmploy())
                 .build();
 
         return response;

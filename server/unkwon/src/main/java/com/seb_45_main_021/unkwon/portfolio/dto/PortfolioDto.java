@@ -34,7 +34,8 @@ public class PortfolioDto {
         private String content;
         private String[] tags;
         private String[] lang;
-
+        private boolean IsEmploy;
+        private boolean IsComment;
 
     }
 
@@ -58,7 +59,15 @@ public class PortfolioDto {
         private String[] tags;
         private String[] lang;
         private int heartCount;
+        private boolean IsEmploy;
+    }
 
+    @Getter
+    @Setter
+    @Builder
+    public static class TopResponse{
+        private long portfolioId;
+        private String title;
     }
 
     @Getter

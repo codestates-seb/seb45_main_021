@@ -7,7 +7,6 @@ import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
 import com.seb_45_main_021.unkwon.portfolio.repository.PortfolioRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,9 +20,11 @@ import java.util.Optional;
 @Transactional
 public class PortfolioService {
     private final PortfolioRepository portfolioRepository;
+    private final JwtTokenizer jwtTokenizer;
 
-    public PortfolioService(PortfolioRepository portfolioRepository) {
+    public PortfolioService(PortfolioRepository portfolioRepository, JwtTokenizer jwtTokenizer) {
         this.portfolioRepository = portfolioRepository;
+        this.jwtTokenizer = jwtTokenizer;
     }
 
     public Portfolio findByPortfolioId(long portfolioId){
@@ -34,14 +35,21 @@ public class PortfolioService {
         return findPortfolio;
     }
 
+
+
+
     public Portfolio createPortfolio(Portfolio portFolio){
 
         return portfolioRepository.save(portFolio);
     }
 
-    public Portfolio updatePortfolio(Portfolio portFolio){
+    public Portfolio updatePortfolio(Portfolio portFolio,MemberInfo memberInfo){
+
         Portfolio findPortfolio = findByPortfolioId(portFolio.getPortfolioId());
 
+        Member findMember = findPortfolio.getMember();
+
+        findMember.checkMemberId(memberInfo);
 
         Optional.ofNullable(portFolio.getTitle())
                 .ifPresent(title -> findPortfolio.setTitle(title));
@@ -51,6 +59,10 @@ public class PortfolioService {
                 .ifPresent(tags -> findPortfolio.setTags(tags));
         Optional.ofNullable(portFolio.getLang())
                 .ifPresent(lang-> findPortfolio.setLang(lang));
+        Optional.ofNullable(portFolio.isIsEmploy())
+                .ifPresent(IsEmploy -> findPortfolio.setIsEmploy(IsEmploy));
+        Optional.ofNullable(portFolio.isIsComment())
+                .ifPresent(IsComment -> findPortfolio.setIsComment(IsComment));
 
         return portfolioRepository.save(findPortfolio);
     }
@@ -112,9 +124,67 @@ public class PortfolioService {
         }
     }
 
-    public void deletePortfolio(long portfolioId){
-        Portfolio portFolio = findByPortfolioId(portfolioId);
+    //조회기능 + 구직여부 (언어,태그,인기순)
+    public Page<Portfolio> findIsEmployPortfolios(String[] tags,String[] lang, Pageable pageable){
 
-        portfolioRepository.delete(portFolio);
+        if(tags != null && lang != null){
+            Arrays.sort(tags);
+            Arrays.sort(lang);
+
+            StringBuilder tagsLikeQueryBuilder = new StringBuilder("");
+
+            for (int i = 0; i < tags.length; i++) {
+                String temp = "%"+ tags[i] + "%";
+                tagsLikeQueryBuilder.append(temp);
+            }
+
+            StringBuilder langsLikeQueryBuilder = new StringBuilder("");
+
+            for (int i = 0; i < lang.length; i++) {
+                String temp = "%" + lang[i] + "%";
+                langsLikeQueryBuilder.append(temp);
+            }
+            return portfolioRepository.findByTagsAndLangAndIsEmploy(tagsLikeQueryBuilder.toString(),langsLikeQueryBuilder.toString(),pageable);
+        }
+        else if(tags != null){
+            Arrays.sort(tags);
+
+            StringBuilder tagLikeQueryBuilder = new StringBuilder("");
+
+            for (int i = 0; i < tags.length; i++) {
+                String temp = "%"+ tags[i] + "%";
+                tagLikeQueryBuilder.append(temp);
+            }
+            return portfolioRepository.findByTagsAndIsEmploy(tagLikeQueryBuilder.toString(),pageable);
+        }
+        else if(lang != null){
+            Arrays.sort(lang);
+
+            StringBuilder langLikeQueryBuilder = new StringBuilder("");
+
+            for (int i = 0; i < lang.length; i++) {
+                String temp = "%" + lang[i] + "%";
+                langLikeQueryBuilder.append(temp);
+            }
+            return portfolioRepository.findByLangAndIsEmploy(langLikeQueryBuilder.toString(),pageable);
+        }
+        else {
+            return portfolioRepository.findEmployedPortfolios(pageable);
+        }
+    }
+
+    // 좋아요 수가 가장 많은 포트폴리오 10개 가져오기
+    public Page<Portfolio> getTop10PortfoliosByLikes(Pageable pageable) {
+        return portfolioRepository.findTop10ByOrderByHeartCountDesc(pageable);
+    }
+
+    public void deletePortfolio(long portfolioId,MemberInfo memberInfo){
+        Portfolio portfolio = findByPortfolioId(portfolioId);
+
+        Member findMember = portfolio.getMember();
+
+        findMember.checkMemberId(memberInfo);
+
+        portfolioRepository.delete(portfolio);
     }
 }
