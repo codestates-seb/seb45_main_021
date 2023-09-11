@@ -129,7 +129,7 @@ export default function LikeList({ id, data, isLoading }) {
         </thead>
         <tbody>
           {isLoading ? (
-            <>
+            <tr>
               <td>
                 <Skeleton width="100%" height="40px" />
               </td>
@@ -139,7 +139,7 @@ export default function LikeList({ id, data, isLoading }) {
               <td>
                 <Skeleton width="100%" height="40px" />
               </td>
-            </>
+            </tr>
           ) : (
             filter.value === 'portfolio' &&
             PortFolio.map((el, i) => <ListItem key={i} data={el} type="좋아요/포트폴리오" />)
