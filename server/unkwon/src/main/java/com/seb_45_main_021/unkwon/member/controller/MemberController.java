@@ -59,15 +59,17 @@ public class MemberController {
 
     /** 회원 정보 조회 **/
     // 정렬 기준 : 최신순
-    @GetMapping("/{member-id}/{host-id}")
+    @GetMapping("/{member-id}")
     public ResponseEntity getMember(@PathVariable("member-id") @Positive Long memberId,
-                                    @PathVariable("host-id") @Positive Long hostId,
-                                    UsernamePasswordAuthenticationToken authentication){
+                                    UsernamePasswordAuthenticationToken authenticationToken){
+
+        // authentication 회원이 null 이면 비로그인, null 아니라면 hostId
         Member findMember = memberService.getMemberInform(memberId);
 
         // 회원 개인 정보
         MemberInformResponseDto responseDto = memberMapper.memberToMemberInformResponseDto(findMember);
         MultiInformResponseDto responseInformDto = new MultiInformResponseDto(responseDto);
+
         // 프로젝트
         responseInformDto.setProjectList(
                 projectMapper.projectToProfileResponseDto(findMember.getProjects()),
@@ -82,16 +84,19 @@ public class MemberController {
 
         // 1. 로그인 상태
         // 2. 자기 자신의 프로필 조회
-        if(hostId != 0 && memberId == hostId){
-            // 찜 리스트(프로젝트, 포트폴리오)
-            List<PortfolioHeart> portfolioHeartList = memberService.getPortfolioInHeart(findMember);
-            List<ProjectHeart> projectHeartList = memberService.getProjectInHeart(findMember);
+        if(authenticationToken != null){
+            MemberInfo memberInfo = (MemberInfo) authenticationToken.getPrincipal();
+            if(memberInfo.getMemberId() == memberId){
+                // 찜 리스트(프로젝트, 포트폴리오)
+                List<PortfolioHeart> portfolioHeartList = memberService.getPortfolioInHeart(findMember);
+                List<ProjectHeart> projectHeartList = memberService.getProjectInHeart(findMember);
 
-            responseInformDto.setPortfolioHeartList(portfolioMapper.portFolioHeartListToProfileResponseDto(portfolioHeartList));
-            responseInformDto.setProjectHeartList(projectMapper.projectHeartListToProfileResponseDto(projectHeartList));
+                responseInformDto.setPortfolioHeartList(portfolioMapper.portFolioHeartListToProfileResponseDto(portfolioHeartList));
+                responseInformDto.setProjectHeartList(projectMapper.projectHeartListToProfileResponseDto(projectHeartList));
 
-            // 프로젝트 카드
-            responseInformDto.setProjectCardList(projectCardMapper.projectCardListToProjectCardResponseDto(findMember.getProjectCardList()));
+                // 프로젝트 카드
+                responseInformDto.setProjectCardList(projectCardMapper.projectCardListToProjectCardResponseDto(ProjectCard.changeLocation(findMember.getProjectCardList())));
+            }
         }
 
         return new ResponseEntity<>(responseInformDto, HttpStatus.OK);
@@ -100,7 +105,9 @@ public class MemberController {
     /** 회원 정보 수정 (프로필 사진) **/
     @PatchMapping("/profileImg/{member-id}")
     public void updateProfile(@PathVariable("member-id") @Positive Long memberId,
-                              UsernamePasswordAuthenticationToken authentication){}
+                              UsernamePasswordAuthenticationToken authentication){
+        MemberInfo memberInfo = (MemberInfo) authentication.getPrincipal();
+    }
 
     /** 회원 정보 수정 (개인 정보) **/
     @PatchMapping("/{member-id}")
@@ -108,7 +115,8 @@ public class MemberController {
                                         @Valid @RequestBody MemberInformUpdateDto dto,
                                        UsernamePasswordAuthenticationToken authentication) {
         dto.setMemberId(memberId);
-        memberService.updateMemberInform(dto, authentication);
+        MemberInfo memberInfo = (MemberInfo) authentication.getPrincipal();
+        memberService.updateMemberInform(dto, memberInfo);
 
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -119,7 +127,8 @@ public class MemberController {
                                          @Valid @RequestBody MemberPasswordUpdateDto dto,
                                          UsernamePasswordAuthenticationToken authentication){
         dto.setMemberId(memberId);
-        memberService.updatePassword(dto, authentication);
+        MemberInfo memberInfo = (MemberInfo) authentication.getPrincipal();
+        memberService.updatePassword(dto, memberInfo);
 
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -128,6 +137,7 @@ public class MemberController {
     @DeleteMapping("/{member-id}")
     public void deleteMember(@PathVariable("member-id") @Positive Long memberId,
                              UsernamePasswordAuthenticationToken authentication){
-        memberService.removeMember(memberId, authentication);
+        MemberInfo memberInfo = (MemberInfo) authentication.getPrincipal();
+        memberService.removeMember(memberId, memberInfo);
     }
 }

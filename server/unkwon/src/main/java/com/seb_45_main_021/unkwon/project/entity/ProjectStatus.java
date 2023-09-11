@@ -22,6 +22,7 @@ public class ProjectStatus { // 프로젝트 지원정보
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long projectStatusId;
+
     @ManyToOne
     @JoinColumn(name = "projectId")
     @JsonBackReference

@@ -7,7 +7,6 @@ import lombok.Setter;
 public class ProjectCardPatchDto {
     @Setter
     private Long projectCardId;
-    private String title;
     private String tell;
     private String aboutMe;
     // 태그

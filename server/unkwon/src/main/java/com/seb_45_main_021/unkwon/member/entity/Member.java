@@ -137,12 +137,8 @@ public class Member extends Auditable {
         this.username = username;
         this.imgUrl = imgUrl;
     }
+
     public void checkMemberId(MemberInfo memberInfo){
-
-        Long findMemberId = memberInfo.getMemberId();
-
-        if(this.memberId != findMemberId){
-            throw new BusinessLogicException(ExceptionCode.DIFFERENT_MEMBER);
-        }
+        if(this.memberId != memberInfo.getMemberId()) throw new BusinessLogicException(ExceptionCode.DIFFERENT_MEMBER);
     }
 }

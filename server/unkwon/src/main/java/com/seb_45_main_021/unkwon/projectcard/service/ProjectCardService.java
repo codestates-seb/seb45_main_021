@@ -32,7 +32,7 @@ public class ProjectCardService {
             throw new BusinessLogicException(ExceptionCode.CARD_LIMIT_OVER);
         }
 
-        ProjectCard projectCard = new ProjectCard(dto.getTell(), dto.getTitle(), dto.getAboutMe(), findMember, dto.getTags());
+        ProjectCard projectCard = new ProjectCard(dto.getTell(), dto.getAboutMe(), findMember, dto.getTags());
         findMember.setProjectCardList(projectCard);
 
         projectCardRepository.save(projectCard);
@@ -46,9 +46,6 @@ public class ProjectCardService {
 
     public void updateProjectCard(ProjectCardPatchDto dto){
         ProjectCard projectCard = findVerifiedProjectCard(dto.getProjectCardId());
-
-        Optional.ofNullable(dto.getTitle())
-                .ifPresent(title -> projectCard.setTitle(dto.getTitle()));
 
         Optional.ofNullable(dto.getTell())
                 .ifPresent(tell -> projectCard.setTell(dto.getTell()));

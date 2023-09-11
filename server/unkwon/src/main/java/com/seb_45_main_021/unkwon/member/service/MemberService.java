@@ -63,30 +63,26 @@ public class MemberService {
         Member findMember = findVerifiedMember(memberId);
 
         // 회원 개인 정보
-        // 포트폴리오 (내가 작성한 포트폴리오를 가져와서 변수로 재직용/구직용 구분)
-        // 프로젝트 (내가 작성한 프로젝트, 회원과 프로젝트 다대다 매핑으로 내가 신청한 프로젝트 리스트 가져오기)
         return findMember;
     }
 
-    /** 회원 정보 조회(개인) **/
-    public List<PortfolioHeart> getPortfolioInHeart(Member member){
-        // 조회 회원이 자기 자신일 경우
-        // 찜 리스트 (내가 좋아요한 프로젝트, 포트폴리오 리스트 가져오기) 다대다 매핑
-        return portfolioHeartRepository.findByMember(member);
-    }
+    /** 회원 정보 조회(찜한 포트폴리오) **/
+    public List<PortfolioHeart> getPortfolioInHeart(Member member){ return portfolioHeartRepository.findByMember(member); }
 
+    /** 회원 정보 조회(찜한 프로젝트) **/
     public List<ProjectHeart> getProjectInHeart(Member member){
         return projectHeartRepository.findByMember(member);
     }
 
+    /** 회원 정보 조회(신청한 프로젝트) **/
     public List<ProjectStatus> getSupportedProjects(Member member) {return projectStatusRepository.findByMember(member);}
 
     /** 회원 정보 수정(개인 정보) **/
-    public void updateMemberInform(MemberInformUpdateDto dto, UsernamePasswordAuthenticationToken authentication){
+    public void updateMemberInform(MemberInformUpdateDto dto, MemberInfo memberInfo){
         // 회원 존재 확인
         Member findMember = findVerifiedMember(dto.getMemberId());
         // 자신의 정보를 수정하는게 맞는지 확인
-        compareUser(authentication, findMember.getMemberId());
+        findMember.checkMemberId(memberInfo);
 
         // 나이
         Optional.ofNullable(dto.getAge())
@@ -111,10 +107,10 @@ public class MemberService {
     }
 
     /** 회원 정보 수정(비밀 번호) **/
-    public void updatePassword(MemberPasswordUpdateDto dto, UsernamePasswordAuthenticationToken authentication){
+    public void updatePassword(MemberPasswordUpdateDto dto, MemberInfo memberInfo){
         Member findMember = findVerifiedMember(dto.getMemberId());
         // 자신의 정보를 수정하는게 맞는지 확인
-        compareUser(authentication, findMember.getMemberId());
+        findMember.checkMemberId(memberInfo);
 
         comparePassword(dto.getPrevPassword(), findMember.getPassword());
 
@@ -123,12 +119,13 @@ public class MemberService {
         memberRepository.save(findMember);
     }
 
+
     /** 회원 탈퇴(삭제) **/
     /** 회원 상태로 구분해 탈퇴 처리를 할지 생각 **/
-    public void removeMember(Long memberId, UsernamePasswordAuthenticationToken authentication){
+    public void removeMember(Long memberId, MemberInfo memberInfo){
         Member findMember = findVerifiedMember(memberId);
         // 자신의 정보를 수정하는게 맞는지 확인
-        compareUser(authentication, findMember.getMemberId());
+        findMember.checkMemberId(memberInfo);
 
         memberRepository.delete(findMember);
     }
@@ -174,12 +171,5 @@ public class MemberService {
     private void comparePassword(String prevPassword, String userPassword){
         if(!passwordEncoder.matches(prevPassword, userPassword))
             throw new BusinessLogicException(ExceptionCode.DIFFERENT_PASSWORD);
-    }
-
-    /** 회원 정보 수정, 삭제 시 자격 확인을 위한 유저 비교 **/
-    private void compareUser(UsernamePasswordAuthenticationToken authentication, Long memberId){
-        MemberInfo memberInfo = (MemberInfo) authentication.getPrincipal();
-
-        if(memberId != memberInfo.getMemberId()) throw new BusinessLogicException(ExceptionCode.DIFFERENT_MEMBER);
     }
 }

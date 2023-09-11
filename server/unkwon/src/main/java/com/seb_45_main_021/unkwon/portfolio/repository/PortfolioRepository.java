@@ -11,9 +11,9 @@ import java.util.List;
 
 public interface PortfolioRepository extends JpaRepository<Portfolio,Long> {
     @Query(
-        value = "SELECT * FROM PORTFOLIO AS p WHERE p.tags LIKE :tagLikeQuery",
-        countQuery = "SELECT COUNT(*) FROM PORTFOLIO AS p WHERE p.tags LIKE :tagLikeQuery",
-        nativeQuery = true)
+            value = "SELECT * FROM PORTFOLIO AS p WHERE p.tags LIKE :tagLikeQuery",
+            countQuery = "SELECT COUNT(*) FROM PORTFOLIO AS p WHERE p.tags LIKE :tagLikeQuery",
+            nativeQuery = true)
     Page<Portfolio> findByTags(String tagLikeQuery,Pageable pageable);
     @Query(
             value = "SELECT * FROM PORTFOLIO AS p WHERE p.lang LIKE :langLikeQuery",

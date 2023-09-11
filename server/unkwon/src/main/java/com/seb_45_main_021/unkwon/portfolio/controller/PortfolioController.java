@@ -86,7 +86,6 @@ public class PortfolioController {
                                            @RequestParam(required = false)String[] lang,
                                            @PageableDefault(size = 12,page =0,sort = "portfolioId",direction = Sort.Direction.DESC)Pageable pageable
                                            ){
-
         Page<Portfolio> result = portfolioService.findPortfolios(tags, lang, pageable);
 
         List<PortfolioDto.Response> portfolioResponseDtos = mapper.portfoliosToPortfolioResponseDtos(result.getContent());

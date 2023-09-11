@@ -1,5 +1,6 @@
 package com.seb_45_main_021.unkwon.projectcard.mapper;
 
+import com.seb_45_main_021.unkwon.projectcard.dto.response.ProjectCardApplyResponseDto;
 import com.seb_45_main_021.unkwon.projectcard.dto.response.ProjectCardResponseDto;
 import com.seb_45_main_021.unkwon.projectcard.entity.ProjectCard;
 import org.mapstruct.Mapper;
@@ -14,10 +15,20 @@ public interface ProjectCardMapper {
         return projectCardList.stream()
                 .map(projectCard -> new ProjectCardResponseDto(
                         projectCard.getProjectCardId(),
-                        projectCard.getTitle(),
                         projectCard.getAboutMe(),
                         projectCard.getTell(),
                         projectCard.getTag()
+                )).collect(Collectors.toList());
+    }
+
+    default List<ProjectCardApplyResponseDto> projectCardListToProjectCardApplyResponseDto(List<ProjectCard> projectCardList){
+        return projectCardList.stream()
+                .map(projectCard -> new ProjectCardApplyResponseDto(
+                        projectCard.getProjectCardId(),
+                        projectCard.getAboutMe(),
+                        projectCard.getTell(),
+                        projectCard.getTag(),
+                        projectCard.getMember()
                 )).collect(Collectors.toList());
     }
 }
