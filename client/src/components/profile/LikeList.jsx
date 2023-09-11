@@ -94,7 +94,7 @@ export default function LikeList({ id, data, isLoading }) {
             defaultLabel={filter.defaultLabel}
             options={filter.options}
             onClickHandler={handleClickFilter}
-            width="30rem"
+            width="25rem"
             fontSize="2rem"
           />
         )}
@@ -130,6 +130,9 @@ export default function LikeList({ id, data, isLoading }) {
         <tbody>
           {isLoading ? (
             <tr>
+              <td>
+                <Skeleton width="100%" height="40px" />
+              </td>
               <td>
                 <Skeleton width="100%" height="40px" />
               </td>

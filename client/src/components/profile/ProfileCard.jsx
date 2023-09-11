@@ -51,7 +51,8 @@ const StyleProfileContainer = styled.div`
   .imgWrapper {
     position: relative;
     width: 50%;
-    height: 100%;
+    height: 50%;
+    margin: auto 0;
   }
   .userImg {
     width: 100%;

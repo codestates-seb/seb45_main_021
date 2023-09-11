@@ -9,6 +9,7 @@ import Page from '../components/common/Page';
 import { isValidEmail, isValidPassword } from '../components/profile/isValid';
 import { deleteUser } from '../redux/userform/userSlice';
 import { useDispatch } from 'react-redux';
+import Spinner from '../components/common/Spinner';
 
 const StyleContainer = styled(Page)`
   width: 100%;
@@ -117,6 +118,7 @@ export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState({ username: '', email: '', password: '' });
+  const [isSubmit, setIsSubmit] = useState(false);
   const { toSignin } = useNav();
   const dispatch = useDispatch();
 
@@ -136,7 +138,7 @@ export default function SignUp() {
     try {
       const isvalidEmail = isValidEmail(email);
       const isvalidPassword = isValidPassword(password);
-
+      setIsSubmit(true);
       if (isvalidEmail && isvalidPassword) {
         const data = JSON.stringify({ username, email, password });
         api.post('/members/signup', data).then(toSignin());
@@ -154,6 +156,7 @@ export default function SignUp() {
       console.log(error);
       setError({ email: '다시 확인해주세요.', password: '다시 확인해주세요.' });
     }
+    setIsSubmit(false);
   };
 
   const handleClickGoogleBtn = () => {
