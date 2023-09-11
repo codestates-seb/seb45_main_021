@@ -19,6 +19,7 @@ import BackGround from './components/common/BackGround';
 import { useAxiosInterceptor } from './hooks/useAxiosInterceptor';
 import Footer from './components/footer/Footer';
 import { styled } from 'styled-components';
+
 const StyleApp = styled.div`
   display: flex;
   flex-direction: column;

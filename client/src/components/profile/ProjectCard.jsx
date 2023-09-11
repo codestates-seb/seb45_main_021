@@ -9,7 +9,7 @@ import SwiperEdit from './SwiperEdit';
 
 const StyleContainer = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 70rem;
   padding: 2rem;
   background-color: var(--black-800);
   position: relative;
@@ -36,7 +36,7 @@ const StyleContainer = styled.div`
   }
 `;
 
-export default function ProjectCard({ id, data }) {
+export default function ProjectCard({ id, data, isLoading }) {
   const [activePage, setActivePage] = useState(0);
   const [isEdit, setIsEdit] = useState({ fetch: false, new: false });
   const [editIdx, setEditIdx] = useState(null);
@@ -82,6 +82,7 @@ export default function ProjectCard({ id, data }) {
                 idx={i}
                 handler={handleIsEdit}
                 idxHandler={handleEditIdx}
+                isLoading={isLoading}
               />
             </SwiperSlide>
           ))}

@@ -10,7 +10,6 @@ import AnchorMenu from '../components/profile/AnchorMenu';
 import Page from '../components/common/Page';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import OverView from '../components/profile/OverView';
 import api from '../hooks/useAxiosInterceptor';
 
 const StyleContainer = styled(Page)`
@@ -36,23 +35,6 @@ const StyleContainer = styled(Page)`
     background-color: none;
   }
 `;
-
-// const TabWrapper = styled.div`
-//   width: 100%;
-//   font-size: 5rem;
-//   display: flex;
-// `;
-
-// const Tab = styled.span`
-//   flex-grow: 1;
-//   text-align: center;
-//   vertical-align: middle;
-//   padding: 2rem 0;
-//   cursor: pointer;
-//   border-bottom: 5px solid;
-//   transition: all 0.4s;
-//   border-color: ${(props) => (props.$active === 'true' ? 'var(--black-100)' : 'var(--black-500)')};
-// `;
 
 const data = {
   profile: {
@@ -237,51 +219,31 @@ const data = {
 export default function Profile() {
   const { memberId } = useParams();
   const user = useSelector((state) => state.user);
-  const [curTab, setCurTab] = useState('detail');
+  const [isLoading, setIsLoading] = useState(false);
 
-  // useEffect(() => {
-  //   try {
-  //     api
-  //       .get(`/members/${memberId}/${user.isLogin ? user.userInfo.memberId : 0}`)
-  //       .then((el) => console.log(el));
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }, []);
+  useEffect(() => {
+    setIsLoading(true);
+    // try {
+    //   api
+    //     .get(`/members/${memberId}/${user.isLogin ? user.userInfo.memberId : 0}`)
+    //     .then((el) => console.log(el));
+    // } catch (error) {
+    //   console.log(error);
+    // }
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
+  }, []);
 
   return (
     <StyleContainer>
-      <ProfileCard id="profile" data={data.profile} />
-      {/* <TabWrapper className="row">
-        <Tab
-          $active={curTab === 'overview' ? 'true' : 'false'}
-          onClick={() => setCurTab('overview')}
-        >
-          Overview
-        </Tab>
-        <Tab
-          className="tab"
-          $active={curTab === 'detail' ? 'true' : 'false'}
-          onClick={() => setCurTab('detail')}
-        >
-          Detail
-        </Tab>
-      </TabWrapper> */}
-      {/* {curTab === 'overview' && (
-        <OverView
-          data={{
-            addproject: data.project[0].length,
-            attendproject: data.project[1].length,
-            portfolio: data.portfolio,
-          }}
-        />
-      )} */}
-      <Project id="project" data={data.project} />
-      <Portfolio id="portfolio" data={data.portfolio} />
+      <ProfileCard id="profile" data={data.profile} isLoading={isLoading} />
+      <Project id="project" data={data.project} isLoading={isLoading} />
+      <Portfolio id="portfolio" data={data.portfolio} isLoading={isLoading} />
       {user.isLogin && Number(memberId) === user.userInfo.memberId && (
         <>
-          <LikeList id="likeList" data={data.likeList} />
-          <ProjectCard id="projectCard" data={data.projectCard} />
+          <LikeList id="likeList" data={data.likeList} isLoading={isLoading} />
+          <ProjectCard id="projectCard" data={data.projectCard} isLoading={isLoading} />
         </>
       )}
       <AnchorMenu />
