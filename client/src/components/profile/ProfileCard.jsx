@@ -19,7 +19,6 @@ const StyleProfileContainer = styled.div`
     margin-bottom: 10px;
     font-weight: 700;
   }
-
   .alignItem {
     align-items: center;
   }
@@ -61,6 +60,7 @@ const StyleProfileContainer = styled.div`
   }
   .infoContainer {
     position: relative;
+    width: 300px;
     ${desktop} {
       width: 260px;
     }
