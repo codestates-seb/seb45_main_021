@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import defaultImg from '../../static/images/userDefaultImg.jpeg';
+import defaultImg from '../../static/images/mockImage.png';
 import LanguageTag from '../common/LanguageTag';
 import useNav from '../../hooks/useNav';
 import Tag from '../common/Tag';

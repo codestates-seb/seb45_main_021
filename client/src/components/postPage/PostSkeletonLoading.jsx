@@ -3,17 +3,21 @@ import { Skeleton } from '@mui/material';
 import styled from 'styled-components';
 import { mobile, desktop, tablet } from '../../static/theme.js';
 const StylePostSkeletonLoading = styled.ul`
-  padding-top: 25px;
+  margin-top: 20px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 20px;
   gap: 40px;
   ${desktop} {
     grid-template-columns: 1fr 1fr;
-    gap: 40px;
+    gap: 20px;
   }
   ${tablet} {
     grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  ${mobile} {
+    margin-top: 55px;
   }
   li {
     min-height: 320px;

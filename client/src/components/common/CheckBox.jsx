@@ -34,10 +34,17 @@ const StyleCheckBox = styled.div`
     font-size: ${(props) => props.$fontSize};
     font-family: var(--barlow);
     font-weight: var(--barlow-semi-bold);
+    word-wrap: break-all;
   }
 `;
 
-export default function CheckBox({ boxSize = '30px', fontSize = '15px', value, label, onChange }) {
+export default function CheckBox({
+  boxSize = '30px',
+  fontSize = '1.6rem',
+  value,
+  label,
+  onChange,
+}) {
   return (
     <StyleCheckBox
       onClick={() => onChange(!value)}

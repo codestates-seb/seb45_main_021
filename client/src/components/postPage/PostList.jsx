@@ -1,18 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
 import PostListItem from './PostListItem';
-import { desktop, tablet } from '../../static/theme.js';
+import { desktop, tablet, mobile } from '../../static/theme.js';
+
 const StylePostList = styled.ul`
-  padding-top: 25px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 40px;
+  margin-top: 20px;
   ${desktop} {
     grid-template-columns: 1fr 1fr;
-    gap: 40px;
+    gap: 20px;
   }
   ${tablet} {
     grid-template-columns: 1fr;
+  }
+  ${mobile} {
+    margin-top: 55px;
   }
 `;
 

@@ -2,16 +2,33 @@ import { styled } from 'styled-components';
 import Select from '../common/Select';
 import { languagesOption, sortOption } from '../../static/options.js';
 import CheckBox from '../common/CheckBox';
-
+import { tablet, mobile } from '../../static/theme.js';
 const StyleFilterOption = styled.div`
   display: flex;
   gap: 15px;
   height: 40px;
-  align-items: end;
-  justify-content: end;
   z-index: 1;
+  width: 100%;
+  align-items: end;
+
   .select {
     position: static;
+  }
+  .check-box {
+    margin-left: auto;
+  }
+
+  ${tablet} {
+    .check-box {
+      margin-left: 0;
+    }
+  }
+  ${mobile} {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    .select-container {
+      width: calc(50% - 8px);
+    }
   }
 `;
 
