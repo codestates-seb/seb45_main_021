@@ -56,6 +56,16 @@ export default function DetailBody({
 
     return (
         <StyleDetailBody className='row'>
+            {isOnProjectCard && 
+            <Modal setIsOpen={setIsOnProjectCard}>
+                <ProjectCardContainer
+                    isForSubmit={true}
+                    selectedCard={selectedCard}
+                    setSelectedCard={setSelectedCard}
+                    cardList={detailData.requestPeople}
+                />
+            </Modal>
+            }
             <div className='post-data-box col'>
                     <TextBox
                         title={'개발 언어'}
@@ -65,7 +75,7 @@ export default function DetailBody({
                         title={'검색 키워드'}
                         component={
                             detailData.tag.map(item=>
-                                <Tag key={item} text={item} type={'project'}/>
+                                <Tag key={item} text={item} type={type}/>
                             )
                         }
                     />

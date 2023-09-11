@@ -17,6 +17,7 @@ import ToggleButton from '../components/common/ToggleButton';
 import languages from '../static/languages';
 import { portFolioErrorInitData, portFolioWriteInitData, portFolioWriteRule } from '../static/portFolioInit';
 import SubmitBox from '../components/PfPjPublic/SubmitBox';
+import { writeSubmitHandler } from '../utils/writeSubmitHandler';
 
 const StyleProjectWrite = styled(Page)`
   height:auto;
@@ -24,19 +25,21 @@ const StyleProjectWrite = styled(Page)`
   padding-top:6rem;
   font-size:1.6rem;
 
+  .write-wrapper {
+    gap:3rem;
+  }
   .margin-top-remove {
     margin-top:-20px !important;
   }
   .input-container {
-    flex:5;
+    width:40%;
     height:100%;
-    margin-right:3rem;
     > div {
       margin-bottom:3rem;
     }
   }
   .imgs-container {
-    flex:6;
+    width:60%;
     height:auto;
     > div {
       margin-bottom:6rem;
@@ -62,6 +65,17 @@ const StyleProjectWrite = styled(Page)`
     color:var(--error);
     margin-top:1rem;
   }
+  @media screen and (max-width:900px){
+    .write-wrapper{
+      flex-direction: column;
+    }
+    .input-container {
+      width:100%;
+    }
+    .imgs-container {
+      width:100%;
+    }
+  }
 `
 
 export default function PortfolioWrite() {
@@ -82,26 +96,10 @@ export default function PortfolioWrite() {
     return arr;
   })()
 
-  //errors에 하나라도 있으면 오류 뱉음
-  const subMitHandler = () => {
-    if(Object.keys(errors).length) {
-      console.log('유효성검사에 문제가 존재함');
-      const newError = {...errors};
-      for (let key in newError) {
-        newError[key] = true;
-      }
-      setErrors(newError);
-      window.scrollTo(0,0);
-    } else {
-      console.log('유효성검사에 문제없음');
-      console.log(dataForm);
-    }
-  }
-
   return (
     <StyleProjectWrite className='col'>
       <WriteHeader text={'포트폴리오 헤더 부분'}/>
-      <div className='row'>
+      <div className='write-wrapper row'>
         <div className='input-container col'>
 
           <Input
@@ -132,11 +130,11 @@ export default function PortfolioWrite() {
               options={languagesOptions}
               defaultLabel={'-'}
               onClickHandler={(e)=>{
-                handleInputChange(null,e,'language')
-                handleErrorChange(null,e,'language',checkValidations)
+                handleInputChange(null,e,'lang')
+                handleErrorChange(null,e,'lang',checkValidations)
               }}
             />}
-            error={errors.language}
+            error={errors.lang}
             name='언어'
           />
 
@@ -187,7 +185,7 @@ export default function PortfolioWrite() {
         <div className='imgs-container col'>
           <FileInput
             name={'타이틀 이미지'}
-            width={'70rem'}
+            width={'100%'}
             height={'65rem'}
             number={1}
             dataForm={dataForm}
@@ -198,9 +196,9 @@ export default function PortfolioWrite() {
 
           <FileInput
             name={'이미지'}
-            width={'70rem'}
+            width={'100%'}
             height={'65rem'}
-            number={7}
+            number={10}
             dataForm={dataForm}
             handleInputChange={handleInputChange}
           />
@@ -209,7 +207,7 @@ export default function PortfolioWrite() {
       <SubmitBox
         submitTitle={'작성 확인'}
         submitMessage={'댓글 허락하지 않음 선택 시 기존의 댓글들도 보이지 않습니다.'}
-        submitCheckHandler={subMitHandler}
+        submitCheckHandler={()=>writeSubmitHandler(dataForm, errors, setErrors, undefined,'portfolio')}
         cancelTitle={'취소 확인'}
         cancelMessage={'취소시 작성한 내용은 저장되지 않습니다.'}
         cancelCheckHandler ={toPortfolio}

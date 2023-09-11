@@ -33,9 +33,12 @@ const StyleFilterOption = styled.div`
 `;
 
 export default function FilterOption({ optionHandler, options, pageType }) {
+  const { employ, lang, sort } = options;
+
   let defaultLanguages;
 
   languagesOption.forEach((item) => {
+    if (item.value === lang) {
       defaultLanguages = item.label;
       return;
     }

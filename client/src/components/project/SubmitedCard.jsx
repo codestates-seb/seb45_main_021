@@ -13,6 +13,10 @@ const StyleSubmitedCard = styled.div`
         margin-right:3rem;
         justify-content:center;
         align-items:center;
+        > * {
+            cursor: pointer;
+        }
+        
         > img {
             margin-bottom:1rem;
             border-radius:50%;      
@@ -20,8 +24,9 @@ const StyleSubmitedCard = styled.div`
             height:auto;
             object-fit:cover;    
         }
+        
         &:hover {
-            cursor:pointer;
+            cursor: pointer;
             opacity:0.4;
         }
     }

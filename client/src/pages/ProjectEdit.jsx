@@ -18,6 +18,8 @@ import languages from '../static/languages'
 import api from '../hooks/useAxiosInterceptor';
 import { projectErrorInitData, projectWriteInitData, projectWriteRule } from '../static/projectInit';
 import SubmitBox from '../components/PfPjPublic/SubmitBox';
+import { writeSubmitHandler } from '../utils/writeSubmitHandler';
+import { apiWriteDataCheckError } from '../utils/apiWriteDataCheckError';
 
 const StyleProjectWrite = styled(Page)`
   height:auto;
@@ -30,15 +32,15 @@ const StyleProjectWrite = styled(Page)`
   }
 
   .input-container {
-    flex:5;
-    height:100%;
+    width:40%;
+    height:auto;
     margin-right:3rem;
     > div {
       margin-bottom:3rem;
     }
   }
   .imgs-container {
-    flex:6;
+    width:60%;
     height:auto;
     > div {
       margin-bottom:6rem;
@@ -60,6 +62,17 @@ const StyleProjectWrite = styled(Page)`
       flex:1;
     }
   }
+  @media screen and (max-width:900px){
+    .write-wrapper{
+      flex-direction: column;
+    }
+    .input-container {
+      width:100%;
+    }
+    .imgs-container {
+      width:100%;
+    }
+  }
 `
 
 //useEffect로 데이터받아왔다 치고
@@ -76,12 +89,12 @@ const DummyData = {
   // }],
   // created_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
   // modified_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-  closed_At : "Wed Aug 28 2023 16:07:06 GMT+0900 (한국 표준시)",
+  closedAt : "Wed Aug 28 2023 16:07:06 GMT+0900 (한국 표준시)",
   language : 'JAVA',
   tags : ['테스트태그', '의미없는 태그', '의미없는 태그2'],
   body : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-  titleImg : '',
-  imgs : ['https://source.unsplash.com/random','https://source.unsplash.com/random','https://source.unsplash.com/random','https://source.unsplash.com/random'],
+  titleImageFile : '',
+  imageFile : ['https://source.unsplash.com/random','https://source.unsplash.com/random','https://source.unsplash.com/random','https://source.unsplash.com/random'],
   description : '',
   author : {
     img : '',
@@ -132,18 +145,52 @@ const DummyData = {
   // ]
 }
 
+// const responseData = {
+//   projectId : 41,
+//   view : 0,
+//   memberId : 7,
+//   title : '안녕하세요',
+//   totalPeople : 6,
+//   createdAt : JSON.stringify(new Date()),
+//   modifiedAt : JSON.stringify(new Date()),
+//   closedAt : 'null',
+//   body : '기획안 입니다',
+//   joinPeople : 'null',
+//   requestPeople : 'null',
+//   description : '즐겁게 해보실 분',
+//   lang : [['react']],
+//   images : [
+//     {
+//       imageId : 10,
+//       imageUrl : 'https://source.unsplash.com/random'
+//     },
+//     {
+//       imageId : 11,
+//       imageUrl : 'https://source.unsplash.com/random'
+//     },
+//     {
+//       imageId : 12,
+//       imageUrl : 'https://source.unsplash.com/random'
+//     }
+//   ],
+//   projectTitleImage : {
+//     projectTitleImageId : 6,
+//     imageUrl : 'https://source.unsplash.com/random',
+//   },
+//   tags : "[테1스트,태스1트,태스3트]"
+// }
+
 export default function ProjectEdit() {
   const {toProject} = useNav();
   const [dataForm, handleInputChange, clearForm, setDataForm] = useForm(projectWriteInitData);
-  const [errors, handleErrorChange, clearError, setErrors] = useError(projectErrorInitData , projectWriteRule);
-  const [willDeletedImgs, setWillDeleteImgs] = useState({titleImg : [], imgs : [],});
-  console.log(willDeletedImgs);
-  console.log(dataForm);
+  const [errors, handleErrorChange, clearError, setErrors] = useError(projectErrorInitData, projectWriteRule);
+  const [willDeletedImgs, setWillDeleteImgs] = useState({titleImageFile : [], imageFile : [],});
 
   useEffect(()=>{
     // api.get()
     //요청후
-    setDataForm({...DummyData});
+    setDataForm(DummyData);
+    // setErrors(apiWriteDataCheckError(DummyData,'project'));
   },[])
 
   const width = '100%';
@@ -157,42 +204,6 @@ export default function ProjectEdit() {
       }
       return arr;
   })()
-
-  const mergedObjectDataForm = (obj) => {
-    const requestData = new FormData();
-    for(const key in obj) {
-      if(obj[key] instanceof FormData) {
-        // for(const [subkey, subValue] of obj[key].entries()) {
-        //   requestData.append(`${key}[]`, subValue);
-        // }
-        for(let i = 0; i < obj[key].length; i++) {
-          console.log(obj[key][i]);
-        }
-      } else {
-        requestData.append(key,JSON.stringify(obj[key]));
-      }
-    }
-    return requestData;
-  }
-
-  //errors에 하나라도 있으면 오류 뱉음
-  const subMitHandler = () => {
-    if(Object.keys(errors).length) {
-      console.log('유효성검사에 문제가 존재함');
-      const newError = {...errors};
-      for (let key in newError) {
-        newError[key] = true;
-      }
-      setErrors(newError);
-      window.scrollTo(0,0);
-    } else {
-      const requestData = mergedObjectDataForm(dataForm);
-
-      for(const [key,value] of requestData.entries()) {
-        console.log(key, value);
-      }
-    }
-  }
   
   return (
     <StyleProjectWrite className='col'>
@@ -244,7 +255,7 @@ export default function ProjectEdit() {
             component={
               <div className='data-select-container row'>
                 <DateSelect
-                  defaultDate={new Date(dataForm.closed_At)}
+                  defaultDate={new Date(dataForm.closedAt)}
                   width={width}
                   handleInputChange={handleInputChange}
                   setErrors={handleErrorChange}
@@ -312,25 +323,25 @@ export default function ProjectEdit() {
         <div className='imgs-container col'>
           <FileInput
             name={'타이틀 이미지'}
-            width={'70rem'}
+            width={'100%'}
             height={'65rem'}
             number={1}
             dataForm={dataForm}
             handleInputChange={handleInputChange}
             handleErrorChange={handleErrorChange}
             clearError={clearError}
-            defaultImgs={dataForm.titleImg}
+            defaultImgs={dataForm.titleImageFile}
             setWillDeleteImgs={setWillDeleteImgs}
           />
 
           <FileInput
             name={'이미지'}
-            width={'70rem'}
+            width={'100%'}
             height={'65rem'}
             number={7}
             dataForm={dataForm}
             handleInputChange={handleInputChange}
-            defaultImgs={dataForm.imgs}
+            defaultImgs={dataForm.imageFile}
             setWillDeleteImgs={setWillDeleteImgs}
           />
 
@@ -339,7 +350,7 @@ export default function ProjectEdit() {
       <SubmitBox
         submitTitle={'작성 확인'}
         submitMessage={'모집 인원은 수정 할 수 없습니다.'}
-        submitCheckHandler={subMitHandler}
+        submitCheckHandler={()=>writeSubmitHandler(dataForm, errors,setErrors,willDeletedImgs)}
         cancelTitle={'취소 확인'}
         cancelMessage={'취소시 수정한 내용은 저장되지 않습니다.'}
         cancelCheckHandler ={toProject}

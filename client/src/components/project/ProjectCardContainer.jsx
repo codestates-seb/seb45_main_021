@@ -3,8 +3,9 @@ import styled from 'styled-components'
 import SubmitedCard from './SubmitedCard';
 import ForSubmitCard from './ForSubmitCard';
 import { desktop, mobile } from '../../static/theme';
+import EmptyData from '../PfPjPublic/EmptyData';
 
-const StyleProjectCardContainer = styled.div`
+export const StyleProjectCardContainer = styled.div`
     width:${props => props.$isForSubmit ? '60vw' : '100%'};
     gap:2rem;
     overflow:auto;
@@ -28,8 +29,8 @@ export default function ProjectCardContainer({
         <StyleProjectCardContainer
             className={isForSubmit ? 'row' : 'col'}
             $isForSubmit={isForSubmit}
-        >    
-            {cardList.map((item, idx) =>
+        >
+            {cardList.length !== 0 ? cardList.map((item, idx) =>
                 <React.Fragment
                     key={idx}
                 >
@@ -43,7 +44,12 @@ export default function ProjectCardContainer({
                     : <SubmitedCard cardData={item}/>
                     }
                 </React.Fragment>
-            )}
+            ) : 
+            <EmptyData 
+                height='500px'
+                text={'신청한 사람이 없음'}
+            />
+            }
         </StyleProjectCardContainer>
     );
 }

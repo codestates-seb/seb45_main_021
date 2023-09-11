@@ -3,7 +3,6 @@ import { styled } from 'styled-components';
 import Input from '../components/common/Input';
 import Select from '../components/common/Select';
 import FileInput from '../components/common/FileInput';
-import { StyleBorderButton } from '../components/common/Buttons';
 import  useForm  from '../hooks/useForm';
 import DateSelect from '../components/project/DateSelect';
 import Page from './../components/common/Page';
@@ -15,10 +14,11 @@ import useError from '../hooks/useError';
 import { checkValidations } from '../utils/checkValidations';
 import ProGress from '../components/common/ProGress';
 import languages from '../static/languages'
-import api from '../hooks/useAxiosInterceptor';
 import { projectErrorInitData, projectWriteInitData, projectWriteRule } from '../static/projectInit';
-import Modal from '../components/common/Modal';
 import SubmitBox from '../components/PfPjPublic/SubmitBox';
+import { writeSubmitHandler } from '../utils/writeSubmitHandler';
+import Modal from '../components/common/Modal';
+import { custom, desktop, tablet } from '../static/theme';
 
 const StyleProjectWrite = styled(Page)`
   height:auto;
@@ -31,15 +31,19 @@ const StyleProjectWrite = styled(Page)`
   }
 
   .input-container {
-    flex:5;
+    width:40%;
     height:100%;
-    margin-right:3rem;
     > div {
       margin-bottom:3rem;
     }
   }
+
+  .write-wrapper {
+    gap:3rem;
+  }
+
   .imgs-container {
-    flex:6;
+    width:60%;
     height:auto;
     > div {
       margin-bottom:6rem;
@@ -61,17 +65,26 @@ const StyleProjectWrite = styled(Page)`
       flex:1;
     }
   }
+  ${custom(900)}{
+    .write-wrapper{
+      flex-direction: column;
+    }
+    .input-container {
+      width:100%;
+    }
+    .imgs-container {
+      width:100%;
+    }
+  }
 `
 
 export default function ProjectWrite() {
   const {toProject} = useNav();
   const [dataForm, handleInputChange] = useForm(projectWriteInitData);
   const [errors, handleErrorChange, clearError, setErrors] = useError(projectErrorInitData, projectWriteRule);
-  const [isCancelModalOn,setIsCancelModalOn] = useState(false);
-  const [isConfirmWrite,setIsConfirmWrite] = useState(false);
-
+  const [showModal, setShowModal] = useState(false);
   const width = '100%';
-  const height = '30rem';
+  const height = '23rem';
 
   const languagesOptions = (() => {
       const arr = [];
@@ -95,63 +108,12 @@ export default function ProjectWrite() {
     {value : '10', label : '10'},
   ]
 
-  const fileHeader = {
-    headers : {
-      'Content-Type': 'multipart/form-data',
-      withCredentials: true
-    }
-  }
-
-  const mergedObjectDataForm = (obj) => {
-    const formData = new FormData();
-
-    for (const key in obj) {
-        const value = obj[key];
-        if (value instanceof FormData) {
-          for (const subValue of value.values()) {
-            formData.append(key, subValue);
-          }
-        } else {
-          // 값이 FormData가 아닌 경우 직렬화하여 새로운 FormData에 추가
-          formData.append(key, JSON.stringify(value));
-        }
-      }
-
-    return formData;
-  }
-
-  //errors에 하나라도 있으면 오류 뱉음
-  const subMitHandler = () => {
-    console.log(dataForm);
-    if(Object.keys(errors).length) {
-      console.log('유효성검사에 문제가 존재함');
-      const newError = {...errors};
-      for (let key in newError) {
-        newError[key] = true;
-      }
-      setErrors(newError);
-      window.scrollTo(0,0);
-    } else {
-      const requestData = mergedObjectDataForm(dataForm);
-      for(const value of requestData.entries()) {
-        console.log(value);
-      }
-    
-      // api.post('/projects',dataForm,fileHeader)
-      // .then((res)=>{
-      // })
-      // .catch(err=>{
-      //   console.log(err);
-      // })
-    }
-  }
   
   return (
     <StyleProjectWrite className='col'>
       <WriteHeader text={'프로젝트 헤더 부분'} />
-      <div className='row'>
+      <div className='write-wrapper row'>
         <div className='input-container col'>
-
           <Input
             label={'프로젝트 제목'}
             width={'100%'}
@@ -181,11 +143,11 @@ export default function ProjectWrite() {
               options={languagesOptions}
               defaultLabel={'-'}
               onClickHandler={(e)=>{
-                handleInputChange(null,e,'language')
-                handleErrorChange(null,e,'language',checkValidations)
+                handleInputChange(null,e,'lang')
+                handleErrorChange(null,e,'lang',checkValidations)
               }}
             />}
-            error={errors.language}
+            error={errors.lang}
             name='언어'
           />
 
@@ -207,9 +169,13 @@ export default function ProjectWrite() {
           <SelectBox
             text={'프로젝트 마감 날짜를 선택 해 주세요. (모집 시작은 작성일 기준입니다.)'}
             component={<div className='data-select-container row'>
-              <DateSelect defaultDate={dataForm.closed_At} width={width} handleInputChange={handleInputChange} setErrors={handleErrorChange}/>
+              <DateSelect
+                defaultDate={dataForm.closedAt}
+                width={width}
+                handleInputChange={handleInputChange}
+                handleErrorChange={handleErrorChange}/>
             </div>}
-            error={errors.closed_At}
+            error={errors.closedAt}
             name='마감 날짜'
           />
           
@@ -269,7 +235,7 @@ export default function ProjectWrite() {
         <div className='imgs-container col'>
           <FileInput
             name={'타이틀 이미지'}
-            width={'70rem'}
+            width={'100%'}
             height={'65rem'}
             number={1}
             dataForm={dataForm}
@@ -280,7 +246,7 @@ export default function ProjectWrite() {
 
           <FileInput
             name={'이미지'}
-            width={'70rem'}
+            width={'100%'}
             height={'65rem'}
             number={7}
             dataForm={dataForm}
@@ -292,11 +258,12 @@ export default function ProjectWrite() {
       <SubmitBox
         submitTitle={'작성 확인'}
         submitMessage={'모집 인원은 수정 할 수 없습니다.'}
-        submitCheckHandler={subMitHandler}
+        submitCheckHandler={()=>writeSubmitHandler(dataForm,errors,setErrors,undefined,'project')}
         cancelTitle={'취소 확인'}
         cancelMessage={'취소시 작성한 내용은 저장되지 않습니다.'}
         cancelCheckHandler ={toProject}
       />
+      {showModal && <Modal/>}
     </StyleProjectWrite>
   );
 }

@@ -30,22 +30,22 @@ export default function SubmitBox({
           <p>게시</p>
           {isConfirmWrite &&
             <Modal
-              setIsOn={()=>setIsConfirmWrite(!isConfirmWrite)}
+              setIsOpen={()=>setIsConfirmWrite(!isConfirmWrite)}
               type='confirm'
               title={submitTitle}
-              message={submitMessage}
+              body={submitMessage}
               cancelHandler={()=>setIsConfirmWrite(false)}
-              checkHandler={submitCheckHandler}
+              confirmHandler={submitCheckHandler}
           />}
         </StyleBorderButton>
         <StyleBorderButton onClick={()=>setIsCancelModalOn(!isCancelModalOn)}>
           <p>취소</p>
           {isCancelModalOn &&
             <Modal
-              setIsOn={()=>setIsCancelModalOn(!isCancelModalOn)}
+              setIsOpen={()=>setIsCancelModalOn(!isCancelModalOn)}
               type='confirm'
               title={cancelTitle}
-              message={cancelMessage}
+              body={cancelMessage}
               cancelHandler={()=>setIsCancelModalOn(false)}
               checkHandler={cancelCheckHandler}
           />}

@@ -1,24 +1,23 @@
 //프로젝트 작성시 기본 데이터들
 export const projectWriteInitData = {
     title:'',
-    language : '',
+    lang : '',
     totalPeople : '',
-    closed_At : new Date(new Date().setDate(new Date().getDate() + 7)),
+    closedAt : String(new Date(new Date().setDate(new Date().getDate() + 7))),
     tags : [],
     body : '',
     description : '',
-    titleImg : new FormData(),
-    imgs : new FormData(),
-    author : {}
+    titleImageFile : new FormData(),
+    imageFile : new FormData(),
 }
 
 //기본적으로 존재하는 프로젝트 에러들
 export const projectErrorInitData = {
     title : false,
     body : false,
-    language : false,
+    lang : false,
     totalPeople : false,
-    titleImg: false,
+    titleImageFile: false,
 }
 
 //프로젝트 작성시 룰
@@ -27,7 +26,7 @@ export const projectWriteRule = {
         min : 10,
         max : 30,
       },
-      language : {
+      lang : {
         min : 1,
         max : 1,
       },
@@ -35,7 +34,7 @@ export const projectWriteRule = {
         min : 1,
         max : 1,
       },
-      closed_At : {
+      closedAt : {
         min : 1,
         max : 1,
       },

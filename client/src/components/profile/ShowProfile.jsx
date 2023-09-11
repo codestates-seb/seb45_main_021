@@ -6,7 +6,7 @@ import Tag from '../common/Tag';
 import userDefaultImg from '../../static/images/userDefaultImg.jpeg';
 import { BsCamera } from 'react-icons/bs';
 import api from '../../hooks/useAxiosInterceptor';
-import { updateUser } from '../../redux/userform/userSlice';
+import { updateUser } from '../../redux/userForm/userSlice';
 import Skeleton from '@mui/material/Skeleton';
 import { mobile } from '../../static/theme';
 

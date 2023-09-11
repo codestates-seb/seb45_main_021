@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 import {HiX} from 'react-icons/hi'
 
 const StyleFileInput = styled.div`
-    margin:5px 0 5px 0;
+    margin:0 0.5rem;
 `
 
 const FileInputContainer = styled.div`
@@ -157,7 +157,7 @@ export default function FileInput({
 }) {
     const [imgs,setImgs] = useState([]);
     const [isDrag, setIsDrag] = useState(false);
-    const fileKey = number===1 ? 'titleImg' : 'imgs';
+    const fileKey = number===1 ? 'titleImageFile' : 'imageFile';
 
     //사용자가 드래그또는클릭으로 사진을 업로드시 미리보기 화면은 readImgToUrl을통해 img의 소스에 넣어서 보여주느것
     //서버에 보낼때 단순 추가일경우 파일을 보냄 수정시에 이미 존재하는 이미지를 지우고싶다면 받아온 url을 보내면 될것
@@ -176,7 +176,7 @@ export default function FileInput({
             }
             handleInputChange(null,formData, fileKey);
             if(number === 1) {
-                clearError('titleImg');
+                clearError('titleImageFile');
             }
         } catch {
             alert('사진 첨부실패');
@@ -235,7 +235,7 @@ export default function FileInput({
             handleInputChange(null,newForm,fileKey);
         }
         if(number===1){
-            handleErrorChange(null,true,'titleImg');
+            handleErrorChange(null,true,'titleImageFile');
         }
     }
 
