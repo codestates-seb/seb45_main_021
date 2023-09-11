@@ -38,7 +38,6 @@ const Global = createGlobalStyle`
       font-size:8.5px;
     }
  }
- 
  ${mobile} {
     html {
       --inner : 95%;

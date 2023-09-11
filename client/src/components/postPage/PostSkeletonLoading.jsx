@@ -1,12 +1,10 @@
 import React from 'react';
 import { Skeleton } from '@mui/material';
 import styled from 'styled-components';
-import { mobile, desktop, tablet } from '../../static/theme.js';
+import { desktop, tablet } from '../../static/theme.js';
 const StylePostSkeletonLoading = styled.ul`
-  margin-top: 20px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 20px;
   gap: 40px;
   ${desktop} {
     grid-template-columns: 1fr 1fr;
@@ -14,10 +12,6 @@ const StylePostSkeletonLoading = styled.ul`
   }
   ${tablet} {
     grid-template-columns: 1fr;
-    gap: 20px;
-  }
-  ${mobile} {
-    margin-top: 55px;
   }
   li {
     min-height: 320px;
