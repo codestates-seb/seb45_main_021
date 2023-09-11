@@ -1,20 +1,35 @@
 import React from 'react';
 import Input from '../common/Input';
-import { GoIssueClosed } from 'react-icons/go';
-import { AiOutlineCloseCircle, AiOutlineClose } from 'react-icons/ai';
+import { AiOutlineClose } from 'react-icons/ai';
 import Tag from '../common/Tag';
+import { styled } from 'styled-components';
 
-export default function EditProfile({
-  editProfile,
-  setEditProfile,
-  isEdit,
-  setIsEdit,
-  handleTagKeyDown,
-  handleEditProfile,
-}) {
+const Container = styled.div`
+  h3 {
+    font-weight: 700;
+    font-size: 1.8rem;
+    padding-bottom: 22px;
+  }
+  .label {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+  input[type='checkbox'] {
+    width: 15px;
+    height: 15px;
+    vertical-align: middle;
+    cursor: pointer;
+  }
+  .tagGap {
+    gap: 1rem;
+  }
+`;
+
+export default function EditProfile({ editProfile, setEditProfile, handleTagKeyDown }) {
   return (
     <>
-      <div className="col gap">
+      <Container>
         <h3>프로필 변경</h3>
         <Input
           label="한줄소개"
@@ -47,7 +62,7 @@ export default function EditProfile({
           value={editProfile.age.value}
           onChange={(e) => setEditProfile({ ...editProfile, age: { value: e.target.value } })}
         />
-        <div className="row">
+        <div>
           <label className="label">
             구직중
             <input
@@ -109,15 +124,7 @@ export default function EditProfile({
             </div>
           </div>
         </div>
-        <div className="editProfile">
-          <GoIssueClosed size="30" color="green" onClick={handleEditProfile} />
-          <AiOutlineCloseCircle
-            size="30"
-            color="var(--error)"
-            onClick={() => setIsEdit({ ...isEdit, profile: false })}
-          />
-        </div>
-      </div>
+      </Container>
     </>
   );
 }
