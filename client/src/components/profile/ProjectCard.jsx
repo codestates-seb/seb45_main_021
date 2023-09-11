@@ -9,10 +9,10 @@ import SwiperEdit from './SwiperEdit';
 
 const StyleContainer = styled.div`
   width: 100%;
-  height: 80rem;
-  padding: 2rem;
+  height: 70rem;
+  padding: 1rem;
+  background-color: #00000046;
   gap: 1rem;
-  background-color: var(--black-800);
   position: relative;
   h2 {
     font-size: 3rem;

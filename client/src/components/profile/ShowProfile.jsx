@@ -1,5 +1,4 @@
-import React from 'react';
-import { FiEdit2 } from 'react-icons/fi';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Tag from '../common/Tag';
@@ -8,13 +7,30 @@ import { BsCamera } from 'react-icons/bs';
 import api from '../../hooks/useAxiosInterceptor';
 import { updateUser } from '../../redux/userform/userSlice';
 import Skeleton from '@mui/material/Skeleton';
-import { mobile } from '../../static/theme';
+import Modal from '../common/Modal';
+import EditProfile from './EditProfile';
+import EditPassword from './EditPassword';
 
-export default function ShowProfile({ profile, isEdit, setIsEdit, setProfile, isLoading }) {
+export default function ShowProfile({
+  profile,
+  setProfile,
+  isLoading,
+  editProfile,
+  setEditProfile,
+  handleTagKeyDown,
+  handleEditProfile,
+  editPassword,
+  setEditPassword,
+  handleEditPassword,
+  handleClickWithdrawal,
+}) {
   const user = useSelector((state) => state.user);
   const fileInputRef = React.createRef();
   const dispatch = useDispatch();
   const { memberId } = useParams();
+  const [isOpenEditInfo, setIsOpenEditInfo] = useState(false);
+  const [isOpenEditPwd, setIsOpenEditPwd] = useState(false);
+  const [isOPenWithdrawal, setIsOpenWithdrawal] = useState(false);
 
   const handleClickUserImg = () => {
     fileInputRef.current.click();
@@ -32,18 +48,47 @@ export default function ShowProfile({ profile, isEdit, setIsEdit, setProfile, is
 
   return (
     <>
-      <div>
-        <h3>프로필</h3>
-        {user.isLogin && Number(memberId) === user.userInfo.memberId && !isLoading && (
-          <div className="editProfile" onClick={() => setIsEdit({ ...isEdit, profile: true })}>
-            <FiEdit2 size="30" />
-          </div>
+      <div className="col gap">
+        {isOpenEditInfo && user.isLogin && Number(memberId) === user.userInfo.memberId && (
+          <Modal
+            setIsOpen={setIsOpenEditInfo}
+            confirmHandler={handleEditProfile}
+            children={
+              <EditProfile
+                editProfile={editProfile}
+                setEditProfile={setEditProfile}
+                handleTagKeyDown={handleTagKeyDown}
+              />
+            }
+          />
         )}
-      </div>
-      <div className="row gap">
+        {isOpenEditPwd && user.isLogin && Number(memberId) === user.userInfo.memberId && (
+          <Modal
+            setIsOpen={setIsOpenEditPwd}
+            confirmHandler={handleEditPassword}
+            children={
+              <EditPassword editPassword={editPassword} setEditPassword={setEditPassword} />
+            }
+          />
+        )}
+        {isOPenWithdrawal && user.isLogin && Number(memberId) === user.userInfo.memberId && (
+          <Modal
+            setIsOpen={setIsOpenWithdrawal}
+            confirmHandler={handleClickWithdrawal}
+            title="회원탈퇴"
+            body="회원탈퇴는 되돌릴 수 없습니다. 다시 한번 고민해주세요."
+          />
+        )}
         <div className="imgWrapper">
           {isLoading ? (
-            <Skeleton variant="circular" width="100%" height="100%" />
+            <Skeleton
+              variant="rounded"
+              width="200px"
+              height="200px"
+              style={{ borderRadius: '20px' }}
+              sx={{ bgcolor: 'grey.700' }}
+              animation="wave"
+            />
           ) : (
             <>
               <img
@@ -72,18 +117,107 @@ export default function ShowProfile({ profile, isEdit, setIsEdit, setProfile, is
           <div className="col info">
             {isLoading ? (
               <>
-                <Skeleton variant="text" width="100%" height="40px" />
-                <Skeleton variant="text" width="200px" height="40px" />
-                <Skeleton variant="text" width="200px" height="40px" />
-                <Skeleton variant="text" width="300px" height="40px" />
-                <Skeleton variant="text" width="200px" height="40px" />
-                <Skeleton variant="text" width="200px" height="40px" />
-                <Skeleton variant="text" width="200px" height="40px" />
+                <div>
+                  <Skeleton
+                    variant="text"
+                    width="40px"
+                    height="30px"
+                    sx={{ bgcolor: 'grey.700' }}
+                    animation="wave"
+                  />
+                  <Skeleton
+                    variant="text"
+                    width="100%"
+                    height="60px"
+                    sx={{ bgcolor: 'grey.700' }}
+                    animation="wave"
+                  />
+                </div>
+                <div>
+                  <Skeleton
+                    variant="text"
+                    width="40px"
+                    height="30px"
+                    sx={{ bgcolor: 'grey.700' }}
+                    animation="wave"
+                  />
+                  <Skeleton
+                    variant="text"
+                    width="60px"
+                    height="30px"
+                    sx={{ bgcolor: 'grey.700' }}
+                    animation="wave"
+                  />
+                </div>
+                <div>
+                  <Skeleton
+                    variant="text"
+                    width="40px"
+                    height="30px"
+                    sx={{ bgcolor: 'grey.700' }}
+                    animation="wave"
+                  />
+                  <Skeleton
+                    variant="text"
+                    width="60px"
+                    height="30px"
+                    sx={{ bgcolor: 'grey.700' }}
+                    animation="wave"
+                  />
+                </div>
+                <div>
+                  <Skeleton
+                    variant="text"
+                    width="40px"
+                    height="30px"
+                    sx={{ bgcolor: 'grey.700' }}
+                    animation="wave"
+                  />
+                  <Skeleton
+                    variant="text"
+                    width="150px"
+                    height="30px"
+                    sx={{ bgcolor: 'grey.700' }}
+                    animation="wave"
+                  />
+                </div>
+                <div>
+                  <Skeleton
+                    variant="text"
+                    width="40px"
+                    height="30px"
+                    sx={{ bgcolor: 'grey.700' }}
+                    animation="wave"
+                  />
+                  <Skeleton
+                    variant="text"
+                    width="60px"
+                    height="30px"
+                    sx={{ bgcolor: 'grey.700' }}
+                    animation="wave"
+                  />
+                </div>
+                <div>
+                  <Skeleton
+                    variant="text"
+                    width="40px"
+                    height="30px"
+                    sx={{ bgcolor: 'grey.700' }}
+                    animation="wave"
+                  />
+                  <Skeleton
+                    variant="text"
+                    width="150px"
+                    height="40px"
+                    sx={{ bgcolor: 'grey.700' }}
+                    animation="wave"
+                  />
+                </div>
               </>
             ) : (
               <>
                 <div>
-                  <p className="label">자기소개</p>
+                  <p className="label">소개</p>
                   <p>{profile.aboutMe}</p>
                 </div>
                 <div>
@@ -121,14 +255,35 @@ export default function ShowProfile({ profile, isEdit, setIsEdit, setProfile, is
             <div className="row edit editwrapper">
               {user.userInfo?.socialType === 'SPEC' &&
                 (isLoading ? (
-                  <Skeleton width="100px" height="50px" />
+                  <Skeleton
+                    width="100%"
+                    height="50px"
+                    sx={{ bgcolor: 'grey.700' }}
+                    animation="wave"
+                  />
                 ) : (
-                  <p onClick={() => setIsEdit({ ...isEdit, password: true })}>비밀번호 수정</p>
+                  <p onClick={() => setIsOpenEditPwd(true)}>비밀번호 수정</p>
                 ))}
               {isLoading ? (
-                <Skeleton width="100px" height="50px" />
+                <>
+                  <Skeleton
+                    width="100%"
+                    height="50px"
+                    sx={{ bgcolor: 'grey.700' }}
+                    animation="wave"
+                  />
+                  <Skeleton
+                    width="100%"
+                    height="50px"
+                    sx={{ bgcolor: 'grey.700' }}
+                    animation="wave"
+                  />
+                </>
               ) : (
-                <p onClick={() => setIsEdit({ ...isEdit, withDrawal: true })}>회원탈퇴</p>
+                <>
+                  <p onClick={() => setIsOpenEditInfo(true)}>정보수정</p>
+                  <p onClick={() => setIsOpenWithdrawal(true)}>탈퇴</p>
+                </>
               )}
             </div>
           )}

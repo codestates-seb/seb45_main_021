@@ -4,9 +4,12 @@ import Select from '../common/Select';
 import ListItem from './ListItem';
 import Page from '../common/Page';
 import Skeleton from '@mui/material/Skeleton';
+import { desktop, mobile } from '../../static/theme';
 
 const StyleContainer = styled(Page)`
   width: 100%;
+  min-height: 0;
+  height: 500px;
   background-color: #00000046;
   gap: 2rem;
   padding: 1rem;
@@ -26,32 +29,69 @@ const StyleContainer = styled(Page)`
     position: absolute;
     top: 1rem;
     right: 1rem;
-    font-size: 2rem;
   }
   table {
-    width: 100%;
     font-size: 1.5rem;
     table-layout: fixed;
+    width: 100%;
   }
   th {
-    padding: 2rem;
+    width: 50px;
+    padding-bottom: 1rem;
+    font-weight: 700;
+    height: 30px;
+    vertical-align: middle;
     border-bottom: 1px solid var(--black-100);
   }
   td {
-    padding: 1rem;
+    width: 50px;
     text-align: center;
     vertical-align: middle;
-    height: 50px;
+    height: 40px;
     svg {
       margin-right: 5px;
       vertical-align: middle;
     }
   }
+  th:nth-child(1),
   td:nth-child(1) {
     text-align: left;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    ${desktop} {
+      width: 230px;
+    }
+    @media (max-width: 800px) {
+      width: 220px;
+    }
+    ${mobile} {
+      width: 200px;
+    }
+  }
+  th:nth-child(2),
+  td:nth-child(2) {
+    ${desktop} {
+      display: table-cell;
+    }
+    @media (max-width: 900px) {
+      display: none;
+    }
+    ${mobile} {
+      display: none;
+    }
+  }
+  th:nth-child(3),
+  td:nth-child(3) {
+    ${desktop} {
+      display: table-cell;
+    }
+    @media (max-width: 900px) {
+      display: none;
+    }
+    ${mobile} {
+      display: none;
+    }
   }
 `;
 
@@ -76,7 +116,7 @@ export default function Project({ id, data, isLoading }) {
       <h2>프로젝트</h2>
       <div className="filterWrapper">
         {isLoading ? (
-          <Skeleton width="30rem" height="40px" />
+          <Skeleton width="20rem" height="40px" sx={{ bgcolor: 'grey.700' }} animation="wave" />
         ) : (
           <Select
             defaultLabel={filter.defaultLabel}
@@ -90,51 +130,59 @@ export default function Project({ id, data, isLoading }) {
       <table>
         <thead>
           <tr>
-            {isLoading ? (
-              <>
-                <th>
-                  <Skeleton width="100%" height="50px" />
-                </th>
-                <th>
-                  <Skeleton width="100%" height="50px" />
-                </th>
-                <th>
-                  <Skeleton width="100%" height="50px" />
-                </th>
-                <th>
-                  <Skeleton width="100%" height="50px" />
-                </th>
-              </>
-            ) : (
-              <>
-                <th className="title">제목</th>
-                {filter.value === 'attend' && <th className="author">작성자</th>}
-                <th className="created_At">작성시간</th>
-                <th className="views">조회수</th>
-                <th className="likes">좋아요</th>
-              </>
+            <th className="title">
+              {isLoading ? (
+                <Skeleton width="90%" height="50px" sx={{ bgcolor: 'grey.700' }} animation="wave" />
+              ) : (
+                '제목'
+              )}
+            </th>
+            {filter.value === 'attend' && (
+              <th className="author">
+                {isLoading ? (
+                  <Skeleton
+                    width="90%"
+                    height="50px"
+                    sx={{ bgcolor: 'grey.700' }}
+                    animation="wave"
+                  />
+                ) : (
+                  '작성자'
+                )}
+              </th>
             )}
+            <th className="created_At">
+              {isLoading ? (
+                <Skeleton width="90%" height="50px" sx={{ bgcolor: 'grey.700' }} animation="wave" />
+              ) : (
+                '작성시간'
+              )}
+            </th>
+            <th className="views">
+              {isLoading ? (
+                <Skeleton width="90%" height="50px" sx={{ bgcolor: 'grey.700' }} animation="wave" />
+              ) : (
+                '조회수'
+              )}
+            </th>
+            <th className="likes">
+              {isLoading ? (
+                <Skeleton width="90%" height="50px" sx={{ bgcolor: 'grey.700' }} animation="wave" />
+              ) : (
+                '좋아요'
+              )}
+            </th>
           </tr>
         </thead>
         <tbody>
-          {isLoading ? (
-            <tr>
-              <td>
-                <Skeleton width="100%" height="40px" />
-              </td>
-              <td>
-                <Skeleton width="100%" height="40px" />
-              </td>
-              <td>
-                <Skeleton width="100%" height="40px" />
-              </td>
-            </tr>
-          ) : (
-            filter.value === 'add' &&
-            add.map((el, i) => <ListItem key={i} data={el} type="프로젝트" />)
-          )}
+          {filter.value === 'add' &&
+            add.map((el, i) => (
+              <ListItem key={i} data={el} type="프로젝트" isLoading={isLoading} />
+            ))}
           {filter.value === 'attend' &&
-            attend.map((el, i) => <ListItem key={i} data={el} type="프로젝트" />)}
+            attend.map((el, i) => (
+              <ListItem key={i} data={el} type="프로젝트" isLoading={isLoading} />
+            ))}
         </tbody>
       </table>
     </StyleContainer>

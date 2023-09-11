@@ -24,11 +24,11 @@ const SwiperCard = styled.div`
     gap: 1rem;
   }
   h3 {
-    font-size: 5rem;
-    padding: 3rem 0;
+    font-size: 3rem;
+    padding: 2rem 0;
   }
   .about {
-    font-size: 3rem;
+    font-size: 2rem;
   }
 `;
 
@@ -116,7 +116,7 @@ export default function SwiperItem({ activePage, data, idx, handler, idxHandler,
                 </div>
               </InfoWrapper>
               <AboutMeWrapper className="gap">
-                <h3>자기소개</h3>
+                <h3>소개</h3>
                 <p className="about">{data.aboutMe}</p>
               </AboutMeWrapper>
               <ButtonWrapper className="row gap">
