@@ -119,7 +119,7 @@ export default function Project({ id, data, isLoading }) {
         </thead>
         <tbody>
           {isLoading ? (
-            <>
+            <tr>
               <td>
                 <Skeleton width="100%" height="40px" />
               </td>
@@ -129,7 +129,7 @@ export default function Project({ id, data, isLoading }) {
               <td>
                 <Skeleton width="100%" height="40px" />
               </td>
-            </>
+            </tr>
           ) : (
             filter.value === 'add' &&
             add.map((el, i) => <ListItem key={i} data={el} type="프로젝트" />)
