@@ -118,7 +118,7 @@ export default function ProjectDetail() {
           detailData={detailData} 
           type='portfolio'
         />
-        <AnchorToComment/>
+        {/* <AnchorToComment/> */}
       </StyleDetailContainer>
       {detailData.isComments &&
         <Comment

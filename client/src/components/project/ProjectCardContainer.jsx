@@ -1,25 +1,33 @@
 import React from 'react';
 import styled from 'styled-components'
-import SubmitCard from './SubmitCard';
+import SubmitedCard from './SubmitedCard';
 import ForSubmitCard from './ForSubmitCard';
+import { desktop, mobile } from '../../static/theme';
 
-const StyleSubmitCardContainer = styled.div`
-    width:70vw;
+const StyleProjectCardContainer = styled.div`
+    width:${props => props.$isForSubmit ? '60vw' : '100%'};
     gap:2rem;
-    max-height:500px;
-    padding-right:1rem;
+    overflow:auto;
+    ${desktop} {
+        flex-direction: column;
+    }
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    height:auto;   
+    max-height:700px;
 `
 
-export default function SubmitCardContainer({
+export default function ProjectCardContainer({
     cardList,
     isForSubmit = false,
     selectedCard,
     setSelectedCard
 }) {
     return (
-        <StyleSubmitCardContainer
+        <StyleProjectCardContainer
             className={isForSubmit ? 'row' : 'col'}
-
+            $isForSubmit={isForSubmit}
         >    
             {cardList.map((item, idx) =>
                 <React.Fragment
@@ -32,11 +40,11 @@ export default function SubmitCardContainer({
                         selectedCard={selectedCard===idx ? true : false}
                         setSelectedCard={setSelectedCard}
                     />
-                    : <SubmitCard cardData={item}/>
+                    : <SubmitedCard cardData={item}/>
                     }
                 </React.Fragment>
             )}
-        </StyleSubmitCardContainer>
+        </StyleProjectCardContainer>
     );
 }
 

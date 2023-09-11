@@ -5,9 +5,10 @@ import Tag from '../common/Tag';
 import { dateFormatter } from '../../utils/dateFormatter';
 import { StyleBorderButton } from '../common/Buttons';
 import Modal from '../common/Modal';
-import SubmitCardContainer from '../project/SubmitCardContainer';
+import ProjectCardContainer from '../project/ProjectCardContainer';
 import api from '../../hooks/useAxiosInterceptor';
 import { useSelector } from 'react-redux';
+import { tablet } from '../../static/theme';
 
 
 export const StyleDetailBody = styled.div`
@@ -20,6 +21,7 @@ export const StyleDetailBody = styled.div`
     .sticky-box {
         position:sticky;
         top:90vh;
+        margin-bottom:2rem;
     }
 
     .image-data-box {
@@ -29,6 +31,12 @@ export const StyleDetailBody = styled.div`
         > img {
             width:100%;
             object-fit:cover;
+        }
+    }
+    ${tablet} {
+        flex-direction: column;
+        .image-data-box {
+            padding-left:0; 
         }
     }
 `
@@ -48,17 +56,6 @@ export default function DetailBody({
 
     return (
         <StyleDetailBody className='row'>
-            {isOnProjectCard && <Modal
-                type={'children'}
-                children={
-                    <SubmitCardContainer
-                        cardList={detailData.requestPeople}
-                        isForSubmit={true}
-                        selectedCard={selectedCard}
-                        setSelectedCard={setSelectedCard}
-                    />}
-                setIsOn={()=>setIsOnProjectCard(!isOnProjectCard)}
-            />}
             <div className='post-data-box col'>
                     <TextBox
                         title={'개발 언어'}
@@ -72,7 +69,8 @@ export default function DetailBody({
                             )
                         }
                     />
-                    {detailData.closed_At && <TextBox
+                    {detailData.closed_At &&
+                    <TextBox
                         title={'프로젝트 마감 날짜'}
                         component={
                             <p>{`${dateFormatter(detailData.created_At)} ~ ${dateFormatter(detailData.closed_At)}`}</p>
@@ -84,13 +82,15 @@ export default function DetailBody({
                             <p>{`${detailData.body}`}</p>
                         }
                     />
-                    {detailData.description && <TextBox
+                    {detailData.description &&
+                    <TextBox
                         title={'상세 요강'}
                         component={
                             <p>{`${detailData.description}`}</p>
                         }
                     />}
-                    {detailData.description && <TextBox
+                    {detailData.description && 
+                    <TextBox
                         title={'모집 현황'}
                         component={
                             <p>{`${detailData.totalPeople}명 / ${detailData.joinPeople?.length}명`}</p>
@@ -103,8 +103,7 @@ export default function DetailBody({
                         onClick={()=>setIsOnProjectCard(!isOnProjectCard)}
                         >프로젝트 신청하기
                     </StyleBorderButton>
-                </div>
-                }
+                </div>}
             </div>
             <div className='image-data-box col'>
                 {detailData.imgs.map((url,idx)=>

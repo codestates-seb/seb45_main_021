@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import styled from 'styled-components'
 import Page from '../components/common/Page';
 import DetailHead from '../components/PfPjPublic/DetailHead';
 import DetailBody from '../components/PfPjPublic/DetailBody';
 import { StyleBorderButton } from '../components/common/Buttons';
 import { useDispatch, useSelector } from 'react-redux';
-import SubmitCardContainer from '../components/project/SubmitCardContainer';
-import JoinStatusContainet from '../components/project/JoinStatusContainet';
+import ProjectCardContainer from '../components/project/ProjectCardContainer';
+import JoinStatusContainer from '../components/project/JoinStatusContainet';
 import useNav from '../hooks/useNav';
 import Modal from '../components/common/Modal';
 import api from '../hooks/useAxiosInterceptor';
+import { desktop, tablet } from '../static/theme';
+import SuspenseDetailPage from '../components/PfPjPublic/SuspenseDetailPage';
 
 export const StyleDetailWrapper = styled(Page)`
   padding-top:6rem;
-  height:500rem;
   * {
-        border-radius: 6px;
-        transition:all 0.2s;
+    border-radius: 6px;
+    transition:all 0.2s;
   }
 `
 
@@ -51,15 +52,27 @@ export const StyleDetailContainer = styled.div`
   }
 
   .status {
-    height:500px;
+    height:600px;
     overflow:auto;
-    h2 {
-      font-size:1.6rem;
-      font-weight: var(--nanum-semi-bold);
-      margin-bottom:1rem;
+  }
+
+  ${desktop} {
+    .status {
+      flex-direction:column;
+    }
+    .vertical-line {
+      margin:3rem 0;
     }
   }
 
+`
+
+const StyleStatusContainer = styled.div`
+    flex:${props => props.$flex};
+    > h2 {
+      font-size:1.6rem;
+      margin-bottom:1rem;
+    }
 `
 
 const OnlyAdmin = styled.div`
@@ -140,57 +153,75 @@ export default function ProjectDetail() {
   const isAdmin = true;
   const fontSize = '1.6rem'
 
+  const adminFunction = [
+    {
+      title : isOnDetail ? '프로젝트 조회' : '현황 조회',
+      handler : ()=>{setIsOnDetail(!isOnDetail)},
+    },{
+      title : '수정',
+      handler : ()=>{toProjectEdit(detailData.id)},
+    },{
+      title : '삭제',
+      handler : ()=>{setIsOnDeleteAlert(!isOnDeleteAlert)},
+    }
+  ]
+
+  const fetchData = () => {
+    return new Promise((resolve)=>{
+      setTimeout(()=>{
+        console.log('시이발');
+        resolve({...DummyData})
+      },5000);
+    })
+  }
+
   useEffect(()=>{
-    // api.get()
-    // .then((res)=>{
-      setDetailData({...DummyData});
-      
-    // })
-    
+    fetchData()
+    .then(res=>{
+      setDetailData(res);
+    })
   },[])
 
   return (
-    <StyleDetailWrapper>
-      {isOnDeleteAlert && <Modal
-        type={'confirm'}
-        title={'정말 삭제 하시겠습니까?'}
-        message={'삭제된 내용은 복귀, 열람이 불가능합니다.'}
-        setIsOn={()=>setIsOnDeleteAlert(!isOnDeleteAlert)}
-        checkHandler={()=>{}}
-      />}
-      <StyleDetailContainer className='col'>
-        <DetailHead detailData={detailData} type='project'/>
-        {isAdmin && <OnlyAdmin className='row'>
-          <StyleBorderButton
-            $fontSize={fontSize}
-            onClick={()=>setIsOnDetail(!isOnDetail)}
-          >{isOnDetail ? '프로젝트 조회' : '현황 조회'}
-          </StyleBorderButton>
-          <StyleBorderButton
-            $fontSize={fontSize}
-            onClick={()=>toProjectEdit(detailData.id)}>수정
-          </StyleBorderButton>
-          <StyleBorderButton
-            onClick={()=>setIsOnDeleteAlert(!isOnDeleteAlert)}
-            $fontSize={fontSize}>삭제
-          </StyleBorderButton>
-        </OnlyAdmin>}
-        {isAdmin && isOnDetail ? 
-        <div className='row status'>
-          <div className='join-people'>
-            <h2>참가자 현황</h2>
-            <JoinStatusContainet joinPeople={detailData.joinPeople}/>
-          </div>
-          <div className='vertical-line'/>
-          <div className='request-people'>
-            <h2>신청자 현황</h2>
-            <SubmitCardContainer cardList={detailData.requestPeople}/>
-          </div>
-        </div>
-        : 
-        <DetailBody detailData={detailData} type='project'/>
-        }
-      </StyleDetailContainer>
-    </StyleDetailWrapper>
+    <Suspense fallback={<SuspenseDetailPage/>}>
+      <StyleDetailWrapper>
+          <StyleDetailContainer className='col'>
+            <DetailHead detailData={detailData} type='project'/>
+            {isAdmin &&
+            <OnlyAdmin className='row'>
+              {adminFunction.map((item,idx)=>
+                <StyleBorderButton
+                  key={idx}
+                  $fontSize={fontSize}
+                  onClick={item.handler}
+                >
+                  {item.title}
+                </StyleBorderButton>
+              )}
+            </OnlyAdmin>}
+            {isAdmin && isOnDetail ? 
+            <div className='row status'>
+              <StyleStatusContainer
+                className='col'
+                $flex={4}
+              >
+                <h2 className='status-title'>참가자 현황</h2>
+                <JoinStatusContainer joinPeople={detailData.joinPeople}/>
+              </StyleStatusContainer>
+              <div className='vertical-line'/>
+              <StyleStatusContainer 
+                className='col'
+                $flex={6}
+              >
+                <h2 className='status-title'>신청자 현황</h2>
+                <ProjectCardContainer cardList={detailData.requestPeople}/>
+              </StyleStatusContainer>
+            </div>
+            : 
+            <DetailBody detailData={detailData} type='project'/>
+            }
+          </StyleDetailContainer>
+      </StyleDetailWrapper>
+    </Suspense>
   );
 }

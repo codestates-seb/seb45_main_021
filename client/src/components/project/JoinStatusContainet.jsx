@@ -7,9 +7,12 @@ const StyleJoinStautsContainer = styled.div`
     width:100%;
     overflow:auto;
     gap:2rem;
+    &::-webkit-scrollbar {
+      display: none;
+    }
 `
 
-export default function JoinStatusContainet({
+export default function JoinStatusContainer({
     joinPeople,
 }) {
     return (

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components'
 import defaultImg from '../../static/images/userDefaultImg.jpeg'
 import Like from '../common/Like';
@@ -75,6 +75,7 @@ export default function DetailHead({
     height='15rem',
     detailData
 }) {
+
     const {toProfile, toProject, toPortfolio} = useNav();
     return (
         <StyleDetailHead 
@@ -98,9 +99,9 @@ export default function DetailHead({
                 />
             </div>
             <Border/>
-            <HiX
+            {/* <HiX
                 onClick={()=>type==='project' ? toProject() : toPortfolio()}
-            />
+            /> */}
         </StyleDetailHead>
     )
 }
