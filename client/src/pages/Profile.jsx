@@ -11,13 +11,21 @@ import Page from '../components/common/Page';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import api from '../hooks/useAxiosInterceptor';
+import { desktop, tablet } from '../static/theme';
 
 const StyleContainer = styled(Page)`
   gap: 2rem;
-  padding-top: 6rem;
   display: flex;
   flex-direction: column;
   position: relative;
+  overflow-x: hidden;
+  ${desktop} {
+    margin-top: 50px;
+  }
+  ${tablet} {
+    margin-top: 30px;
+  }
+
   ::-webkit-scrollbar {
     width: 5px;
   }

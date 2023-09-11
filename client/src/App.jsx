@@ -1,25 +1,27 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
-import About from './pages/About';
-import SignIn from './pages/SignIn';
-import SignUp from './pages/SignUp';
-import Profile from './pages/Profile';
-import ProjectWrite from './pages/ProjectWrite';
-import ProjectDetail from './pages/ProjectDetail';
-import ProjectEdit from './pages/ProjectEdit';
-import PortfolioEdit from './pages/PortfolioEdit';
-import PortfolioDetail from './pages/PortfolioDetail';
-import PortfolioWrite from './pages/PortfolioWrite';
-import NotFound from './pages/NotFound';
+import { lazy, Suspense } from 'react';
 import Header from './components/header/Header';
 import { useEffect } from 'react';
-import Projects from './pages/Projects';
-import Portfolios from './pages/Portfolios';
-import Search from './pages/Search';
 import BackGround from './components/common/BackGround';
 import { useAxiosInterceptor } from './hooks/useAxiosInterceptor';
 import Footer from './components/footer/Footer';
 import { styled } from 'styled-components';
+import Spinner from './components/common/Spinner';
 
+const About = lazy(() => import('./pages/About'));
+const SignIn = lazy(() => import('./pages/SignIn'));
+const SignUp = lazy(() => import('./pages/SignUp'));
+const Profile = lazy(() => import('./pages/Profile'));
+const Projects = lazy(() => import('./pages/Projects'));
+const ProjectWrite = lazy(() => import('./pages/ProjectWrite'));
+const ProjectDetail = lazy(() => import('./pages/ProjectDetail'));
+const ProjectEdit = lazy(() => import('./pages/ProjectEdit'));
+const Portfolios = lazy(() => import('./pages/Portfolios'));
+const PortfolioWrite = lazy(() => import('./pages/PortfolioWrite'));
+const PortfolioDetail = lazy(() => import('./pages/PortfolioDetail'));
+const PortfolioEdit = lazy(() => import('./pages/PortfolioEdit'));
+const NotFound = lazy(() => import('./pages/NotFound'));
+const Search = lazy(() => import('./pages/Search'));
 const StyleApp = styled.div`
   display: flex;
   flex-direction: column;
@@ -47,22 +49,24 @@ function App() {
     <StyleApp>
       <BackGround />
       <Header />
-      <Routes>
-        <Route path="/" element={<About />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/profile/:memberId" element={<Profile />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/project/write" element={<ProjectWrite />} />
-        <Route path="/project/detail/:projectId" element={<ProjectDetail />} />
-        <Route path="/project/edit/:projectId" element={<ProjectEdit />} />
-        <Route path="/portfolios" element={<Portfolios />} />
-        <Route path="/portfolio/write" element={<PortfolioWrite />} />
-        <Route path="/portfolio/detail/:portfolioId" element={<PortfolioDetail />} />
-        <Route path="/portfolio/edit/:portfolioId" element={<PortfolioEdit />} />
-        <Route path="/search" element={<Search />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <Suspense fallback={<Spinner />}>
+        <Routes>
+          <Route path="/" element={<About />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/profile/:memberId" element={<Profile />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/project/write" element={<ProjectWrite />} />
+          <Route path="/project/detail/:projectId" element={<ProjectDetail />} />
+          <Route path="/project/edit/:projectId" element={<ProjectEdit />} />
+          <Route path="/portfolios" element={<Portfolios />} />
+          <Route path="/portfolio/write" element={<PortfolioWrite />} />
+          <Route path="/portfolio/detail/:portfolioId" element={<PortfolioDetail />} />
+          <Route path="/portfolio/edit/:portfolioId" element={<PortfolioEdit />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
       <Footer />
     </StyleApp>
   );

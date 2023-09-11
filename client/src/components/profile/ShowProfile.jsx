@@ -8,6 +8,7 @@ import { BsCamera } from 'react-icons/bs';
 import api from '../../hooks/useAxiosInterceptor';
 import { updateUser } from '../../redux/userform/userSlice';
 import Skeleton from '@mui/material/Skeleton';
+import { mobile } from '../../static/theme';
 
 export default function ShowProfile({ profile, isEdit, setIsEdit, setProfile, isLoading }) {
   const user = useSelector((state) => state.user);

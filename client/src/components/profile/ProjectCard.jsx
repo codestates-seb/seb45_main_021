@@ -9,14 +9,12 @@ import SwiperEdit from './SwiperEdit';
 
 const StyleContainer = styled.div`
   width: 100%;
-  height: 70rem;
+  height: 80rem;
   padding: 2rem;
+  gap: 1rem;
   background-color: var(--black-800);
   position: relative;
   h2 {
-    position: absolute;
-    top: 2rem;
-    left: 2rem;
     font-size: 3rem;
     font-weight: 800;
   }
@@ -26,9 +24,11 @@ const StyleContainer = styled.div`
   }
   .swiper-wrapper {
     display: flex;
+    align-items: center;
   }
   .swiper-slide {
-    width: 50%;
+    padding: 1rem;
+    width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
@@ -60,43 +60,45 @@ export default function ProjectCard({ id, data, isLoading }) {
   };
 
   return (
-    <StyleContainer id={id}>
+    <StyleContainer id={id} className="col">
       <h2>프로젝트 카드</h2>
-      <Swiper
-        modules={[Pagination]}
-        onSlideChange={handleSlideChange}
-        slidesPerView={'auto'}
-        centeredSlides={true}
-        pagination={{ clickable: true }}
-        spaceBetween={10}
-        slideToClickedSlide={true}
-        initialSlide={isEdit.fetch || isEdit.new ? 0 : 1}
-      >
-        {!isEdit.fetch &&
-          !isEdit.new &&
-          data.map((el, i) => (
-            <SwiperSlide key={i}>
-              <SwiperItem
-                activePage={activePage}
-                data={el}
-                idx={i}
+      <div>
+        <Swiper
+          modules={[Pagination]}
+          onSlideChange={handleSlideChange}
+          slidesPerView={'auto'}
+          centeredSlides={true}
+          pagination={{ clickable: true }}
+          spaceBetween={10}
+          slideToClickedSlide={true}
+          initialSlide={isEdit.fetch || isEdit.new ? 0 : 1}
+        >
+          {!isEdit.fetch &&
+            !isEdit.new &&
+            data.map((el, i) => (
+              <SwiperSlide key={i}>
+                <SwiperItem
+                  activePage={activePage}
+                  data={el}
+                  idx={i}
+                  handler={handleIsEdit}
+                  idxHandler={handleEditIdx}
+                  isLoading={isLoading}
+                />
+              </SwiperSlide>
+            ))}
+          {(isEdit.fetch || isEdit.new) && editIdx !== null && (
+            <SwiperSlide>
+              <SwiperEdit
+                data={data[editIdx]}
+                idx={editIdx}
                 handler={handleIsEdit}
-                idxHandler={handleEditIdx}
-                isLoading={isLoading}
+                type={isEdit.fetch ? 'fetch' : isEdit.new ? 'new' : ''}
               />
             </SwiperSlide>
-          ))}
-        {(isEdit.fetch || isEdit.new) && editIdx !== null && (
-          <SwiperSlide>
-            <SwiperEdit
-              data={data[editIdx]}
-              idx={editIdx}
-              handler={handleIsEdit}
-              type={isEdit.fetch ? 'fetch' : isEdit.new ? 'new' : ''}
-            />
-          </SwiperSlide>
-        )}
-      </Swiper>
+          )}
+        </Swiper>
+      </div>
     </StyleContainer>
   );
 }

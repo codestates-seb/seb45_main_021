@@ -83,7 +83,7 @@ export default function Portfolio({ id, data, isLoading }) {
             defaultLabel={filter.defaultLabel}
             options={filter.options}
             onClickHandler={handleClickFilter}
-            width="30rem"
+            width="25rem"
             fontSize="2rem"
           />
         )}

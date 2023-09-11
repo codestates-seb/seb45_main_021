@@ -33,7 +33,6 @@ const StyleContainer = styled(Page)`
     font-size: 1.5rem;
     table-layout: fixed;
   }
-
   th {
     padding: 2rem;
     border-bottom: 1px solid var(--black-100);
@@ -83,7 +82,7 @@ export default function Project({ id, data, isLoading }) {
             defaultLabel={filter.defaultLabel}
             options={filter.options}
             onClickHandler={handleClickFilter}
-            width="30rem"
+            width="25rem"
             fontSize="2rem"
           />
         )}
