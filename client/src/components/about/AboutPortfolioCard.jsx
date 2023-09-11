@@ -54,11 +54,11 @@ export default function AboutPortfolioCard({ portfolio }) {
         <h3 onClick={() => toPortfolioDetail(id)}>{title}</h3>
         <div className="skill">
           {tag.map((tag) => (
-            <Tag key={tag} text={tag} type="portfolio" />
+            <Tag key={tag} text={tag} type="portfolios" />
           ))}
         </div>
         <div className="action row">
-          <Like likes={likes} className="likes" />
+          <Like likes={likes} postId={id} className="likes" />
           <DateUser date={created_At} user={author} size={'1.3rem'} />
         </div>
       </div>

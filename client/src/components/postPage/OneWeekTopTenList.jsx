@@ -7,14 +7,10 @@ import { Autoplay } from 'swiper/modules';
 import OneWeekTopTenItem from './OneWeekTopTenItem';
 
 const StyleOneWeekTopTenList = styled.div`
-  border-radius: 3px;
-  backdrop-filter: blur(5px);
   flex: 1;
-
   .swiper-wrapper {
     height: 40px;
   }
-
   h5 {
     font-size: 1.4rem;
     font-weight: var(--nanum-semi-bold);

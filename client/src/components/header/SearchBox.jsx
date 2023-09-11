@@ -15,7 +15,7 @@ const StyleSearchInput = styled.div`
     width: 100%;
   }
   input {
-    border: 2px solid var(--black-500);
+    border: 2px solid var(--black-400);
     width: 100%;
     height: 40px;
     border-radius: 20px;
@@ -87,7 +87,6 @@ export default function SearchBox() {
 
   const updateSearchHistory = (keyword) => {
     // 검색 기록 업데이트
-
     if (keyword && keyword !== currentKeyword) {
       const newHistory = [keyword, ...searchHistory.filter((item) => item !== keyword)];
       if (newHistory.length > 5) {
@@ -95,7 +94,7 @@ export default function SearchBox() {
       }
       setSearchHistory(newHistory);
       localStorage.setItem('searchHistory', JSON.stringify(newHistory));
-      toSearch(keyword, 'project');
+      toSearch(keyword, 'projects');
     }
   };
 
@@ -122,6 +121,8 @@ export default function SearchBox() {
           autoComplete="off"
           value={searchInput.keyword}
           ref={inputRef}
+          maxLength={20}
+          placeholder="태그를 검색해보세요"
         />
         <button className="search-button">
           <HiOutlineSearch size={22} />

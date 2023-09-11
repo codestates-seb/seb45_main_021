@@ -11,7 +11,6 @@ import { useSelector } from 'react-redux';
 const StyleHeader = styled.header`
   padding: 10px 0;
   z-index: 10;
-  position: fixed;
   top: 0;
   width: 100%;
   transition: 0.6s;
