@@ -22,6 +22,7 @@ const PortfolioDetail = lazy(() => import('./pages/PortfolioDetail'));
 const PortfolioEdit = lazy(() => import('./pages/PortfolioEdit'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const Search = lazy(() => import('./pages/Search'));
+
 const StyleApp = styled.div`
   display: flex;
   flex-direction: column;

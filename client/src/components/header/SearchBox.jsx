@@ -5,14 +5,17 @@ import { HiOutlineSearch } from 'react-icons/hi';
 import useForm from '../../hooks/useForm';
 import useNav from '../../hooks/useNav';
 import RecentSearches from './RecentSearches';
+import { mobile, tablet, desktop, custom } from '../../static/theme.js';
 
 const StyleSearchInput = styled.div`
+  width: 100%;
   opacity: ${(props) => (props.$hidden ? '0' : '1')};
   visibility: ${(props) => (props.$hidden ? 'hidden' : 'visible')};
-  position: relative;
   flex: 1;
-  form {
-    width: 100%;
+  position: relative;
+  ${custom(900)} {
+    top: 50px;
+    position: absolute;
   }
   input {
     border: 2px solid var(--black-400);
@@ -121,7 +124,7 @@ export default function SearchBox() {
           autoComplete="off"
           value={searchInput.keyword}
           ref={inputRef}
-          maxLength={20}
+          maxLength={10}
           placeholder="태그를 검색해보세요"
         />
         <button className="search-button">

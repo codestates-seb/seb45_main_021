@@ -14,10 +14,10 @@ export const StyleBorderButton = styled.button`
   border: 2px solid ${(props) => (props.$borderColor ? props.$borderColor : 'var(--black-100)')};
   border-radius: ${(props) => (props.$radius ? props.$radius : '20px')};
   position: relative;
-  color: ${(props) => (props.$color ? props.$color : '')};
-  font-size: ${(props) => (props.$fontSize ? props.$fontSize : '')};
-  width: ${(props) => (props.$width ? props.$width : '')};
-  height: ${(props) => (props.$height ? props.$height : '')};
+  color: ${(props) => (props.$color ? props.$color : 'var(--black-100)')};
+  font-size: ${(props) => (props.$fontSize ? props.$fontSize : '1.5rem')};
+  width: ${(props) => (props.$width ? props.$width : 'auto')};
+  height: ${(props) => (props.$height ? props.$height : 'auto')};
   overflow: hidden;
   opacity: 0.8;
   transition: all.2s;
@@ -59,6 +59,7 @@ export const StyleBottomButton = styled.button`
     right: 0;
     transition: all.2s;
     margin: auto;
+    font-size: ${(props) => (props.$fontSize ? props.$fontSize : '1.5rem')};
   }
   &:hover:after {
     width: 80%;
