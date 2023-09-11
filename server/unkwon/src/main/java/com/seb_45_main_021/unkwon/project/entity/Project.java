@@ -2,6 +2,7 @@ package com.seb_45_main_021.unkwon.project.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.seb_45_main_021.unkwon.audit.Auditable;
 import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
 import com.seb_45_main_021.unkwon.heart.entity.ProjectHeart;
 import com.seb_45_main_021.unkwon.member.entity.Member;
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Project {
+public class Project extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long projectId;
@@ -51,13 +52,6 @@ public class Project {
     @Column
     @ElementCollection(targetClass=Long.class)
     private List<Long> requestPeople;
-
-    @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime modifiedAt;
 
     private LocalDate closedAt; // 마감일 (유저 입력)
 

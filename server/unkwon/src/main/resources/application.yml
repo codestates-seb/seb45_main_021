@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/han_db
-    username: root
-    password: gks0923
+    url: jdbc:mysql://spec-db-1.c8qdyivupwng.ap-northeast-2.rds.amazonaws.com:13306/SPEC
+    username: admin
+    password: qwer1234 #${MYSQL_SECRET}
 
   jpa:
     open-in-view: true
@@ -44,18 +44,18 @@ spring:
             scope:
               - email
               - profile
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: ${G_USERNAME}
-    password: ${G_PASSWORD}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          timeout: 5000
-          starttls:
-            enable: true
+#  mail:
+#    host: smtp.gmail.com
+#    port: 587
+#    username: ${G_USERNAME}
+#    password: ${G_PASSWORD}
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          timeout: 5000
+#          starttls:
+#            enable: true
 
 logging:
   level:
