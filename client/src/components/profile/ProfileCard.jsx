@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 import useNav from '../../hooks/useNav';
 import { useParams } from 'react-router-dom';
 import api from '../../hooks/useAxiosInterceptor';
-import { deleteUser } from '../../redux/userForm/userSlice';
+import { deleteUser } from '../../redux/userform/userSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import EditPassword from './EditPassword';
 import EditProfile from './EditProfile';
@@ -15,10 +15,11 @@ const StyleProfileContainer = styled.div`
   display: flex;
   gap: 5rem;
   padding: 1rem;
-  padding-top: 3rem;
   font-size: 2rem;
   .label {
     font-size: 1.5rem;
+    margin-bottom: 5px;
+    font-weight: 700;
   }
   .withdrawal {
     position: relative;
@@ -50,14 +51,13 @@ const StyleProfileContainer = styled.div`
   .imgWrapper {
     position: relative;
     width: 50%;
-    height: 100%;
+    height: 50%;
+    margin: auto 0;
   }
   .userImg {
     width: 100%;
-    border-radius: 20px;
-    &:hover {
-      filter: brightness(0.8);
-    }
+    height: 100%;
+    border-radius: 50%;
   }
   .editImg {
     position: absolute;
@@ -83,7 +83,12 @@ const StyleProfileContainer = styled.div`
     width: 100%;
     height: 100%;
   }
-
+  input[type='checkbox'] {
+    width: 15px;
+    height: 15px;
+    vertical-align: middle;
+    cursor: pointer;
+  }
   .infoContainer {
     width: 100%;
     border: 1px solid var(--black-100);
@@ -96,7 +101,7 @@ const StyleProfileContainer = styled.div`
       position: absolute;
       top: 2rem;
       right: 2rem;
-      gap: 0.5rem;
+      gap: 2rem;
       display: flex;
       svg {
         cursor: pointer;
@@ -112,12 +117,14 @@ const StyleProfileContainer = styled.div`
       font-weight: 700;
     }
     .editwrapper {
-      position: absolute;
-      bottom: 0;
-      right: 0;
+      margin-top: 3px;
+      margin-left: auto;
       color: var(--error);
       gap: 3rem;
       padding: 1rem 0;
+      p {
+        cursor: pointer;
+      }
     }
 
     .gap {
@@ -143,7 +150,7 @@ const StyleProfileContainer = styled.div`
   }
 `;
 
-export default function ProfileCard({ id, data }) {
+export default function ProfileCard({ id, data, isLoading }) {
   const { toAbout, toProfile } = useNav();
   const [isEdit, setIsEdit] = useState({ profile: false, password: false, withDrawal: false });
   const [profile, setProfile] = useState({
@@ -197,14 +204,21 @@ export default function ProfileCard({ id, data }) {
   const handleTagKeyDown = (e) => {
     if (e.code !== 'Enter' && e.code !== 'NumpadEnter') return;
     e.preventDefault();
-    if (editProfile.tag.value.length <= 2) {
-      setEditProfile({
-        ...editProfile,
-        tag: {
-          value: [...editProfile.tag.value, editProfile.tag.curString],
-          curString: '',
-        },
-      });
+    if (editProfile.tag.curString.length <= 10 && editProfile.tag.curString.length > 0) {
+      if (
+        editProfile.tag.value.length <= 2 &&
+        editProfile.tag.value.filter(
+          (el) => el.toLowerCase() === editProfile.tag.curString.toLowerCase(),
+        ).length === 0
+      ) {
+        setEditProfile({
+          ...editProfile,
+          tag: {
+            value: [...editProfile.tag.value, editProfile.tag.curString],
+            curString: '',
+          },
+        });
+      }
     }
   };
 
@@ -297,6 +311,7 @@ export default function ProfileCard({ id, data }) {
             isEdit={isEdit}
             setIsEdit={setIsEdit}
             setProfile={setProfile}
+            isLoading={isLoading}
           />
         )}
         {isEdit.profile && user.isLogin && Number(memberId) === user.userInfo.memberId && (
