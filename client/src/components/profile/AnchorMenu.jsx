@@ -29,6 +29,7 @@ const LinkContainer = styled.div`
   display: flex;
   flex-direction: column;
   position: fixed;
+  z-index: 20;
   bottom: 90px;
   right: 20px;
   overflow: hidden;
@@ -46,7 +47,7 @@ const LinkItem = styled.div`
 
 export default function AnchorMenu() {
   const [isOn, setIsOn] = useState(false);
-  const { userId } = useParams();
+  const { memberId } = useParams();
   const user = useSelector((state) => state.user);
 
   const handleIsOn = (e) => {
@@ -76,7 +77,7 @@ export default function AnchorMenu() {
           <AnchorLink href="#portfolio">
             <LinkItem>포트폴리오</LinkItem>
           </AnchorLink>
-          {user.isLogin && userId === user.userInfo.memberId && (
+          {user.isLogin && memberId === user.userInfo.memberId && (
             <>
               <AnchorLink href="#likeList">
                 <LinkItem>좋아요 리스트</LinkItem>

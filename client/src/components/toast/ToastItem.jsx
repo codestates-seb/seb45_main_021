@@ -12,6 +12,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  font-family: var(--nanum);
 `;
 
 const MessageWrapper = styled.div`
@@ -21,13 +22,13 @@ const MessageWrapper = styled.div`
   position: relative;
   background-color: ${(props) =>
     props.$type === 'info'
-      ? 'blue'
+      ? '#6060de'
       : props.$type === 'success'
-      ? 'green'
+      ? '#55b555'
       : props.$type === 'warning'
-      ? 'yellow'
+      ? '#dfdf4bcb'
       : props.$type === 'error'
-      ? 'red'
+      ? 'var(--error)'
       : null};
   border-radius: 5px;
   gap: 1rem;
@@ -36,9 +37,19 @@ const MessageWrapper = styled.div`
   p {
     font-family: var(--nanum);
     font-size: 2rem;
-    width: 20rem;
+    min-width: 20rem;
     word-wrap: break-word;
+    text-shadow: 2px 2px 2px gray;
   }
+  @keyframes slideInRight {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  animation: slideInRight 0.5s ease-in-out;
 `;
 
 const ProgressBar = styled.div`

@@ -67,7 +67,6 @@ const StyleModal = styled.div`
 
 /**
  *
- * @param isOpen - 모달의 열거 상태를 전달
  * @param setIsOpen - setter 함수 그대로 전달
  * @param type - type=alert or confirm or children
  * @param title - 타이틀 문자열 전달 (alert,confirm)

@@ -10,17 +10,27 @@ import { isValidEmail, isValidPassword } from '../components/profile/isValid';
 import { deleteUser } from '../redux/userForm/userSlice';
 import { useDispatch } from 'react-redux';
 import Spinner from '../components/common/Spinner';
+import { desktop, mobile } from '../static/theme';
+import Toast from '../components/toast/Toast';
 
 const StyleContainer = styled(Page)`
-  width: 100%;
-  height: 100%;
+  width: fit-content;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 2rem;
   font-size: 2rem;
-
+  scale: 1;
+  ${desktop} {
+    scale: 1;
+  }
+  @media (max-width: 800px) {
+    scale: 0.8;
+  }
+  ${mobile} {
+    scale: 0.8;
+  }
   h3 {
     font-size: 5rem;
     font-weight: 700;
@@ -37,18 +47,27 @@ const StyleContainer = styled(Page)`
   }
   .bottom {
     margin-bottom: 5rem;
+    ${desktop} {
+      margin-bottom: 5rem;
+    }
+    @media (max-width: 800px) {
+      margin-bottom: 3rem;
+    }
+    ${mobile} {
+      margin-bottom: 3rem;
+    }
   }
   .logo {
     margin-right: 20px;
   }
   .formGap {
-    gap: 2rem;
+    gap: 1rem;
   }
   .error {
     font-size: 1.3rem;
   }
   .colgap {
-    gap: 3rem;
+    gap: 2rem;
   }
 `;
 
@@ -56,6 +75,19 @@ const StyleRowContainer = styled.div`
   justify-content: center;
   width: 100%;
   gap: 6rem;
+  display: flex;
+  flex-direction: row;
+  ${desktop} {
+    flex-direction: row;
+  }
+  @media (max-width: 800px) {
+    flex-direction: column;
+    gap: 4rem;
+  }
+  ${mobile} {
+    flex-direction: column;
+    gap: 4rem;
+  }
 `;
 
 const StyleColContainer = styled.div`
@@ -64,13 +96,14 @@ const StyleColContainer = styled.div`
 `;
 
 const StyleBtnContainer = styled.div`
-  width: 30rem;
+  width: 40rem;
+  height: 56.22px;
   border: 1px solid var(--black-300);
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s;
-  padding: 1.2rem 0;
+  padding: 2rem 4rem;
   border-radius: 10px;
   font-weight: 700;
   &:hover {
@@ -84,13 +117,25 @@ const StyleDivider = styled.div`
   justify-content: center;
   position: relative;
   height: 100%;
-
   &::before {
     content: '';
     border-left: 1px solid var(--black-500);
     position: absolute;
     height: 40%;
     top: 0;
+    ${desktop} {
+      top: 0;
+    }
+    @media (max-width: 800px) {
+      left: 0;
+      width: 40%;
+      border-bottom: 1px solid var(--black-500);
+    }
+    ${mobile} {
+      left: 0;
+      width: 40%;
+      border-bottom: 1px solid var(--black-500);
+    }
   }
 
   &::after {
@@ -99,6 +144,19 @@ const StyleDivider = styled.div`
     position: absolute;
     height: 40%;
     bottom: 0;
+    ${desktop} {
+      bottom: 0;
+    }
+    @media (max-width: 800px) {
+      right: 0;
+      width: 40%;
+      border-bottom: 1px solid var(--black-500);
+    }
+    ${mobile} {
+      right: 0;
+      width: 40%;
+      border-bottom: 1px solid var(--black-500);
+    }
   }
 
   span {
@@ -141,7 +199,10 @@ export default function SignUp() {
       setIsSubmit(true);
       if (isvalidEmail && isvalidPassword) {
         const data = JSON.stringify({ username, email, password });
-        api.post('/members/signup', data).then(toSignin());
+        api.post('/members/signup', data).then(() => {
+          Toast.success('회원가입 성공.');
+          toSignin();
+        });
       } else if (!isvalidEmail && !isvalidPassword) {
         setError({
           email: '올바른 이메일 형식을 입력해주세요.',
@@ -186,7 +247,7 @@ export default function SignUp() {
             <span>이미 회원이신가요 ?</span>
             <p onClick={toSignin}>&nbsp;로그인</p>
           </div>
-          <StyleRowContainer className="row">
+          <StyleRowContainer>
             <StyleColContainer className="col colgap">
               <StyleBtnContainer onClick={handleClickGoogleBtn}>
                 <FcGoogle className="logo" size={30} />
@@ -202,12 +263,12 @@ export default function SignUp() {
                 <span>OR</span>
               </StyleDivider>
             </div>
-            <div>
+            <StyleColContainer>
               <form className="formGap col">
                 <Input
                   label={'이름'}
                   placeholder="이름을 입력해주세요"
-                  width="30rem"
+                  width="40rem"
                   height="56.22px"
                   fontSize="2rem"
                   type="text"
@@ -218,7 +279,7 @@ export default function SignUp() {
                 <Input
                   label={'이메일'}
                   placeholder="username@example.com"
-                  width="30rem"
+                  width="40rem"
                   height="56.22px"
                   fontSize="2rem"
                   type="text"
@@ -229,7 +290,7 @@ export default function SignUp() {
                 <Input
                   label={'비밀번호'}
                   placeholder="영어,숫자,특수기호 포함 8글자 이상"
-                  width="30rem"
+                  width="40rem"
                   height="56.22px"
                   fontSize="2rem"
                   type="password"
@@ -242,7 +303,7 @@ export default function SignUp() {
                   <span>회원가입</span>
                 </StyleBtnContainer>
               </form>
-            </div>
+            </StyleColContainer>
           </StyleRowContainer>
         </StyleContainer>
       )}

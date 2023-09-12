@@ -2,14 +2,14 @@ import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateUser, deleteUser } from '../redux/userForm/userSlice';
 import useNav from '../hooks/useNav';
+import Toast from '../components/toast/Toast';
 
 const instance = axios.create({
-  baseURL: 'https://2469-14-53-203-58.ngrok-free.app/',
+  baseURL: 'http://ec2-52-78-224-100.ap-northeast-2.compute.amazonaws.com/',
   timeout: 7000,
   headers: {
     'Content-Type': 'application/json',
     withCredentials: true,
-    'ngrok-skip-browser-warning': true,
   },
 });
 
@@ -52,7 +52,7 @@ export const useAxiosInterceptor = () => {
 
       if (message === 'refreshToken has expired') {
         dispatch(deleteUser());
-        window.alert('토큰이 만료되어 자동으로 로그아웃 되었습니다.');
+        Toast.warning('세션이 만료되었습니다.');
         toSignin();
       }
 

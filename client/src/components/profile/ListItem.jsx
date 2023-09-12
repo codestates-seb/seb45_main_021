@@ -9,7 +9,7 @@ const ItemContainer = styled.tr`
   border-bottom: 1px solid #bdbdbd6e;
 `;
 
-export default function ListItem({ data, type }) {
+export default function ListItem({ data, type, isLoading }) {
   const { toProfile, toProjectDetail, toPortfolioDetail } = useNav();
 
   const handleClickTitle = () => {
@@ -24,21 +24,47 @@ export default function ListItem({ data, type }) {
   return (
     <ItemContainer>
       <td className="title cursor" onClick={handleClickTitle}>
-        {data.title}
+        {isLoading ? (
+          <Skeleton width="90%" height="40px" sx={{ bgcolor: 'grey.700' }} animation="wave" />
+        ) : (
+          data.title
+        )}
       </td>
       {data.author?.userName && (
         <td className="cursor author" onClick={handleClickName}>
-          {data.author.userName}
+          {isLoading ? (
+            <Skeleton width="90%" height="40px" sx={{ bgcolor: 'grey.700' }} animation="wave" />
+          ) : (
+            data.author.userName
+          )}
         </td>
       )}
-      <td className="created_At">{data.createdAt}</td>
+      <td className="created_At">
+        {isLoading ? (
+          <Skeleton width="90%" height="40px" sx={{ bgcolor: 'grey.700' }} animation="wave" />
+        ) : (
+          data.createdAt
+        )}
+      </td>
       <td className="views">
-        <FaRegEye color="gray" size="20" />
-        <span>{data.view}</span>
+        {isLoading ? (
+          <Skeleton width="90%" height="40px" sx={{ bgcolor: 'grey.700' }} animation="wave" />
+        ) : (
+          <>
+            <FaRegEye color="gray" size="20" />
+            <span>{data.view}</span>
+          </>
+        )}
       </td>
       <td className="likes">
-        <AiOutlineHeart color="gray" size="20" />
-        <span>{data.heartCount}</span>
+        {isLoading ? (
+          <Skeleton width="90%" height="40px" sx={{ bgcolor: 'grey.700' }} animation="wave" />
+        ) : (
+          <>
+            <AiOutlineHeart color="gray" size="20" />
+            <span>{data.heartCount}</span>
+          </>
+        )}
       </td>
     </ItemContainer>
   );

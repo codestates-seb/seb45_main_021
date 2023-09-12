@@ -58,7 +58,9 @@ export default function NotFound() {
         />
       )}
       <button onClick={handleModal}>모달</button>
-      <button onClick={() => toast.success('성공')}>성공</button>
+      <button onClick={() => toast.success('성공nhjghjghghjghjg7865786hjgjhghjgjh')}>
+        성gfghfghfghfgh공
+      </button>
       <button onClick={() => toast.info('인포')}>인포</button>
     </Container>
   );

@@ -11,21 +11,22 @@ import Page from '../components/common/Page';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import api from '../hooks/useAxiosInterceptor';
-import { desktop, tablet } from '../static/theme';
+import { desktop, mobile } from '../static/theme';
 
 const StyleContainer = styled(Page)`
   gap: 2rem;
   display: flex;
-  flex-direction: column;
   position: relative;
   overflow-x: hidden;
   ${desktop} {
-    margin-top: 50px;
+    flex-direction: row;
   }
-  ${tablet} {
-    margin-top: 30px;
+  @media (max-width: 850px) {
+    flex-direction: column;
   }
-
+  ${mobile} {
+    flex-direction: column;
+  }
   ::-webkit-scrollbar {
     width: 5px;
   }
@@ -246,14 +247,16 @@ export default function Profile() {
   return (
     <StyleContainer>
       <ProfileCard id="profile" data={data.profile} isLoading={isLoading} />
-      <Project id="project" data={data.project} isLoading={isLoading} />
-      <Portfolio id="portfolio" data={data.portfolio} isLoading={isLoading} />
-      {user.isLogin && Number(memberId) === user.userInfo.memberId && (
-        <>
-          <LikeList id="likeList" data={data.likeList} isLoading={isLoading} />
-          <ProjectCard id="projectCard" data={data.projectCard} isLoading={isLoading} />
-        </>
-      )}
+      <div>
+        <Project id="project" data={data.project} isLoading={isLoading} />
+        <Portfolio id="portfolio" data={data.portfolio} isLoading={isLoading} />
+        {user.isLogin && Number(memberId) === user.userInfo.memberId && (
+          <>
+            <LikeList id="likeList" data={data.likeList} isLoading={isLoading} />
+            <ProjectCard id="projectCard" data={data.projectCard} isLoading={isLoading} />
+          </>
+        )}
+      </div>
       <AnchorMenu />
     </StyleContainer>
   );
