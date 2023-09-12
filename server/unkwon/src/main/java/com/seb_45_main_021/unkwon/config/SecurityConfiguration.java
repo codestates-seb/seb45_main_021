@@ -90,8 +90,10 @@ public class SecurityConfiguration {
         // HTTP 메서드에 대한 HTTP 통신 허용
         configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
-        
-        // configuration.setExposedHeaders(List.of()); 응답 헤더 설정
+        configuration.setExposedHeaders(List.of(
+                "accessToken",
+                "refreshToken"
+        )); // 응답 헤더 설정
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         // 모든 URL 에 앞에서 구성한 CORS 정책 적용
