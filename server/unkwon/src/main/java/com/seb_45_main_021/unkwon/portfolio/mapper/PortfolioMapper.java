@@ -57,7 +57,7 @@ public interface PortfolioMapper {
                 .view(portFolio.getView())
                 .commentCount(portFolio.getComments().size())
                 .tags(new String[]{portFolio.getTags()})
-                .lang(new String[]{portFolio.getLang()})
+                .lang(portFolio.getLang())
                 .heartCount(portFolio.getHeartCount())
                 .IsEmploy(portFolio.isIsEmploy())
                 .build();
@@ -82,7 +82,7 @@ public interface PortfolioMapper {
                 .view(portFolio.getView())
                 .commentCount(portFolio.getComments().size())
                 .tags(new String[]{portFolio.getTags()})
-                .lang(new String[]{portFolio.getLang()})
+                .lang(portFolio.getLang())
                 .IsEmploy(portFolio.isIsEmploy())
                 .IsComment(portFolio.isIsComment())
                 .heartCount(portFolio.getHeartCount())
