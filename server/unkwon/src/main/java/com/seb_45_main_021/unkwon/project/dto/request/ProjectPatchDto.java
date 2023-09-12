@@ -12,8 +12,6 @@ public class ProjectPatchDto {
     private String title;
     private int totalPeople;
     private String body;
-
-//    private List<Image> images;
     private String description;
     private String[] tags;
     private String[] lang;
