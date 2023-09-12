@@ -5,7 +5,7 @@ import useNav from '../hooks/useNav';
 import Toast from '../components/toast/Toast';
 
 const instance = axios.create({
-  baseURL: 'http://ec2-52-78-224-100.ap-northeast-2.compute.amazonaws.com/',
+  baseURL: 'http://ec2-52-78-224-100.ap-northeast-2.compute.amazonaws.com:8080/',
   timeout: 7000,
   headers: {
     'Content-Type': 'application/json',
