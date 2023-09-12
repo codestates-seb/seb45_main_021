@@ -57,7 +57,7 @@ public class PortfolioDto {
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
         private String[] tags;
-        private String[] lang;
+        private String lang;
         private int heartCount;
         private boolean IsEmploy;
     }
@@ -88,7 +88,7 @@ public class PortfolioDto {
         private boolean IsComment;
         private boolean IsEmploy;
         private String[] tags;
-        private String[] lang;
+        private String lang;
         private int heartCount;
     }
     @Getter @Setter
