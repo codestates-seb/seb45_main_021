@@ -20,6 +20,16 @@ const StyleContainer = styled(Page)`
   align-items: center;
   gap: 2rem;
   font-size: 2rem;
+  scale: 1;
+  ${desktop} {
+    scale: 1;
+  }
+  @media (max-width: 800px) {
+    scale: 0.8;
+  }
+  ${mobile} {
+    scale: 0.8;
+  }
   h3 {
     font-size: 5rem;
     font-weight: 700;
@@ -36,18 +46,27 @@ const StyleContainer = styled(Page)`
   }
   .bottom {
     margin-bottom: 5rem;
+    ${desktop} {
+      margin-bottom: 5rem;
+    }
+    @media (max-width: 800px) {
+      margin-bottom: 3rem;
+    }
+    ${mobile} {
+      margin-bottom: 3rem;
+    }
   }
   .logo {
     margin-right: 20px;
   }
   .formGap {
-    gap: 2rem;
+    gap: 1rem;
   }
   .error {
     font-size: 1.3rem;
   }
   .colgap {
-    gap: 3rem;
+    gap: 2rem;
   }
 `;
 
@@ -62,9 +81,11 @@ const StyleRowContainer = styled.div`
   }
   @media (max-width: 800px) {
     flex-direction: column;
+    gap: 4rem;
   }
   ${mobile} {
     flex-direction: column;
+    gap: 4rem;
   }
 `;
 
