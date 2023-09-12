@@ -14,10 +14,12 @@ const StyleProjectCard = styled.div`
     justify-content:center;
     align-items:center;
     .image-name-container {
-        > span:nth-child(1) {
-            border-radius:50%;
-        }
-        gap:1rem;
+      > span:nth-child(1) {
+          border-radius:50%;
+      }
+      gap:1rem;
+      justify-content:center;
+      align-items:center;
     }
 `
 const renderSkeletons = (count = 1, size) => {
@@ -49,7 +51,7 @@ const renderSkeletons = (count = 1, size) => {
     return skeletons;
   };
 
-export default function ProjectCardSkeleton() {
+export default function JoinCardSkeleton() {
     const size = 20;
     return (
         <StyleProjectCardSkeletion className='col'>

@@ -13,6 +13,7 @@ import api from '../hooks/useAxiosInterceptor';
 import { desktop, tablet } from '../static/theme';
 import SuspenseDetailPage from '../components/PfPjPublic/DetailSkeletonLoading';
 import ProjectCardSkeletion from './../components/project/ProjectCardSkeleton';
+import JoinCardSkeleton from '../components/project/JoinCardSkeleton';
 
 export const StyleDetailWrapper = styled(Page)`
   padding-top:6rem;
@@ -238,7 +239,10 @@ export default function ProjectDetail() {
           <div className='row status'>
             <StyleStatusContainer className='col' $flex={4}>
               <h2 className='status-title'>참가자 현황</h2>
-              <JoinStatusContainer joinPeople={detailData.joinPeople}/>
+              {isRequestLoading
+              ? <JoinCardSkeleton/>
+              : <JoinStatusContainer joinPeople={detailData.joinPeople}/>
+              }
             </StyleStatusContainer>
             <div className='vertical-line'/>
             <StyleStatusContainer className='col' $flex={6}>

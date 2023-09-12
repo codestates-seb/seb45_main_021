@@ -3,7 +3,6 @@ import { styled } from 'styled-components';
 import {HiX} from 'react-icons/hi'
 
 const StyleFileInput = styled.div`
-    margin:0 0.5rem;
 `
 
 const FileInputContainer = styled.div`
