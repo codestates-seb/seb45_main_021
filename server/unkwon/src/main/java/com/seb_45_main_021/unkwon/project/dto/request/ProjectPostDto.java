@@ -15,11 +15,9 @@ public class ProjectPostDto {
 
     private int totalPeople;
 
-    private LocalDate closedAt;
+//    private LocalDate closedAt;
 
     private String body;
-
-//    private List<Image> images;
 
     private String description;
 

@@ -1,9 +1,10 @@
 package com.seb_45_main_021.unkwon.project.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.seb_45_main_021.unkwon.audit.Auditable;
 import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
-import com.seb_45_main_021.unkwon.heart.entity.ProjectHeart;
+import com.seb_45_main_021.unkwon.image.ProjectImage;
+import com.seb_45_main_021.unkwon.image.ProjectTitleImage;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,11 +15,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -26,7 +25,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Project {
+public class Project extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long projectId;
@@ -35,11 +34,6 @@ public class Project {
     private String title;
 
     private int totalPeople; // 모집 희망 인원
-
-//    private List<Long> joinPeople; // 수락된 인원
-
-//    @Transient // JPA 가 데이터베이스와 매핑하지 않음을 의미
-//    private List<Long> requestPeople; // 신청한 인원
 
     @OneToMany(mappedBy = "project")
     private List<ProjectStatus> projectStatuses;
@@ -52,14 +46,7 @@ public class Project {
     @ElementCollection(targetClass=Long.class)
     private List<Long> requestPeople;
 
-    @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime modifiedAt;
-
-    private LocalDate closedAt; // 마감일 (유저 입력)
+//    private LocalDate closedAt;
 
     @Column(columnDefinition = "TEXT")
     private String tags;
@@ -86,4 +73,25 @@ public class Project {
     @JsonManagedReference
     private List<PortfolioHeart> portfolioHearts = new ArrayList<>();
 
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<ProjectImage> images = new ArrayList<>();
+
+    public void addImage(ProjectImage image) {
+        this.images.add(image);
+        image.setProject(this);
+
+    }
+
+    @OneToOne(mappedBy = "project", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private ProjectTitleImage projectTitleImage;
+
+    public void setProjectTitleImage(ProjectTitleImage titleImage) {
+        if (this.projectTitleImage != null) {
+            this.projectTitleImage.setProject(null);
+        }
+        this.projectTitleImage = titleImage;
+        titleImage.setProject(this);
+    }
 }
