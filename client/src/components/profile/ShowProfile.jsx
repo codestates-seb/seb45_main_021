@@ -40,8 +40,8 @@ export default function ShowProfile({
     console.log('유저 이미지 교체 요청');
     const file = e.target.files[0];
     api.patch(`/members/profileImg/${memberId}`).then((el) => {
-      setProfile({ ...profile, userImgUrl: el.data.imgUrl });
-      dispatch(updateUser({ userInfo: { ...user.userInfo, imgUrl: el.data.imgUrl } }));
+      setProfile({ ...profile, userImgUrl: el.data.userImgUrl });
+      dispatch(updateUser({ userInfo: { ...user.userInfo, userImgUrl: el.data.userImgUrl } }));
     });
     console.log(file);
   };
@@ -92,8 +92,8 @@ export default function ShowProfile({
           ) : (
             <>
               <img
-                className="userImgUrl"
-                src={profile.userImgUrl !== '' ? profile.userImgUrl : userDefaultImg}
+                className="userImg"
+                src={profile.userImgUrl ? profile.userImgUrl : userDefaultImg}
                 alt="userImage"
               />
               {user.isLogin && Number(memberId) === user.userInfo.memberId && (
