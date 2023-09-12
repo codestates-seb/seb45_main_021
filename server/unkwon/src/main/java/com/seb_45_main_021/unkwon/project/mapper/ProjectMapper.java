@@ -38,7 +38,7 @@ public interface ProjectMapper {
         project.setTags(Arrays.toString(projectPostDto.getTags()));
         project.setBody(projectPostDto.getBody());
         project.setDescription(projectPostDto.getDescription());
-        project.setClosedAt(projectPostDto.getClosedAt());
+//        project.setClosedAt(projectPostDto.getClosedAt());
 
         return project;
     }
@@ -115,13 +115,15 @@ public interface ProjectMapper {
                 .requestPeople(project.getRequestPeople())
                 .createdAt(project.getCreatedAt())
                 .modifiedAt(project.getModifiedAt())
-                .closedAt(project.getClosedAt())
+//                .closedAt(project.getClosedAt())
                 .lang(new String[]{project.getLang()})
                 .tags(new String[]{project.getTags()})
                 .body(project.getBody())
                 .description(project.getDescription())
                 .heartCount(project.getHeartCount())
                 .view(project.getView())
+                .images(project.getImages())
+                .projectTitleImage(project.getProjectTitleImage())
                 .build();
 
         return projectResponseDto;

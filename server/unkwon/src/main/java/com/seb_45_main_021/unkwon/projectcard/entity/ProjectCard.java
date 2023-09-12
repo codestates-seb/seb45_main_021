@@ -37,7 +37,7 @@ public class ProjectCard extends Auditable {
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "PROJECT_STATUS_ID")
+    @JoinColumn(name = "projectStatusId")
     private ProjectStatus projectStatus;
 
     public ProjectCard(String tell, String aboutMe, Member member, String[] tags) {
