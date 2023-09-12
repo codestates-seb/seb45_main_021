@@ -264,7 +264,7 @@ export default function SignUp() {
               </StyleDivider>
             </div>
             <StyleColContainer>
-              <form className="formGap col">
+              <form className="formGap col" onSubmit={handleSubmitForm}>
                 <Input
                   label={'이름'}
                   placeholder="이름을 입력해주세요"
@@ -299,7 +299,8 @@ export default function SignUp() {
                   onChange={handleChangePassword}
                   error={error.password}
                 />
-                <StyleBtnContainer onClick={handleSubmitForm}>
+
+                <StyleBtnContainer type="submit" onClick={handleSubmitForm}>
                   <span>회원가입</span>
                 </StyleBtnContainer>
               </form>

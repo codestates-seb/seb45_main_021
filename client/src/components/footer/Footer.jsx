@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from 'styled-components';
 import githubIcon from '../../static/images/githubIcon.png';
-
+import { tablet } from '../../static/theme';
 const StyleFooter = styled.footer`
   width: var(--inner);
   margin: var(--center);
@@ -28,6 +28,13 @@ const StyleFooter = styled.footer`
   }
   .user:hover {
     background-color: #ffffff1b;
+  }
+  ${tablet} {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    .user:hover {
+      background-color: transparent;
+    }
   }
 `;
 

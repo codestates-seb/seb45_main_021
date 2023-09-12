@@ -16,7 +16,7 @@ export const useAxiosInterceptor = () => {
   const dispatch = useDispatch();
   const jwt = useSelector((state) => state.user.jwt);
   const { toAbout, toSignin } = useNav();
-
+  console.log(jwt);
   instance.interceptors.request.use(
     (config) => {
       if (jwt?.accesstoken) {
@@ -25,7 +25,7 @@ export const useAxiosInterceptor = () => {
       if (jwt?.refreshtoken) {
         config.headers['refreshtoken'] = `${jwt.refreshtoken}`;
       }
-
+      console.log(config);
       return config;
     },
     (error) => {
@@ -43,7 +43,6 @@ export const useAxiosInterceptor = () => {
       return response;
     },
     (error) => {
-      console.log(error);
       let message;
       if (error?.response?.data?.message) {
         message = error.response.data.message;

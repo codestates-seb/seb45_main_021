@@ -10,14 +10,15 @@ import { styled } from 'styled-components';
  * @param {string} color - 버튼 색 컬러 지정
  * @return {JSX.Element}
  */
+
 export const StyleBorderButton = styled.button`
   border: 2px solid ${(props) => (props.$borderColor ? props.$borderColor : 'var(--black-100)')};
   border-radius: ${(props) => (props.$radius ? props.$radius : '20px')};
   position: relative;
   color: ${(props) => (props.$color ? props.$color : 'var(--black-100)')};
   font-size: ${(props) => (props.$fontSize ? props.$fontSize : '1.5rem')};
-  width: ${(props) => (props.$width ? props.$width : 'auto')};
-  height: ${(props) => (props.$height ? props.$height : 'auto')};
+  width: ${(props) => props.$width};
+  height: ${(props) => props.$height};
   overflow: hidden;
   opacity: 0.8;
   transition: all.2s;
@@ -63,5 +64,22 @@ export const StyleBottomButton = styled.button`
   }
   &:hover:after {
     width: 80%;
+  }
+`;
+
+export const StyleBackgroundButton = styled.button`
+  position: relative;
+  transition: 0.2s;
+  opacity: 0.8;
+  margin-left: auto;
+  background-color: var(--black-700);
+  border-radius: ${(props) => (props.$radius ? props.$radius : '5px')};
+  color: ${(props) => (props.$color ? props.$color : 'var(--black-100)')};
+  font-size: ${(props) => (props.$fontSize ? props.$fontSize : '1.5rem')};
+  width: ${(props) => props.$width};
+  height: ${(props) => props.$height};
+  padding: ${(props) => props.$padding || '6px 10px'};
+  &:hover {
+    opacity: 1;
   }
 `;

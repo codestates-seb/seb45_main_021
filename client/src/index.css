@@ -27,7 +27,9 @@ html {
   --sky-blue: #7fdbff;
   --shadow: #00000020;
   --center: 0 auto;
-  --backgroundColor: #00000099;
+  --backgroundColor: #1e1c1c;
+  background-color: var(--backgroundColor);
+  overflow-x: hidden;
 }
 
 .hidden {
@@ -84,4 +86,8 @@ path {
 
 ::-webkit-scrollbar-thumb:hover {
   background-color: var(--black-400);
+}
+
+a {
+  text-decoration: none;
 }

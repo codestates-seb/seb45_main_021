@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom';
 import { mobile } from '../../static/theme';
 const StyleModal = styled.div`
   position: fixed;
-  z-index: 30;
+  z-index: 15;
   top: 0;
   left: 0;
   width: 100vw;
@@ -93,7 +93,9 @@ export default function Modal({
     };
   }, []);
 
-  const modalCloser = () => setIsOpen(false);
+  const modalCloser = () => {
+    if (type === 'confirm') setIsOpen(false);
+  };
 
   const confirmOnClickHandler = () => {
     if (confirmHandler) {

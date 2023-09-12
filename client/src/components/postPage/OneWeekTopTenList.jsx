@@ -5,9 +5,11 @@ import 'swiper/css';
 import { styled } from 'styled-components';
 import { Autoplay } from 'swiper/modules';
 import OneWeekTopTenItem from './OneWeekTopTenItem';
-
+import { tablet } from '../../static/theme';
 const StyleOneWeekTopTenList = styled.div`
   padding-bottom: 10px;
+  ${tablet} {
+  }
   .swiper-wrapper {
     height: 30px;
   }

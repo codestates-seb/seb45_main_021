@@ -48,7 +48,6 @@ function App() {
   useAxiosInterceptor();
   return (
     <StyleApp>
-      <BackGround />
       <Header />
       <Suspense fallback={<Spinner />}>
         <Routes>
