@@ -11,14 +11,26 @@ import { updateUser, deleteUser } from '../redux/userform/userSlice';
 import { isValidEmail, isValidPassword } from '../components/profile/isValid';
 import userDefaultImg from '../static/images/userDefaultImg.jpeg';
 import Spinner from '../components/common/Spinner';
+import { desktop, mobile } from '../static/theme';
 
 const StyleContainer = styled(Page)`
   display: flex;
+  width: fit-content;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 2rem;
   font-size: 2rem;
+  scale: 1;
+  ${desktop} {
+    scale: 1;
+  }
+  @media (max-width: 800px) {
+    scale: 0.8;
+  }
+  ${mobile} {
+    scale: 0.8;
+  }
   h3 {
     font-size: 5rem;
     font-weight: 700;
@@ -35,11 +47,22 @@ const StyleContainer = styled(Page)`
   }
   .bottom {
     margin-bottom: 5rem;
+    ${desktop} {
+      margin-bottom: 5rem;
+    }
+    @media (max-width: 800px) {
+      margin-bottom: 3rem;
+    }
+    ${mobile} {
+      margin-bottom: 3rem;
+    }
   }
   .logo {
     margin-right: 20px;
   }
   .formGap {
+    display: flex;
+    flex-direction: column;
     gap: 2rem;
   }
   .error {
@@ -52,8 +75,20 @@ const StyleContainer = styled(Page)`
 
 const StyleRowContainer = styled.div`
   justify-content: center;
-  width: 100%;
+  width: fit-content;
   gap: 6rem;
+  display: flex;
+  ${desktop} {
+    flex-direction: row;
+  }
+  @media (max-width: 800px) {
+    flex-direction: column;
+    gap: 4rem;
+  }
+  ${mobile} {
+    flex-direction: column;
+    gap: 4rem;
+  }
 `;
 
 const StyleColContainer = styled.div`
@@ -83,13 +118,25 @@ const StyleDivider = styled.div`
   justify-content: center;
   position: relative;
   height: 100%;
-
   &::before {
     content: '';
     border-left: 1px solid var(--black-500);
     position: absolute;
     height: 40%;
     top: 0;
+    ${desktop} {
+      top: 0;
+    }
+    @media (max-width: 800px) {
+      left: 0;
+      width: 40%;
+      border-bottom: 1px solid var(--black-500);
+    }
+    ${mobile} {
+      left: 0;
+      width: 40%;
+      border-bottom: 1px solid var(--black-500);
+    }
   }
 
   &::after {
@@ -98,6 +145,19 @@ const StyleDivider = styled.div`
     position: absolute;
     height: 40%;
     bottom: 0;
+    ${desktop} {
+      bottom: 0;
+    }
+    @media (max-width: 800px) {
+      right: 0;
+      width: 40%;
+      border-bottom: 1px solid var(--black-500);
+    }
+    ${mobile} {
+      right: 0;
+      width: 40%;
+      border-bottom: 1px solid var(--black-500);
+    }
   }
 
   span {
@@ -109,6 +169,18 @@ const StyleDivider = styled.div`
     padding: 10px 0;
     top: 0;
     bottom: 0;
+    ${desktop} {
+      top: 0;
+      bottom: 0;
+    }
+    @media (max-width: 800px) {
+      left: 0;
+      right: 0;
+    }
+    ${mobile} {
+      left: 0;
+      right: 0;
+    }
   }
 `;
 
@@ -181,7 +253,7 @@ export default function SignIn() {
             <span>회원가입이 필요하신가요 ?</span>
             <p onClick={toSignup}>&nbsp;회원가입</p>
           </div>
-          <StyleRowContainer className="row">
+          <StyleRowContainer>
             <StyleColContainer className="col colgap">
               <StyleBtnContainer>
                 <FcGoogle className="logo" size={30} />
@@ -197,8 +269,8 @@ export default function SignIn() {
                 <span>OR</span>
               </StyleDivider>
             </div>
-            <div>
-              <form className="formGap col colgap">
+            <StyleColContainer className="col gap">
+              <form className="formGap">
                 <Input
                   label={'이메일'}
                   placeholder="name@example.com"
@@ -226,7 +298,7 @@ export default function SignIn() {
                   <span>로그인</span>
                 </StyleBtnContainer>
               </form>
-            </div>
+            </StyleColContainer>
           </StyleRowContainer>
         </StyleContainer>
       )}
