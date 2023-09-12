@@ -145,7 +145,7 @@ public class JwtTokenizer {
     public String delegateRefreshToken(Member member) {
         // subject 를 이메일 대신 회원 식별자로 변경
         String subject = String.valueOf(member.getMemberId());
-        Date expiration = getTokenExpiration(getAccessTokenExpirationMinutes());
+        Date expiration = getTokenExpiration(getRefreshTokenExpirationMinutes());
 
         String base64EncodeSecretKey = encodeBase64SecretKey(getSecretKey());
 
@@ -157,6 +157,10 @@ public class JwtTokenizer {
     public Member findMemberByMemberId(Long memberId){
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new JwtException(ExceptionCode.MEMBER_NOT_FOUND));
+    }
+
+    public void setRefreshTokenHasNull(Member member){
+        memberRepository.save(member);
     }
 
 }

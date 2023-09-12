@@ -20,11 +20,9 @@ import java.util.Optional;
 @Transactional
 public class PortfolioService {
     private final PortfolioRepository portfolioRepository;
-    private final JwtTokenizer jwtTokenizer;
 
-    public PortfolioService(PortfolioRepository portfolioRepository, JwtTokenizer jwtTokenizer) {
+    public PortfolioService(PortfolioRepository portfolioRepository) {
         this.portfolioRepository = portfolioRepository;
-        this.jwtTokenizer = jwtTokenizer;
     }
 
     public Portfolio findByPortfolioId(long portfolioId){

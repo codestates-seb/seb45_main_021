@@ -81,7 +81,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         }
 
         // RefreshToken 이 Null 이 아닐 경우에는 다른 곳에서 로그인 했으므로 예외 발생
-        if(!findMember.refreshTokenIsNull()) throw new BusinessLogicException(ExceptionCode.STATUS_LOGIN);
+        // if(!findMember.refreshTokenIsNull()) throw new BusinessLogicException(ExceptionCode.STATUS_LOGIN);
 
         // 로그인
         return findMember;

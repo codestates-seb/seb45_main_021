@@ -36,5 +36,4 @@ public class ProjectResponseDto {
     private String[] tags;
     private String[] lang;
     private int heartCount;
-
 }
