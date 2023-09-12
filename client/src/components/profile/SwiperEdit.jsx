@@ -7,6 +7,7 @@ import api from '../../hooks/useAxiosInterceptor';
 import useNav from '../../hooks/useNav';
 import { useParams } from 'react-router-dom';
 import { isValidPhone } from './isValid';
+import Modal from '../common/Modal';
 
 const SwiperCard = styled.div`
   width: 100%;
@@ -60,7 +61,7 @@ const Tag = styled.div`
   }
 `;
 
-export default function SwiperEdit({ data, idx, handler, type }) {
+export default function SwiperEdit({ data, idx, handler, type, setData, trueData }) {
   const [temp, setTemp] = useState({
     ...data,
     tell: { value: data.tell, error: '' },
@@ -68,8 +69,8 @@ export default function SwiperEdit({ data, idx, handler, type }) {
     tag: data.tag,
     curString: '',
   });
-  const { toProfile } = useNav();
   const { memberId } = useParams();
+  const [isSubmit, setIsSubmit] = useState(false);
 
   useEffect(() => {
     if (type === 'new') {
@@ -99,8 +100,15 @@ export default function SwiperEdit({ data, idx, handler, type }) {
             aboutMe: temp.aboutMe.value,
           })
           .then((el) => {
-            window.alert('수정완료.');
-            toProfile(memberId);
+            setIsSubmit(true);
+            const tem = trueData.projectCard;
+            tem[idx] = {
+              tag: temp.tag,
+              tell: temp.tell.value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'),
+              aboutMe: temp.aboutMe.value,
+            };
+            setData({ ...trueData, projectCard: tem });
+            handleClickCancel();
           });
       } else if (!isvalidPhone) {
         setTemp({ ...temp, tell: { ...temp.tell, error: '-를 제외한 전화번호를 입력해주세요.' } });
@@ -113,14 +121,22 @@ export default function SwiperEdit({ data, idx, handler, type }) {
     } else if (type === 'new') {
       if (isvalidPhone && temp.aboutMe.value.length <= 200) {
         api
-          .post(`/projectcards/${idx}`, {
+          .post(`/projectcards/${memberId}`, {
             tag: temp.tag,
             tell: temp.tell.value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'),
             aboutMe: temp.aboutMe.value,
           })
           .then((el) => {
-            window.alert('생성완료.');
-            toProfile(memberId);
+            setIsSubmit(true);
+            const idx = trueData.projectCard.findIndex((item) => Object.keys(item).length === 0);
+            const tem = trueData.projectCard;
+            tem[idx] = {
+              tag: temp.tag,
+              tell: temp.tell.value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'),
+              aboutMe: temp.aboutMe.value,
+            };
+            setData({ ...trueData, projectCard: tem });
+            handleClickCancel();
           });
       } else if (!isvalidPhone) {
         setTemp({ ...temp, tell: { ...temp.tell, error: '-를 제외한 전화번호를 입력해주세요.' } });
@@ -156,6 +172,13 @@ export default function SwiperEdit({ data, idx, handler, type }) {
 
   return (
     <SwiperCard className="col">
+      {isSubmit && (
+        <Modal
+          setIsOpen={setIsSubmit}
+          type="alert"
+          title={type === 'fetch' ? '수정완료' : '생성완료'}
+        />
+      )}
       <div className="cancel">
         <AiOutlineCloseCircle color={'var(--error)'} size={40} onClick={handleClickCancel} />
       </div>

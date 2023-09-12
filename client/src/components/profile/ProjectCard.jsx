@@ -36,7 +36,7 @@ const StyleContainer = styled.div`
   }
 `;
 
-export default function ProjectCard({ id, data, isLoading }) {
+export default function ProjectCard({ id, data, isLoading, setData, trueData }) {
   const [activePage, setActivePage] = useState(0);
   const [isEdit, setIsEdit] = useState({ fetch: false, new: false });
   const [editIdx, setEditIdx] = useState(null);
@@ -94,6 +94,8 @@ export default function ProjectCard({ id, data, isLoading }) {
                 idx={editIdx}
                 handler={handleIsEdit}
                 type={isEdit.fetch ? 'fetch' : isEdit.new ? 'new' : ''}
+                setData={setData}
+                trueData={trueData}
               />
             </SwiperSlide>
           )}
