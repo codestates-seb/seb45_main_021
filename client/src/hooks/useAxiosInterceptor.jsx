@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateUser, deleteUser } from '../redux/userform/userSlice';
 import useNav from '../hooks/useNav';
+import Toast from '../components/toast/Toast';
 
 const instance = axios.create({
   baseURL: 'https://7e5f-119-193-199-218.ngrok-free.app/',
@@ -52,7 +53,7 @@ export const useAxiosInterceptor = () => {
 
       if (message === 'refreshToken has expired') {
         dispatch(deleteUser());
-        window.alert('토큰이 만료되어 자동으로 로그아웃 되었습니다.');
+        Toast.warning('세션이 만료되었습니다.');
         toSignin();
       }
 

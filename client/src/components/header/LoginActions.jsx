@@ -4,6 +4,7 @@ import { StyleBorderButton } from '../common/Buttons';
 import { useDispatch } from 'react-redux';
 import { deleteUser } from '../../redux/userform/userSlice';
 import userDefaultImg from '../../static/images/userDefaultImg.jpeg';
+import Toast from '../toast/Toast';
 
 export default function LoginActions({ userInfo }) {
   const { memberId, imgUrl } = userInfo;
@@ -16,7 +17,14 @@ export default function LoginActions({ userInfo }) {
         alt="user profile"
         onClick={() => toProfile(memberId)}
       />
-      <StyleBorderButton onClick={() => dispatch(deleteUser())}>로그아웃</StyleBorderButton>
+      <StyleBorderButton
+        onClick={() => {
+          Toast.success('로그아웃 완료');
+          dispatch(deleteUser());
+        }}
+      >
+        로그아웃
+      </StyleBorderButton>
     </>
   );
 }
