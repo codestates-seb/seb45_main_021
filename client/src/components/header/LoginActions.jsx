@@ -12,7 +12,7 @@ export default function LoginActions({ userInfo }) {
   return (
     <>
       <img
-        src={userImgUrl === '' ? userDefaultImg : userImgUrl}
+        src={userImgUrl ? userImgUrl : userDefaultImg}
         alt="user profile"
         onClick={() => toProfile(memberId)}
       />
