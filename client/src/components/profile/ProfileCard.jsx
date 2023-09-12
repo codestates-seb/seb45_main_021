@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 import useNav from '../../hooks/useNav';
 import { useParams } from 'react-router-dom';
 import api from '../../hooks/useAxiosInterceptor';
-import { deleteUser } from '../../redux/userform/userSlice';
+import { deleteUser } from '../../redux/userForm/userSlice';
 import { useDispatch } from 'react-redux';
 import ShowProfile from './ShowProfile';
 import { isValidPassword } from './isValid';

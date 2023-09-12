@@ -7,7 +7,7 @@ import { AiFillGithub } from 'react-icons/ai';
 import Input from '../components/common/Input';
 import api from '../hooks/useAxiosInterceptor';
 import { useDispatch } from 'react-redux';
-import { updateUser, deleteUser } from '../redux/userform/userSlice';
+import { updateUser, deleteUser } from '../redux/userForm/userSlice';
 import { isValidEmail, isValidPassword } from '../components/profile/isValid';
 import userDefaultImg from '../static/images/userDefaultImg.jpeg';
 import Spinner from '../components/common/Spinner';
