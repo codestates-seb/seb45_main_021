@@ -2,6 +2,7 @@ package com.seb_45_main_021.unkwon.config;
 import com.seb_45_main_021.unkwon.auth.filter.ExceptionHandlerFilter;
 import com.seb_45_main_021.unkwon.auth.filter.JwtAuthenticationFilter;
 import com.seb_45_main_021.unkwon.auth.filter.JwtVerificationFilter;
+import com.seb_45_main_021.unkwon.auth.handler.UserAccessDeniedHandler;
 import com.seb_45_main_021.unkwon.auth.handler.UserAuthenticationFailureHandler;
 import com.seb_45_main_021.unkwon.auth.handler.UserAuthenticationSuccessHandler;
 import com.seb_45_main_021.unkwon.auth.jwt.JwtTokenizer;
@@ -43,6 +44,7 @@ public class SecurityConfiguration {
     private final MemberRepository memberRepository;
     private final PortfolioHeartRepository portfolioHeartRepository;
     private final ProjectHeartRepository projectHeartRepository;
+    private final UserAccessDeniedHandler userAccessDeniedHandler;
 
 
     @Bean
@@ -57,6 +59,8 @@ public class SecurityConfiguration {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .apply(new CustomFilterConfigurer())
+                .and()
+                .exceptionHandling().accessDeniedHandler(userAccessDeniedHandler)
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
                         .antMatchers("/h2/**").permitAll()
@@ -86,11 +90,8 @@ public class SecurityConfiguration {
         // HTTP 메서드에 대한 HTTP 통신 허용
         configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setExposedHeaders(List.of(
-                "AccessToken",
-                "RefreshToken",
-                "memberId"
-        ));
+        
+        // configuration.setExposedHeaders(List.of()); 응답 헤더 설정
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         // 모든 URL 에 앞에서 구성한 CORS 정책 적용

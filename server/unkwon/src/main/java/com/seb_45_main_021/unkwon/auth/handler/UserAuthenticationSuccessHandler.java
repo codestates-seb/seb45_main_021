@@ -46,18 +46,18 @@ public class UserAuthenticationSuccessHandler implements AuthenticationSuccessHa
 
         // 회원가입일 경우 아래 로직은 실행 되어서는 안된다.
         setMemberToResponse(response, member);
+        // setMemberHeartsList(response, member);
         setTokenToResponse(response, member);
     }
 
     // 로그인 시 반환에 필요한 회원 정보 
     private void setMemberToResponse(HttpServletResponse response, Member member) throws IOException{
-
-        LoginResponseDto responseDto = LoginResponseDto.builder()
-                .memberId(member.getMemberId())
-                .username(member.getUsername())
-                .imgUrl(member.getImgUrl())
-                .socialType(member.getSocialType()) // 값이 null 이기 때문에 클라이언트 쪽에서는 확인 불가능
-                .build();
+        LoginResponseDto responseDto = new LoginResponseDto(member.getMemberId(),
+                member.getUserName(),
+                member.getImgUrl(),
+                member.getSocialType(),
+                portfolioHeartRepository.findByMember(member),
+                projectHeartRepository.findByMember(member));
 
         Gson gson = new Gson();
         response.setStatus(HttpStatus.OK.value());
@@ -93,6 +93,4 @@ public class UserAuthenticationSuccessHandler implements AuthenticationSuccessHa
         return memberRepository.findBySocialTypeAndEmail(socialType, email)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
-
-
 }

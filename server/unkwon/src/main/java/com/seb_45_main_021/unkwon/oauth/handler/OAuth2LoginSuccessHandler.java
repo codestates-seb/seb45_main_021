@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.seb_45_main_021.unkwon.auth.jwt.JwtTokenizer;
 import com.seb_45_main_021.unkwon.exception.BusinessLogicException;
 import com.seb_45_main_021.unkwon.exception.ExceptionCode;
+import com.seb_45_main_021.unkwon.heart.repository.PortfolioHeartRepository;
+import com.seb_45_main_021.unkwon.heart.repository.ProjectHeartRepository;
 import com.seb_45_main_021.unkwon.member.dto.response.LoginResponseDto;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.member.entity.SocialType;
@@ -33,6 +35,8 @@ import java.util.Optional;
 public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JwtTokenizer jwtTokenizer;
     private final MemberRepository memberRepository;
+    private final ProjectHeartRepository projectHeartRepository;
+    private final PortfolioHeartRepository portfolioHeartRepository;
     public static final String REDIRECT_URI = "http://localhost:3000/login/redirect";
 
     private static final String GOOGLE = "GOOGLE";
@@ -50,6 +54,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         // 토큰 생성
         // 토큰 헤더 저장 및 DB 저장
         setTokenToResponse(response, member);
+        setMemberToResponse(response, member);
         getRedirectStrategy().sendRedirect(request, response, getRedirectUri(REDIRECT_URI));
     }
 
@@ -73,15 +78,15 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         return memberRepository.findBySocialTypeAndEmail(socialType, email)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
-    private void setMemberToResponse(Member member, HttpServletResponse response) throws IOException{
-        Gson gson = new Gson();
-        LoginResponseDto responseDto = LoginResponseDto.builder()
-                .memberId(member.getMemberId())
-                .username(member.getUsername())
-                .imgUrl(member.getImgUrl())
-                .socialType(member.getSocialType())
-                .build();
+    private void setMemberToResponse(HttpServletResponse response, Member member) throws IOException{
+        LoginResponseDto responseDto = new LoginResponseDto(member.getMemberId(),
+                member.getUserName(),
+                member.getImgUrl(),
+                member.getSocialType(),
+                portfolioHeartRepository.findByMember(member),
+                projectHeartRepository.findByMember(member));
 
+        Gson gson = new Gson();
         response.setStatus(HttpStatus.OK.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().write(gson.toJson(responseDto, LoginResponseDto.class));

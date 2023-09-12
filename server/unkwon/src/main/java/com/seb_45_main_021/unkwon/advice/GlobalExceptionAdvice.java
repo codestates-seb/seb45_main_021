@@ -75,12 +75,12 @@ public class GlobalExceptionAdvice {
         return response;
     }
 
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleException(Exception e) {
-        log.error("# handle Exception", e);
-        final ErrorResponse response = ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR);
-
-        return response;
-    }
+//    @ExceptionHandler
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    public ErrorResponse handleException(Exception e) {
+//        log.error("# handle Exception", e);
+//        final ErrorResponse response = ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR);
+//
+//        return response;
+//    }
 }

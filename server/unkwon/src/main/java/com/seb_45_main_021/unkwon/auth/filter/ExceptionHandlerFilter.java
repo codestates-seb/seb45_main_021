@@ -31,10 +31,6 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
         }
     }
 
-    // 로그아웃 처리를 위해 refreshToken 을 null 로 한다.
-    private void setRefreshToken(Long memberId){
-        jwtTokenizer.findMemberByMemberId(memberId).setRefreshToken(null);
-    }
     private void setErrorResponse(HttpServletResponse response, HttpStatus status, Throwable e) throws IOException{
         response.setStatus(status.value());
         response.setContentType("application/json");
