@@ -46,7 +46,9 @@ public class Project extends Auditable {
     @ElementCollection(targetClass=Long.class)
     private List<Long> requestPeople;
 
+
 //    private LocalDate closedAt;
+
 
     @Column(columnDefinition = "TEXT")
     private String tags;

@@ -168,7 +168,6 @@ public class ProjectService {
         response.setJoinPeople(acceptedMembers.stream().map(member -> new ProjectApplicationStatusResponseDto.JoinPeopleResponseDto(member.getMemberId(), member.getImgUrl(), member.getUsername())).collect(Collectors.toList()));
         response.setRequestPeople(waitingCards.stream().map(projectCard -> new ProjectCardResponseDto(
                 projectCard.getProjectCardId(),
-                projectCard.getTitle(),
                 projectCard.getAboutMe(),
                 projectCard.getTell(),
                 projectCard.getTag()

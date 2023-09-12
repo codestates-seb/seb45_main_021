@@ -2,12 +2,16 @@ package com.seb_45_main_021.unkwon.auth.handler;
 
 import com.google.gson.Gson;
 import com.seb_45_main_021.unkwon.auth.jwt.JwtTokenizer;
+import com.seb_45_main_021.unkwon.dto.MemberHeartDto;
 import com.seb_45_main_021.unkwon.exception.BusinessLogicException;
 import com.seb_45_main_021.unkwon.exception.ExceptionCode;
+import com.seb_45_main_021.unkwon.heart.repository.PortfolioHeartRepository;
+import com.seb_45_main_021.unkwon.heart.repository.ProjectHeartRepository;
 import com.seb_45_main_021.unkwon.member.dto.response.LoginResponseDto;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.member.entity.SocialType;
 import com.seb_45_main_021.unkwon.member.repository.MemberRepository;
+import com.seb_45_main_021.unkwon.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,6 +29,8 @@ public class UserAuthenticationSuccessHandler implements AuthenticationSuccessHa
 
     private final JwtTokenizer jwtTokenizer;
     private final MemberRepository memberRepository;
+    private final PortfolioHeartRepository portfolioHeartRepository;
+    private final ProjectHeartRepository projectHeartRepository;
 
     private static final SocialType socialType = SocialType.SPEC;
     @Override
@@ -45,7 +51,6 @@ public class UserAuthenticationSuccessHandler implements AuthenticationSuccessHa
 
     // 로그인 시 반환에 필요한 회원 정보 
     private void setMemberToResponse(HttpServletResponse response, Member member) throws IOException{
-        Gson gson = new Gson();
 
         LoginResponseDto responseDto = LoginResponseDto.builder()
                 .memberId(member.getMemberId())
@@ -54,6 +59,7 @@ public class UserAuthenticationSuccessHandler implements AuthenticationSuccessHa
                 .socialType(member.getSocialType()) // 값이 null 이기 때문에 클라이언트 쪽에서는 확인 불가능
                 .build();
 
+        Gson gson = new Gson();
         response.setStatus(HttpStatus.OK.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().write(gson.toJson(responseDto, LoginResponseDto.class));
@@ -71,9 +77,22 @@ public class UserAuthenticationSuccessHandler implements AuthenticationSuccessHa
 
         memberRepository.save(member);
     }
+    
+    // 회원이 좋아요한 포트폴리오, 프로젝트 식별자 리스트
+    private void setMemberHeartsList(HttpServletResponse response, Member member) throws IOException{
+        MemberHeartDto heartDto = new MemberHeartDto(portfolioHeartRepository.findByMember(member),
+                                                     projectHeartRepository.findByMember(member));
+
+        Gson gson = new Gson();
+        response.setStatus(HttpStatus.OK.value());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.getWriter().write(gson.toJson(heartDto, MemberHeartDto.class));
+    }
 
     private Member findMemberByEmailAndSocialType(String email){
         return memberRepository.findBySocialTypeAndEmail(socialType, email)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
+
+
 }
