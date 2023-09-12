@@ -29,6 +29,6 @@ public class ProjectResponseDto {
     private ProjectTitleImage projectTitleImage;
     private String description;
     private String[] tags;
-    private String[] lang;
+    private String lang;
     private int heartCount;
 }

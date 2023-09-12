@@ -23,6 +23,5 @@ public class ProjectPostDto {
 
     private String[] tags;
 
-    private String[] lang;
-
+    private String lang;
 }
