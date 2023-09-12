@@ -11,6 +11,7 @@ const StyleTag = styled.div`
   transition: all.2s;
   cursor: pointer;
   display: flex;
+  align-items: center;
   justify-content: center;
   gap: 1rem;
   &:hover {
