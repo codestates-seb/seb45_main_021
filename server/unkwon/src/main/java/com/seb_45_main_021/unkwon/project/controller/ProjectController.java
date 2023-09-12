@@ -67,38 +67,30 @@ public class ProjectController {
         }
     }
 
-    // 프로젝트 수정
-    @PatchMapping("/{project-id}")
-    public ResponseEntity patchProject(@PathVariable("project-id") @Positive long projectId,
-                                       @RequestBody ProjectPatchDto projectPatchDto) {
-
-        projectPatchDto.setProjectId(projectId);
-
-        Project project = projectService.updateProject(mapper.projectPatchDtoToProject(projectPatchDto));
-
-        return new ResponseEntity<>(mapper.projectToProjectResponseDto(project), HttpStatus.OK);
-
-    }
-
 //    // 프로젝트 수정
 //    @PatchMapping("/{project-id}")
 //    public ResponseEntity patchProject(@PathVariable("project-id") @Positive long projectId,
 //                                       @RequestParam("project") String projectAsString,
 //                                       @RequestParam(value = "titleImageFile", required = false) MultipartFile titleImageFile,
+//                                       @RequestParam(value = "titleImageUrl", required = false) String titleImageUrl,
 //                                       @RequestParam(value = "imageFile", required = false) List<MultipartFile> imageFiles,
 //                                       @RequestParam(value = "imageUrls", required = false) List<String> imageUrls) {
 //
 //        try {
 //            ProjectPatchDto projectPatchDto = new ObjectMapper().readValue(projectAsString, ProjectPatchDto.class);
 //            projectPatchDto.setProjectId(projectId);
-//            Project project = projectService.updateProject(mapper.projectPatchDtoToProject(projectPatchDto), titleImageFile, imageFiles, imageUrls);
+//
+//            Project project = projectService.updateProject(mapper.projectPatchDtoToProject(projectPatchDto),
+//                    titleImageFile, titleImageUrl, imageFiles, imageUrls);
 //
 //            return new ResponseEntity<>(mapper.projectToProjectResponseDto(project), HttpStatus.OK);
 //        } catch (JsonProcessingException e) {
 //            e.printStackTrace();
 //            return ResponseEntity.badRequest().body("Invalid JSON format.");
 //        }
+//
 //    }
+
 
     // 프로젝트 상세 조회
     @GetMapping("/{project-id}")
