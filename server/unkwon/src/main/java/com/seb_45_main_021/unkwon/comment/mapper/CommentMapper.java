@@ -23,7 +23,7 @@ public interface CommentMapper {
         Comment comment = new Comment();
         comment.setMember(member);
         comment.setPortFolio(portFolio);
-        comment.setContent(commentPostDto.getContent());
+        comment.setBody(commentPostDto.getBody());
 
         return comment;
     }
@@ -34,7 +34,7 @@ public interface CommentMapper {
 
         CommentDto.ResponseDto commentResponseDto = new CommentDto.ResponseDto(
                 comment.getCommentId(),
-                comment.getContent(),
+                comment.getBody(),
                 comment.getPortFolio().getPortfolioId(),
                 comment.getMember().getMemberId(),
                 comment.getMember().getEmail(),
