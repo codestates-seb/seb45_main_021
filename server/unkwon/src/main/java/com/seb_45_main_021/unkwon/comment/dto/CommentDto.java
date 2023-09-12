@@ -25,7 +25,7 @@ public class CommentDto {
 
         @NotBlank(message = "댓글 내용을 작성해주세요.")
         @Size(max = 500, message = "500자 이하로 입력해 주세요.")
-        private String content;
+        private String body;
     }
 
 
@@ -35,7 +35,7 @@ public class CommentDto {
 
         @NotBlank(message = "댓글 내용을 작성해주세요.")
         @Size(max = 500, message = "500자 이하로 입력해 주세요.")
-        private String content;
+        private String body;
     }
 
 
@@ -44,13 +44,13 @@ public class CommentDto {
     @Builder
     public static class ResponseDto {
         private long commentId;
-        private String content;
+        private String body;
 
         private long portfolioId;
 
         private long memberId;
         private String email;
-        private String nickName;
+        private String userName;
 
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;

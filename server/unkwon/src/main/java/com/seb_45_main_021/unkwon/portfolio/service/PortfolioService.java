@@ -51,8 +51,8 @@ public class PortfolioService {
 
         Optional.ofNullable(portFolio.getTitle())
                 .ifPresent(title -> findPortfolio.setTitle(title));
-        Optional.ofNullable(portFolio.getContent())
-                .ifPresent(content -> findPortfolio.setContent(content));
+        Optional.ofNullable(portFolio.getBody())
+                .ifPresent(content -> findPortfolio.setBody(content));
         Optional.ofNullable(portFolio.getTags())
                 .ifPresent(tags -> findPortfolio.setTags(tags));
         Optional.ofNullable(portFolio.getLang())

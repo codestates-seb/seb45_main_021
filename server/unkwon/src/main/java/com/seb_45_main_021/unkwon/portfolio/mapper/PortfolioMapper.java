@@ -7,6 +7,7 @@ import com.seb_45_main_021.unkwon.portfolio.dto.PortfolioDto;
 import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,9 +23,9 @@ public interface PortfolioMapper {
 
         Portfolio portFolio = new Portfolio();
         portFolio.setTitle(portfolioPostDto.getTitle());
-        portFolio.setContent(portfolioPostDto.getContent());
+        portFolio.setBody(portfolioPostDto.getBody());
         portFolio.setTags(Arrays.toString(portfolioPostDto.getTags()));
-        portFolio.setLang(Arrays.toString(portfolioPostDto.getLang()));
+        portFolio.setLang((portfolioPostDto.getLang()));
         portFolio.setMember(member);
 
         return portFolio;
@@ -48,15 +49,11 @@ public interface PortfolioMapper {
         PortfolioDto.Response response = PortfolioDto.Response.builder()
                 .portfolioId(portFolio.getPortfolioId())
                 .memberId(portFolio.getMember().getMemberId())
-                .email(portFolio.getMember().getEmail())
-                .username(portFolio.getMember().getUserName())
+                .userName(portFolio.getMember().getUserName())
+                .userImgUrl(portFolio.getMember().getImgUrl())
                 .title(portFolio.getTitle())
-                .content(portFolio.getContent())
                 .createdAt(portFolio.getCreatedAt())
-                .modifiedAt(portFolio.getModifiedAt())
-                .view(portFolio.getView())
-                .commentCount(portFolio.getComments().size())
-                .tags(new String[]{portFolio.getTags()})
+                .tags(StringUtils.commaDelimitedListToStringArray(portFolio.getTags()))
                 .lang(portFolio.getLang())
                 .heartCount(portFolio.getHeartCount())
                 .IsEmploy(portFolio.isIsEmploy())
@@ -73,15 +70,13 @@ public interface PortfolioMapper {
         PortfolioDto.DetailResponse detailResponse = PortfolioDto.DetailResponse.builder()
                 .portfolioId(portFolio.getPortfolioId())
                 .memberId(portFolio.getMember().getMemberId())
-                .email(portFolio.getMember().getEmail())
-                .username(portFolio.getMember().getUserName())
+                .userName(portFolio.getMember().getUserName())
                 .title(portFolio.getTitle())
-                .content(portFolio.getContent())
+                .body(portFolio.getBody())
                 .createdAt(portFolio.getCreatedAt())
                 .modifiedAt(portFolio.getModifiedAt())
                 .view(portFolio.getView())
-                .commentCount(portFolio.getComments().size())
-                .tags(new String[]{portFolio.getTags()})
+                .tags(StringUtils.commaDelimitedListToStringArray(portFolio.getTags()))
                 .lang(portFolio.getLang())
                 .IsEmploy(portFolio.isIsEmploy())
                 .IsComment(portFolio.isIsComment())
@@ -93,11 +88,10 @@ public interface PortfolioMapper {
         List<PortfolioDto.CommentResponse> commentResponses =
                 comments.stream().map(comment -> PortfolioDto.CommentResponse.builder()
                         .commentId(comment.getCommentId())
-                        .content(comment.getContent())
+                        .body(comment.getBody())
                         .createdAt(comment.getCreatedAt())
                         .modifiedAt(comment.getModifiedAt())
                         .memberId(comment.getMember().getMemberId())
-                        .email(comment.getMember().getEmail())
                         .userName(comment.getMember().getUserName())
                         .portfolioId(comment.getPortFolio().getPortfolioId())
                         .build()
