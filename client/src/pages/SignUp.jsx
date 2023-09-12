@@ -222,9 +222,9 @@ export default function SignUp() {
 
   const handleClickGoogleBtn = () => {
     try {
-      // api.post('/oauth2/authorization/google');
+      api.post('/oauth2/authorization/google');
       // window.location.assign(
-      //   'https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=15196070608-ti8mt0m3fo8tj48172bhq72h4re8bcni.apps.googleusercontent.com&scope=email%20profile&state=WXWKmZbi37lUKgjof9BPMSDKwOEL_QhVWWYwV5gMxcM%3D&redirect_uri=http://d9fd-14-53-203-58.ngrok-free.app/login/oauth2/code/google',
+      //   'https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=15196070608-ti8mt0m3fo8tj48172bhq72h4re8bcni.apps.googleusercontent.com&scope=email%20profile&state=DKmeMgtsMo4TAFwj_w_-H9L3dWnTcS1o_j3qAk1DJtw%3D&redirect_uri=http://localhost:3000/signup',
       // );
     } catch (error) {
       console.log(error);

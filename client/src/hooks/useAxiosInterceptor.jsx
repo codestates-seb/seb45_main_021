@@ -2,7 +2,6 @@ import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateUser, deleteUser } from '../redux/userForm/userSlice';
 import useNav from '../hooks/useNav';
-import Toast from '../components/toast/Toast';
 
 const instance = axios.create({
   baseURL: 'http://ec2-52-78-224-100.ap-northeast-2.compute.amazonaws.com:8080/',
@@ -52,7 +51,13 @@ export const useAxiosInterceptor = () => {
 
       if (message === 'refreshToken has expired') {
         dispatch(deleteUser());
-        Toast.warning('세션이 만료되었습니다.');
+        alert('세션이 만료되었습니다.');
+        toSignin();
+      }
+
+      if (message === 'refreshToken has different') {
+        dispatch(deleteUser());
+        alert('새 기기에서 접속하여 로그하웃 되었습니다.');
         toSignin();
       }
 
