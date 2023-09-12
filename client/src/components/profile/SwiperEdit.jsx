@@ -66,7 +66,7 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
     ...data,
     tell: { value: data.tell, error: '' },
     aboutMe: { value: data.aboutMe, error: '' },
-    tag: data.tag,
+    tags: data.tags,
     curString: '',
   });
   const { memberId } = useParams();
@@ -77,14 +77,14 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
       setTemp({
         tell: { value: '', error: '' },
         aboutMe: { value: '', error: '' },
-        tag: [],
+        tags: [],
         curString: '',
       });
     }
-    if (type === 'fetch' && temp.tag[0] === undefined) {
+    if (type === 'fetch' && temp.tags[0] === undefined) {
       setTemp({
         ...temp,
-        tag: [],
+        tags: [],
       });
     }
   }, []);
@@ -95,7 +95,7 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
       if (isvalidPhone && temp.title.value.length <= 20 && temp.aboutMe.value.length <= 200) {
         api
           .patch(`/projectcards/${idx}`, {
-            tag: temp.tag,
+            tags: temp.tags,
             tell: temp.tell.value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'),
             aboutMe: temp.aboutMe.value,
           })
@@ -103,7 +103,7 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
             setIsSubmit(true);
             const tem = trueData.projectCard;
             tem[idx] = {
-              tag: temp.tag,
+              tags: temp.tags,
               tell: temp.tell.value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'),
               aboutMe: temp.aboutMe.value,
             };
@@ -122,7 +122,7 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
       if (isvalidPhone && temp.aboutMe.value.length <= 200) {
         api
           .post(`/projectcards/${memberId}`, {
-            tag: temp.tag,
+            tags: temp.tags,
             tell: temp.tell.value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'),
             aboutMe: temp.aboutMe.value,
           })
@@ -131,7 +131,7 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
             const idx = trueData.projectCard.findIndex((item) => Object.keys(item).length === 0);
             const tem = trueData.projectCard;
             tem[idx] = {
-              tag: temp.tag,
+              tags: temp.tags,
               tell: temp.tell.value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'),
               aboutMe: temp.aboutMe.value,
             };
@@ -158,12 +158,12 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
     e.preventDefault();
     if (temp.curString.length <= 10 && temp.curString.length > 0) {
       if (
-        temp.tag?.length <= 2 &&
-        temp.tag.filter((el) => el.toLowerCase() === temp.curString.toLowerCase()).length === 0
+        temp.tags?.length <= 2 &&
+        temp.tags.filter((el) => el.toLowerCase() === temp.curString.toLowerCase()).length === 0
       ) {
         setTemp({
           ...temp,
-          tag: [...temp.tag, temp.curString],
+          tags: [...temp.tags, temp.curString],
           curString: '',
         });
       }
@@ -219,7 +219,7 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
           onKeyDown={handleTagKeyDown}
         />
         <div className="row gap">
-          {temp.tag?.map((el, i) => (
+          {temp.tags?.map((el, i) => (
             <Tag key={i}>
               {el}
               <AiOutlineClose
@@ -228,7 +228,7 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
                 onClick={() =>
                   setTemp({
                     ...temp,
-                    tag: temp.tag.filter((_, idx) => i !== idx),
+                    tags: temp.tags.filter((_, idx) => i !== idx),
                   })
                 }
               />
