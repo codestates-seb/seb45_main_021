@@ -1,5 +1,4 @@
 {
-  "proxy": "https://7e5f-119-193-199-218.ngrok-free.app/",
   "name": "client",
   "version": "0.1.0",
   "private": true,

@@ -5,12 +5,11 @@ import useNav from '../hooks/useNav';
 import Toast from '../components/toast/Toast';
 
 const instance = axios.create({
-  baseURL: 'https://7e5f-119-193-199-218.ngrok-free.app/',
+  baseURL: 'http://ec2-52-78-224-100.ap-northeast-2.compute.amazonaws.com/',
   timeout: 7000,
   headers: {
     'Content-Type': 'application/json',
     withCredentials: true,
-    'ngrok-skip-browser-warning': true,
   },
 });
 

@@ -110,7 +110,7 @@ const StyleProfileContainer = styled.div`
 `;
 
 export default function ProfileCard({ id, data, isLoading }) {
-  const { toAbout, toProfile } = useNav();
+  const { toAbout } = useNav();
   const { memberId } = useParams();
   const dispatch = useDispatch();
   const [profile, setProfile] = useState({
@@ -134,10 +134,12 @@ export default function ProfileCard({ id, data, isLoading }) {
     },
     age: {
       value: profile.age,
+      error: '',
     },
     tag: {
       value: profile.tag,
       curString: '',
+      error: '',
     },
     working: {
       value: profile.working,
@@ -161,7 +163,10 @@ export default function ProfileCard({ id, data, isLoading }) {
   const handleTagKeyDown = (e) => {
     if (e.code !== 'Enter' && e.code !== 'NumpadEnter') return;
     e.preventDefault();
-    if (editProfile.tag.curString.length <= 10 && editProfile.tag.curString.length > 0) {
+    if (
+      editProfile.tag.curString.split(' ').join('').length <= 10 &&
+      editProfile.tag.curString.split(' ').join('').length > 0
+    ) {
       if (
         editProfile.tag.value.length <= 2 &&
         editProfile.tag.value.filter(
@@ -171,8 +176,17 @@ export default function ProfileCard({ id, data, isLoading }) {
         setEditProfile({
           ...editProfile,
           tag: {
-            value: [...editProfile.tag.value, editProfile.tag.curString],
+            value: [...editProfile.tag.value, editProfile.tag.curString.split(' ').join('')],
             curString: '',
+            error: '',
+          },
+        });
+      } else {
+        setEditProfile({
+          ...editProfile,
+          tag: {
+            ...editProfile.tag,
+            error: '중복은 허용하지않습니다.',
           },
         });
       }
@@ -182,17 +196,30 @@ export default function ProfileCard({ id, data, isLoading }) {
   const handleEditProfile = () => {
     console.log('프로필 수정 요청');
     try {
-      const responseBody = {
-        aboutMe: editProfile.aboutMe.value,
-        userName: editProfile.userName.value,
-        age: editProfile.age.value,
-        tag: editProfile.tag.value,
-        working: editProfile.working.value,
-      };
-      api.patch(`members/${memberId}`, responseBody).then(() => {
-        console.log('프로필 수정 성공');
-        toProfile(memberId);
-      });
+      if (
+        editProfile.aboutMe.value.length <= 200 &&
+        editProfile.userName.value.length <= 5 &&
+        editProfile.age.value.toString().length <= 3
+      ) {
+        const responseBody = {
+          aboutMe: editProfile.aboutMe.value,
+          userName: editProfile.userName.value,
+          age: editProfile.age.value,
+          tag: editProfile.tag.value,
+          working: editProfile.working.value,
+        };
+        api.patch(`members/${memberId}`, responseBody).then(() => {
+          console.log('프로필 수정 성공');
+          setProfile({
+            ...profile,
+            aboutMe: editProfile.aboutMe.value,
+            userName: editProfile.userName.value,
+            age: editProfile.age.value,
+            tag: editProfile.tag.value,
+            working: editProfile.working.value,
+          });
+        });
+      }
     } catch (error) {
       console.log(error);
     }
@@ -208,12 +235,6 @@ export default function ProfileCard({ id, data, isLoading }) {
         isValidPassword(editPassword.newPassword) &&
         isValidPassword(editPassword.newPassword2)
       ) {
-        setEditPassword({
-          ...editPassword,
-          prevPassword: { ...editPassword.prevPassword, error: '' },
-          newPassword: { ...editPassword.newPassword, error: '' },
-          newPassword2: { ...editPassword.newPassword, error: '' },
-        });
         api
           .patch(`/members/password/${memberId}`, {
             prevPassword: editPassword.prevPassword,
@@ -221,6 +242,12 @@ export default function ProfileCard({ id, data, isLoading }) {
           })
           .then((el) => {
             alert('비밀번호 변경이 완료되었습니다');
+            setEditPassword({
+              ...editPassword,
+              prevPassword: { ...editPassword.prevPassword, error: '' },
+              newPassword: { ...editPassword.newPassword, error: '' },
+              newPassword2: { ...editPassword.newPassword, error: '' },
+            });
           });
       } else if (!(editPassword.newPassword === editPassword.newPassword2)) {
         setEditPassword({
