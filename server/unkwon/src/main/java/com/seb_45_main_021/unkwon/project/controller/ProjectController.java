@@ -1,5 +1,7 @@
 package com.seb_45_main_021.unkwon.project.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seb_45_main_021.unkwon.dto.MultiResponseDto;
 import com.seb_45_main_021.unkwon.project.dto.request.ProjectPatchDto;
 import com.seb_45_main_021.unkwon.project.dto.request.ProjectPostDto;
@@ -17,9 +19,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -44,15 +48,23 @@ public class ProjectController {
     }
 
     // 프로젝트 등록
-    @PostMapping
-    public ResponseEntity postProject(@RequestBody @Valid ProjectPostDto projectPostDto) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity postProject(@RequestParam("project") String projectAsString,
+                                      @RequestParam("titleImageFile") MultipartFile titleImageFile,
+                                      @RequestParam("imageFile") List<MultipartFile> imageFiles) {
+        try {
+            ProjectPostDto projectPostDto = new ObjectMapper().readValue(projectAsString, ProjectPostDto.class);
 
-        Project project = projectService.createProject(mapper.projectPostDtoToProject(projectPostDto));
+            Project project = projectService.createProject(mapper.projectPostDtoToProject(projectPostDto), titleImageFile, imageFiles);
 
-        URI location = UriCreator.createUri(PROJECT_DEFAULT_URL, project.getProjectId());
+            URI location = UriCreator.createUri(PROJECT_DEFAULT_URL, project.getProjectId());
 
-        return ResponseEntity.created(location).body(mapper.projectToProjectResponseDto(project));
+            return ResponseEntity.created(location).body(mapper.projectToProjectResponseDto(project));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
 
+            return ResponseEntity.badRequest().body("Invalid JSON format.");
+        }
     }
 
     // 프로젝트 수정
@@ -67,6 +79,26 @@ public class ProjectController {
         return new ResponseEntity<>(mapper.projectToProjectResponseDto(project), HttpStatus.OK);
 
     }
+
+//    // 프로젝트 수정
+//    @PatchMapping("/{project-id}")
+//    public ResponseEntity patchProject(@PathVariable("project-id") @Positive long projectId,
+//                                       @RequestParam("project") String projectAsString,
+//                                       @RequestParam(value = "titleImageFile", required = false) MultipartFile titleImageFile,
+//                                       @RequestParam(value = "imageFile", required = false) List<MultipartFile> imageFiles,
+//                                       @RequestParam(value = "imageUrls", required = false) List<String> imageUrls) {
+//
+//        try {
+//            ProjectPatchDto projectPatchDto = new ObjectMapper().readValue(projectAsString, ProjectPatchDto.class);
+//            projectPatchDto.setProjectId(projectId);
+//            Project project = projectService.updateProject(mapper.projectPatchDtoToProject(projectPatchDto), titleImageFile, imageFiles, imageUrls);
+//
+//            return new ResponseEntity<>(mapper.projectToProjectResponseDto(project), HttpStatus.OK);
+//        } catch (JsonProcessingException e) {
+//            e.printStackTrace();
+//            return ResponseEntity.badRequest().body("Invalid JSON format.");
+//        }
+//    }
 
     // 프로젝트 상세 조회
     @GetMapping("/{project-id}")

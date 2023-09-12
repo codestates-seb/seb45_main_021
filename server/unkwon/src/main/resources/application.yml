@@ -1,9 +1,11 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
+
     url: jdbc:mysql://spec-db-1.c8qdyivupwng.ap-northeast-2.rds.amazonaws.com:13306/SPEC
     username: admin
     password: qwer1234 #${MYSQL_SECRET}
+
 
   jpa:
     open-in-view: true
@@ -16,6 +18,16 @@ spring:
     properties:
       hibernate.format_sql: true
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
 
   #  h2:
 #    console:
@@ -72,3 +84,16 @@ jwt:
     secret: ${JWT_SECRET_KEY}
   access-token-expiration-minutes: 420
   refresh-token-expiration-minutes: 420
+
+cloud:
+  aws:
+    s3:
+      bucket: mainproject-bucket
+    credentials:
+      access-key: AKIATUJ7QKHFTJH66A4P
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false

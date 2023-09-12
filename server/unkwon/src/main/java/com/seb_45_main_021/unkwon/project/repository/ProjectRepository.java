@@ -4,6 +4,7 @@ import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
 import com.seb_45_main_021.unkwon.project.entity.Project;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
