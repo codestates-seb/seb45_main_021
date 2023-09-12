@@ -12,6 +12,7 @@ import { isValidEmail, isValidPassword } from '../components/profile/isValid';
 import userDefaultImg from '../static/images/userDefaultImg.jpeg';
 import Spinner from '../components/common/Spinner';
 import { desktop, mobile } from '../static/theme';
+import Toast from '../components/toast/Toast';
 
 const StyleContainer = styled(Page)`
   display: flex;
@@ -189,7 +190,7 @@ export default function SignIn() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState({ email: '', password: '' });
   const [isSubmit, setIsSubmit] = useState(false);
-  const { toSignup } = useNav();
+  const { toSignup, toAbout } = useNav();
   const dispatch = useDispatch();
 
   const handleChangeEmail = (e) => {
@@ -217,8 +218,14 @@ export default function SignIn() {
                 imgUrl: el.data.imgUrl,
                 socialType: el.data.socialType,
               },
+              likeList: {
+                portfolioList: el.data.portfolioList,
+                projectList: el.data.projectList,
+              },
             }),
           );
+          Toast.success('로그인 성공');
+          toAbout();
         });
       } else if (!isvalidEmail && !isvalidPassword) {
         setError({

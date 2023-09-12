@@ -11,6 +11,7 @@ import { deleteUser } from '../redux/userform/userSlice';
 import { useDispatch } from 'react-redux';
 import Spinner from '../components/common/Spinner';
 import { desktop, mobile } from '../static/theme';
+import Toast from '../components/toast/Toast';
 
 const StyleContainer = styled(Page)`
   width: fit-content;
@@ -198,7 +199,10 @@ export default function SignUp() {
       setIsSubmit(true);
       if (isvalidEmail && isvalidPassword) {
         const data = JSON.stringify({ username, email, password });
-        api.post('/members/signup', data).then(toSignin());
+        api.post('/members/signup', data).then(() => {
+          Toast.success('회원가입 성공.');
+          toSignin();
+        });
       } else if (!isvalidEmail && !isvalidPassword) {
         setError({
           email: '올바른 이메일 형식을 입력해주세요.',
