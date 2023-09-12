@@ -118,7 +118,18 @@ export default function Input({
           onChange={onChangeHandler}
           {...rest}
         />
-      ) : undefined}
+      ) : (
+        <StyleInput
+          $width={width}
+          $height={height}
+          $color={color}
+          $fontSize={fontSize}
+          $borderColor={borderColor}
+          onChange={onChangeHandler}
+          type={type}
+          {...rest}
+        />
+      )}
       <StyleError $error={error}>{error}</StyleError>
     </StyleErrorInput>
   );
