@@ -10,5 +10,5 @@ public class ProjectCardPatchDto {
     private String tell;
     private String aboutMe;
     // 태그
-    private String[] tags;
+    private String[] tag;
 }

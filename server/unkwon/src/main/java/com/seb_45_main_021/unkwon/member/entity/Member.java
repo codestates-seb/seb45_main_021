@@ -16,6 +16,7 @@ import com.seb_45_main_021.unkwon.projectcard.entity.ProjectCard;
 import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
 import com.seb_45_main_021.unkwon.project.entity.Project;
 import lombok.*;
+import org.springframework.security.access.AccessDeniedException;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -42,7 +43,7 @@ public class Member extends Auditable {
     private String password; // 비밀번호
 
     @Column(nullable = false)
-    private String username; // 닉네임
+    private String userName; // 닉네임
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles; // 사용권한
@@ -50,7 +51,7 @@ public class Member extends Auditable {
     private String refreshToken; // 로그인 시 생성되는 RefreshToken
 
     /** 사용자 선택 입력 정보 **/
-    @Column(length = 1000)
+    @Column(length = 200)
     private String aboutMe; // 자기 소개
 
     private String imgUrl; // 이미지 URL
@@ -107,19 +108,19 @@ public class Member extends Auditable {
     }
 
     // 회원 가입 생성자
-    public Member(String email, String password, String username, List<String> roles, String imgUrl, SocialType socialType) {
+    public Member(String email, String password, String userName, List<String> roles, String imgUrl, SocialType socialType) {
         this.email = email;
         this.password = password;
-        this.username = username;
+        this.userName = userName;
         this.roles = roles;
         this.imgUrl = imgUrl;
         this.socialType = socialType;
     }
 
     // OAuth2 회원 가입 생성자
-    public Member(String email, String username, List<String> roles, String imgUrl, SocialType socialType, String socialId) {
+    public Member(String email, String userName, List<String> roles, String imgUrl, SocialType socialType, String socialId) {
         this.email = email;
-        this.username = username;
+        this.userName = userName;
         this.roles = roles;
         this.imgUrl = imgUrl;
         this.socialType = socialType;
@@ -129,16 +130,17 @@ public class Member extends Auditable {
     public boolean refreshTokenIsNull(){
         return this.refreshToken == null;
     }
+    public boolean compareRefreshToken(String refreshToken) {return this.refreshToken.equals(refreshToken);}
     public void setTag(String[] tags) {this.tag = Arrays.toString(tags);}
 
     // 구글에서 한번 정보를 가져온 이후로 업데이트 주도권을 우리 서버에서 가질것인지
     // 아니면 구글 업데이트도 전부 반영해줄것인지
-    public void updateUsernameAndImgUrl(String username, String imgUrl){
-        this.username = username;
+    public void updateUsernameAndImgUrl(String userName, String imgUrl){
+        this.userName = userName;
         this.imgUrl = imgUrl;
     }
 
     public void checkMemberId(MemberInfo memberInfo){
-        if(this.memberId != memberInfo.getMemberId()) throw new BusinessLogicException(ExceptionCode.DIFFERENT_MEMBER);
+        if(this.memberId != memberInfo.getMemberId()) throw new AccessDeniedException(ExceptionCode.DIFFERENT_MEMBER.getMessage());
     }
 }

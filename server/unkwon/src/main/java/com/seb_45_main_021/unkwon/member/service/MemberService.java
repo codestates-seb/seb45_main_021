@@ -49,7 +49,7 @@ public class MemberService {
         Member member = new Member(
                 memberSignupDto.getEmail(),
                 passwordEncoder.encode(memberSignupDto.getPassword()),
-                memberSignupDto.getUsername(),
+                memberSignupDto.getUserName(),
                 roles,
                 IMG_URL,
                 socialType
@@ -92,8 +92,8 @@ public class MemberService {
                 .ifPresent(aboutMe -> findMember.setAboutMe(aboutMe));
 
         // 유저네임
-        Optional.ofNullable(dto.getUsername())
-                .ifPresent(username -> findMember.setUsername(username));
+        Optional.ofNullable(dto.getUserName())
+                .ifPresent(username -> findMember.setUserName(username));
 
         // 재직 상태
         Optional.ofNullable(dto.isWorking())
@@ -137,7 +137,7 @@ public class MemberService {
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
         // 로그인 하지 않은 상태의 회원을 로그아웃 시키는 요청이 들어올 경우 잘못된 접근으로 판단
-        if(findMember.refreshTokenIsNull()) throw new BusinessLogicException(ExceptionCode.BAD_ACCESS);
+        if(findMember.refreshTokenIsNull()) throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
         findMember.updateRefreshToken(null);
 
         memberRepository.save(findMember);
