@@ -258,7 +258,7 @@ export default function ProjectWrite() {
       <SubmitBox
         submitTitle={'작성 확인'}
         submitMessage={'모집 인원은 수정 할 수 없습니다.'}
-        submitCheckHandler={()=>writeSubmitHandler(dataForm,errors,setErrors,undefined,'project')}
+        submitCheckHandler={()=>writeSubmitHandler(dataForm,errors,setErrors,'project')}
         cancelTitle={'취소 확인'}
         cancelMessage={'취소시 작성한 내용은 저장되지 않습니다.'}
         cancelCheckHandler ={toProject}

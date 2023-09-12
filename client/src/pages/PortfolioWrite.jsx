@@ -3,7 +3,6 @@ import { styled } from 'styled-components';
 import Input from '../components/common/Input';
 import Select from '../components/common/Select';
 import FileInput from '../components/common/FileInput';
-import { StyleBorderButton } from '../components/common/Buttons';
 import  useForm  from '../hooks/useForm';
 import Page from './../components/common/Page';
 import useNav from '../hooks/useNav';
@@ -207,7 +206,7 @@ export default function PortfolioWrite() {
       <SubmitBox
         submitTitle={'작성 확인'}
         submitMessage={'댓글 허락하지 않음 선택 시 기존의 댓글들도 보이지 않습니다.'}
-        submitCheckHandler={()=>writeSubmitHandler(dataForm, errors, setErrors, undefined,'portfolio')}
+        submitCheckHandler={()=>writeSubmitHandler(dataForm, errors, setErrors, 'portfolio')}
         cancelTitle={'취소 확인'}
         cancelMessage={'취소시 작성한 내용은 저장되지 않습니다.'}
         cancelCheckHandler ={toPortfolio}

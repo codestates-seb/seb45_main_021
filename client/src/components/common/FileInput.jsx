@@ -158,7 +158,7 @@ export default function FileInput({
     const [imgs,setImgs] = useState([]);
     const [isDrag, setIsDrag] = useState(false);
     const fileKey = number===1 ? 'titleImageFile' : 'imageFile';
-
+    const willDeleteKey = number === 1? 'titleImageUrl' : 'imageUrls';
     //사용자가 드래그또는클릭으로 사진을 업로드시 미리보기 화면은 readImgToUrl을통해 img의 소스에 넣어서 보여주느것
     //서버에 보낼때 단순 추가일경우 파일을 보냄 수정시에 이미 존재하는 이미지를 지우고싶다면 받아온 url을 보내면 될것
     //서버에 이미지를 추가적으로 넣고싶다 그러면 파일 삭제하고싶다 그러면 url로 보냄
@@ -220,22 +220,33 @@ export default function FileInput({
         const newImgs = imgs.filter((el,id)=>id!==idx);
         setImgs(newImgs);
         if(setWillDeleteImgs) {
-            setWillDeleteImgs((prev)=>{
-                return {...prev, [fileKey] : [...prev[fileKey], imgs[idx]]}
-            })
-        } else {
-            const tempFiles = dataForm[fileKey].getAll(fileKey);
-            const newForm = dataForm[fileKey];
-            newForm.delete(fileKey);
-            for(let i = 0; i < tempFiles.length; i++) {
-                if(i !== idx) {
-                    newForm.append(fileKey,tempFiles[i]);
+            if(number === 1) {
+                if(dataForm.projectTitleImage[0] === imgs[idx]) {
+                    console.log('받은데이터에서 삭제');
+                    handleInputChange(null,imgs[idx],willDeleteKey)        
                 }
+            } else {
+                for(let i = 0; i < dataForm.images.length; i++) {
+                    if(imgs[idx] === dataForm.images[i]) {
+                        const tempArr = [...dataForm.imageUrls];
+                        tempArr.push(imgs[idx]);
+                        handleInputChange(null,tempArr,willDeleteKey)
+                        return;
+                    }
+                }   
             }
-            handleInputChange(null,newForm,fileKey);
         }
+        const tempFiles = dataForm[fileKey].getAll(fileKey);
+        const newForm = dataForm[fileKey];
+        newForm.delete(fileKey);
+        for(let i = 0; i < tempFiles.length; i++) {
+            if(i !== idx) {
+                newForm.append(fileKey,tempFiles[i]);
+            }
+        }
+        handleInputChange(null,newForm,fileKey);
         if(number===1){
-            handleErrorChange(null,true,'titleImageFile');
+            handleErrorChange(null,true,fileKey);
         }
     }
 

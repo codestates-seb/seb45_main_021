@@ -12,7 +12,7 @@ import Modal from '../components/common/Modal';
 import api from '../hooks/useAxiosInterceptor';
 import { desktop, tablet } from '../static/theme';
 import SuspenseDetailPage from '../components/PfPjPublic/DetailSkeletonLoading';
-import ProjectCardSkeletion from './../components/project/ProjectCardSkeletion';
+import ProjectCardSkeletion from './../components/project/ProjectCardSkeleton';
 
 export const StyleDetailWrapper = styled(Page)`
   padding-top:6rem;
@@ -145,6 +145,10 @@ const DummyData = {
       body : '신청합니다.'
     }
   ]
+}
+
+const joinRequestPeople = {
+  
 }
 
 export default function ProjectDetail() {

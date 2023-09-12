@@ -5,9 +5,12 @@ export const portFolioWriteInitData = {
     isComments : false,
     tags : [],
     body : '',
-    titleImageFile : '',
+    titleImageFile : new FormData(),
+    titleImageUrl : '',
     imageFile : new FormData(),
+    imageUrls : '',
 }
+
 
 //포트폴리오 작성시에 기본적으로 존재하는 룰
 export const portFolioErrorInitData = {

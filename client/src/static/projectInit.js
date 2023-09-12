@@ -8,7 +8,9 @@ export const projectWriteInitData = {
     body : '',
     description : '',
     titleImageFile : new FormData(),
+    titleImageUrl : '',
     imageFile : new FormData(),
+    imageUrls : [],
 }
 
 //기본적으로 존재하는 프로젝트 에러들

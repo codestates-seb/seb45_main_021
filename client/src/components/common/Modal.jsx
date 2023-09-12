@@ -98,7 +98,6 @@ export default function Modal({
 
   const confirmOnClickHandler = () => {
     if (confirmHandler) {
-      console.log(confirmHandler);
       confirmHandler();
     }
     modalCloser(false);

@@ -12,7 +12,6 @@ export default function DateSelect ({
     const [resetDate, setResetDate] = useState([]);
 
     useEffect(()=>{
-        console.log('실행');
         if(defaultDate.length) {
             const parsingDate = new Date(defaultDate);
             setResetDate([

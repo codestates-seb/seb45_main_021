@@ -1,8 +1,6 @@
 import React from 'react';
 import styled from 'styled-components'
-import { desktop } from '../../static/theme';
 import { Skeleton } from '@mui/material';
-import { BorderLine } from '../portfolio/SeeComment';
 import { StyleProjectCardContainer } from './ProjectCardContainer';
 
 const StyleProjectCardSkeletion = styled(StyleProjectCardContainer)`
@@ -98,7 +96,7 @@ const renderSkeletons = (count = 1, size) => {
     return skeletons;
   };
 
-export default function ProjectCardSkeletion() {
+export default function ProjectCardSkeleton() {
     const size = 20;
     return (
         <StyleProjectCardSkeletion className='col'>
