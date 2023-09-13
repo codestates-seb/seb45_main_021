@@ -19,17 +19,21 @@ export const useAxiosInterceptor = () => {
 
   instance.interceptors.request.use(
     (config) => {
+      const newHeaders = { ...config.headers };
       if (jwt?.accesstoken) {
-        config.headers['accesstoken'] = `Bearer ${jwt.accesstoken}`;
+        newHeaders['accesstoken'] = `Bearer ${jwt.accesstoken}`;
+      } else {
+        delete newHeaders['accesstoken'];
       }
       if (jwt?.refreshtoken) {
-        config.headers['refreshtoken'] = `${jwt.refreshtoken}`;
+        newHeaders['refreshtoken'] = `${jwt.refreshtoken}`;
+      } else {
+        delete newHeaders['refreshtoken'];
       }
-
+      config.headers = newHeaders;
       return config;
     },
     (error) => {
-      console.log(error);
       return Promise.reject(error);
     },
   );
