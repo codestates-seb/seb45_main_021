@@ -35,7 +35,7 @@ export const useAxiosInterceptor = () => {
       return config;
     },
     (error) => {
-      return Promise.reject(error);
+      throw error;
     },
   );
 
@@ -92,7 +92,7 @@ export const useAxiosInterceptor = () => {
       if (error.code === 'ECONNABORTED') {
         toAbout();
       }
-      return Promise.reject(error);
+      throw error;
     },
   );
 };
