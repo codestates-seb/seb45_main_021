@@ -9,6 +9,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +25,7 @@ public interface PortfolioMapper {
         Portfolio portFolio = new Portfolio();
         portFolio.setTitle(portfolioPostDto.getTitle());
         portFolio.setBody(portfolioPostDto.getBody());
-        portFolio.setTags(portfolioPostDto.getTags());
+        portFolio.setTags(new String[]{portfolioPostDto.getTags()});
         portFolio.setLang((portfolioPostDto.getLang()));
         portFolio.setMember(member);
 
@@ -33,8 +34,29 @@ public interface PortfolioMapper {
 
 
 
-
+    @Mapping(target = "tags", expression = "java(mapTags(portfolioPatchDto.getTags()))")
     Portfolio portfolioPatchDtoToPortfolio(PortfolioDto.Patch portfolioPatchDto);
+    default String [] mapTags(String tags) {
+        if (tags == null || tags.isEmpty()) {
+            return new String[0];
+        }
+        return  tags.split(",");
+    }
+    private String[] parseTags(String tags) {
+        if (tags == null || tags.isEmpty()) {
+            return new String[0];
+        }
+
+        // 태그 문자열을 쉼표로 분리하여 배열로 반환
+        String[] tagArray = tags.split(",");
+
+        // 각 태그 문자열의 양 끝에 있는 공백 및 대괄호 제거
+        for (int i = 0; i < tagArray.length; i++) {
+            tagArray[i] = tagArray[i].trim().replaceAll("^\\[|\\]$", "");
+        }
+
+        return tagArray;
+    }
 
 
     default PortfolioDto.Response portfolioToPortfolioResponseDto(Portfolio portFolio){
@@ -45,7 +67,7 @@ public interface PortfolioMapper {
                 .userImgUrl(portFolio.getMember().getImgUrl())
                 .title(portFolio.getTitle())
                 .createdAt(portFolio.getCreatedAt())
-                .tags(portFolio.getTags())
+                .tags(parseTags(Arrays.toString(portFolio.getTags())))
                 .lang(portFolio.getLang())
                 .heartCount(portFolio.getHeartCount())
                 .IsEmploy(portFolio.isIsEmploy())
@@ -68,7 +90,7 @@ public interface PortfolioMapper {
                 .createdAt(portFolio.getCreatedAt())
                 .modifiedAt(portFolio.getModifiedAt())
                 .view(portFolio.getView())
-                .tags(portFolio.getTags())
+                .tags(parseTags(Arrays.toString(portFolio.getTags())))
                 .lang(portFolio.getLang())
                 .IsEmploy(portFolio.isIsEmploy())
                 .IsComment(portFolio.isIsComment())

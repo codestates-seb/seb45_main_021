@@ -53,7 +53,6 @@ public class Project extends Auditable {
     private String closedAt;
 
 
-    @Column(columnDefinition = "TEXT")
     private String[] tags;
 
     private String lang;

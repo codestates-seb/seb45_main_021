@@ -8,6 +8,7 @@ import com.seb_45_main_021.unkwon.project.dto.request.ProjectPostDto;
 import com.seb_45_main_021.unkwon.project.dto.request.ProjectRequestDto;
 import com.seb_45_main_021.unkwon.project.dto.response.ProjectProfileResponseDto;
 import com.seb_45_main_021.unkwon.project.dto.response.ProjectResponseDto;
+
 import com.seb_45_main_021.unkwon.project.dto.response.ProjectStatusResponseDto;
 import com.seb_45_main_021.unkwon.project.entity.Project;
 import com.seb_45_main_021.unkwon.project.entity.ProjectStatus;
@@ -15,7 +16,9 @@ import com.seb_45_main_021.unkwon.projectcard.entity.ProjectCard;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+
 import java.util.Arrays;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,7 +34,7 @@ public interface ProjectMapper {
         project.setTitle(projectPostDto.getTitle());
         project.setTotalPeople(projectPostDto.getTotalPeople());
         project.setLang(projectPostDto.getLang());
-        project.setTags(projectPostDto.getTags());
+        project.setTags(new String[]{projectPostDto.getTags()});
         project.setBody(projectPostDto.getBody());
         project.setDescription(projectPostDto.getDescription());
         project.setClosedAt(projectPostDto.getClosedAt());
@@ -46,7 +49,7 @@ public interface ProjectMapper {
         project.setTitle(projectPatchDto.getTitle());
         project.setTotalPeople(projectPatchDto.getTotalPeople());
         project.setLang(projectPatchDto.getLang());
-        project.setTags(projectPatchDto.getTags());
+        project.setTags(new String[]{projectPatchDto.getTags()});
         project.setBody(projectPatchDto.getBody());
         project.setDescription(projectPatchDto.getDescription());
 
@@ -107,20 +110,21 @@ public interface ProjectMapper {
                 .memberId(project.getMember().getMemberId())
                 .userName(project.getMember().getUserName())
                 .userImgUrl(project.getMember().getImgUrl())
+
                 .title(project.getTitle())
                 .totalPeople(project.getTotalPeople())
                 .joinPeople(project.getJoinPeople())
                 .requestPeople(project.getRequestPeople())
                 .createdAt(project.getCreatedAt())
                 .modifiedAt(project.getModifiedAt())
-                .images(project.getImages())
                 .closedAt(project.getClosedAt())
                 .lang(project.getLang())
-                .tags(project.getTags())
+                .tags(parseTags(Arrays.toString(project.getTags())))
                 .body(project.getBody())
                 .description(project.getDescription())
                 .heartCount(project.getHeartCount())
                 .view(project.getView())
+                .images(project.getImages())
                 .projectTitleImage(project.getProjectTitleImage())
                 .build();
 
@@ -133,9 +137,30 @@ public interface ProjectMapper {
                 .collect(Collectors.toList());
     }
 
-
+    @Mapping(target = "tags", expression = "java(mapTags(projectPatchDto.getTags()))")
     Portfolio projectPatchDtoToPortfolio(ProjectPatchDto projectPatchDto);
 
+    default String [] mapTags(String tags) {
+        if (tags == null || tags.isEmpty()) {
+            return new String[0];
+        }
+        return  tags.split(",");
+    }
+    private String[] parseTags(String tags) {
+        if (tags == null || tags.isEmpty()) {
+            return new String[0];
+        }
+
+        // 태그 문자열을 쉼표로 분리하여 배열로 반환
+        String[] tagArray = tags.split(",");
+
+        // 각 태그 문자열의 양 끝에 있는 공백 및 대괄호 제거
+        for (int i = 0; i < tagArray.length; i++) {
+            tagArray[i] = tagArray[i].trim().replaceAll("^\\[|\\]$", "");
+        }
+
+        return tagArray;
+    }
 
 
     default List<ProjectProfileResponseDto> projectToProfileResponseDto(List<Project> projectList){

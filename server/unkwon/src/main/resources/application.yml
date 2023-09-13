@@ -5,6 +5,7 @@ spring:
     username: root
     password: aass0357!!
 
+
   jpa:
     open-in-view: true
     hibernate:
@@ -16,10 +17,10 @@ spring:
     properties:
       hibernate.format_sql: true
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
+      hibernate:
+        connection:
+          characterEncoding: utf8mb4
 
-  jackson:
-    serialization:
-      write-dates-as-timestamps: false
 
   servlet:
     multipart:
@@ -93,8 +94,8 @@ cloud:
     s3:
       bucket: mainproject-bucket
     credentials:
-      access-key: AKIATUJ7QKHFUAP67DGX
-      secret-key: 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
+      access-key:
+      secret-key:
     region:
       static: ap-northeast-2
       auto: false

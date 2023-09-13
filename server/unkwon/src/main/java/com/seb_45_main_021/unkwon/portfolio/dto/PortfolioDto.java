@@ -19,7 +19,7 @@ public class PortfolioDto {
         private long memberId;
         private String title;
         private String body;
-        private String[] tags;
+        private String tags;
         private String lang;
 
     }
@@ -32,7 +32,7 @@ public class PortfolioDto {
         private long portfolioId;
         private String title;
         private String body;
-        private String[] tags;
+        private String tags;
         private String lang;
         private boolean IsEmploy;
         private boolean IsComment;
