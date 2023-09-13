@@ -31,7 +31,7 @@ spring:
 #      max-request-size: 50MB
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/han_db
+    url: jdbc:mysql://localhost:3306/kim_db
     username: root
     password: gks0923
 

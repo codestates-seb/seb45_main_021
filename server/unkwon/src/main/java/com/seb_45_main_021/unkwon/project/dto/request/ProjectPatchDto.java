@@ -11,6 +11,7 @@ public class ProjectPatchDto {
     private long memberId;
     private String title;
     private int totalPeople;
+    private String closedAt;
     private String body;
     private String description;
     private String tags;
