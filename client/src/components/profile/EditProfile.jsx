@@ -51,7 +51,7 @@ export default function EditProfile({ editProfile, setEditProfile, handleTagKeyD
         />
         <ProGress
           comPleteNum={200}
-          proGressNum={editProfile.aboutMe.value.length}
+          proGressNum={editProfile.aboutMe.value?.length}
           fontSize="1.5rem"
         />
         <Input
@@ -68,7 +68,7 @@ export default function EditProfile({ editProfile, setEditProfile, handleTagKeyD
         />
         <ProGress
           comPleteNum={5}
-          proGressNum={editProfile.userName.value.length}
+          proGressNum={editProfile.userName.value?.length}
           fontSize="1.5rem"
         />
         <Input
@@ -82,7 +82,7 @@ export default function EditProfile({ editProfile, setEditProfile, handleTagKeyD
         />
         <ProGress
           comPleteNum={3}
-          proGressNum={editProfile.age.value.toString().length}
+          proGressNum={editProfile.age.value?.toString()?.length}
           fontSize="1.5rem"
         />
         <div style={{ marginBottom: '10px' }}>

@@ -23,12 +23,14 @@ const StyleContainer = styled.div`
     height: 100%;
   }
   .swiper-wrapper {
+    width: 100%;
     display: flex;
     align-items: center;
   }
   .swiper-slide {
     padding: 1rem;
     width: 100%;
+    min-height: 500px;
     height: 100%;
     display: flex;
     align-items: center;
@@ -69,9 +71,7 @@ export default function ProjectCard({ id, data, isLoading, setData, trueData }) 
           slidesPerView={'auto'}
           centeredSlides={true}
           pagination={{ clickable: true }}
-          spaceBetween={10}
           slideToClickedSlide={true}
-          initialSlide={isEdit.fetch || isEdit.new ? 0 : 1}
         >
           {!isEdit.fetch &&
             !isEdit.new &&

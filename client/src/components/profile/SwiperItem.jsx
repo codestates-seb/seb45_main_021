@@ -10,7 +10,7 @@ import Skeleton from '@mui/material/Skeleton';
 
 const SwiperCard = styled.div`
   width: 100%;
-  height: 100%;
+  min-height: 500px;
   border: 1px solid white;
   border-radius: 3rem;
   padding: 2rem;
@@ -33,13 +33,15 @@ const SwiperCard = styled.div`
 `;
 
 const SwiperNullCard = styled(SwiperCard)`
-  height: 100%;
   svg {
     cursor: pointer;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+  }
+  &:hover {
+    background-color: #80808027;
   }
 `;
 
@@ -90,7 +92,7 @@ export default function SwiperItem({ activePage, data, idx, handler, idxHandler,
         <Skeleton width="100%" height="100%" style={{ borderRadius: '3rem' }} />
       ) : (
         <>
-          {data.tags ? (
+          {data.tell ? (
             <SwiperCard className="col gap" $active={activePage === idx ? true : false}>
               <InfoWrapper className="row gap">
                 <img className="userImg" src={data.userImg} alt="" />
