@@ -160,6 +160,31 @@ export default function ProfileCard({ id, data, isLoading }) {
     },
   });
 
+  const handleResetEditProfile = () => {
+    setEditProfile({
+      aboutMe: {
+        value: profile.aboutMe,
+        error: '',
+      },
+      userName: {
+        value: profile.userName,
+        error: '',
+      },
+      age: {
+        value: profile.age,
+        error: '',
+      },
+      tags: {
+        value: profile.tags,
+        curString: '',
+        error: '',
+      },
+      working: {
+        value: profile.working,
+      },
+    });
+  };
+
   const handleTagKeyDown = (e) => {
     if (e.code !== 'Enter' && e.code !== 'NumpadEnter') return;
     e.preventDefault();
@@ -303,6 +328,7 @@ export default function ProfileCard({ id, data, isLoading }) {
           setEditPassword={setEditPassword}
           handleEditPassword={handleEditPassword}
           handleClickWithdrawal={handleClickWithdrawal}
+          handleResetEditProfile={handleResetEditProfile}
         />
       </div>
     </StyleProfileContainer>
