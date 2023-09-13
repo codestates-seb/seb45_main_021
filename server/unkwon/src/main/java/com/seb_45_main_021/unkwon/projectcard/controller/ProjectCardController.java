@@ -43,7 +43,7 @@ public class ProjectCardController {
 
     // 카드 수정
     @PatchMapping("/{projectcard-id}")
-    public ResponseEntity updateProjectCard(@PathVariable @Positive Long projectCardId,
+    public ResponseEntity updateProjectCard(@PathVariable("projectcard-id") @Positive Long projectCardId,
                                   @Valid @RequestBody ProjectCardPatchDto dto){
         dto.setProjectCardId(projectCardId);
         projectCardService.updateProjectCard(dto);
@@ -53,7 +53,7 @@ public class ProjectCardController {
 
     // 카드 삭제
     @DeleteMapping("/{projectcard-id}")
-    public ResponseEntity deleteProjectCard(@PathVariable @Positive Long projectCardId){
+    public ResponseEntity deleteProjectCard(@PathVariable("projectcard-id") @Positive Long projectCardId){
         projectCardService.removeProjectCard(projectCardId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

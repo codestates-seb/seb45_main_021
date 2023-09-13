@@ -1,4 +1,34 @@
 spring:
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#
+#    url: jdbc:mysql://localhost:3306/han_db
+#    username: root
+#    password: gks0923
+#    #url: jdbc:mysql://spec-db-1.c8qdyivupwng.ap-northeast-2.rds.amazonaws.com:13306/SPEC
+#    #username: admin
+#    #password: qwer1234 #${MYSQL_SECRET}
+#
+#  jpa:
+#    open-in-view: true
+#    hibernate:
+#      ddl-auto: update
+#      naming:
+#        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+#      use-new-id-generator-mappings: false
+#    show-sql: true
+#    properties:
+#      hibernate.format_sql: true
+#      dialect: org.hibernate.dialect.MySQL8InnoDBDialect
+#
+#  jackson:
+#    serialization:
+#      write-dates-as-timestamps: false
+#
+#  servlet:
+#    multipart:
+#      max-file-size: 50MB
+#      max-request-size: 50MB
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/han_db
@@ -25,6 +55,7 @@ spring:
     multipart:
       max-file-size: 50MB
       max-request-size: 50MB
+
 
 
   #  h2:

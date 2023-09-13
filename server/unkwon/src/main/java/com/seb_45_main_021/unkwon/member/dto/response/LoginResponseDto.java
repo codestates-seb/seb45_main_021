@@ -11,15 +11,15 @@ import java.util.List;
 public class LoginResponseDto {
     private Long memberId;
     private String userName;
-    private String imgUrl;
+    private String userImgUrl;
     private SocialType socialType;
     private List<Long> portfolioList = new ArrayList<>();
     private List<Long> projectList = new ArrayList<>();
 
-    public LoginResponseDto(Long memberId, String userName, String imgUrl, SocialType socialType, List<PortfolioHeart> portfolioHeartList, List<ProjectHeart> projectHeartList) {
+    public LoginResponseDto(Long memberId, String userName, String userImgUrl, SocialType socialType, List<PortfolioHeart> portfolioHeartList, List<ProjectHeart> projectHeartList) {
         this.memberId = memberId;
         this.userName = userName;
-        this.imgUrl = imgUrl;
+        this.userImgUrl = userImgUrl;
         this.socialType = socialType;
         setPortfolioList(portfolioHeartList);
         setProjectList(projectHeartList);
