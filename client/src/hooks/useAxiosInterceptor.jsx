@@ -48,6 +48,12 @@ export const useAxiosInterceptor = () => {
         message = error.response.data.message;
       }
 
+      if (message === 'Bad Token') {
+        dispatch(deleteUser());
+        alert('토큰이 잘못 전달되었습니다.');
+        toSignin();
+      }
+
       if (message === 'refreshToken has expired') {
         dispatch(deleteUser());
         alert('세션이 만료되었습니다.');

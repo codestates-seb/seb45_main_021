@@ -45,13 +45,13 @@ const StyleContainer = styled(Page)`
   }
 `;
 
-const data = {
+const data1 = {
   profile: {
     userName: '유명인',
-    userImg: userDefaultImg,
+    userImgUrl: userDefaultImg,
     email: 'kimcoding@gmail.com',
     age: 50,
-    tag: ['JavaScript', 'React', 'CSS'],
+    tags: ['JavaScript', 'React', 'CSS'],
     working: false,
     aboutMe: '나 안산에 사는 코딩을 공부중인 23살 명인쓰인데 리액트 잘하고 css 맛깔나게 짠다.',
     createdAt: '1999-3-3',
@@ -204,22 +204,18 @@ const data = {
   ],
   projectCard: [
     {
-      working: true,
-      email: 'dbauddls12@naver.com',
       userImg: userDefaultImg,
-      userName: '유명인',
+      working: true,
       aboutMe: '자기소개 이렇게 적는게 맞는걸까요오오오드용액 가버렷 컽컽컽 !!@!@',
       tell: '010-1111-2222',
-      tag: ['JavaScript', 'React', 'CSS'],
+      tags: ['JavaScript', 'React', 'CSS'],
     },
     {
-      working: true,
-      email: 'dbauddls12@naver.com',
       userImg: userDefaultImg,
-      userName: '유명인',
+      working: true,
       aboutMe: '내가 자신없으면 너가 뭘 할 수 있는데 으이 ?!!?',
       tell: '010-3333-2222',
-      tag: [],
+      tags: [],
     },
     {},
   ],
@@ -229,7 +225,7 @@ export default function Profile() {
   const { memberId } = useParams();
   const user = useSelector((state) => state.user);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [data, setData] = useState(data1);
   useEffect(() => {
     setIsLoading(true);
     // try {
@@ -253,7 +249,13 @@ export default function Profile() {
         {user.isLogin && Number(memberId) === user.userInfo.memberId && (
           <>
             <LikeList id="likeList" data={data.likeList} isLoading={isLoading} />
-            <ProjectCard id="projectCard" data={data.projectCard} isLoading={isLoading} />
+            <ProjectCard
+              id="projectCard"
+              data={data.projectCard}
+              isLoading={isLoading}
+              setData={setData}
+              trueData={data}
+            />
           </>
         )}
       </div>

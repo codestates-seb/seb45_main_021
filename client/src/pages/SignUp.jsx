@@ -11,7 +11,6 @@ import { deleteUser } from '../redux/userForm/userSlice';
 import { useDispatch } from 'react-redux';
 import Spinner from '../components/common/Spinner';
 import { desktop, mobile } from '../static/theme';
-import Toast from '../components/toast/Toast';
 
 const StyleContainer = styled(Page)`
   width: fit-content;
@@ -95,7 +94,7 @@ const StyleColContainer = styled.div`
   justify-content: center;
 `;
 
-const StyleBtnContainer = styled.div`
+const StyleBtnContainer = styled.button`
   width: 40rem;
   height: 56.22px;
   border: 1px solid var(--black-300);
@@ -172,10 +171,10 @@ const StyleDivider = styled.div`
 `;
 
 export default function SignUp() {
-  const [username, setName] = useState('');
+  const [userName, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState({ username: '', email: '', password: '' });
+  const [error, setError] = useState({ userName: '', email: '', password: '' });
   const [isSubmit, setIsSubmit] = useState(false);
   const { toSignin } = useNav();
   const dispatch = useDispatch();
@@ -193,14 +192,14 @@ export default function SignUp() {
   };
 
   const handleSubmitForm = (e) => {
+    e.preventDefault();
     try {
       const isvalidEmail = isValidEmail(email);
       const isvalidPassword = isValidPassword(password);
       setIsSubmit(true);
       if (isvalidEmail && isvalidPassword) {
-        const data = JSON.stringify({ username, email, password });
+        const data = JSON.stringify({ userName, email, password });
         api.post('/members/signup', data).then(() => {
-          Toast.success('회원가입 성공.');
           toSignin();
         });
       } else if (!isvalidEmail && !isvalidPassword) {
@@ -214,8 +213,9 @@ export default function SignUp() {
         setError({ ...error, password: '영어,숫자,특수기호 포함 8글자 이상으로 입력해주세요.' });
       }
     } catch (error) {
-      console.log(error);
-      setError({ email: '다시 확인해주세요.', password: '다시 확인해주세요.' });
+      if (error.response.status === 409) {
+        setError({ ...error, email: '이미 존재하는 이메일 입니다.' });
+      }
     }
     setIsSubmit(false);
   };
@@ -224,7 +224,7 @@ export default function SignUp() {
     try {
       api.post('/oauth2/authorization/google');
       // window.location.assign(
-      //   'https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=15196070608-ti8mt0m3fo8tj48172bhq72h4re8bcni.apps.googleusercontent.com&scope=email%20profile&state=DKmeMgtsMo4TAFwj_w_-H9L3dWnTcS1o_j3qAk1DJtw%3D&redirect_uri=http://localhost:3000/signup',
+      //   'https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=15196070608-ti8mt0m3fo8tj48172bhq72h4re8bcni.apps.googleusercontent.com&scope=email%20profile&state=J8xE05niEcAJo0CAB8XkqVr25Prh7dXvkrqthZ2YJw0%3D&redirect_uri=http://ec2-52-78-224-100.ap-northeast-2.compute.amazonaws.com:8080/login/oauth2/code/google',
       // );
     } catch (error) {
       console.log(error);
@@ -272,13 +272,13 @@ export default function SignUp() {
                   height="56.22px"
                   fontSize="2rem"
                   type="text"
-                  value={username}
+                  value={userName}
                   onChange={handleChangeName}
-                  error={error.username}
+                  error={error.userName}
                 />
                 <Input
                   label={'이메일'}
-                  placeholder="username@example.com"
+                  placeholder="userName@example.com"
                   width="40rem"
                   height="56.22px"
                   fontSize="2rem"
@@ -299,7 +299,6 @@ export default function SignUp() {
                   onChange={handleChangePassword}
                   error={error.password}
                 />
-
                 <StyleBtnContainer type="submit" onClick={handleSubmitForm}>
                   <span>회원가입</span>
                 </StyleBtnContainer>

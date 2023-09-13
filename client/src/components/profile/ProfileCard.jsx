@@ -116,10 +116,10 @@ export default function ProfileCard({ id, data, isLoading }) {
   const [profile, setProfile] = useState({
     email: data.email,
     userName: data.userName,
-    userImg: data.userImg,
+    userImgUrl: data.userImg,
     working: data.working,
     age: data.age,
-    tag: data.tag,
+    tags: data.tags,
     aboutMe: data.aboutMe,
     createdAt: data.createdAt,
   });
@@ -136,8 +136,8 @@ export default function ProfileCard({ id, data, isLoading }) {
       value: profile.age,
       error: '',
     },
-    tag: {
-      value: profile.tag,
+    tags: {
+      value: profile.tags,
       curString: '',
       error: '',
     },
@@ -164,19 +164,19 @@ export default function ProfileCard({ id, data, isLoading }) {
     if (e.code !== 'Enter' && e.code !== 'NumpadEnter') return;
     e.preventDefault();
     if (
-      editProfile.tag.curString.split(' ').join('').length <= 10 &&
-      editProfile.tag.curString.split(' ').join('').length > 0
+      editProfile.tags.curString.split(' ').join('').length <= 10 &&
+      editProfile.tags.curString.split(' ').join('').length > 0
     ) {
       if (
-        editProfile.tag.value.length <= 2 &&
-        editProfile.tag.value.filter(
-          (el) => el.toLowerCase() === editProfile.tag.curString.toLowerCase(),
+        editProfile.tags.value.length <= 2 &&
+        editProfile.tags.value.filter(
+          (el) => el.toLowerCase() === editProfile.tags.curString.toLowerCase(),
         ).length === 0
       ) {
         setEditProfile({
           ...editProfile,
-          tag: {
-            value: [...editProfile.tag.value, editProfile.tag.curString.split(' ').join('')],
+          tags: {
+            value: [...editProfile.tags.value, editProfile.tags.curString.split(' ').join('')],
             curString: '',
             error: '',
           },
@@ -184,8 +184,8 @@ export default function ProfileCard({ id, data, isLoading }) {
       } else {
         setEditProfile({
           ...editProfile,
-          tag: {
-            ...editProfile.tag,
+          tags: {
+            ...editProfile.tags,
             error: '중복은 허용하지않습니다.',
           },
         });
@@ -205,7 +205,7 @@ export default function ProfileCard({ id, data, isLoading }) {
           aboutMe: editProfile.aboutMe.value,
           userName: editProfile.userName.value,
           age: editProfile.age.value,
-          tag: editProfile.tag.value,
+          tags: editProfile.tags.value,
           working: editProfile.working.value,
         };
         api.patch(`members/${memberId}`, responseBody).then(() => {
@@ -215,7 +215,7 @@ export default function ProfileCard({ id, data, isLoading }) {
             aboutMe: editProfile.aboutMe.value,
             userName: editProfile.userName.value,
             age: editProfile.age.value,
-            tag: editProfile.tag.value,
+            tags: editProfile.tags.value,
             working: editProfile.working.value,
           });
         });

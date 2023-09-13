@@ -101,23 +101,23 @@ export default function EditProfile({ editProfile, setEditProfile, handleTagKeyD
               height="3rem"
               type="text"
               placeholder="태그는 최대 중복제외 3개까지 등록이 가능합니다."
-              value={editProfile.tag.curString}
-              error={editProfile.tag.error}
+              value={editProfile.tags.curString}
+              error={editProfile.tags.error}
               onChange={(e) => {
                 setEditProfile({
                   ...editProfile,
-                  tag: { value: [...editProfile.tag.value], curString: e.target.value },
+                  tags: { value: [...editProfile.tags.value], curString: e.target.value },
                 });
               }}
               onKeyDown={handleTagKeyDown}
             />
             <ProGress
               comPleteNum={3}
-              proGressNum={editProfile.tag.value.length}
+              proGressNum={editProfile.tags.value.length}
               fontSize="1.5rem"
             />
             <div className="row tagGap">
-              {editProfile.tag.value.map((el, i) => (
+              {editProfile.tags.value.map((el, i) => (
                 <Tag
                   key={i}
                   edit={true}
@@ -130,9 +130,9 @@ export default function EditProfile({ editProfile, setEditProfile, handleTagKeyD
                         onClick={() =>
                           setEditProfile({
                             ...editProfile,
-                            tag: {
-                              value: editProfile.tag.value.filter((_, idx) => i !== idx),
-                              curString: editProfile.tag.curString,
+                            tags: {
+                              value: editProfile.tags.value.filter((_, idx) => i !== idx),
+                              curString: editProfile.tags.curString,
                             },
                           })
                         }
