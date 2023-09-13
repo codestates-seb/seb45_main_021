@@ -12,7 +12,6 @@ import { isValidEmail, isValidPassword } from '../components/profile/isValid';
 import userDefaultImg from '../static/images/userDefaultImg.jpeg';
 import Spinner from '../components/common/Spinner';
 import { desktop, mobile } from '../static/theme';
-import Toast from '../components/toast/Toast';
 
 const StyleContainer = styled(Page)`
   display: flex;
@@ -97,7 +96,7 @@ const StyleColContainer = styled.div`
   justify-content: center;
 `;
 
-const StyleBtnContainer = styled.div`
+const StyleBtnContainer = styled.button`
   width: 40rem;
   height: 56.22px;
   border: 1px solid var(--black-300);
@@ -201,7 +200,8 @@ export default function SignIn() {
     setPassword(e.target.value);
   };
 
-  const handleSubmitForm = () => {
+  const handleSubmitForm = (e) => {
+    e.preventDefault();
     try {
       const isvalidEmail = isValidEmail(email);
       const isvalidPassword = isValidPassword(password);
@@ -214,8 +214,8 @@ export default function SignIn() {
               isLogin: true,
               userInfo: {
                 memberId: el.data.memberId,
-                userName: el.data.username,
-                imgUrl: el.data.imgUrl,
+                userName: el.data.userName,
+                userImgUrl: el.data.userImgUrl,
                 socialType: el.data.socialType,
               },
               likeList: {
@@ -224,7 +224,6 @@ export default function SignIn() {
               },
             }),
           );
-          Toast.success('로그인 성공');
           toAbout();
         });
       } else if (!isvalidEmail && !isvalidPassword) {
@@ -238,8 +237,12 @@ export default function SignIn() {
         setError({ ...error, password: '영어,숫자,특수기호 포함 8글자 이상으로 입력해주세요.' });
       }
     } catch (error) {
-      console.log(error);
-      setError({ email: '다시 확인해주세요.', password: '다시 확인해주세요.' });
+      if (error.response.status === 401) {
+        setError({ ...error, password: '비밀번호가 유효하지 않습니다.' });
+      }
+      if (error.response.status === 404) {
+        setError({ ...error, email: '이메일이 유효하지 않습니다.' });
+      }
     }
     setIsSubmit(false);
   };
@@ -277,7 +280,7 @@ export default function SignIn() {
               </StyleDivider>
             </div>
             <StyleColContainer className="col gap">
-              <form className="formGap">
+              <form className="formGap" onSubmit={handleSubmitForm}>
                 <Input
                   label={'이메일'}
                   placeholder="name@example.com"

@@ -90,7 +90,7 @@ export default function SwiperItem({ activePage, data, idx, handler, idxHandler,
         <Skeleton width="100%" height="100%" style={{ borderRadius: '3rem' }} />
       ) : (
         <>
-          {data.userName ? (
+          {data.tags ? (
             <SwiperCard className="col gap" $active={activePage === idx ? true : false}>
               <InfoWrapper className="row gap">
                 <img className="userImg" src={data.userImg} alt="" />
@@ -102,11 +102,11 @@ export default function SwiperItem({ activePage, data, idx, handler, idxHandler,
                     <p>{data.working ? '재직중' : '구직중'}</p>
                   </div>
                   <div className="col gap">
-                    {data.tag.length !== 0 && (
+                    {data.tags.length !== 0 && (
                       <>
                         <p className="label">기술</p>
                         <div className="row gap">
-                          {data.tag.map((el, i) => (
+                          {data.tags.map((el, i) => (
                             <Tag key={i} text={el} />
                           ))}
                         </div>
