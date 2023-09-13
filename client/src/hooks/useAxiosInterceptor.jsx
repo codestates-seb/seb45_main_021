@@ -17,7 +17,7 @@ export const useAxiosInterceptor = () => {
   const jwt = useSelector((state) => state.user.jwt);
   const userInfo = useSelector((state) => state.user.userInfo);
   const { toAbout, toSignin } = useNav();
-  console.log(jwt);
+
   instance.interceptors.request.use(
     (config) => {
       const newHeaders = { ...config.headers };
@@ -56,33 +56,18 @@ export const useAxiosInterceptor = () => {
 
       if (message === 'Bad Token') {
         dispatch(deleteUser());
-        try {
-          instance.post(`/members/logout/${userInfo.memberId}`);
-        } catch (error) {
-          console.log(error);
-        }
         alert('토큰이 잘못 전달되었습니다.');
         toSignin();
       }
 
       if (message === 'refreshToken has expired') {
         dispatch(deleteUser());
-        try {
-          instance.post(`/members/logout/${userInfo.memberId}`);
-        } catch (error) {
-          console.log(error);
-        }
         alert('세션이 만료되었습니다.');
         toSignin();
       }
 
       if (message === 'refreshToken has different') {
         dispatch(deleteUser());
-        try {
-          instance.post(`/members/logout/${userInfo.memberId}`);
-        } catch (error) {
-          console.log(error);
-        }
         alert('새 기기에서 접속하여 로그하웃 되었습니다.');
         toSignin();
       }
