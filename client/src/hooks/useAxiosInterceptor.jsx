@@ -17,7 +17,7 @@ export const useAxiosInterceptor = () => {
   const jwt = useSelector((state) => state.user.jwt);
   const userInfo = useSelector((state) => state.user.userInfo);
   const { toAbout, toSignin } = useNav();
-
+  console.log(jwt);
   instance.interceptors.request.use(
     (config) => {
       const newHeaders = { ...config.headers };
@@ -48,7 +48,6 @@ export const useAxiosInterceptor = () => {
       return response;
     },
     (error) => {
-      console.log(error);
       let message;
       if (error?.response?.data?.message) {
         message = error.response.data.message;

@@ -19,6 +19,7 @@ const StylePostList = styled.ul`
 `;
 
 export default function PostList({ postData, type }) {
+  console.log(postData);
   return (
     <StylePostList>
       {postData.map((post, i) => (

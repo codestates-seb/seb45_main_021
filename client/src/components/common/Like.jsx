@@ -3,6 +3,7 @@ import { FaRegHeart } from 'react-icons/fa';
 import { styled } from 'styled-components';
 import Modal from './Modal';
 import useNav from '../../hooks/useNav';
+import { useSelector } from 'react-redux';
 const StyleLike = styled.div`
   display: flex;
   font-size: ${(props) => props.$size || '2rem'};
@@ -27,7 +28,7 @@ const StyleLike = styled.div`
  */
 
 export default function Like({ likes, size, unLikePost, likePost, postId }) {
-  const user = {};
+  const { isLogin, userInfo } = useSelector((state) => state.user);
   const [userLikes, setUserLikes] = useState([1, 3, 4, 5, 6, 7, 8, 9, 10]);
   const isUserLiked = userLikes.includes(+postId);
   const [isOpen, setIsOpen] = useState(false);
@@ -45,17 +46,14 @@ export default function Like({ likes, size, unLikePost, likePost, postId }) {
     // 서버에다가 좋아요 업데이트 요청
     // likePost();
   };
-
   const likeUpdateHandler = () => {
-    if (!user.name) {
-      setIsOpen(true);
-    } else isUserLiked ? unLikePostHandler() : likePostHandler();
+    if (!isLogin) setIsOpen(true);
+    else isUserLiked ? unLikePostHandler() : likePostHandler();
   };
   return (
     <StyleLike $size={size}>
       {isOpen && (
         <Modal
-          isOpen={isOpen}
           setIsOpen={setIsOpen}
           title="로그인이 필요한 서비스입니다."
           body="로그인 페이지로 이동하시겠습니까?"
