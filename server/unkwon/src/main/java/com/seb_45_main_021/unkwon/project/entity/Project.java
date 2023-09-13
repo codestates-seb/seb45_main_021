@@ -93,6 +93,7 @@ public class Project extends Auditable {
         if (this.projectTitleImage != null) {
             this.projectTitleImage.setProject(null);
         }
+
         this.projectTitleImage = titleImage;
         titleImage.setProject(this);
     }
