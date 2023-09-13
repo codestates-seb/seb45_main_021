@@ -50,7 +50,6 @@ public class Project extends Auditable {
 //    private LocalDate closedAt;
 
 
-    @Column(columnDefinition = "TEXT")
     private String[] tags;
 
     private String lang;

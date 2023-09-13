@@ -21,7 +21,7 @@ public class ProjectPostDto {
 
     private String description;
 
-    private String[] tags;
+    private String tags;
 
     private String lang;
 }
