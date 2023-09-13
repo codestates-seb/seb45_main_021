@@ -24,7 +24,7 @@ public interface PortfolioMapper {
         Portfolio portFolio = new Portfolio();
         portFolio.setTitle(portfolioPostDto.getTitle());
         portFolio.setBody(portfolioPostDto.getBody());
-        portFolio.setTags(Arrays.toString(portfolioPostDto.getTags()));
+        portFolio.setTags(portfolioPostDto.getTags());
         portFolio.setLang((portfolioPostDto.getLang()));
         portFolio.setMember(member);
 
@@ -33,16 +33,8 @@ public interface PortfolioMapper {
 
 
 
-    @Mapping(target = "tags", expression = "java(mapping(portfolioPatchDto.getTags()))")
+
     Portfolio portfolioPatchDtoToPortfolio(PortfolioDto.Patch portfolioPatchDto);
-
-    default String mapping(String[] tags) {
-        if (tags == null || tags.length == 0) {
-            return null;
-        }
-        return String.join(",", tags);
-    }
-
 
 
     default PortfolioDto.Response portfolioToPortfolioResponseDto(Portfolio portFolio){
@@ -53,7 +45,7 @@ public interface PortfolioMapper {
                 .userImgUrl(portFolio.getMember().getImgUrl())
                 .title(portFolio.getTitle())
                 .createdAt(portFolio.getCreatedAt())
-                .tags(StringUtils.commaDelimitedListToStringArray(portFolio.getTags()))
+                .tags(portFolio.getTags())
                 .lang(portFolio.getLang())
                 .heartCount(portFolio.getHeartCount())
                 .IsEmploy(portFolio.isIsEmploy())
@@ -76,7 +68,7 @@ public interface PortfolioMapper {
                 .createdAt(portFolio.getCreatedAt())
                 .modifiedAt(portFolio.getModifiedAt())
                 .view(portFolio.getView())
-                .tags(StringUtils.commaDelimitedListToStringArray(portFolio.getTags()))
+                .tags(portFolio.getTags())
                 .lang(portFolio.getLang())
                 .IsEmploy(portFolio.isIsEmploy())
                 .IsComment(portFolio.isIsComment())

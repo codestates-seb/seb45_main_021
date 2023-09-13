@@ -35,7 +35,7 @@ public interface ProjectMapper {
         project.setTitle(projectPostDto.getTitle());
         project.setTotalPeople(projectPostDto.getTotalPeople());
         project.setLang(projectPostDto.getLang());
-        project.setTags(Arrays.toString(projectPostDto.getTags()));
+        project.setTags(projectPostDto.getTags());
         project.setBody(projectPostDto.getBody());
         project.setDescription(projectPostDto.getDescription());
 //        project.setClosedAt(projectPostDto.getClosedAt());
@@ -50,7 +50,7 @@ public interface ProjectMapper {
         project.setTitle(projectPatchDto.getTitle());
         project.setTotalPeople(projectPatchDto.getTotalPeople());
         project.setLang(projectPatchDto.getLang());
-        project.setTags(Arrays.toString(projectPatchDto.getTags()));
+        project.setTags(projectPatchDto.getTags());
         project.setBody(projectPatchDto.getBody());
         project.setDescription(projectPatchDto.getDescription());
 
@@ -117,7 +117,7 @@ public interface ProjectMapper {
                 .modifiedAt(project.getModifiedAt())
 //                .closedAt(project.getClosedAt())
                 .lang(project.getLang())
-                .tags(new String[]{project.getTags()})
+                .tags(project.getTags())
                 .body(project.getBody())
                 .description(project.getDescription())
                 .heartCount(project.getHeartCount())
@@ -135,15 +135,9 @@ public interface ProjectMapper {
                 .collect(Collectors.toList());
     }
 
-    @Mapping(target = "tags", expression = "java(mapping(projectPatchDto.getTags()))")
+
     Portfolio projectPatchDtoToPortfolio(ProjectPatchDto projectPatchDto);
 
-    default String mapping(String[] tags) {
-        if (tags == null || tags.length == 0) {
-            return null;
-        }
-        return String.join(",", tags);
-    }
 
 
     default List<ProjectProfileResponseDto> projectToProfileResponseDto(List<Project> projectList){
