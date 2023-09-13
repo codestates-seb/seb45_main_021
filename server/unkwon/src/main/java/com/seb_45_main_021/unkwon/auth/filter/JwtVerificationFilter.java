@@ -131,13 +131,13 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         try {
             jwtTokenizer.getSubject(refreshToken, base64EncodedSecretKey);
         } catch (SignatureException se) {
-            log.info("SignatureException : " + hostId);
+            log.info("SignatureException");
             throw new JwtException(ExceptionCode.BAD_TOKEN);
         } catch (ExpiredJwtException ee) {
-            log.info("ExpiredJwtException : " + hostId);
+            log.info("ExpiredJwtException");
             setRefreshTokenHasNull(hostId, refreshToken);
         } catch (Exception e) {
-            log.info("Exception : " + hostId);
+            log.info("Exception");
             throw new JwtException(ExceptionCode.BAD_ACCESS);
         }
         return hostId;

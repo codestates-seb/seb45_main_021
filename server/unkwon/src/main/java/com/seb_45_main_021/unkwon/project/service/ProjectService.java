@@ -184,17 +184,13 @@ public class ProjectService {
                 .collect(Collectors.toList());
 
         ProjectApplicationStatusResponseDto response = new ProjectApplicationStatusResponseDto();
-
-        response.setJoinPeople(acceptedMembers.stream().map(member -> new ProjectApplicationStatusResponseDto.JoinPeopleResponseDto(member.getMemberId(), member.getImgUrl(), member.getUserName())).collect(Collectors.toList()));
-        response.setRequestPeople(waitingCards.stream().map(projectCard -> new ProjectCardApplyResponseDto(
-
+        response.setJoinPeople(acceptedMembers.stream().map(member -> new ProjectApplicationStatusResponseDto.JoinPeopleResponseDto(member.getMemberId(), member.getUserImgUrl(), member.getUserName())).collect(Collectors.toList()));
+        response.setRequestPeople(waitingCards.stream().map(projectCard -> new ProjectCardResponseDto(
                 projectCard.getProjectCardId(),
                 projectCard.getAboutMe(),
                 projectCard.getTell(),
                 projectCard.getTag(),
                 projectCard.getMember()
-
-
         )).collect(Collectors.toList()));
 
         return response;

@@ -84,7 +84,7 @@ public interface ProjectMapper {
 
         if (projectStatus.getMember() != null) {
             long memberId = projectStatus.getMember().getMemberId();
-            String imgUrl = projectStatus.getMember().getImgUrl();
+            String imgUrl = projectStatus.getMember().getUserImgUrl();
             String userName = projectStatus.getMember().getUserName();
             projectRequestResponseDto.setMemberId(memberId);
         }

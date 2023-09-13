@@ -22,11 +22,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor // 생성자 주입을 임의의 코드 없이 가능하게 한다.
 public class MemberService {
     private final MemberRepository memberRepository;
@@ -62,6 +65,8 @@ public class MemberService {
     public Member getMemberInform(Long memberId){
         Member findMember = findVerifiedMember(memberId);
 
+        System.out.println("get: " + findMember.getTags());
+
         // 회원 개인 정보
         return findMember;
     }
@@ -93,15 +98,20 @@ public class MemberService {
 
         // 유저네임
         Optional.ofNullable(dto.getUserName())
-                .ifPresent(username -> findMember.setUserName(username));
+                .ifPresent(userName -> findMember.setUserName(userName));
 
         // 재직 상태
-        Optional.ofNullable(dto.isWorking())
-                .ifPresent(isWorking -> findMember.setWorking(isWorking));
+        Optional.ofNullable(dto.isIsWorking())
+                .ifPresent(isIsWorking -> findMember.setWorking(isIsWorking));
 
         // 태그
         Optional.ofNullable(dto.getTags())
                 .ifPresent(tags -> findMember.setTag(tags));
+
+        System.out.println(dto.getTags());
+        System.out.println(findMember.getTags());
+        System.out.println(dto.isIsWorking());
+        System.out.println(findMember.isWorking());
 
         memberRepository.save(findMember);
     }

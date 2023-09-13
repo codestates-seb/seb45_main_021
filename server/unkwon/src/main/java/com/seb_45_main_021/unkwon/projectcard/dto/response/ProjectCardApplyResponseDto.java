@@ -8,29 +8,35 @@ import lombok.Setter;
 @Setter
 public class ProjectCardApplyResponseDto {
     private Long projectCardId;
-    private String[] tag;
+    private String[] tags;
     private String tell;
     private String aboutMe;
     private String img;
-
     private Long memberId;
     private String username;
     private String email;
     private boolean working;
 
 
-    public ProjectCardApplyResponseDto(Long projectCardId, String aboutMe, String tell, String tag, Member member) {
+    public ProjectCardApplyResponseDto(Long projectCardId, String aboutMe, String tell, String tags, Member member) {
         this.projectCardId = projectCardId;
         this.aboutMe = aboutMe;
         this.tell = tell;
-        this.tag = setTag(tag);
+        setTag(tags);
+        this.userName = member.getUserName();
         this.memberId = member.getMemberId();
-        this.username = member.getUserName();
         this.email = member.getEmail();
         this.working = member.isWorking();
     }
 
-    private String[] setTag(String tag){
-        return tag.replaceAll(" ", "").split(",");
+    public void setTag(String tags){
+        // 태그 입력 전 이면 빈배열, 입력 후 라면 split 배열
+        if(tags == null || tags.equals("[]")) this.tags = new String[]{};
+        else {
+            this.tags =  tags.replaceAll(" ", "")
+                    .replace("[", "")
+                    .replace("]", "")
+                    .split(",");
+        }
     }
 }
