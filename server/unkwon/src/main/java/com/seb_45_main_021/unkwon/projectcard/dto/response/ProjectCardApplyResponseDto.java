@@ -13,7 +13,7 @@ public class ProjectCardApplyResponseDto {
     private String aboutMe;
     private String img;
     private Long memberId;
-    private String username;
+    private String userName;
     private String email;
     private boolean working;
 

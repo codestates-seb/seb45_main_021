@@ -64,7 +64,7 @@ public interface PortfolioMapper {
                 .portfolioId(portFolio.getPortfolioId())
                 .memberId(portFolio.getMember().getMemberId())
                 .userName(portFolio.getMember().getUserName())
-                .userImgUrl(portFolio.getMember().getImgUrl())
+                .userImgUrl(portFolio.getMember().getUserImgUrl())
                 .title(portFolio.getTitle())
                 .createdAt(portFolio.getCreatedAt())
                 .tags(parseTags(Arrays.toString(portFolio.getTags())))
