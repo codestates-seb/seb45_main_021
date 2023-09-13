@@ -81,7 +81,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     private void setMemberToResponse(HttpServletResponse response, Member member) throws IOException{
         LoginResponseDto responseDto = new LoginResponseDto(member.getMemberId(),
                 member.getUserName(),
-                member.getImgUrl(),
+                member.getUserImgUrl(),
                 member.getSocialType(),
                 portfolioHeartRepository.findByMember(member),
                 projectHeartRepository.findByMember(member));

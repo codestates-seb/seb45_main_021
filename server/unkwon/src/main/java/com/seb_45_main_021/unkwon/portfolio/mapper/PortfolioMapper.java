@@ -44,7 +44,7 @@ public interface PortfolioMapper {
     }
     private String[] parseTags(String tags) {
         if (tags == null || tags.isEmpty()) {
-            return new String[0];
+            return null;
         }
 
         // 태그 문자열을 쉼표로 분리하여 배열로 반환
@@ -64,7 +64,7 @@ public interface PortfolioMapper {
                 .portfolioId(portFolio.getPortfolioId())
                 .memberId(portFolio.getMember().getMemberId())
                 .userName(portFolio.getMember().getUserName())
-                .userImgUrl(portFolio.getMember().getImgUrl())
+                .userImgUrl(portFolio.getMember().getUserImgUrl())
                 .title(portFolio.getTitle())
                 .createdAt(portFolio.getCreatedAt())
                 .tags(parseTags(Arrays.toString(portFolio.getTags())))

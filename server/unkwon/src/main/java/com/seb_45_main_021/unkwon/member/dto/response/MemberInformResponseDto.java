@@ -13,16 +13,22 @@ public class MemberInformResponseDto {
     private String email;
     private String userName;
     private String aboutMe;
-    private String imgUrl;
+    private String userImgUrl;
     private int age;
     private boolean isWorking;
     private String createdAt;
-    private String[] tag;
+    private String[] tags;
 
 
-    public void setTag(String tags){
+    public void setTags(String tags){
         // 태그 입력 전 이면 빈배열, 입력 후 라면 split 배열
-        this.tag = tags == null ? new String[]{} : tags.replaceAll(" ", "").split(",");
+        if(tags == null || tags.equals("[]")) this.tags = new String[]{};
+        else {
+            this.tags =  tags.replaceAll(" ", "")
+                    .replace("[", "")
+                    .replace("]", "")
+                    .split(",");
+        }
     }
 
     public void setCreatedAt(LocalDateTime createdAt){

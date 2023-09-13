@@ -23,5 +23,5 @@ public class ProjectCardPostDto {
     private String aboutMe;
 
     @NotNull
-    private String[] tag;
+    private String[] tags;
 }
