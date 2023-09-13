@@ -48,7 +48,6 @@ export const useAxiosInterceptor = () => {
       return response;
     },
     (error) => {
-      console.log(error);
       let message;
       if (error?.response?.data?.message) {
         message = error.response.data.message;
@@ -61,7 +60,6 @@ export const useAxiosInterceptor = () => {
         } catch (error) {
           console.log(error);
         }
-        toAbout();
         alert('토큰이 잘못 전달되었습니다.');
         toSignin();
       }
@@ -73,7 +71,6 @@ export const useAxiosInterceptor = () => {
         } catch (error) {
           console.log(error);
         }
-        toAbout();
         alert('세션이 만료되었습니다.');
         toSignin();
       }
