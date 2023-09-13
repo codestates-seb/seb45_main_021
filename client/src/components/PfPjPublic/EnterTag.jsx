@@ -37,14 +37,15 @@ export default function EnterTag({
 }) {
     const [tags,setTags] = useState(defaultTags);
     useEffect(()=>{
-        if(defaultTags.length) {
+        if(defaultTags?.length) {
             setTags(defaultTags);
         }
     },[defaultTags])
 
     const enterTagHandler = (e) => {
+        const noSpecialCharsOrSpacesRegex = /^[a-zA-Z0-9가-힣]+$/
         if(e.code === 'Enter' || e.code === 'NumpadEnter') {
-            if(tags.length < 3 && tags.indexOf(e.target.value) === -1) {
+            if(tags.length < 3 && tags.indexOf(e.target.value) === -1 && noSpecialCharsOrSpacesRegex.test(e.target.value)) {
                 setTags([e.target.value,...tags]);
                 handleInputChange(null,[e.target.value,...tags],'tags')
             }
@@ -58,7 +59,7 @@ export default function EnterTag({
     return (
         <StyleEnterTag className='col'>
             <Input
-                label="태그"
+                label="검색 키워드"
                 width={width}
                 height={height}
                 placeholder={placeholder}
