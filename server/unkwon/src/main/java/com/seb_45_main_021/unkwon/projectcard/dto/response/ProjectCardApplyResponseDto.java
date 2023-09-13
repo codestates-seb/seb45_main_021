@@ -25,7 +25,7 @@ public class ProjectCardApplyResponseDto {
         this.tell = tell;
         this.tag = setTag(tag);
         this.memberId = member.getMemberId();
-        this.username = member.getUsername();
+        this.username = member.getUserName();
         this.email = member.getEmail();
         this.working = member.isWorking();
     }

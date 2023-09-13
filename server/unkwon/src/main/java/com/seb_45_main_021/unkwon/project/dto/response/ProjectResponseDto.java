@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -23,7 +24,7 @@ public class ProjectResponseDto {
     private int totalPeople;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-    private LocalDate closedAt;
+    private String closedAt;
     private String body;
     private List<Long> joinPeople;
     private List<Long> requestPeople;

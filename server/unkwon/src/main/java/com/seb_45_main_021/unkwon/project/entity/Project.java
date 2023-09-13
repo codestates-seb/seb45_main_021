@@ -1,5 +1,6 @@
 package com.seb_45_main_021.unkwon.project.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.seb_45_main_021.unkwon.audit.Auditable;
 import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
@@ -15,8 +16,10 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -33,7 +36,7 @@ public class Project extends Auditable {
     @Column(length = 30, nullable = false)
     private String title;
 
-    private int totalPeople; // 모집 희망 인원
+    private int totalPeople;
 
     @OneToMany(mappedBy = "project")
     private List<ProjectStatus> projectStatuses;
@@ -47,7 +50,7 @@ public class Project extends Auditable {
     private List<Long> requestPeople;
 
 
-//    private LocalDate closedAt;
+    private String closedAt;
 
 
     @Column(columnDefinition = "TEXT")
@@ -57,8 +60,6 @@ public class Project extends Auditable {
 
     @Lob // 속성이 큰 오브젝트나 텍스트 데이터를 포함하고 있을 경우, Large Object 로 데이터베이스에 저장
     private String body;
-
-//    private List<Image> images; // 이미지
 
     private String description;
 

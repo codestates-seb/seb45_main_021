@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:mysql://localhost:3306/kim_db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="SPEC" uuid="f0529ab6-594f-479e-87fc-4bc79c2a2252">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://spec-db-1.c8qdyivupwng.ap-northeast-2.rds.amazonaws.com :13306/SPEC</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
