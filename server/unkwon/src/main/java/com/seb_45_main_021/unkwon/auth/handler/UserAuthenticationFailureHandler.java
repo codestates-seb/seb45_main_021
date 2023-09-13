@@ -30,8 +30,7 @@ public class UserAuthenticationFailureHandler implements AuthenticationFailureHa
 
     private void sendErrorResponse(HttpServletResponse response, AuthenticationException exception) throws IOException{
         ErrorResponse errorResponse = null;
-        System.out.println(exception.getMessage());
-        if(exception.getMessage().equals("User not found")) {
+        if(exception.getMessage().equals("Member not found")) {
             errorResponse = ErrorResponse.of(ExceptionCode.MEMBER_NOT_FOUND);
             response.setStatus(ExceptionCode.MEMBER_NOT_FOUND.getStatus());
         }

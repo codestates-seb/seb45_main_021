@@ -36,7 +36,7 @@ public class MemberDetailsService implements UserDetailsService {
                         .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
         // 동일 아이디 로그인 방지
-        if(!findMember.refreshTokenIsNull()) throw new BusinessLogicException(ExceptionCode.STATUS_LOGIN);
+        // if(!findMember.refreshTokenIsNull()) throw new BusinessLogicException(ExceptionCode.STATUS_LOGIN);
 
         log.info("MemberDetailsService (ID) : " + findMember.getEmail());
         log.info("MemberDetailsService (PW) : " + findMember.getPassword());
@@ -50,7 +50,7 @@ public class MemberDetailsService implements UserDetailsService {
             setEmail(member.getEmail());
             setPassword(member.getPassword());
             setImgUrl(member.getImgUrl());
-            setUsername(member.getUsername());
+            setUserName(member.getUserName());
             setRoles(member.getRoles());
         }
 

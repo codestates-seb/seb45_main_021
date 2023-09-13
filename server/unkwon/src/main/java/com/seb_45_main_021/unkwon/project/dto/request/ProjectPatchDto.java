@@ -14,6 +14,6 @@ public class ProjectPatchDto {
     private String body;
     private String description;
     private String[] tags;
-    private String[] lang;
+    private String lang;
 
 }

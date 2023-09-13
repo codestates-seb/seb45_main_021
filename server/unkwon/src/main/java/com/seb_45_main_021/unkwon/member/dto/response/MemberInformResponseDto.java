@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 public class MemberInformResponseDto {
     private Long memberId;
     private String email;
-    private String username;
+    private String userName;
     private String aboutMe;
     private String imgUrl;
     private int age;

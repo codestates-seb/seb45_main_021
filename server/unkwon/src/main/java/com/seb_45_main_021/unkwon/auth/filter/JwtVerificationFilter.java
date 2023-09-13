@@ -1,5 +1,7 @@
 package com.seb_45_main_021.unkwon.auth.filter;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seb_45_main_021.unkwon.auth.jwt.JwtTokenizer;
 import com.seb_45_main_021.unkwon.auth.userdetails.MemberInfo;
 import com.seb_45_main_021.unkwon.auth.utils.CustomAuthorityUtils;
@@ -20,6 +22,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +32,7 @@ import java.util.Map;
 public class JwtVerificationFilter extends OncePerRequestFilter {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public JwtVerificationFilter(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils) {
         this.jwtTokenizer = jwtTokenizer;
@@ -51,8 +56,9 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException{
-        if(request.getRequestURI().startsWith("/h2")) return true;
-        if(request.getRequestURI().startsWith("/members/logout")) return true;
+        if(request.getRequestURI().startsWith("/h2") ||
+                request.getRequestURI().startsWith("/members/logout")) return true;
+
         String accessToken = request.getHeader("AccessToken");
         String refreshToken = request.getHeader("RefreshToken");
 
@@ -91,8 +97,9 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
         // refreshToken 을 먼저 확인 후 만료 시 로그아웃 처리 -> subject(memberId) 획득
-        Long hostId = verifyRefreshToken(refreshToken, base64EncodedSecretKey); // Patch, Delete 가 들어오는 객체 주인 식별자
-
+        Long hostId = null;
+        hostId = verifyRefreshToken(refreshToken, base64EncodedSecretKey); // Patch, Delete 가 들어오는 객체 주인 식별자
+        
         // 헤더로 들어온 refreshToken 과 id 가 같을 경우의 DB 에서 조회한 refreshToken 일치 여부 확인 (memberRepository 를 통해 member 객체를 조회)
         Member member = jwtTokenizer.findMemberByMemberId(hostId);
         // 일치하지 않을 경우
@@ -118,18 +125,48 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         return claims;
     }
 
-    private Long verifyRefreshToken(String refreshToken, String base64EncodedSecretKey) {
-        Long hostId = null;
+    private Long verifyRefreshToken(String refreshToken, String base64EncodedSecretKey){
+        Long hostId = decodeJwtPayloadSubject(refreshToken);
+
         try {
-            hostId = Long.parseLong(jwtTokenizer.getSubject(refreshToken, base64EncodedSecretKey));
+            jwtTokenizer.getSubject(refreshToken, base64EncodedSecretKey);
         } catch (SignatureException se) {
+            log.info("SignatureException : " + hostId);
             throw new JwtException(ExceptionCode.BAD_TOKEN);
         } catch (ExpiredJwtException ee) {
-            throw new JwtException(ExceptionCode.REFRESHTOKEN_HAS_EXPIRED);
+            log.info("ExpiredJwtException : " + hostId);
+            setRefreshTokenHasNull(hostId, refreshToken);
         } catch (Exception e) {
+            log.info("Exception : " + hostId);
             throw new JwtException(ExceptionCode.BAD_ACCESS);
         }
         return hostId;
     }
 
+    // payload 파싱 후 hostId 얻기
+    private Long decodeJwtPayloadSubject(String refreshToken){
+        Long hostId = null;
+        try{
+            String sub = (String) objectMapper.readValue(new String(Base64.getUrlDecoder().decode(refreshToken.split("\\.")[1])), Map.class).get("sub");
+            hostId = Long.parseLong(sub);
+        }catch(JsonProcessingException jpe){}
+        return  hostId;
+    }
+
+    // refreshToken 검사 후 null 처리(로그아웃)
+    private void setRefreshTokenHasNull(Long hostId, String refreshToken){
+        // 회원 찾기
+        Member member = jwtTokenizer.findMemberByMemberId(hostId);
+        // 회원이 로그아웃 상태인데 요청이 들어왔을 경우
+        if(member.refreshTokenIsNull()) throw new JwtException(ExceptionCode.BAD_ACCESS);
+        // 회원의 refreshToken 이 잘못 들어온 경우
+        if(!member.compareRefreshToken(refreshToken)) throw new JwtException(ExceptionCode.BAD_TOKEN);
+
+        // refreshToken 을 null 로 통해 로그아웃 처리
+        member.updateRefreshToken(null);
+        // DB 저장
+        jwtTokenizer.setRefreshTokenHasNull(member);
+        // 기한 만료
+        throw new JwtException(ExceptionCode.REFRESHTOKEN_HAS_EXPIRED);
+    }
 }

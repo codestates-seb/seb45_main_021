@@ -31,7 +31,7 @@ public interface ProjectMapper {
 
         project.setTitle(projectPostDto.getTitle());
         project.setTotalPeople(projectPostDto.getTotalPeople());
-        project.setLang(Arrays.toString(projectPostDto.getLang()));
+        project.setLang(projectPostDto.getLang());
         project.setTags(Arrays.toString(projectPostDto.getTags()));
         project.setBody(projectPostDto.getBody());
         project.setDescription(projectPostDto.getDescription());
@@ -46,7 +46,7 @@ public interface ProjectMapper {
         project.setProjectId(projectPatchDto.getProjectId());
         project.setTitle(projectPatchDto.getTitle());
         project.setTotalPeople(projectPatchDto.getTotalPeople());
-        project.setLang(Arrays.toString(projectPatchDto.getLang()));
+        project.setLang(projectPatchDto.getLang());
         project.setTags(Arrays.toString(projectPatchDto.getTags()));
         project.setBody(projectPatchDto.getBody());
         project.setDescription(projectPatchDto.getDescription());
@@ -83,7 +83,7 @@ public interface ProjectMapper {
         if (projectStatus.getMember() != null) {
             long memberId = projectStatus.getMember().getMemberId();
             String imgUrl = projectStatus.getMember().getImgUrl();
-            String userName = projectStatus.getMember().getUsername();
+            String userName = projectStatus.getMember().getUserName();
             projectRequestResponseDto.setMemberId(memberId);
         }
 
@@ -116,7 +116,7 @@ public interface ProjectMapper {
                 .modifiedAt(project.getModifiedAt())
                 .images(project.getImages())
 //                .closedAt(project.getClosedAt())
-                .lang(new String[]{project.getLang()})
+                .lang(project.getLang())
                 .tags(new String[]{project.getTags()})
                 .body(project.getBody())
                 .description(project.getDescription())
@@ -135,7 +135,6 @@ public interface ProjectMapper {
     }
 
     @Mapping(target = "tags", expression = "java(mapping(projectPatchDto.getTags()))")
-    @Mapping(target = "lang", expression = "java(mapping(projectPatchDto.getLang()))")
     Portfolio projectPatchDtoToPortfolio(ProjectPatchDto projectPatchDto);
 
     default String mapping(String[] tags) {

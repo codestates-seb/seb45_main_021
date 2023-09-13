@@ -16,5 +16,5 @@ public class MemberSignupDto {
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$")
     private String password;
     @NotBlank
-    private String username;
+    private String userName;
 }

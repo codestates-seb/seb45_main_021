@@ -32,7 +32,7 @@ public class ProjectProfileResponseDto {
         this.heartCount = heartCount;
         this.view = view;
         author = Author.builder()
-                .username(member.getUsername())
+                .username(member.getUserName())
                 .memberId(member.getMemberId())
                 .build();
     }

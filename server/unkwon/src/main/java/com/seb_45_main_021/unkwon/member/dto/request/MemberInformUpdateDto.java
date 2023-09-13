@@ -11,7 +11,7 @@ public class MemberInformUpdateDto {
     private Long memberId;
     private boolean isWorking;
     private String aboutMe;
-    private String username;
+    private String userName;
     private int age;
     // tag
     private String[] tags;
