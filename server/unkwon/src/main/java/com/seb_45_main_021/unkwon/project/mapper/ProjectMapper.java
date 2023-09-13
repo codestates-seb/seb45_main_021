@@ -31,14 +31,13 @@ public interface ProjectMapper {
         member.setMemberId(projectPostDto.getMemberId());
         project.setMember(member);
 
-
         project.setTitle(projectPostDto.getTitle());
         project.setTotalPeople(projectPostDto.getTotalPeople());
         project.setLang(projectPostDto.getLang());
         project.setTags(new String[]{projectPostDto.getTags()});
         project.setBody(projectPostDto.getBody());
         project.setDescription(projectPostDto.getDescription());
-//        project.setClosedAt(projectPostDto.getClosedAt());
+        project.setClosedAt(projectPostDto.getClosedAt());
 
         return project;
     }
@@ -109,13 +108,16 @@ public interface ProjectMapper {
         ProjectResponseDto projectResponseDto = ProjectResponseDto.builder()
                 .projectId(project.getProjectId())
                 .memberId(project.getMember().getMemberId())
+                .userName(project.getMember().getUserName())
+                .userImgUrl(project.getMember().getImgUrl())
+
                 .title(project.getTitle())
                 .totalPeople(project.getTotalPeople())
                 .joinPeople(project.getJoinPeople())
                 .requestPeople(project.getRequestPeople())
                 .createdAt(project.getCreatedAt())
                 .modifiedAt(project.getModifiedAt())
-//                .closedAt(project.getClosedAt())
+                .closedAt(project.getClosedAt())
                 .lang(project.getLang())
                 .tags(parseTags(Arrays.toString(project.getTags())))
                 .body(project.getBody())
