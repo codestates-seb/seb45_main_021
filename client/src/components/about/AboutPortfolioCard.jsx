@@ -8,10 +8,11 @@ import LanguageTag from '../common/LanguageTag';
 import useNav from '../../hooks/useNav';
 import Tag from '../common/Tag';
 import EmployBadge from '../common/EmployBadge';
+import { tablet } from '../../static/theme.js';
 
 const StyleAboutPortfolioCard = styled.div`
-  height: 35rem;
-  width: 60rem;
+  height: 350px;
+  width: 600px;
   background-image: url(${(props) => props.$background});
   background-size: cover;
   background-color: white;
@@ -19,8 +20,9 @@ const StyleAboutPortfolioCard = styled.div`
   border-radius: 5px;
   position: relative;
   overflow: hidden;
+
   .center {
-    width: 60rem !important;
+    width: 600px !important;
     padding: 2rem;
     display: flex;
     flex-direction: column;
@@ -39,6 +41,13 @@ const StyleAboutPortfolioCard = styled.div`
   }
   .date {
     font-size: 1.6rem;
+  }
+  ${tablet} {
+    width: 100% !important;
+    height: 300px;
+    .center {
+      width: 85% !important;
+    }
   }
 `;
 

@@ -16,7 +16,7 @@ const StyleVideoPlayer = styled.div`
 export default function VideoPlayer({ src }) {
   return (
     <StyleVideoPlayer>
-      <video muted autoPlay loop controls={false}>
+      <video loop autoPlay playSinline controls={false}>
         <source src={src} type="video/mp4" />
       </video>
     </StyleVideoPlayer>

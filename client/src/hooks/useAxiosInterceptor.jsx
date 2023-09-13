@@ -19,14 +19,16 @@ export const useAxiosInterceptor = () => {
 
   instance.interceptors.request.use(
     (config) => {
+      const localData = JSON.parse(localStorage.getItem('persist:root'));
+      const { accesstoken, refreshtoken } = JSON.parse(localData.user).jwt;
       const newHeaders = { ...config.headers };
-      if (jwt?.accesstoken) {
-        newHeaders['accesstoken'] = `${jwt.accesstoken}`;
+      if (accesstoken) {
+        newHeaders['accesstoken'] = accesstoken;
       } else {
         delete newHeaders['accesstoken'];
       }
-      if (jwt?.refreshtoken) {
-        newHeaders['refreshtoken'] = `${jwt.refreshtoken}`;
+      if (refreshtoken) {
+        newHeaders['refreshtoken'] = refreshtoken;
       } else {
         delete newHeaders['refreshtoken'];
       }

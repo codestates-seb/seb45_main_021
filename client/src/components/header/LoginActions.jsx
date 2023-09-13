@@ -16,14 +16,15 @@ export default function LoginActions({ userInfo }) {
         src={userImgUrl ? userImgUrl : userDefaultImg}
         alt="user profile"
         onClick={() => toProfile(memberId)}
-      />
-      <StyleBorderButton
-        onClick={() => {
-          dispatch(deleteUser());
+        style={{
+          cursor: 'pointer',
+          marginRight: '5px',
+          borderRadius: '50%',
+          width: '45px',
+          border: '1px solid var(--black-800)',
         }}
-      >
-        로그아웃
-      </StyleBorderButton>
+      />
+      <StyleBorderButton onClick={() => dispatch(deleteUser())}>로그아웃</StyleBorderButton>
     </>
   );
 }

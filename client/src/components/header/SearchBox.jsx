@@ -66,9 +66,14 @@ export default function SearchBox({ callback, ...rest }) {
   useEffect(() => {
     // 페이지 로드 시 로컬 스토리지에서 검색 기록 불러오기
     const storedHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+    const searchInputFocus = (e) => e.key === '/' && inputRef.current.focus();
     setSearchHistory(storedHistory);
+    window.addEventListener('keyup', searchInputFocus);
     window.addEventListener('click', () => setIsInputFocused(false));
-    return () => window.removeEventListener('click', () => setIsInputFocused(false));
+    return () => {
+      window.removeEventListener('click', () => setIsInputFocused(false));
+      window.removeEventListener('keyup', searchInputFocus);
+    };
   }, []);
 
   const clearSearchHistory = () => {

@@ -54,13 +54,6 @@ const StyleHeader = styled.header`
     display: flex;
     align-items: center;
     gap: 1.5rem;
-    img {
-      cursor: pointer;
-      margin-right: 5px;
-      border-radius: 50%;
-      width: 45px;
-      border: 1px solid var(--black-800);
-    }
   }
   .spread-btn {
     padding: 0;
@@ -72,6 +65,7 @@ const StyleHeader = styled.header`
     margin-top: 20px;
     .spread-buttons {
       display: flex;
+      align-items: center;
       justify-content: space-around;
       padding-bottom: 10px;
     }
@@ -132,12 +126,18 @@ export default function Header() {
             <button className="spread-content-btn" onClick={() => spreadCloser(toPortfolio)}>
               포트폴리오
             </button>
-            <button className="spread-content-btn" onClick={() => spreadCloser(toSignin)}>
-              로그인
-            </button>
-            <button className="spread-content-btn" onClick={() => spreadCloser(toSignup)}>
-              회원가입
-            </button>
+            {user.isLogin ? (
+              <LoginActions userInfo={user?.userInfo} />
+            ) : (
+              <>
+                <button className="spread-content-btn" onClick={() => spreadCloser(toSignin)}>
+                  로그인
+                </button>
+                <button className="spread-content-btn" onClick={() => spreadCloser(toSignup)}>
+                  회원가입
+                </button>
+              </>
+            )}
           </div>
           <SearchBox className="tablet-search" callback={() => setIsSpread(false)} />
         </div>
