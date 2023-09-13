@@ -24,13 +24,6 @@ const userSlice = createSlice({
      * @dispatch - {isLogin:false,userInfo:null,jwt:{accessToken:null,refreshToken:null}}
      */
     deleteUser: (state) => {
-      if (state.userInfo) {
-        try {
-          api.post(`/members/logout/${state.userInfo?.memberId}`);
-        } catch (error) {
-          console.log(error);
-        }
-      }
       return { isLogin: false, userInfo: null, jwt: { accessToken: null, refreshToken: null } };
     },
   },

@@ -15,21 +15,26 @@ const instance = axios.create({
 export const useAxiosInterceptor = () => {
   const dispatch = useDispatch();
   const jwt = useSelector((state) => state.user.jwt);
+  const userInfo = useSelector((state) => state.user.userInfo);
   const { toAbout, toSignin } = useNav();
   console.log(jwt);
   instance.interceptors.request.use(
     (config) => {
+      const newHeaders = { ...config.headers };
       if (jwt?.accesstoken) {
-        config.headers['accesstoken'] = `Bearer ${jwt.accesstoken}`;
+        newHeaders['accesstoken'] = `Bearer ${jwt.accesstoken}`;
+      } else {
+        delete newHeaders['accesstoken'];
       }
       if (jwt?.refreshtoken) {
-        config.headers['refreshtoken'] = `${jwt.refreshtoken}`;
+        newHeaders['refreshtoken'] = `${jwt.refreshtoken}`;
+      } else {
+        delete newHeaders['refreshtoken'];
       }
-      console.log(config);
+      config.headers = newHeaders;
       return config;
     },
     (error) => {
-      console.log(error);
       return Promise.reject(error);
     },
   );
@@ -50,24 +55,40 @@ export const useAxiosInterceptor = () => {
 
       if (message === 'Bad Token') {
         dispatch(deleteUser());
+        try {
+          instance.post(`/members/logout/${userInfo.memberId}`);
+        } catch (error) {
+          console.log(error);
+        }
+        toAbout();
         alert('토큰이 잘못 전달되었습니다.');
         toSignin();
       }
 
       if (message === 'refreshToken has expired') {
         dispatch(deleteUser());
+        try {
+          instance.post(`/members/logout/${userInfo.memberId}`);
+        } catch (error) {
+          console.log(error);
+        }
+        toAbout();
         alert('세션이 만료되었습니다.');
         toSignin();
       }
 
       if (message === 'refreshToken has different') {
         dispatch(deleteUser());
+        try {
+          instance.post(`/members/logout/${userInfo.memberId}`);
+        } catch (error) {
+          console.log(error);
+        }
         alert('새 기기에서 접속하여 로그하웃 되었습니다.');
         toSignin();
       }
 
       if (error.code === 'ECONNABORTED') {
-        console.log('요청 시간 초과');
         toAbout();
       }
       return Promise.reject(error);
