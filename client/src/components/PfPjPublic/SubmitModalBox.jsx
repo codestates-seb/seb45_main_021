@@ -27,7 +27,7 @@ export default function SubmitModalBox({
     return (
         <StyleSubmitBox>
         <StyleBorderButton onClick={()=>setIsConfirmWrite(!isConfirmWrite)}>
-          <p>게시</p>
+          <p>작성</p>
           {isConfirmWrite &&
             <Modal
               setIsOpen={()=>setIsConfirmWrite(!isConfirmWrite)}

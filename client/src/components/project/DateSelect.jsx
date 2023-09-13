@@ -12,7 +12,7 @@ export default function DateSelect ({
     const [resetDate, setResetDate] = useState([]);
 
     useEffect(()=>{
-        if(defaultDate.length) {
+        if(defaultDate?.length) {
             const parsingDate = new Date(defaultDate);
             setResetDate([
                 parsingDate.getFullYear(),

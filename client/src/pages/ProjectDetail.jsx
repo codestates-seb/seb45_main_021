@@ -155,7 +155,7 @@ export default function ProjectDetail() {
 
   //삭제알림
   const [isOnDeleteModal, setIsOnDeleteModal] = useState(false);
-  const {toProjectEdit} = useNav();
+  const {toProjectEdit, toProject} = useNav();
 
   //현재 로그인 한 유저 정보
   const loginUserData = useSelector(state=>state.user);
@@ -178,7 +178,7 @@ export default function ProjectDetail() {
       },
     },{
       title : '수정',
-      handler : ()=>{toProjectEdit(detailData.id)},
+      handler : ()=>{toProjectEdit(detailData.projectId)},
     },{
       title : '삭제',
       handler : ()=>{setIsOnDeleteModal(!isOnDeleteModal)},
@@ -186,7 +186,6 @@ export default function ProjectDetail() {
   ]
 
   const fetchData = () => {
-    console.log(projectId);
     setIsPageLoading(true);
     api.get(`/projects/${projectId}`)
     .then(res=>{
@@ -213,12 +212,23 @@ export default function ProjectDetail() {
     }, 1000);
   }
 
-  const fetchMyProjectCard = () => {
-    setIsRequestLaoding(true);
-    setTimeout(()=>{
-      setIsRequestLaoding(false);
-      setRequestPeopledata(DummyData.requestPeople);
-    }, 1000);
+  // const fetchMyProjectCard = () => {
+  //   setIsRequestLaoding(true);
+  //   setTimeout(()=>{
+  //     setIsRequestLaoding(false);
+  //     setRequestPeopledata(DummyData.requestPeople);
+  //   }, 1000);
+  // }
+
+  const fetchDeleteProject = (id) => {
+    setError(false);
+    api.delete(`/projects/${id}`)
+    .then(res=>{
+      toProject();
+    })
+    .catch(err=>{
+      setError(true);
+    })
   }
 
   useEffect(()=>{
@@ -240,7 +250,7 @@ export default function ProjectDetail() {
             setIsOpen={setIsOnDeleteModal}
             title={error ? '통신 에러' : '정말 삭제하시겠습니까?'}
             body={error ? '다시 시도해 주세요.' : '삭제된 내용은 복구할 수 없습니다.'}
-            confirmHandler={error ? ()=>{navigate(-1)} : undefined}
+            confirmHandler={error ? ()=>{} : ()=>fetchDeleteProject(projectId)}
           />}
         {isPageLoading
         ? <SuspenseDetailPage/>

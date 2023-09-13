@@ -20,6 +20,11 @@ import { projectErrorInitData, projectWriteInitData, projectWriteRule } from '..
 import SubmitModalBox from '../components/PfPjPublic/SubmitModalBox';
 import { writeSubmitHandler } from '../utils/writeSubmitHandler';
 import { apiWriteDataCheckError, shapingApiData } from '../utils/shapingApiData';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { custom } from '../static/theme';
+import Modal from '../components/common/Modal';
+import { useStepContext } from '@mui/material';
 
 const StyleProjectWrite = styled(Page)`
   height:auto;
@@ -62,7 +67,7 @@ const StyleProjectWrite = styled(Page)`
       flex:1;
     }
   }
-  @media screen and (max-width:900px){
+  ${custom(900)}{
     .write-wrapper{
       flex-direction: column;
     }
@@ -75,53 +80,66 @@ const StyleProjectWrite = styled(Page)`
   }
 `
 
-const responseData = {
-  view : 0,
-  memberId : 7,
-  projectId : 41,
-  userName : '박찬섭',
-  userImgUrl : null,
-  title : '안녕하세요wtrgdrgdhtfth',
-  totalPeople : 6,
-  createdAt : String(new Date()),
-  modifiedAt : String(new Date()),
-  closedAt : String(new Date()),
-  body : '기획안 gfukukfhukhfkfhjukvhjm,hjmvhjmhjmvhj,vhj,vhj,vhj,vhj,vhj,vhj,hvj,vhjhjv입니다기획안 gfukukfhukhfkfhjukvhjm,hjmvhjmhjmvhj,vhj,vhj,vhj,vhj,vhj,vhj,hvj,vhjhjv입니다기획안 gfukukfhukhfkfhjukvhjm,hjmvhjmhjmvhj,vhj,vhj,vhj,vhj,vhj,vhj,hvj,vhjhjv입니다',
-  joinPeople : 'null',
-  requestPeople : 'null',
-  description : '즐겁게 해보실 분',
-  lang : 'react',
-  images : [
-    {
-      imageId : 10,
-      imageUrl : 'https://source.unsplash.com/random'
-    },
-    {
-      imageId : 11,
-      imageUrl : 'https://source.unsplash.com/random'
-    },
-    {
-      imageId : 12,
-      imageUrl : 'https://source.unsplash.com/random'
-    }
-  ],
-  projectTitleImage : {
-    projectTitleImageId : 6,
-    imageUrl : 'https://source.unsplash.com/random',
-  },
-  tags : ['테1스트','태스1트','태스3트'],
-  heartCount : 6,
-}
+// const responseData = {
+//   view : 0,
+//   memberId : 7,
+//   projectId : 41,
+//   userName : '박찬섭',
+//   userImgUrl : null,
+//   title : '안녕하세요wtrgdrgdhtfth',
+//   totalPeople : 6,
+//   createdAt : String(new Date()),
+//   modifiedAt : String(new Date()),
+//   closedAt : String(new Date()),
+//   body : '기획안 gfukukfhukhfkfhjukvhjm,hjmvhjmhjmvhj,vhj,vhj,vhj,vhj,vhj,vhj,hvj,vhjhjv입니다기획안 gfukukfhukhfkfhjukvhjm,hjmvhjmhjmvhj,vhj,vhj,vhj,vhj,vhj,vhj,hvj,vhjhjv입니다기획안 gfukukfhukhfkfhjukvhjm,hjmvhjmhjmvhj,vhj,vhj,vhj,vhj,vhj,vhj,hvj,vhjhjv입니다',
+//   joinPeople : 'null',
+//   requestPeople : 'null',
+//   description : '즐겁게 해보실 분',
+//   lang : 'react',
+//   images : [
+//     {
+//       imageId : 10,
+//       imageUrl : 'https://source.unsplash.com/random'
+//     },
+//     {
+//       imageId : 11,
+//       imageUrl : 'https://source.unsplash.com/random'
+//     },
+//     {
+//       imageId : 12,
+//       imageUrl : 'https://source.unsplash.com/random'
+//     }
+//   ],
+//   projectTitleImage : {
+//     projectTitleImageId : 6,
+//     imageUrl : 'https://source.unsplash.com/random',
+//   },
+//   tags : ['테1스트','태스1트','태스3트'],
+//   heartCount : 6,
+// }
 
 export default function ProjectEdit() {
   const {toProject} = useNav();
   const [dataForm, handleInputChange, clearForm, setDataForm] = useForm(projectWriteInitData);
   const [errors, handleErrorChange, clearError, setErrors] = useError({}, projectWriteRule);
+  const {projectId} = useParams();
+  const loginUserData = useSelector(state=>state.user);
+  const [showModal, setShowModal] = useState(false);
+  const [apiResult, setApiResult] = useState(false);
+  //false면 프론트측 에러 true면 백측에러
+  const [whichError, setWhichError] = useState(false);
+  const [firstResult, setFirstResult] = useState(true);
 
   useEffect(()=>{
-    // api.get()
-    //요청후
-    setDataForm(shapingApiData(responseData));
+    api.get(`/projects/${projectId}`)
+    .then(res=>{
+      setDataForm(shapingApiData(res.data))
+    })
+    .catch(err=>{
+      setShowModal(true);
+      setWhichError(true);
+      setFirstResult(false);
+    });
   },[])
 
   const width = '100%';
@@ -138,8 +156,15 @@ export default function ProjectEdit() {
   
   return (
     <StyleProjectWrite className='col'>
-      <WriteHeader text={'프로젝트 헤더 부분'} />
-      <div className='row'>
+      {showModal && <Modal
+        type={'alert'}
+        setIsOpen={setShowModal}
+        title={apiResult ? '수정 완료' : `${whichError ? '통신 에러' : '입력 형식 오류'}`}
+        body={apiResult ? '확인 버튼 클릭시 프로젝트리스트 화면으로 넘어갑니다.' : `${whichError ? '서버와의 통신에 실패했습니다. 다시 시도해 주세요.' : '필수 입력 양식을 다시 확인해 주세요.'}`}
+        confirmHandler={apiResult ? ()=>{toProject()} : firstResult ? ()=>{setShowModal(false)} : ()=>{toProject()}}
+      />}
+      <WriteHeader type='project' state='edit'/>
+      <div className='write-wrapper row'>
         <div className='input-container col'>
 
           <Input
@@ -173,11 +198,11 @@ export default function ProjectEdit() {
                 options={languagesOptions}
                 defaultLabel={dataForm.lang}
                 onClickHandler={(e)=>{
-                  handleInputChange(null,e,'language')
-                  handleErrorChange(null,e,'language',checkValidations)
+                  handleInputChange(null,e,'lang')
+                  handleErrorChange(null,e,'lang',checkValidations)
                 }}
               />}
-            error={errors.language}
+            error={errors.lang}
             name='언어'
           />
 
@@ -277,9 +302,16 @@ export default function ProjectEdit() {
         </div>
       </div>
       <SubmitModalBox
-        submitTitle={'작성 확인'}
-        submitMessage={'모집 인원은 수정 할 수 없습니다.'}
-        submitCheckHandler={()=>writeSubmitHandler(dataForm, errors,setErrors,'project')}
+        submitTitle={'수정 확인'}
+        submitMessage={'수정 하기 전 내용은 복구 할 수 없습니다.'}
+        submitCheckHandler={()=> {
+          writeSubmitHandler(dataForm, errors, setErrors,'project',loginUserData.userInfo.memberId,projectId)
+          .then(()=>setApiResult(true))
+          .catch((err)=>{
+            setWhichError(err==='formError' ? false : true);
+            setApiResult(false)})
+          .finally(()=>setShowModal(true))
+        }}
         cancelTitle={'취소 확인'}
         cancelMessage={'취소시 수정한 내용은 저장되지 않습니다.'}
         cancelCheckHandler ={toProject}

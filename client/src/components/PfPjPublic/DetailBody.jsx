@@ -9,6 +9,8 @@ import ProjectCardContainer from '../project/ProjectCardContainer';
 import api from '../../hooks/useAxiosInterceptor';
 import { useSelector } from 'react-redux';
 import { tablet } from '../../static/theme';
+import ProjectCardSkeleton from '../project/ProjectCardSkeleton';
+import EmptyData from './EmptyData';
 
 
 export const StyleDetailBody = styled.div`
@@ -74,12 +76,12 @@ export default function DetailBody({
     updateHandler
 }) {
     const [isOnProjectCard, setIsOnProjectCard] = useState(false);
-    const [ownProjectCardList, setOwnProjectCardList] = useState(undefined);
+    const [ownProjectCardList, setOwnProjectCardList] = useState(null);
     const [selectedCard, setSelectedCard] = useState(null);
     const [isPossibleApply, setIsPossibleApply] = useState(false);
     const [isOnStateAlert, setIsOnStateAlert] = useState(false);
     const [apiResult,setApiResult] = useState(false);
-    
+    const [apiLoading, setApiLoading] = useState(true);
     const loginUserData = useSelector(state=>state.user);
 
     const cancleProjectApply = (projectId,setApiResult) => {
@@ -93,23 +95,29 @@ export default function DetailBody({
     }
 
     const getOwnProjectCard = (memberId) => {
-        // if(ownProjectCardList) {
-        //     setIsOnProjectCard(true);
-        // } else {
-        //     api.get(`/projectcards/${memberId}`)
-        //     .then(res=>{
-        //         setOwnProjectCardList(res.data)
-        //     })
-        //     .catch(err=>{
-        //         setApiResult(false);
-        //     })
-        // }
+        setIsOnProjectCard(true);
         if(ownProjectCardList) {
             setIsOnProjectCard(true);
         } else {
-            setOwnProjectCardList(myProjectCard);
-            setIsOnProjectCard(true);
+            setApiLoading(true);
+            api.get(`/projectcards/${memberId}`)
+            .then(res=>{
+                console.log('통신성공')
+                setOwnProjectCardList(res.data)
+                setApiLoading(false);
+            })
+            .catch(err=>{
+                console.log('통신실패')
+                setApiResult(false);
+                setApiLoading(false);
+            })
         }
+        // if(ownProjectCardList) {
+        //     setIsOnProjectCard(true);
+        // } else {
+        //     setOwnProjectCardList(myProjectCard);
+        //     setIsOnProjectCard(true);
+        // }
     };
 
     const applyProjectCard = (memberId, projectId, projectCardId) => {
@@ -128,7 +136,9 @@ export default function DetailBody({
     }
 
     useEffect(()=>{
-        if(detailData.requestPeople && !isAdmin) {
+        console.log(detailData);
+        console.log(loginUserData);
+        if(!isAdmin && loginUserData.isLogin) {
             for(let i = 0; i < detailData.requestPeople.length; i++) {
                 if(Number(detailData.requestPeople[i]) === Number(loginUserData.userInfo.memeberId)) {
                     setIsPossibleApply(false);
@@ -137,7 +147,7 @@ export default function DetailBody({
             }
             setIsPossibleApply(true);
         } else {
-            setIsPossibleApply(true);
+            setIsPossibleApply(false);
         }
     },[])
 
@@ -154,14 +164,16 @@ export default function DetailBody({
             {isOnProjectCard && 
             <Modal
                 setIsOpen={setIsOnProjectCard}
-                confirmHandler={()=>applyProjectCard()}
+                confirmHandler={()=>selectedCard && applyProjectCard()}
             >
-                <ProjectCardContainer
-                    isForSubmit={true}
-                    selectedCard={selectedCard}
-                    setSelectedCard={setSelectedCard}
-                    cardList={ownProjectCardList}
-                />
+                {apiLoading ?<ProjectCardSkeleton/>
+                :   <ProjectCardContainer
+                        isForSubmit={true}
+                        selectedCard={selectedCard}
+                        setSelectedCard={setSelectedCard}
+                        cardList={ownProjectCardList}
+                    />
+                }
             </Modal>
             }
             <div className='post-data-box col'>
@@ -172,6 +184,10 @@ export default function DetailBody({
                     <TextBox
                         title={'검색 키워드'}
                         component={
+                            detailData.tags.length === 1 && detailData.tags[0] === '' 
+                            ? 
+                            <p>검색 키워드 없음</p>
+                            :
                             detailData.tags?.map(item=>
                                 <Tag key={item} text={item} type={type}/>
                             )
@@ -206,6 +222,7 @@ export default function DetailBody({
                     />}
                 {type === 'project' && !isAdmin &&
                 <div className='sticky-box'>
+                    {detailData.totalPeople !== detailData.joinPeople.length ?
                     <StyleBorderButton 
                         $width={'100%'}
                         onClick={()=>{
@@ -216,15 +233,24 @@ export default function DetailBody({
                             }
                         }}
                         >{isPossibleApply ? '프로젝트 신청하기' : '프로젝트 신청 취소하기'}
+                    </StyleBorderButton> :
+                    <StyleBorderButton>
+                        프로젝트 마감됌
                     </StyleBorderButton>
+                    }
                 </div>}
             </div>
             <div className='image-data-box col'>
-                {detailData.images.map((item,idx)=>
-                    <img key={idx} src={item} alt='이미지'></img>
-                )}
+                {detailData.images.length
+                    ? detailData.images.map((item,idx)=><img key={idx} src={item} alt='이미지'></img>)
+                    : <EmptyData
+                        text={'등록된 이미지가 없습니다.'}
+                        background={'var(--black-700)'}
+                    />
+                }
             </div>
         </StyleDetailBody>
     );
 }
+
 

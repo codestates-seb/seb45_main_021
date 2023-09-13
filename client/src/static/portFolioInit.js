@@ -2,7 +2,7 @@
 export const portfolioWriteInitData = {
     title:'',
     lang : '',
-    isComments : false,
+    isComment : false,
     tags : [],
     body : '',
     titleImageFile : new FormData(),

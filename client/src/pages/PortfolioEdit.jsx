@@ -18,6 +18,9 @@ import { portfolioErrorInitData, portfolioWriteInitData, portfolioWriteRule } fr
 import SubmitModalBox from '../components/PfPjPublic/SubmitModalBox';
 import { shapingApiData } from '../utils/shapingApiData';
 import { writeSubmitHandler } from '../utils/writeSubmitHandler';
+import { useParams } from 'react-router-dom';
+import api from '../hooks/useAxiosInterceptor'
+import Modal from '../components/common/Modal';
 
 const StyleProjectWrite = styled(Page)`
   height:auto;
@@ -65,49 +68,30 @@ const StyleProjectWrite = styled(Page)`
   }
 `
 
-const responseData = {
-  projectId : 41,
-  view : 0,
-  memberId : 7,
-  title : '안녕하세요wtrgdrgdhtfth',
-  createdAt : String(new Date()),
-  modifiedAt : String(new Date()),
-  body : '기획안 gfukukfhukhfkfhjukvhjm,hjmvhjmhjmvhj,vhj,vhj,vhj,vhj,vhj,vhj,hvj,vhjhjv입니다기획안 gfukukfhukhfkfhjukvhjm,hjmvhjmhjmvhj,vhj,vhj,vhj,vhj,vhj,vhj,hvj,vhjhjv입니다기획안 gfukukfhukhfkfhjukvhjm,hjmvhjmhjmvhj,vhj,vhj,vhj,vhj,vhj,vhj,hvj,vhjhjv입니다',
-  description : '즐겁게 해보실 분',
-  lang : 'react',
-  images : [
-    {
-      imageId : 10,
-      imageUrl : 'https://source.unsplash.com/random'
-    },
-    {
-      imageId : 11,
-      imageUrl : 'https://source.unsplash.com/random'
-    },
-    {
-      imageId : 12,
-      imageUrl : 'https://source.unsplash.com/random'
-    }
-  ],
-  projectTitleImage : {
-    projectTitleImageId : 6,
-    imageUrl : 'https://source.unsplash.com/random',
-  },
-  tags : ['테1스트','태스1트','태스3트']
-}
-
 export default function PortfolioEdit() {
   const {toPortfolio} = useNav();
+  const {portfolioId} = useParams();
   const [dataForm,handleInputChange, clearForm, setDataForm] = useForm(portfolioWriteInitData);
   const [errors, handleErrorChange, clearError, setErrors ] = useError({} , portfolioWriteRule);
+  const [showModal, setShowModal] = useState(false);
+  const [apiResult, setApiResult] = useState(false);
+  //false면 프론트측 에러 true면 백측에러
+  const [whichError, setWhichError] = useState(false);
+  const [firstResult, setFirstResult] = useState(true);
 
   const width = '100%';
   const height = '70rem';
 
   useEffect(()=>{
-    // api.get()
-    //요청후
-    setDataForm(shapingApiData(responseData));
+    api.get(`/portfolios/${portfolioId}`)
+    .then(res=>{
+      setDataForm(shapingApiData(res.data))
+    })
+    .catch(err=>{
+      setShowModal(true);
+      setWhichError(true);
+      setFirstResult(false);
+    });
   },[])
 
   //테스트용 언어 옵션들
@@ -122,7 +106,14 @@ export default function PortfolioEdit() {
 
   return (
     <StyleProjectWrite className='col'>
-      <WriteHeader text={'포트폴리오 헤더 부분'}/>
+      {showModal && <Modal
+        type={'alert'}
+        setIsOpen={setShowModal}
+        title={apiResult ? '수정 완료' : `${whichError ? '통신 에러' : '입력 형식 오류'}`}
+        body={apiResult ? '확인 버튼 클릭시 프로젝트리스트 화면으로 넘어갑니다.' : `${whichError ? '서버와의 통신에 실패했습니다. 다시 시도해 주세요.' : '필수 입력 양식을 다시 확인해 주세요.'}`}
+        confirmHandler={apiResult ? ()=>{toPortfolio()} : firstResult ? undefined : ()=>{toPortfolio()}}
+      />}
+      <WriteHeader type='portfolio' state='edit'/>
       <div className='row'>
         <div className='input-container col'>
 
@@ -241,7 +232,7 @@ export default function PortfolioEdit() {
         </div>
       </div>
       <SubmitModalBox
-        submitTitle={'작성 확인'}
+        submitTitle={'수정 확인'}
         submitMessage={'댓글 허락하지 않음 선택 시 기존의 댓글들도 보이지 않습니다.'}
         submitCheckHandler={()=>writeSubmitHandler(dataForm, errors,setErrors,'portfolio')}
         cancelTitle={'취소 확인'}
