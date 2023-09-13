@@ -51,7 +51,7 @@ public class ProjectController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity postProject(@RequestParam("project") String projectAsString,
                                       @RequestParam("titleImageFile") MultipartFile titleImageFile,
-                                      @RequestParam("imageFile") List<MultipartFile> imageFiles) {
+                                      @RequestParam(value = "imageFile", required = false) List<MultipartFile> imageFiles) {
         try {
             ProjectPostDto projectPostDto = new ObjectMapper().readValue(projectAsString, ProjectPostDto.class);
 
