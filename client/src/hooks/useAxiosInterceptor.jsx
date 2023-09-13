@@ -15,7 +15,7 @@ const instance = axios.create({
 export const useAxiosInterceptor = () => {
   const dispatch = useDispatch();
   const jwt = useSelector((state) => state.user.jwt);
-  const { memberId } = useSelector((state) => state.user.userInfo);
+  const userInfo = useSelector((state) => state.user.userInfo);
   const { toAbout, toSignin } = useNav();
 
   instance.interceptors.request.use(
@@ -57,7 +57,7 @@ export const useAxiosInterceptor = () => {
       if (message === 'Bad Token') {
         dispatch(deleteUser());
         try {
-          instance.post(`/members/logout/${memberId}`);
+          instance.post(`/members/logout/${userInfo.memberId}`);
         } catch (error) {
           console.log(error);
         }
@@ -69,7 +69,7 @@ export const useAxiosInterceptor = () => {
       if (message === 'refreshToken has expired') {
         dispatch(deleteUser());
         try {
-          instance.post(`/members/logout/${memberId}`);
+          instance.post(`/members/logout/${userInfo.memberId}`);
         } catch (error) {
           console.log(error);
         }
@@ -81,7 +81,7 @@ export const useAxiosInterceptor = () => {
       if (message === 'refreshToken has different') {
         dispatch(deleteUser());
         try {
-          instance.post(`/members/logout/${memberId}`);
+          instance.post(`/members/logout/${userInfo.memberId}`);
         } catch (error) {
           console.log(error);
         }
