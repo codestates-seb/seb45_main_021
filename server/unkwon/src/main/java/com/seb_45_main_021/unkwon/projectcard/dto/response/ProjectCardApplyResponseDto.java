@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 public class ProjectCardApplyResponseDto {
     private Long projectCardId;
-    private String[] tag;
+    private String[] tags;
     private String tell;
     private String aboutMe;
     private String img;
@@ -15,17 +15,22 @@ public class ProjectCardApplyResponseDto {
     private boolean working;
 
 
-    public ProjectCardApplyResponseDto(Long projectCardId, String aboutMe, String tell, String tag, Member member) {
+    public ProjectCardApplyResponseDto(Long projectCardId, String aboutMe, String tell, String tags, Member member) {
         this.projectCardId = projectCardId;
         this.aboutMe = aboutMe;
         this.tell = tell;
-        this.tag = setTag(tag);
+        setTag(tags);
         this.userName = member.getUserName();
         this.email = member.getEmail();
         this.working = member.isWorking();
     }
 
-    private String[] setTag(String tag){
-        return tag.replaceAll(" ", "").split(",");
+    public void setTag(String tags){
+        // 태그 입력 전 이면 빈배열, 입력 후 라면 split 배열
+        this.tags = tags == null ? new String[]{}
+                : tags.replaceAll(" ", "")
+                .replace("[", "")
+                .replace("]", "")
+                .split(",");
     }
 }

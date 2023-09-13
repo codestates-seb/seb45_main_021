@@ -20,6 +20,7 @@ import org.springframework.security.access.AccessDeniedException;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -54,14 +55,14 @@ public class Member extends Auditable {
     @Column(length = 200)
     private String aboutMe; // 자기 소개
 
-    private String imgUrl; // 이미지 URL
+    private String userImgUrl; // 이미지 URL
 
     private int age; // 사용자 나이
 
     private boolean isWorking;
 
     @Column(columnDefinition = "TEXT")
-    private String tag;
+    private String tags;
 
     @Enumerated(EnumType.STRING)
     private SocialType socialType; // 회원가입 방식 (직접 회원가입, GOOGLE, GITHUB)
@@ -108,21 +109,21 @@ public class Member extends Auditable {
     }
 
     // 회원 가입 생성자
-    public Member(String email, String password, String userName, List<String> roles, String imgUrl, SocialType socialType) {
+    public Member(String email, String password, String userName, List<String> roles, String userImgUrl, SocialType socialType) {
         this.email = email;
         this.password = password;
         this.userName = userName;
         this.roles = roles;
-        this.imgUrl = imgUrl;
+        this.userImgUrl = userImgUrl;
         this.socialType = socialType;
     }
 
     // OAuth2 회원 가입 생성자
-    public Member(String email, String userName, List<String> roles, String imgUrl, SocialType socialType, String socialId) {
+    public Member(String email, String userName, List<String> roles, String userImgUrl, SocialType socialType, String socialId) {
         this.email = email;
         this.userName = userName;
         this.roles = roles;
-        this.imgUrl = imgUrl;
+        this.userImgUrl = userImgUrl;
         this.socialType = socialType;
         this.socialId = socialId;
     }
@@ -131,13 +132,13 @@ public class Member extends Auditable {
         return this.refreshToken == null;
     }
     public boolean compareRefreshToken(String refreshToken) {return this.refreshToken.equals(refreshToken);}
-    public void setTag(String[] tags) {this.tag = Arrays.toString(tags);}
+    public void setTag(String[] tags) {this.tags = Arrays.toString(tags);}
 
     // 구글에서 한번 정보를 가져온 이후로 업데이트 주도권을 우리 서버에서 가질것인지
     // 아니면 구글 업데이트도 전부 반영해줄것인지
-    public void updateUsernameAndImgUrl(String userName, String imgUrl){
+    public void updateUsernameAndImgUrl(String userName, String userImgUrl){
         this.userName = userName;
-        this.imgUrl = imgUrl;
+        this.userImgUrl = userImgUrl;
     }
 
     public void checkMemberId(MemberInfo memberInfo){

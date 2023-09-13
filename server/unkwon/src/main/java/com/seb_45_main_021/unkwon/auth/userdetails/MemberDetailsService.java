@@ -49,7 +49,7 @@ public class MemberDetailsService implements UserDetailsService {
             setMemberId(member.getMemberId());
             setEmail(member.getEmail());
             setPassword(member.getPassword());
-            setImgUrl(member.getImgUrl());
+            setUserImgUrl(member.getUserImgUrl());
             setUserName(member.getUserName());
             setRoles(member.getRoles());
         }

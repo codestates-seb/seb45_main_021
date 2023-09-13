@@ -63,15 +63,14 @@ public class SecurityConfiguration {
                 .exceptionHandling().accessDeniedHandler(userAccessDeniedHandler)
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
-                        .antMatchers("/h2/**").permitAll()
                         // .antMatchers(HttpMethod.OPTIONS).permitAll() // preflight 요청은 OPTIONS 메서드를 사용하기 때문에  허용
-                        .antMatchers("/portfolios/**", "/projects/**", "/members/**", "/projectcards/**", "/oauth2/**").permitAll()
-                        .anyRequest().authenticated())
-                .oauth2Login()
-                .successHandler(oAuth2LoginSuccessHandler)
-                .failureHandler(oAuth2LoginFailureHandler)
-                .userInfoEndpoint() // OAuth2 로그인 성공 이후 사용자 정보를 가져올 설정
-                .userService(customOAuth2UserService);
+                        .antMatchers("/portfolios/**", "/projects/**", "/members/**", "/projectcards/**", "/oauth2/**", "/h2/**").permitAll()
+                        .anyRequest().authenticated());
+//                .oauth2Login()
+//                .successHandler(oAuth2LoginSuccessHandler)
+//                .failureHandler(oAuth2LoginFailureHandler)
+//                .userInfoEndpoint() // OAuth2 로그인 성공 이후 사용자 정보를 가져올 설정
+//                .userService(customOAuth2UserService);
 
         return http.build();
     }
@@ -90,8 +89,10 @@ public class SecurityConfiguration {
         // HTTP 메서드에 대한 HTTP 통신 허용
         configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
-        
-        // configuration.setExposedHeaders(List.of()); 응답 헤더 설정
+        configuration.setExposedHeaders(List.of(
+                "accessToken",
+                "refreshToken"
+        )); // 응답 헤더 설정
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         // 모든 URL 에 앞에서 구성한 CORS 정책 적용
