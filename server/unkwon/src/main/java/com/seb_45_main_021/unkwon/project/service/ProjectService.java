@@ -4,10 +4,7 @@ import com.seb_45_main_021.unkwon.commonCode.CommonCode;
 import com.seb_45_main_021.unkwon.commonCode.CommonCodeRepository;
 import com.seb_45_main_021.unkwon.exception.BusinessLogicException;
 import com.seb_45_main_021.unkwon.exception.ExceptionCode;
-import com.seb_45_main_021.unkwon.image.ProjectImage;
-import com.seb_45_main_021.unkwon.image.ProjectTitleImage;
-import com.seb_45_main_021.unkwon.image.ProjectTitleImageRepository;
-import com.seb_45_main_021.unkwon.image.S3Service;
+import com.seb_45_main_021.unkwon.image.*;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.member.repository.MemberRepository;
 import com.seb_45_main_021.unkwon.project.dto.response.ProjectApplicationStatusResponseDto;
@@ -38,6 +35,7 @@ public class ProjectService {
     private CommonCodeRepository commonCodeRepository;
     private MemberRepository memberRepository;
     private ProjectTitleImageRepository projectTitleImageRepository;
+    private ProjectImageRepository projectImageRepository;
     @Autowired
     private S3Service s3Service;
 
@@ -45,12 +43,14 @@ public class ProjectService {
                           ProjectStatusRepository projectStatusRepository,
                           ProjectTitleImageRepository projectTitleImageRepository,
                           CommonCodeRepository commonCodeRepository,
-                          MemberRepository memberRepository) {
+                          MemberRepository memberRepository,
+                          ProjectImageRepository projectImageRepository) {
         this.projectRepository = projectRepository;
         this.projectTitleImageRepository = projectTitleImageRepository;
         this.projectStatusRepository = projectStatusRepository;
         this.commonCodeRepository = commonCodeRepository;
         this.memberRepository = memberRepository;
+        this.projectImageRepository = projectImageRepository;
     }
 
     // 프로젝트 등록
@@ -118,7 +118,8 @@ public class ProjectService {
         if(imageUrls != null && !imageUrls.isEmpty()) {
             for(String imageUrl : imageUrls) { // for 문 돌려서 하나씩
                 s3Service.deleteFile(imageUrl);  // S3 에서 삭제하기
-                findProject.getImages().removeIf(image -> (image.getImageUrl().equals(imageUrl))); // 프로젝트에서도 삭제
+                projectImageRepository.deleteByImageUrl(imageUrl); // DB 에서 삭제
+//                findProject.getImages().removeIf(image -> (image.getImageUrl().equals(imageUrl))); // 프로젝트에서도 삭제
             }
         }
         // 나머지 이미지 업데이트 로직
@@ -182,7 +183,7 @@ public class ProjectService {
 
         ProjectApplicationStatusResponseDto response = new ProjectApplicationStatusResponseDto();
 
-        response.setJoinPeople(acceptedMembers.stream().map(member -> new ProjectApplicationStatusResponseDto.JoinPeopleResponseDto(member.getMemberId(), member.getImgUrl(), member.getUsername())).collect(Collectors.toList()));
+        response.setJoinPeople(acceptedMembers.stream().map(member -> new ProjectApplicationStatusResponseDto.JoinPeopleResponseDto(member.getMemberId(), member.getImgUrl(), member.getUserName())).collect(Collectors.toList()));
         response.setRequestPeople(waitingCards.stream().map(projectCard -> new ProjectCardApplyResponseDto(
 
                 projectCard.getProjectCardId(),
