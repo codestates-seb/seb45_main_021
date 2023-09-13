@@ -52,6 +52,7 @@ public interface ProjectMapper {
         project.setTags(new String[]{projectPatchDto.getTags()});
         project.setBody(projectPatchDto.getBody());
         project.setDescription(projectPatchDto.getDescription());
+        project.setClosedAt(projectPatchDto.getClosedAt());
 
         return project;
     }
@@ -136,9 +137,6 @@ public interface ProjectMapper {
                 .collect(Collectors.toList());
     }
 
-    @Mapping(target = "tags", expression = "java(mapTags(projectPatchDto.getTags()))")
-    Portfolio projectPatchDtoToPortfolio(ProjectPatchDto projectPatchDto);
-
     default String [] mapTags(String tags) {
         if (tags == null || tags.isEmpty()) {
             return new String[0];
@@ -147,7 +145,7 @@ public interface ProjectMapper {
     }
     private String[] parseTags(String tags) {
         if (tags == null || tags.isEmpty()) {
-            return new String[0];
+            return null;
         }
 
         // 태그 문자열을 쉼표로 분리하여 배열로 반환
