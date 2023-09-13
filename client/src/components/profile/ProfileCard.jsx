@@ -116,7 +116,7 @@ export default function ProfileCard({ id, data, isLoading }) {
   const [profile, setProfile] = useState({
     email: data.email,
     userName: data.userName,
-    userImgUrl: data.userImg,
+    userImgUrl: data.userImgUrl,
     working: data.working,
     age: data.age,
     tags: data.tags,
@@ -195,20 +195,22 @@ export default function ProfileCard({ id, data, isLoading }) {
 
   const handleEditProfile = () => {
     console.log('프로필 수정 요청');
-    try {
-      if (
-        editProfile.aboutMe.value.length <= 200 &&
-        editProfile.userName.value.length <= 5 &&
-        editProfile.age.value.toString().length <= 3
-      ) {
-        const responseBody = {
-          aboutMe: editProfile.aboutMe.value,
-          userName: editProfile.userName.value,
-          age: editProfile.age.value,
-          tags: editProfile.tags.value,
-          working: editProfile.working.value,
-        };
-        api.patch(`members/${memberId}`, responseBody).then(() => {
+    if (
+      editProfile.aboutMe.value.length <= 200 &&
+      editProfile.userName.value.length <= 5 &&
+      editProfile.age.value.toString().length <= 3
+    ) {
+      console.log(editProfile.working.value);
+      const responseBody = {
+        aboutMe: editProfile.aboutMe.value,
+        userName: editProfile.userName.value,
+        age: editProfile.age.value,
+        tags: editProfile.tags.value,
+        isWorking: editProfile.working.value,
+      };
+      api
+        .patch(`members/${memberId}`, responseBody)
+        .then((el) => {
           console.log('프로필 수정 성공');
           setProfile({
             ...profile,
@@ -218,10 +220,10 @@ export default function ProfileCard({ id, data, isLoading }) {
             tags: editProfile.tags.value,
             working: editProfile.working.value,
           });
+        })
+        .catch((error) => {
+          console.log(error);
         });
-      }
-    } catch (error) {
-      console.log(error);
     }
   };
 

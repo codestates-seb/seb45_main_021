@@ -27,7 +27,7 @@ export const useAxiosInterceptor = () => {
       } else {
         delete newHeaders['accesstoken'];
       }
-      if (jwt?.refreshtoken) {
+      if (refreshtoken) {
         newHeaders['refreshtoken'] = refreshtoken;
       } else {
         delete newHeaders['refreshtoken'];

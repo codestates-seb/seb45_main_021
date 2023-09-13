@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import Input from '../components/common/Input';
 import Select from '../components/common/Select';
@@ -17,6 +17,8 @@ import languages from '../static/languages';
 import { portfolioErrorInitData, portfolioWriteInitData, portfolioWriteRule } from '../static/portfolioInit';
 import SubmitModalBox from '../components/PfPjPublic/SubmitModalBox';
 import { writeSubmitHandler } from '../utils/writeSubmitHandler';
+import Modal from '../components/common/Modal';
+import { useSelector } from 'react-redux';
 
 const StyleProjectWrite = styled(Page)`
   height:auto;
@@ -81,6 +83,12 @@ export default function PortfolioWrite() {
   const {toPortfolio} = useNav();
   const [dataForm,handleInputChange] = useForm(portfolioWriteInitData);
   const [errors, handleErrorChange, clearError, setErrors ] = useError(portfolioErrorInitData , portfolioWriteRule);
+  const [showModal, setShowModal] = useState(false);
+  const [apiResult, setApiResult] = useState(false);
+  //false면 프론트측 에러 true면 백측에러
+  const [whichError, setWhichError] = useState(false);
+  const [isLoading ,setIsLoading] = useState(false);
+  const loginUserData = useSelector(state=>state.user);
 
   const width = '100%';
   const height = '70rem';
@@ -97,10 +105,16 @@ export default function PortfolioWrite() {
 
   return (
     <StyleProjectWrite className='col'>
-      <WriteHeader text={'포트폴리오 헤더 부분'}/>
+      {showModal && <Modal
+        type={'alert'}
+        setIsOpen={setShowModal}
+        title={isLoading ? '' : apiResult ? '작성 완료' : `${whichError ? '통신 에러' : '입력 형식 오류'}`}
+        body={isLoading ? '' : apiResult ? '확인 버튼 클릭시 포트폴리오 리스트 화면으로 넘어갑니다.' : `${whichError ? '서버와의 통신에 실패했습니다. 다시 시도해 주세요' : '필수 입력 양식을 다시 확인해 주세요.'}`}
+        confirmHandler={() => {apiResult ? toPortfolio() : setShowModal(false)}}
+      />}
+      <WriteHeader type='portfolio'/>
       <div className='write-wrapper row'>
         <div className='input-container col'>
-
           <Input
             label={'포트폴리오 제목'}
             width={'100%'}
@@ -144,14 +158,14 @@ export default function PortfolioWrite() {
                 width='10rem'
                 height='5rem'
                 onClickHandler={()=>{
-                  handleInputChange(null, !dataForm.isComments, 'isComments')
+                  handleInputChange(null, !dataForm.isComment, 'isComments')
                 }}
-                defaultValue={dataForm.isComments}
+                defaultValue={dataForm.isComment}
                 hideError={true}
               />
             }
             hideError={true}
-            customText={dataForm.isComments ? '허용됨' : '허용되지 않음'}
+            customText={dataForm.isComment ? '허용됨' : '허용되지 않음'}
           />
           
           <EnterTag width="100%" height="3.5rem" placeholder="태그는 최대 3개까지 등록이 가능합니다." dataForm={dataForm} handleInputChange={handleInputChange}/>
@@ -205,8 +219,18 @@ export default function PortfolioWrite() {
       </div>
       <SubmitModalBox
         submitTitle={'작성 확인'}
-        submitMessage={'댓글 허락하지 않음 선택 시 기존의 댓글들도 보이지 않습니다.'}
-        submitCheckHandler={()=>writeSubmitHandler(dataForm, errors, setErrors, 'portfolio')}
+        submitMessage={'댓글 허락시에 달리는 댓글은 작성자에 한해서 자유롭게 삭제 할 수 있습니다.'}
+        submitCheckHandler={()=>{
+            setShowModal(true);
+            setIsLoading(true);
+            writeSubmitHandler(dataForm,errors,setErrors,'portfolio',loginUserData.userInfo.memberId)
+            .then(()=>setApiResult(true))
+            .catch((err)=>{
+              setWhichError(err==='formError' ? false : true);
+              setApiResult(false)})
+            .finally(()=>setIsLoading(false));
+          }
+        }
         cancelTitle={'취소 확인'}
         cancelMessage={'취소시 작성한 내용은 저장되지 않습니다.'}
         cancelCheckHandler ={toPortfolio}

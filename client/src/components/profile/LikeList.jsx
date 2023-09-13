@@ -9,7 +9,7 @@ import { desktop, mobile } from '../../static/theme';
 const StyleContainer = styled(Page)`
   width: 100%;
   min-height: 0;
-  height: 500px;
+  max-height: 500px;
   background-color: #00000046;
   gap: 2rem;
   padding: 1rem;
@@ -93,6 +93,16 @@ const StyleContainer = styled(Page)`
   }
 `;
 
+const NotContent = styled.div`
+  font-size: 4rem;
+  color: gray;
+  width: 100%;
+  height: 100px;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+`;
+
 export default function LikeList({ id, data, isLoading }) {
   const [filter, setfilter] = useState({
     defaultLabel: '포트폴리오',
@@ -102,6 +112,7 @@ export default function LikeList({ id, data, isLoading }) {
       { label: '프로젝트', value: 'project' },
     ],
   });
+  console.log(data);
   const PortFolio = data[0];
   const Project = data[1];
 
@@ -112,49 +123,21 @@ export default function LikeList({ id, data, isLoading }) {
     <StyleContainer id={id} className="col">
       <h2>좋아요</h2>
       <div className="filterWrapper">
-        {isLoading ? (
-          <Skeleton width="30rem" height="40px" />
-        ) : (
-          <Select
-            defaultLabel={filter.defaultLabel}
-            options={filter.options}
-            onClickHandler={handleClickFilter}
-            width="25rem"
-            fontSize="2rem"
-          />
-        )}
+        <Select
+          defaultLabel={filter.defaultLabel}
+          options={filter.options}
+          onClickHandler={handleClickFilter}
+          width="25rem"
+          fontSize="2rem"
+        />
       </div>
       <table>
         <thead>
           <tr>
-            <th className="title">
-              {isLoading ? (
-                <Skeleton width="90%" height="50px" sx={{ bgcolor: 'grey.700' }} animation="wave" />
-              ) : (
-                '제목'
-              )}
-            </th>
-            <th className="author">
-              {isLoading ? (
-                <Skeleton width="90%" height="50px" sx={{ bgcolor: 'grey.700' }} animation="wave" />
-              ) : (
-                '작성자'
-              )}
-            </th>
-            <th className="views">
-              {isLoading ? (
-                <Skeleton width="90%" height="50px" sx={{ bgcolor: 'grey.700' }} animation="wave" />
-              ) : (
-                '조회수'
-              )}
-            </th>
-            <th className="likes">
-              {isLoading ? (
-                <Skeleton width="90%" height="50px" sx={{ bgcolor: 'grey.700' }} animation="wave" />
-              ) : (
-                '좋아요'
-              )}
-            </th>
+            <th className="title">제목</th>
+            <th className="author">작성자</th>
+            <th className="views">조회수</th>
+            <th className="likes">조회수</th>
           </tr>
         </thead>
         <tbody>
@@ -168,6 +151,12 @@ export default function LikeList({ id, data, isLoading }) {
             ))}
         </tbody>
       </table>
+      {filter.value === 'portfolio' && PortFolio.length === 0 && (
+        <NotContent>등록된 글이 없습니다.</NotContent>
+      )}
+      {filter.value === 'project' && Project.length === 0 && (
+        <NotContent>등록된 글이 없습니다.</NotContent>
+      )}
     </StyleContainer>
   );
 }

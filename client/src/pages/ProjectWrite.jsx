@@ -85,9 +85,13 @@ export default function ProjectWrite() {
   const {toProject} = useNav();
   const [dataForm, handleInputChange] = useForm(projectWriteInitData);
   const [errors, handleErrorChange, clearError, setErrors] = useError(projectErrorInitData, projectWriteRule);
-  const loginUserData = useSelector(state=>state.user);
   const [showModal, setShowModal] = useState(false);
   const [apiResult, setApiResult] = useState(false);
+  //false면 프론트측 에러 true면 백측에러
+  const [whichError, setWhichError] = useState(false);
+  const [isLoading ,setIsLoading] = useState(false);
+  const loginUserData = useSelector(state=>state.user);
+
   const width = '100%';
   const height = '23rem';
 
@@ -113,38 +117,17 @@ export default function ProjectWrite() {
     {value : '9', label : '9'},
     {value : '10', label : '10'},
   ]
-
-  const formDataHeader = {
-    'Content-Type': 'multipart/form-data',
-    withCredentials: true,
-}
-
-  const WriteHandler = (dataForm,errors,setErrors,type,memberId) => {
-    setShowModal(true);
-    const requestData = writeSubmitHandler(dataForm,errors,setErrors,type,memberId);
-    if(requestData) {
-      api.post(`/${type}s`, requestData, {headers : formDataHeader})
-      .then(res=>{
-        setApiResult(true);
-      })
-      .catch(err=>{
-        setApiResult(false);
-      })
-    } else {
-      setApiResult(false);
-    }
-  }
-
   
   return (
     <StyleProjectWrite className='col'>
-      {/* {showModal && <Modal
+      {showModal && <Modal
+        type={'alert'}
         setIsOpen={setShowModal}
-        title={'작성'}
-        body={apiResult ? '작성하였습니다.' : '다시 시도 해 주세요.'}
-        confirmHandler={apiResult && toProject()}
-      />} */}
-      <WriteHeader text={'프로젝트 헤더 부분'} />
+        title={isLoading ? '' : apiResult ? '작성 완료' : `${whichError ? '통신 에러' : '입력 형식 오류'}`}
+        body={isLoading ? '' : apiResult ? '확인 버튼 클릭시 프로젝트 리스트 화면으로 넘어갑니다.' : `${whichError ? '서버와의 통신에 실패했습니다. 다시 시도해 주세요' : '필수 입력 양식을 다시 확인해 주세요.'}`}
+        confirmHandler={() => {apiResult ? toProject() : setShowModal(false)}}
+      />}
+      <WriteHeader type='project'/>
       <div className='write-wrapper row'>
         <div className='input-container col'>
           <Input
@@ -290,8 +273,17 @@ export default function ProjectWrite() {
       </div>
       <SubmitModalBox
         submitTitle={'작성 확인'}
-        submitMessage={'모집 인원은 수정 할 수 없습니다.'}
-        submitCheckHandler={()=>writeSubmitHandler(dataForm,errors,setErrors,'project',loginUserData.userInfo.memberId)}
+        submitMessage={'최초 작성시 설정한 모집 인원은 수정 할 수 없습니다.'}
+        submitCheckHandler={() => {
+          setShowModal(true);
+          setIsLoading(true);
+          writeSubmitHandler(dataForm,errors,setErrors,'project', loginUserData.userInfo.memberId)
+          .then(()=>setApiResult(true))
+          .catch((err)=>{
+            setWhichError(err==='formError' ? false : true);
+            setApiResult(false)})
+          .finally(()=>setIsLoading(false));
+        }}
         cancelTitle={'취소 확인'}
         cancelMessage={'취소시 작성한 내용은 저장되지 않습니다.'}
         cancelCheckHandler ={toProject}

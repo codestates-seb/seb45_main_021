@@ -15,6 +15,7 @@ import { desktop, mobile } from '../static/theme';
 
 const StyleContainer = styled(Page)`
   gap: 2rem;
+  margin-top: 20px;
   display: flex;
   position: relative;
   overflow-x: hidden;
@@ -43,6 +44,10 @@ const StyleContainer = styled(Page)`
   ::-webkit-scrollbar-thumb:hover {
     background-color: none;
   }
+`;
+
+const StyleDiv = styled.div`
+  flex: 1;
 `;
 
 const data1 = {
@@ -225,12 +230,40 @@ export default function Profile() {
   const { memberId } = useParams();
   const user = useSelector((state) => state.user);
   const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState(data1);
+  const [data, setData] = useState(null);
   useEffect(() => {
     setIsLoading(true);
     api
-      .get(`/members/${memberId}/${user.isLogin ? user.userInfo.memberId : 0}`)
-      .then((el) => console.log(el))
+      .get(`/members/${memberId}`)
+      .then((el) => {
+        console.log(el.data);
+        const temp = [{}, {}, {}];
+        temp.map((ele, i) => {
+          temp[i] = {
+            ...ele,
+            working: el.data.profile.working,
+            userImgUrl: el.data.profile.userImgUrl,
+          };
+        });
+        // eslint-disable-next-line array-callback-return
+        el.data.projectCard.map((ele, i) => {
+          temp[i] = {
+            ...ele,
+          };
+        });
+        setData({
+          profile: {
+            ...el.data.profile,
+            tags: el.data.profile.tags,
+            userImgUrl:
+              el.data.profile.userImgUrl === '' ? userDefaultImg : el.data.profile.userImgUrl,
+          },
+          project: el.data.project,
+          portfolio: el.data.portFolio,
+          likeList: [el.data.portfolioHeart, el.data.projectHeart],
+          projectCard: temp,
+        });
+      })
       .catch((error) => {
         console.log(error);
       });
@@ -239,26 +272,35 @@ export default function Profile() {
     }, 3000);
   }, []);
 
+  useEffect(() => {
+    console.log('data');
+    console.log(data);
+  }, [data]);
+
   return (
     <StyleContainer>
-      <ProfileCard id="profile" data={data.profile} isLoading={isLoading} />
-      <div>
-        <Project id="project" data={data.project} isLoading={isLoading} />
-        <Portfolio id="portfolio" data={data.portfolio} isLoading={isLoading} />
-        {user.isLogin && Number(memberId) === user.userInfo.memberId && (
-          <>
-            <LikeList id="likeList" data={data.likeList} isLoading={isLoading} />
-            <ProjectCard
-              id="projectCard"
-              data={data.projectCard}
-              isLoading={isLoading}
-              setData={setData}
-              trueData={data}
-            />
-          </>
-        )}
-      </div>
-      <AnchorMenu />
+      {data !== null && (
+        <>
+          <ProfileCard id="profile" data={data.profile} isLoading={isLoading} />
+          <StyleDiv>
+            <Project id="project" data={data.project} isLoading={isLoading} />
+            <Portfolio id="portfolio" data={data.portfolio} isLoading={isLoading} />
+            {user.isLogin && Number(memberId) === user.userInfo.memberId && (
+              <>
+                <LikeList id="likeList" data={data.likeList} isLoading={isLoading} />
+                <ProjectCard
+                  id="projectCard"
+                  data={data.projectCard}
+                  isLoading={isLoading}
+                  setData={setData}
+                  trueData={data}
+                />
+              </>
+            )}
+          </StyleDiv>
+          <AnchorMenu />
+        </>
+      )}
     </StyleContainer>
   );
 }
