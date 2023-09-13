@@ -1,5 +1,5 @@
 //포트폴리오 작성시 기본 데이터
-export const portFolioWriteInitData = {
+export const portfolioWriteInitData = {
     title:'',
     lang : '',
     isComments : false,
@@ -13,7 +13,7 @@ export const portFolioWriteInitData = {
 
 
 //포트폴리오 작성시에 기본적으로 존재하는 룰
-export const portFolioErrorInitData = {
+export const portfolioErrorInitData = {
     title : false,
     body : false,
     lang : false,
@@ -21,7 +21,7 @@ export const portFolioErrorInitData = {
 }
 
 //프로트폴리오 작성시 룰
-export const portFolioWriteRule = {
+export const portfolioWriteRule = {
     title : {
       min : 10,
       max : 30,

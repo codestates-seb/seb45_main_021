@@ -17,7 +17,7 @@ import ProGress from '../components/common/ProGress';
 import languages from '../static/languages'
 import api from '../hooks/useAxiosInterceptor';
 import { projectErrorInitData, projectWriteInitData, projectWriteRule } from '../static/projectInit';
-import SubmitBox from '../components/PfPjPublic/SubmitBox';
+import SubmitModalBox from '../components/PfPjPublic/SubmitModalBox';
 import { writeSubmitHandler } from '../utils/writeSubmitHandler';
 import { apiWriteDataCheckError, shapingApiData } from '../utils/shapingApiData';
 
@@ -75,80 +75,12 @@ const StyleProjectWrite = styled(Page)`
   }
 `
 
-// //useEffect로 데이터받아왔다 치고
-// const DummyData = {
-//   id : 1,
-//   title : '사용하여 프로젝트,포트폴리오 공유 프로젝트입니다.',
-//   // totalPeople:5,
-//   // joinPeople:[{
-//   //   id : 15,
-//   // },{
-//   //   id : 16,
-//   // },{
-//   //   id : 21,
-//   // }],
-//   // created_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-//   // modified_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-//   closedAt : "Wed Aug 28 2023 16:07:06 GMT+0900 (한국 표준시)",
-//   language : 'JAVA',
-//   tags : ['테스트태그', '의미없는 태그', '의미없는 태그2'],
-//   body : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-//   titleImageFile : '',
-//   imageFile : ['https://source.unsplash.com/random','https://source.unsplash.com/random','https://source.unsplash.com/random','https://source.unsplash.com/random'],
-//   description : '',
-//   author : {
-//     img : '',
-//     userName : '박찬섭', 
-//     id : 1,
-//   },
-//   // // likes : ["1", "2", "3", "4", "5"],
-//   // requestPeople : [
-//   //   {
-//   //     id : 5,
-//   //     img : '',
-//   //     userName : '신청자1',
-//   //     email:'1234@naver.com',
-//   //     isEmploy : true,
-//   //     tag : ['java','javascript','C++'],
-//   //     hotline : '010-1234-5678',
-//   //     body : '신청합니다.'
-//   //   },
-//   //   {
-//   //     id : 6,
-//   //     img : '',
-//   //     userName : '신청자2',
-//   //     email:'1234@naver.com',
-//   //     isEmploy : false,
-//   //     tag : ['java','javascript','C++'],
-//   //     hotline : '010-1234-5678',
-//   //     body : '신청합니다.'},
-//   //   {
-//   //     id : 7,
-//   //     img : '',
-//   //     userName : '신청자3',
-//   //     email:'1234@naver.com',
-//   //     isEmploy : true,
-//   //     tag : ['java','javascript','C++'],
-//   //     hotline : '010-1234-5678',
-//   //     body : '신청합니다.'
-//   //   },
-//   //   {
-//   //     id : 7,
-//   //     img : '',
-//   //     userName : '신청자3',
-//   //     email:'1234@naver.com',
-//   //     isEmploy : true,
-//   //     tag : ['java','javascript','C++'],
-//   //     hotline : '010-1234-5678',
-//   //     body : '신청합니다.'
-//   //   }
-//   // ]
-// }
-
 const responseData = {
-  projectId : 41,
   view : 0,
   memberId : 7,
+  projectId : 41,
+  userName : '박찬섭',
+  userImgUrl : null,
   title : '안녕하세요wtrgdrgdhtfth',
   totalPeople : 6,
   createdAt : String(new Date()),
@@ -177,7 +109,8 @@ const responseData = {
     projectTitleImageId : 6,
     imageUrl : 'https://source.unsplash.com/random',
   },
-  tags : ['테1스트','태스1트','태스3트']
+  tags : ['테1스트','태스1트','태스3트'],
+  heartCount : 6,
 }
 
 export default function ProjectEdit() {
@@ -343,7 +276,7 @@ export default function ProjectEdit() {
 
         </div>
       </div>
-      <SubmitBox
+      <SubmitModalBox
         submitTitle={'작성 확인'}
         submitMessage={'모집 인원은 수정 할 수 없습니다.'}
         submitCheckHandler={()=>writeSubmitHandler(dataForm, errors,setErrors,'project')}

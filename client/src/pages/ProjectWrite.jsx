@@ -15,10 +15,13 @@ import { checkValidations } from '../utils/checkValidations';
 import ProGress from '../components/common/ProGress';
 import languages from '../static/languages'
 import { projectErrorInitData, projectWriteInitData, projectWriteRule } from '../static/projectInit';
-import SubmitBox from '../components/PfPjPublic/SubmitBox';
+import SubmitModalBox from '../components/PfPjPublic/SubmitModalBox';
 import { writeSubmitHandler } from '../utils/writeSubmitHandler';
 import Modal from '../components/common/Modal';
 import { custom, desktop, tablet } from '../static/theme';
+import Spinner from '../components/common/Spinner';
+import { useSelector } from 'react-redux';
+import api from '../hooks/useAxiosInterceptor'
 
 const StyleProjectWrite = styled(Page)`
   height:auto;
@@ -82,7 +85,9 @@ export default function ProjectWrite() {
   const {toProject} = useNav();
   const [dataForm, handleInputChange] = useForm(projectWriteInitData);
   const [errors, handleErrorChange, clearError, setErrors] = useError(projectErrorInitData, projectWriteRule);
+  const loginUserData = useSelector(state=>state.user);
   const [showModal, setShowModal] = useState(false);
+  const [apiResult, setApiResult] = useState(false);
   const width = '100%';
   const height = '23rem';
 
@@ -94,6 +99,7 @@ export default function ProjectWrite() {
       }
       return arr;
   })()
+
 
   const totalPeopleOptions = [
     {value : '', label : '-'},
@@ -108,9 +114,36 @@ export default function ProjectWrite() {
     {value : '10', label : '10'},
   ]
 
+  const formDataHeader = {
+    'Content-Type': 'multipart/form-data',
+    withCredentials: true,
+}
+
+  const WriteHandler = (dataForm,errors,setErrors,type,memberId) => {
+    setShowModal(true);
+    const requestData = writeSubmitHandler(dataForm,errors,setErrors,type,memberId);
+    if(requestData) {
+      api.post(`/${type}s`, requestData, {headers : formDataHeader})
+      .then(res=>{
+        setApiResult(true);
+      })
+      .catch(err=>{
+        setApiResult(false);
+      })
+    } else {
+      setApiResult(false);
+    }
+  }
+
   
   return (
     <StyleProjectWrite className='col'>
+      {/* {showModal && <Modal
+        setIsOpen={setShowModal}
+        title={'작성'}
+        body={apiResult ? '작성하였습니다.' : '다시 시도 해 주세요.'}
+        confirmHandler={apiResult && toProject()}
+      />} */}
       <WriteHeader text={'프로젝트 헤더 부분'} />
       <div className='write-wrapper row'>
         <div className='input-container col'>
@@ -255,15 +288,14 @@ export default function ProjectWrite() {
 
         </div>
       </div>
-      <SubmitBox
+      <SubmitModalBox
         submitTitle={'작성 확인'}
         submitMessage={'모집 인원은 수정 할 수 없습니다.'}
-        submitCheckHandler={()=>writeSubmitHandler(dataForm,errors,setErrors,'project')}
+        submitCheckHandler={()=>writeSubmitHandler(dataForm,errors,setErrors,'project',loginUserData.userInfo.memberId)}
         cancelTitle={'취소 확인'}
         cancelMessage={'취소시 작성한 내용은 저장되지 않습니다.'}
         cancelCheckHandler ={toProject}
       />
-      {showModal && <Modal/>}
     </StyleProjectWrite>
   );
 }

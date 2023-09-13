@@ -9,6 +9,9 @@ export const StyleProjectCardContainer = styled.div`
     width:${props => props.$isForSubmit ? '60vw' : '100%'};
     gap:2rem;
     overflow:auto;
+    div {
+        border-radius:5px;
+    }
     ${desktop} {
         flex-direction: column;
     }
@@ -47,7 +50,7 @@ export default function ProjectCardContainer({
             ) : 
             <EmptyData 
                 height='500px'
-                text={'신청한 사람이 없음'}
+                text={'신청자 없음'}
             />
             }
         </StyleProjectCardContainer>

@@ -17,6 +17,7 @@ const StyleSkeletonBody = styled.div`
     .post-data-box {
         flex:4;
         height:auto;
+        gap:10rem;
     }
 
     .sticky-box {
@@ -101,7 +102,7 @@ export default function DetailSkeletonLoading({type = 'project'}) {
             </StyleSkeletonHead>
             <BorderLine/>
             <StyleSkeletonBody className='row'>
-                <div className='post-data-box'>
+                <div className='post-data-box col'>
                 {defaultSize[type].map((item,idx)=>
                     <TextBox
                         key={idx}

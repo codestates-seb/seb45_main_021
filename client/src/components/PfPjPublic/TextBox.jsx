@@ -3,7 +3,6 @@ import styled from 'styled-components'
 
 const StyleTextBox = styled.div`
     width: 100%;
-    margin-bottom:10rem;
     .textbox-title {
         font-size:2rem;
         margin-bottom:1rem;
@@ -17,6 +16,8 @@ const StyleTextBox = styled.div`
     p {
         line-height:2.2rem;
         font-size:1.6rem;
+        overflow-wrap: break-word;
+        word-break: break-all;
     }
 `
 

@@ -14,7 +14,7 @@ const StyleSubmitBox = styled.div`
     }
 `
 
-export default function SubmitBox({
+export default function SubmitModalBox({
     submitTitle,
     submitMessage,
     submitCheckHandler,

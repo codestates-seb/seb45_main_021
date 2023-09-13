@@ -22,7 +22,7 @@ export default function JoinStatusContainer({
                 joinPeople.map((item,idx)=>
                     <JoinCard
                         key={idx}
-                        // cardData={item}
+                        cardData={item}
                     />
             ):
             <EmptyData text={'참가자 없음'} height='500px'/>

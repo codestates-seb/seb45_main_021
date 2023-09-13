@@ -14,8 +14,8 @@ import { checkValidations } from '../utils/checkValidations';
 import ProGress from '../components/common/ProGress';
 import ToggleButton from '../components/common/ToggleButton';
 import languages from '../static/languages';
-import { portFolioErrorInitData, portFolioWriteInitData, portFolioWriteRule } from '../static/portFolioInit';
-import SubmitBox from '../components/PfPjPublic/SubmitBox';
+import { portfolioErrorInitData, portfolioWriteInitData, portfolioWriteRule } from '../static/portfolioInit';
+import SubmitModalBox from '../components/PfPjPublic/SubmitModalBox';
 import { writeSubmitHandler } from '../utils/writeSubmitHandler';
 
 const StyleProjectWrite = styled(Page)`
@@ -79,8 +79,8 @@ const StyleProjectWrite = styled(Page)`
 
 export default function PortfolioWrite() {
   const {toPortfolio} = useNav();
-  const [dataForm,handleInputChange] = useForm(portFolioWriteInitData);
-  const [errors, handleErrorChange, clearError, setErrors ] = useError(portFolioErrorInitData , portFolioWriteRule);
+  const [dataForm,handleInputChange] = useForm(portfolioWriteInitData);
+  const [errors, handleErrorChange, clearError, setErrors ] = useError(portfolioErrorInitData , portfolioWriteRule);
 
   const width = '100%';
   const height = '70rem';
@@ -117,7 +117,7 @@ export default function PortfolioWrite() {
             width={'100%'}
             height={'1.2rem'}
             fontSize={'1.2rem'}
-            comPleteNum={portFolioWriteRule.title.max}
+            comPleteNum={portfolioWriteRule.title.max}
             proGressNum={dataForm.title.length ?? 0}
             error={dataForm.title.length < 10 ? true : false}
           />
@@ -174,7 +174,7 @@ export default function PortfolioWrite() {
             width={'100%'}
             height={'1.2rem'}
             fontSize={'1.2rem'}
-            comPleteNum={portFolioWriteRule.body.max}
+            comPleteNum={portfolioWriteRule.body.max}
             proGressNum={dataForm.body.length ?? 0}
             error={dataForm.body.length < 100 ? true : false}
           />
@@ -203,7 +203,7 @@ export default function PortfolioWrite() {
           />
         </div>
       </div>
-      <SubmitBox
+      <SubmitModalBox
         submitTitle={'작성 확인'}
         submitMessage={'댓글 허락하지 않음 선택 시 기존의 댓글들도 보이지 않습니다.'}
         submitCheckHandler={()=>writeSubmitHandler(dataForm, errors, setErrors, 'portfolio')}

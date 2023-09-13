@@ -35,14 +35,9 @@ const StyleJoinCard = styled.div`
     }
 `
 
-const dummy = {
-        img : '',
-        userName : '박찬섭12', 
-        id : 15,
-    }
 
 export default function JoinCard({
-    cardData = dummy,
+    cardData,
 }) {
     const {toProfile} = useNav();
     return (
@@ -51,7 +46,7 @@ export default function JoinCard({
                 className='col author-wrapper'
                 onClick={()=>toProfile(cardData.id)}
             >
-                <img src={cardData?.img.length === 0 ? defaultImg : cardData.img} alt='신청자이미지'/>
+                <img src={cardData?.imgUrl.length === 0 ? defaultImg : cardData.imgUrl} alt='신청자이미지'/>
                 <p>{cardData?.userName}</p>
             </div>
         </StyleJoinCard>

@@ -85,13 +85,13 @@ export default function SubmitedCard({
     return (
         <StyleSubmitedCard className='col'>
             <div className='row'>
-                <div className='image-name-container col' onClick={()=>toProfile(cardData.id)}>
-                    <img src={cardData?.img.length === 0 ? defaultImg : cardData.img} alt='신청자이미지'/>
+                <div className='image-name-container col' onClick={()=>toProfile(cardData.memberId)}>
+                    <img src={cardData?.img ? defaultImg : cardData.img} alt='신청자이미지'/>
                     <span>{cardData?.userName}</span>
                 </div>
                 <div className='data-box col'>
                     <span>{`이메일 : ${cardData?.email}`}</span>
-                    <span>{`재직 상태 : ${cardData?.isEmploy ? '재직 중' : '구직 중'}`}</span>
+                    <span>{`재직 상태 : ${cardData?.working ? '재직 중' : '구직 중'}`}</span>
                     <span className='tag-container row'>
                         {'관심 기술 :'}
                         {cardData.tag.map((item,idx)=>
@@ -103,7 +103,7 @@ export default function SubmitedCard({
                             type={'project'}
                         />)}
                     </span>
-                    <span>{`연락처 : ${cardData?.hotline}`}</span>
+                    <span>{`연락처 : ${cardData?.tell}`}</span>
                     <span
                         className='see-more-box button'
                         onClick={isOnHandler}
@@ -114,7 +114,7 @@ export default function SubmitedCard({
                 className='row'
                 $isOn={isOn}
             >
-                <span>{cardData.body}</span>
+                <span>{cardData?.aboutMe}</span>
             </IntroduceBox>
             <div className='row accept-reject-box'>
                 <span className='button'>수락</span>

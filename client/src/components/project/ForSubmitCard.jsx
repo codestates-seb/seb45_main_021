@@ -7,13 +7,15 @@ const StyleForSubmitCard = styled.div`
     width:100%;
     padding:1rem;
     height:300px;
-    background-color:rgba(50,50,50,0.8);
+    background-color:rgba(30,30,30,0.8);
     opacity:${props => props.$selectedCard ? '0.5' : '1'};
     position:relative;
+    > .row {
+        gap:5%;
+    }
     .image-container {
-        flex:1.3;
+        flex:2;
         overflow:hidden;
-        margin-right:1rem;
         justify-content:center;
         align-items:center;
         > img {
@@ -68,9 +70,7 @@ const IntroduceBox = styled.div`
     height: 100%;
     border: 1px solid var(--black-300);
     margin-top:2rem;
-    > span {
-        padding:1rem;
-    }
+    padding:1rem;
 `
 
 export default function ForSubmitCard({
@@ -88,12 +88,12 @@ export default function ForSubmitCard({
             {selectedCard && <span className='display-selected'>카드 선택됨</span>}
             <div className='row'>
                 <div className='image-container col'>
-                    <img src={cardData?.img.length === 0 ? defaultImg : cardData.img} alt='신청자이미지'/>
+                    <img src={cardData?.img ? cardData.img : defaultImg} alt='신청자이미지'/>
                     <span>{cardData?.userName}</span>
                 </div>
                 <div className='data-box col'>
                     <span>{`이메일 : ${cardData?.email}`}</span>
-                    <span>{`재직 상태 : ${cardData?.isEmploy ? '재직 중' : '구직 중'}`}</span>
+                    <span>{`재직 상태 : ${cardData?.working ? '재직 중' : '구직 중'}`}</span>
                     <div className='row'>
                         <span>{'관심 기술 : '}</span>
                         <div className='tag-box row'>
@@ -108,11 +108,11 @@ export default function ForSubmitCard({
                             )}
                         </div>
                     </div>
-                    <span>{`연락처 : ${cardData?.hotline}`}</span>
+                    <span>{`연락처 : ${cardData?.tell}`}</span>
                 </div>
             </div>
-            <IntroduceBox className='row'>
-                <span>{cardData.body}</span>
+            <IntroduceBox>
+                <span>{cardData.aboutMe}</span>
             </IntroduceBox>
         </StyleForSubmitCard>
     );

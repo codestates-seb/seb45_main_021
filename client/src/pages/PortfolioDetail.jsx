@@ -9,6 +9,8 @@ import AnchorToComment from '../components/portfolio/AncholToComment';
 import Comment from '../components/portfolio/Comment';
 import useNav from '../hooks/useNav';
 import Modal from '../components/common/Modal';
+import api from '../hooks/useAxiosInterceptor'
+import { shapingApiData } from '../utils/shapingApiData';
 
 const OnlyAdmin = styled.div`
   width:100%;
@@ -22,8 +24,8 @@ const DummyData = {
   title : '내가 만든 포트폴리오',
   created_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
   modified_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-  language : 'JAVA',
-  tag : ['테스트태그', '의미없는 태그', '의미없는 태그2'],
+  lang : 'JAVA',
+  tags : ['테스트태그', '의미없는 태그', '의미없는 태그2'],
   body : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
   titleImg : '',
   imgs : ['https://source.unsplash.com/random','https://source.unsplash.com/random','https://source.unsplash.com/random','https://source.unsplash.com/random'],
@@ -89,8 +91,30 @@ export default function ProjectDetail() {
   // loginUserData?.userInfo === detailData.id 
   const fontSize = '1.6rem'
 
+
+  const fetchData = () => {
+    api.get(`/portfolios/1`)
+    .then(res=>{
+      
+      console.log(shapingApiData(res.data));
+      setDetailData(shapingApiData(res.data));
+    })
+    .catch(err=>{
+      console.log(err);
+      // if(err.code === 'ERR_BAD_REQUEST') {
+      //   navigate('/404')
+      // } else if (err.code === 'ERR_BAD_RESPONSE'){
+      //   console.log(err.code);
+      //   setError(true);
+      //   setIsOnDeleteModal(true);
+      // }
+    })
+  }
+
   useEffect(()=>{
-    setDetailData({...DummyData})
+    // fetchData()
+    // setDetailData({...DummyData})
+    
   },[])
 
   return (
@@ -99,7 +123,7 @@ export default function ProjectDetail() {
         type={'confirm'}
         title={'정말 삭제 하시겠습니까?'}
         message={'삭제된 내용은 복귀, 열람이 불가능합니다.'}
-        setIsOn={()=>setIsOnDeleteAlert(!isOnDeleteAlert)}
+        setIsOpen={()=>setIsOnDeleteAlert(!isOnDeleteAlert)}
         checkHandler={()=>{}}
       />}
       <StyleDetailContainer className='col'>

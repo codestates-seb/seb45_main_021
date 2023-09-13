@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components'
 import Page from '../components/common/Page';
 import DetailHead from '../components/PfPjPublic/DetailHead';
@@ -14,6 +14,8 @@ import { desktop, tablet } from '../static/theme';
 import SuspenseDetailPage from '../components/PfPjPublic/DetailSkeletonLoading';
 import ProjectCardSkeletion from './../components/project/ProjectCardSkeleton';
 import JoinCardSkeleton from '../components/project/JoinCardSkeleton';
+import { useNavigate, useParams } from 'react-router-dom';
+import { shapingApiData } from './../utils/shapingApiData';
 
 export const StyleDetailWrapper = styled(Page)`
   padding-top:6rem;
@@ -88,73 +90,63 @@ const OnlyAdmin = styled.div`
 `
 
 const DummyData = {
-  id : 1,
-  title : '프론트엔드 리액트를 사용하여 프로젝트,포트폴리오 공유 프로젝트입니다.',
-  totalPeople:5,
-  joinPeople:[
+  projectId : 1,
+  view : 0,
+  memberId : 9,
+  userName : '박찬섭',
+  userImgUrl : '',
+  title : '안녕하세요wtrgdrgdhtfth',
+  totalPeople : 6,
+  createdAt : String(new Date()),
+  modifiedAt : String(new Date()),
+  closedAt : String(new Date()),
+  body : '기획안 gfukukfhukhfkfhjukvhjm,hjmvhjmhjmvhj,vhj,vhj,vhj,vhj,vhj,vhj,hvj,vmvhjmhjmvhj,vhj,vhj,vhj,vhj,vhj,vhj,hvj,vhjhjv입니다기획안gfukukfhukhfkfhjukvhjm,hjmvhjmhjmvhj,vhj,vhj,vhj,vhj,vhj,vhj,hvj,vhjhjv입니다',
+  joinPeople : 'null', 
+  requestPeople : 'null',
+  description : '즐겁게 해보실 분',
+  lang : 'react',
+  images : [
     {
-      id : 15,
-    },{
-      id : 16,
-    },{
-      id : 21,
-    },
-  ],
-  created_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-  modified_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-  closed_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-  language : 'JAVA',
-  tag : ['테스트태그', '의미없는 태그', '의미없는 태그2'],
-  body : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-  titleImg : '',
-  imgs : ['https://source.unsplash.com/random','https://source.unsplash.com/random','https://source.unsplash.com/random','https://source.unsplash.com/random'],
-  description : '',
-  author : {
-    img : '',
-    userName : '박찬섭', 
-    id : 1,
-  },
-  likes : ["1", "2", "3", "4", "5"],
-  requestPeople : [
-    {
-      id : 5,
-      img : '',
-      userName : '신청자1',
-      email:'1234@naver.com',
-      isEmploy : true,
-      tag : ['java','javascript','C++'],
-      hotline : '010-1234-5678',
-      body : '신청합니다.'
+      imageId : 10,
+      imageUrl : 'https://source.unsplash.com/random'
     },
     {
-      id : 6,
-      img : '',
-      userName : '신청자2',
-      email:'1234@naver.com',
-      isEmploy : false,
-      tag : ['java','javascript','C++'],
-      hotline : '010-1234-5678',
-      body : '신청합니다.'},
+      imageId : 11,
+      imageUrl : 'https://source.unsplash.com/random'
+    },
     {
-      id : 7,
-      img : '',
-      userName : '신청자3',
-      email:'1234@naver.com',
-      isEmploy : true,
-      tag : ['java','javascript','C++'],
-      hotline : '010-1234-5678',
-      body : '신청합니다.'
+      imageId : 12,
+      imageUrl : 'https://source.unsplash.com/random'
     }
-  ]
+  ],
+  projectTitleImage : {
+    projectTitleImageId : 6,
+    imageUrl : 'https://source.unsplash.com/random',
+  },
+  tags : ['테1스트','태스1트','태스3트'],
+  heartCount : 6,
 }
 
-const joinRequestPeople = {
-  
+const RequestPeopleTestData = {
+  joinPeople : [{
+    memberId : 1,
+    imgUrl : '',
+    userName : '테스터'
+  },{
+    memberId : 2,
+    imgUrl : '',
+    userName : '바차서'
+  }],
+  requestPeople : []
 }
 
 export default function ProjectDetail() {
+  const navigate = useNavigate();
+  const [update, setUpdate] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [detailData, setDetailData] = useState({});
   const [requestPeopleData, setRequestPeopledata] = useState([]);
+  const [error, setError] = useState(false);
 
   //디테일페이지조회중인지 신청자현황조회중인지
   const [isOnDetail, setIsOnDetail] = useState(true);
@@ -163,13 +155,18 @@ export default function ProjectDetail() {
 
   //삭제알림
   const [isOnDeleteModal, setIsOnDeleteModal] = useState(false);
-
   const {toProjectEdit} = useNav();
-  const dispatch = useDispatch();
+
   //현재 로그인 한 유저 정보
   const loginUserData = useSelector(state=>state.user);
-  const isAdmin = true;
   const fontSize = '1.6rem'
+  const {projectId} = useParams()
+  // console.log(loginUserData);
+  // console.log(isAdmin);
+
+  const updateHandler = () => {
+    setUpdate((prev)=>!prev);
+  }
 
   const adminFunction = [
     {
@@ -188,15 +185,35 @@ export default function ProjectDetail() {
     }
   ]
 
-  const fetchData = async () => {
+  const fetchData = () => {
+    console.log(projectId);
     setIsPageLoading(true);
-    return new Promise((resolve) => 
-      setTimeout(()=>{
-      resolve(DummyData);
-    }, 1000));
+    api.get(`/projects/${projectId}`)
+    .then(res=>{
+      console.log(shapingApiData(res.data));
+      setIsPageLoading(false);
+      setDetailData(shapingApiData(res.data));
+    })
+    .catch(err=>{
+      if(err.code === 'ERR_BAD_REQUEST') {
+        navigate('/404')
+      } else if (err.code === 'ERR_BAD_RESPONSE'){
+        console.log(err.code);
+        setError(true);
+        setIsOnDeleteModal(true);
+      }
+    })
   }
 
-  const fetchRequestData = async () => {
+  const fetchRequestData = () => {
+    setIsRequestLaoding(true);
+    setTimeout(()=>{
+      setIsRequestLaoding(false);
+      setRequestPeopledata({...RequestPeopleTestData});
+    }, 1000);
+  }
+
+  const fetchMyProjectCard = () => {
     setIsRequestLaoding(true);
     setTimeout(()=>{
       setIsRequestLaoding(false);
@@ -206,22 +223,28 @@ export default function ProjectDetail() {
 
   useEffect(()=>{
     fetchData()
-    .then(res=>{
-      setIsPageLoading(false);
-      setDetailData(res);
-    })
   },[]);
+
+  useEffect(()=>{
+    if(loginUserData.userInfo?.memberId === detailData?.memberId) {
+      setIsAdmin(true);
+    } else {
+      setIsAdmin(false);
+    }
+  },[detailData])
 
   return (
     <StyleDetailWrapper>
         {isOnDeleteModal &&
           <Modal
             setIsOpen={setIsOnDeleteModal}
-            title={'정말 삭제하시겠습니까?'}
-            body={'삭제된 내용은 복구할 수 없습니다.'}
+            title={error ? '통신 에러' : '정말 삭제하시겠습니까?'}
+            body={error ? '다시 시도해 주세요.' : '삭제된 내용은 복구할 수 없습니다.'}
+            confirmHandler={error ? ()=>{navigate(-1)} : undefined}
           />}
-        {isPageLoading ? <SuspenseDetailPage/> :
-        <StyleDetailContainer className='col'>
+        {isPageLoading
+        ? <SuspenseDetailPage/>
+        : <StyleDetailContainer className='col'>
           <DetailHead detailData={detailData} type='project'/>
           {isAdmin &&
           <OnlyAdmin className='row'>
@@ -241,7 +264,7 @@ export default function ProjectDetail() {
               <h2 className='status-title'>참가자 현황</h2>
               {isRequestLoading
               ? <JoinCardSkeleton/>
-              : <JoinStatusContainer joinPeople={detailData.joinPeople}/>
+              : <JoinStatusContainer joinPeople={requestPeopleData.joinPeople}/>
               }
             </StyleStatusContainer>
             <div className='vertical-line'/>
@@ -249,12 +272,17 @@ export default function ProjectDetail() {
               <h2 className='status-title'>신청자 현황</h2>
               {isRequestLoading 
               ? <ProjectCardSkeletion/>
-              : <ProjectCardContainer cardList={requestPeopleData}/>
+              : <ProjectCardContainer cardList={requestPeopleData.requestPeople}/>
               }
             </StyleStatusContainer>
           </div>
           : 
-          <DetailBody detailData={detailData} type='project'/>
+          <DetailBody 
+            detailData={detailData}
+            type='project'
+            isAdmin={isAdmin}
+            updateHandler={updateHandler}
+          />
           }
         </StyleDetailContainer>
         }
