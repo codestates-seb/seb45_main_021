@@ -65,13 +65,15 @@ public class ProjectService {
         project.setProjectTitleImage(titleImage); // 프로젝트에 반영
 
         // 나머지 이미지 로직
-        for (MultipartFile imageFile : imageFiles) { // 배열로 받은 이미지 순회
-            String fileName = s3Service.uploadFile(imageFile); // S3 업로드
-            String imageUrl = String.format("https://%s.s3.amazonaws.com/%s", bucketName, fileName); // URL 생성
+        if (imageFiles != null && !imageFiles.isEmpty()) {
+            for (MultipartFile imageFile : imageFiles) { // 배열로 받은 이미지 순회
+                String fileName = s3Service.uploadFile(imageFile); // S3 업로드
+                String imageUrl = String.format("https://%s.s3.amazonaws.com/%s", bucketName, fileName); // URL 생성
 
-            ProjectImage image = new ProjectImage(); // 이미지 객체 생성
-            image.setImageUrl(imageUrl); // URL 저장
-            project.addImage(image); // 프로젝트에 반영
+                ProjectImage image = new ProjectImage(); // 이미지 객체 생성
+                image.setImageUrl(imageUrl); // URL 저장
+                project.addImage(image); // 프로젝트에 반영
+            }
         }
 
         return projectRepository.save(project);
