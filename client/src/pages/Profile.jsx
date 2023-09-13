@@ -228,13 +228,12 @@ export default function Profile() {
   const [data, setData] = useState(data1);
   useEffect(() => {
     setIsLoading(true);
-    // try {
-    //   api
-    //     .get(`/members/${memberId}/${user.isLogin ? user.userInfo.memberId : 0}`)
-    //     .then((el) => console.log(el));
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    api
+      .get(`/members/${memberId}/${user.isLogin ? user.userInfo.memberId : 0}`)
+      .then((el) => console.log(el))
+      .catch((error) => {
+        console.log(error);
+      });
     setTimeout(() => {
       setIsLoading(false);
     }, 3000);
