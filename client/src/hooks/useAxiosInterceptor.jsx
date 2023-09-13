@@ -15,14 +15,13 @@ const instance = axios.create({
 export const useAxiosInterceptor = () => {
   const dispatch = useDispatch();
   const jwt = useSelector((state) => state.user.jwt);
-  const userInfo = useSelector((state) => state.user.userInfo);
   const { toAbout, toSignin } = useNav();
 
   instance.interceptors.request.use(
     (config) => {
       const newHeaders = { ...config.headers };
       if (jwt?.accesstoken) {
-        newHeaders['accesstoken'] = `Bearer ${jwt.accesstoken}`;
+        newHeaders['accesstoken'] = `${jwt.accesstoken}`;
       } else {
         delete newHeaders['accesstoken'];
       }
@@ -41,7 +40,6 @@ export const useAxiosInterceptor = () => {
 
   instance.interceptors.response.use(
     (response) => {
-      console.log(response.headers.accesstoken);
       const { accesstoken, refreshtoken } = response.headers;
       if (accesstoken && refreshtoken) {
         dispatch(updateUser({ jwt: { accesstoken: accesstoken, refreshtoken: refreshtoken } }));
@@ -56,19 +54,16 @@ export const useAxiosInterceptor = () => {
 
       if (message === 'Bad Token') {
         dispatch(deleteUser());
-        alert('토큰이 잘못 전달되었습니다.');
         toSignin();
       }
 
       if (message === 'refreshToken has expired') {
         dispatch(deleteUser());
-        alert('세션이 만료되었습니다.');
         toSignin();
       }
 
       if (message === 'refreshToken has different') {
         dispatch(deleteUser());
-        alert('새 기기에서 접속하여 로그하웃 되었습니다.');
         toSignin();
       }
 
