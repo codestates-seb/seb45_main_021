@@ -33,8 +33,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/han_db
     username: root
-    password: aass0357!!
-
+    password: gks0923
 
   jpa:
     open-in-view: true
@@ -125,8 +124,8 @@ cloud:
     s3:
       bucket: mainproject-bucket
     credentials:
-      access-key:
-      secret-key:
+      access-key: AKIATUJ7QKHFUAP67DGX
+      secret-key: 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
     region:
       static: ap-northeast-2
       auto: false

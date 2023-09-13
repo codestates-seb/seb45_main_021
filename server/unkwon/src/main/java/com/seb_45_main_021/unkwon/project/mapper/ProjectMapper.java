@@ -110,7 +110,6 @@ public interface ProjectMapper {
                 .memberId(project.getMember().getMemberId())
                 .userName(project.getMember().getUserName())
                 .userImgUrl(project.getMember().getUserImgUrl())
-
                 .title(project.getTitle())
                 .totalPeople(project.getTotalPeople())
                 .joinPeople(project.getJoinPeople())
