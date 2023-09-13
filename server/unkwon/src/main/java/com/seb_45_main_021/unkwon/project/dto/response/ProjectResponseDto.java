@@ -17,6 +17,8 @@ public class ProjectResponseDto {
     private long projectId;
     private int view;
     private long memberId;
+    private  String userName;
+    private String userImgUrl;
     private String title;
     private int totalPeople;
     private LocalDateTime createdAt;

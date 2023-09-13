@@ -8,7 +8,6 @@ import com.seb_45_main_021.unkwon.project.dto.request.ProjectPostDto;
 import com.seb_45_main_021.unkwon.project.dto.request.ProjectRequestDto;
 import com.seb_45_main_021.unkwon.project.dto.response.ProjectProfileResponseDto;
 import com.seb_45_main_021.unkwon.project.dto.response.ProjectResponseDto;
-
 import com.seb_45_main_021.unkwon.project.dto.response.ProjectStatusResponseDto;
 import com.seb_45_main_021.unkwon.project.entity.Project;
 import com.seb_45_main_021.unkwon.project.entity.ProjectStatus;
@@ -16,9 +15,7 @@ import com.seb_45_main_021.unkwon.projectcard.entity.ProjectCard;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-
 import java.util.Arrays;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -109,12 +106,15 @@ public interface ProjectMapper {
         ProjectResponseDto projectResponseDto = ProjectResponseDto.builder()
                 .projectId(project.getProjectId())
                 .memberId(project.getMember().getMemberId())
+                .userName(project.getMember().getUsername())
+                .userImgUrl(project.getMember().getImgUrl())
                 .title(project.getTitle())
                 .totalPeople(project.getTotalPeople())
                 .joinPeople(project.getJoinPeople())
                 .requestPeople(project.getRequestPeople())
                 .createdAt(project.getCreatedAt())
                 .modifiedAt(project.getModifiedAt())
+                .images(project.getImages())
 //                .closedAt(project.getClosedAt())
                 .lang(new String[]{project.getLang()})
                 .tags(new String[]{project.getTags()})
@@ -122,7 +122,6 @@ public interface ProjectMapper {
                 .description(project.getDescription())
                 .heartCount(project.getHeartCount())
                 .view(project.getView())
-                .images(project.getImages())
                 .projectTitleImage(project.getProjectTitleImage())
                 .build();
 
