@@ -23,6 +23,7 @@ export default function ShowProfile({
   setEditPassword,
   handleEditPassword,
   handleClickWithdrawal,
+  handleResetEditProfile,
 }) {
   const user = useSelector((state) => state.user);
   const fileInputRef = React.createRef();
@@ -53,6 +54,7 @@ export default function ShowProfile({
           <Modal
             setIsOpen={setIsOpenEditInfo}
             confirmHandler={handleEditProfile}
+            cancelHandler={handleResetEditProfile}
             children={
               <EditProfile
                 editProfile={editProfile}
