@@ -1,6 +1,6 @@
 import useNav from '../../hooks/useNav';
 import { styled } from 'styled-components';
-
+import scollToTop from '../../utils/scrollToTop';
 const StyleTag = styled.div`
   padding: ${(props) => props.$padding || '5px 7px'};
   font-size: ${(props) => props.$padding || '1.4rem'};
@@ -33,7 +33,14 @@ export default function Tag({ text, type, size, padding, edit }) {
   const { toSearch } = useNav();
 
   return (
-    <StyleTag $padding={padding} $size={size} onClick={() => !edit && toSearch(text, type)}>
+    <StyleTag
+      $padding={padding}
+      $size={size}
+      onClick={() => {
+        !edit && toSearch(text, type);
+        scollToTop();
+      }}
+    >
       {text}
     </StyleTag>
   );

@@ -6,7 +6,7 @@ import useNav from '../../hooks/useNav';
 import Tag from '../common/Tag';
 import Like from '../common/Like';
 import DateUser from '../common/DateUser';
-
+import EmployBadge from '../common/EmployBadge';
 const StylePostListItem = styled.li`
   border-radius: 3px;
   overflow: hidden;
@@ -52,26 +52,40 @@ const StylePostListItem = styled.li`
 `;
 export default function PostListItem({ post, type }) {
   const { toProjectDetail, toPortfolioDetail } = useNav();
-  const { language, titleImg, title, id, tag, likes, created_At, author } = post;
+  const {
+    lang,
+    titleImg,
+    title,
+    tag,
+    likes,
+    portfolioId,
+    projectId,
+    createdAt,
+    author,
+    isEmploy,
+    memberId,
+  } = post;
 
+  const id = portfolioId || projectId;
   const onDetailHandler = (id) => {
     type === 'projects' ? toProjectDetail(id) : toPortfolioDetail(id);
   };
 
   return (
     <StylePostListItem>
-      <LanguageTag language={language} />
+      {type === 'portfolios' && isEmploy && <EmployBadge />}
+      <LanguageTag language={lang} />
       <img src={titleImg || defaultImg} alt="post title img" onClick={() => onDetailHandler(id)} />
       <div className="content-box">
         <h4 onClick={() => onDetailHandler(id)}>{title}</h4>
         <div className="tag">
-          {tag.map((tagItem) => (
+          {tag?.map((tagItem) => (
             <Tag text={tagItem} key={tagItem} type={type} />
           ))}
         </div>
         <div className="user">
           <Like size="17px" likes={likes} postId={id} />
-          <DateUser size="13px" date={created_At} user={author} />
+          <DateUser size="13px" date={createdAt} user={author} />
         </div>
       </div>
     </StylePostListItem>

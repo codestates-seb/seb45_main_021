@@ -199,6 +199,7 @@ export default function SignUp() {
       setIsSubmit(true);
       if (isvalidEmail && isvalidPassword) {
         const data = JSON.stringify({ userName, email, password });
+        console.log('회원가입 요청');
         api.post('/members/signup', data).then(() => {
           toSignin();
         });

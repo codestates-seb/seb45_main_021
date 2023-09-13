@@ -5,24 +5,20 @@ import { HiOutlineSearch } from 'react-icons/hi';
 import useForm from '../../hooks/useForm';
 import useNav from '../../hooks/useNav';
 import RecentSearches from './RecentSearches';
-import { mobile, tablet, desktop, custom } from '../../static/theme.js';
 
 const StyleSearchInput = styled.div`
   width: 100%;
   opacity: ${(props) => (props.$hidden ? '0' : '1')};
   visibility: ${(props) => (props.$hidden ? 'hidden' : 'visible')};
+  height: ${(props) => (props.$hidden ? '0px' : 'auto')};
   flex: 1;
   position: relative;
-  ${custom(900)} {
-    top: 50px;
-    position: absolute;
-  }
   input {
     border: 2px solid var(--black-400);
     width: 100%;
     height: 40px;
     border-radius: 20px;
-    font-size: 16px;
+    font-size: 1.6rem;
     background-color: transparent;
     font-weight: var(--nanum-semi-bold);
     color: var(--black-100);
@@ -48,7 +44,7 @@ const StyleSearchInput = styled.div`
 
 const searchHiddenPath = ['portfolio/write', 'project/write', 'portfolio/edit', 'project/edit', ''];
 
-export default function SearchBox() {
+export default function SearchBox({ callback, ...rest }) {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const currentKeyword = queryParams.get('keyword') || '';
@@ -98,6 +94,7 @@ export default function SearchBox() {
       setSearchHistory(newHistory);
       localStorage.setItem('searchHistory', JSON.stringify(newHistory));
       toSearch(keyword, 'projects');
+      if (callback) callback();
     }
   };
 
@@ -107,7 +104,6 @@ export default function SearchBox() {
       updateSearchHistory(searchInput.keyword.trim());
     }
   };
-
   return (
     <StyleSearchInput
       $hidden={isSearchHidden}
@@ -115,6 +111,7 @@ export default function SearchBox() {
         e.stopPropagation();
         setIsInputFocused(true);
       }}
+      {...rest}
     >
       <form onSubmit={searchHandler}>
         <input

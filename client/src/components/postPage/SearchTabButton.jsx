@@ -1,11 +1,11 @@
 import React from 'react';
 import { styled } from 'styled-components';
-import { tablet, mobile } from '../../static/theme.js';
+import { tablet } from '../../static/theme.js';
 
 const StyleSearchButton = styled.div`
   display: flex;
   position: relative;
-  background-color: #1a1f1b;
+  background-color: var(--backgroundColor);
   border-radius: 50px;
   overflow: hidden;
   width: 30%;
@@ -29,10 +29,6 @@ const StyleSearchButton = styled.div`
   }
   ${tablet} {
     width: 100%;
-    margin-bottom: 20px;
-  }
-  ${mobile} {
-    margin-bottom: 0;
   }
 `;
 

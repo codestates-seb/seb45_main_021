@@ -1,8 +1,7 @@
 import { styled } from 'styled-components';
 import Select from '../common/Select';
 import { languagesOption, sortOption } from '../../static/options.js';
-import CheckBox from '../common/CheckBox';
-import { mobile } from '../../static/theme.js';
+import { tablet, mobile } from '../../static/theme.js';
 
 const StyleFilterOption = styled.div`
   display: flex;
@@ -11,23 +10,13 @@ const StyleFilterOption = styled.div`
   z-index: 1;
   width: 100%;
   align-items: end;
-  padding-bottom: 20px;
+  position: relative;
   .select {
-    position: static;
+    position: relative;
   }
-  .check-box {
-    margin-left: auto;
-  }
-
   ${mobile} {
-    flex-wrap: wrap;
-    padding-bottom: 95px;
-    justify-content: space-between;
     .select-container {
       width: calc(50% - 8px);
-    }
-    .check-box {
-      margin-left: 0;
     }
   }
 `;
@@ -61,15 +50,6 @@ export default function FilterOption({ optionHandler, options, pageType }) {
         defaultLabel={sort === 'latest' ? '최신순' : '관심순'}
         onClickHandler={(value) => optionHandler('sort', value)}
       />
-
-      {pageType === 'portfolios' && (
-        <CheckBox
-          value={employ}
-          boxSize="25px"
-          label="구직용 포트폴리오 모아보기"
-          onChange={(value) => optionHandler('employ', value)}
-        />
-      )}
     </StyleFilterOption>
   );
 }

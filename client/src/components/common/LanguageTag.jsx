@@ -27,7 +27,7 @@ const StyleLanguageTag = styled.span`
   font-family: var(--barlow);
   font-size: 2rem;
   letter-spacing: 1px;
-  width: 15rem;
+  width: 150px;
   text-align: center;
   transform: rotate(-45deg);
 `;
