@@ -36,7 +36,8 @@ export default function useFilterOption() {
     const params = [];
 
     if (keyword !== DEFAULT_OPTIONS.keyword) {
-      params.push(`tags=${keyword}`);
+      const encodedKeyword = encodeURIComponent(keyword);
+      params.push(`tags=${encodedKeyword}`);
     }
     if (lang !== DEFAULT_OPTIONS.lang) {
       params.push(`lang=${lang}`);

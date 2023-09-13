@@ -15,19 +15,20 @@ const instance = axios.create({
 export const useAxiosInterceptor = () => {
   const dispatch = useDispatch();
   const jwt = useSelector((state) => state.user.jwt);
-  const userInfo = useSelector((state) => state.user.userInfo);
   const { toAbout, toSignin } = useNav();
-  console.log(jwt);
+
   instance.interceptors.request.use(
     (config) => {
+      const localData = JSON.parse(localStorage.getItem('persist:root'));
+      const { accesstoken, refreshtoken } = JSON.parse(localData.user).jwt;
       const newHeaders = { ...config.headers };
-      if (jwt?.accesstoken) {
-        newHeaders['accesstoken'] = `Bearer ${jwt.accesstoken}`;
+      if (accesstoken) {
+        newHeaders['accesstoken'] = accesstoken;
       } else {
         delete newHeaders['accesstoken'];
       }
       if (jwt?.refreshtoken) {
-        newHeaders['refreshtoken'] = `${jwt.refreshtoken}`;
+        newHeaders['refreshtoken'] = refreshtoken;
       } else {
         delete newHeaders['refreshtoken'];
       }
@@ -55,36 +56,16 @@ export const useAxiosInterceptor = () => {
 
       if (message === 'Bad Token') {
         dispatch(deleteUser());
-        try {
-          instance.post(`/members/logout/${userInfo.memberId}`);
-        } catch (error) {
-          console.log(error);
-        }
-        toAbout();
-        alert('토큰이 잘못 전달되었습니다.');
         toSignin();
       }
 
       if (message === 'refreshToken has expired') {
         dispatch(deleteUser());
-        try {
-          instance.post(`/members/logout/${userInfo.memberId}`);
-        } catch (error) {
-          console.log(error);
-        }
-        toAbout();
-        alert('세션이 만료되었습니다.');
         toSignin();
       }
 
       if (message === 'refreshToken has different') {
         dispatch(deleteUser());
-        try {
-          instance.post(`/members/logout/${userInfo.memberId}`);
-        } catch (error) {
-          console.log(error);
-        }
-        alert('새 기기에서 접속하여 로그하웃 되었습니다.');
         toSignin();
       }
 

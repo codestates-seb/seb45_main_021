@@ -7,7 +7,7 @@ import AboutThird from '../components/about/AboutThird';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { styled } from 'styled-components';
-
+import { tablet } from '../static/theme';
 const StyleAbout = styled.main`
   & > .swiper {
     width: 100vw;
@@ -25,6 +25,9 @@ const StyleAbout = styled.main`
     display: flex;
     flex-direction: column;
     align-items: center;
+    ${tablet} {
+      margin-right: 0;
+    }
   }
   .swiper-pagination-bullet {
     background-color: var(--black-100);

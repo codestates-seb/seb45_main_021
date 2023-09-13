@@ -6,6 +6,7 @@ import { styled } from 'styled-components';
 import { Autoplay } from 'swiper/modules';
 import OneWeekTopTenItem from './OneWeekTopTenItem';
 import { tablet } from '../../static/theme';
+import api from '../../hooks/useAxiosInterceptor';
 const StyleOneWeekTopTenList = styled.div`
   padding-bottom: 10px;
   ${tablet} {
@@ -22,10 +23,19 @@ const StyleOneWeekTopTenList = styled.div`
 `;
 
 export default function OneWeekTopTenList({ pageType }) {
-  const [topTenList, setTopTenList] = useState([...list.portfolios]);
+  const [topTenList, setTopTenList] = useState([]);
 
   useEffect(() => {
-    // TopTenList를 받아와서, setTopTenList를 해야함
+    async function fetchOneWeekTopTenList() {
+      let res;
+      if (pageType === 'projects') {
+        res = await api.get('/project/hearts/weekly-top');
+      } else if (pageType === 'portfolios') {
+        res = await api.get('/portfolio/hearts/weekly-top');
+      }
+      console.log({ res });
+    }
+    fetchOneWeekTopTenList();
   }, [pageType]);
 
   return (

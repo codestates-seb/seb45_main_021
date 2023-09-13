@@ -8,39 +8,48 @@ import { useEffect, useState } from 'react';
 import data from '../../static/portfolio.json';
 import AboutPortfolioCard from './AboutPortfolioCard';
 import StyleFilter from '../common/Filter';
-
+import { tablet, desktop, mobile } from '../../static/theme.js';
 const StyleAboutSecond = styled.section`
   width: 100vw;
   height: 100vh;
   position: relative;
   background-image: url(${img});
   background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   .center {
-    display: flex;
-    gap: 1rem;
-    width: var(--inner);
-    height: 35rem;
+    height: 460px;
+    width: 700px;
+    ${tablet} {
+      width: 90%;
+    }
   }
   .page-description {
-    flex: 1;
+    padding-left: 45px;
+    display: flex;
+    align-items: end;
+    padding-bottom: 10px;
+    ${tablet} {
+      padding: 0 0 10px 0;
+      margin-left: -3px;
+    }
     h3 {
-      flex: 1;
       font-size: 10rem;
-      margin-top: -1.5rem;
-      margin-left: -0.5rem;
       font-family: var(--barlow);
       color: var(--black-100);
       text-shadow: 3px 3px 6px var(--black-800);
     }
-    p {
-      line-height: 1.8;
-      font-size: 2rem;
-      font-weight: var(--nanum-semi-bold);
-      text-shadow: 2px 2px 6px var(--black-800);
+    span {
+      padding: 0 0 5px 20px;
+      font-weight: var(--barlow-bold);
+      font-family: var(--barlow);
+      font-size: 2.5rem;
+      text-shadow: 3px 3px 6px var(--black);
     }
   }
   .wrapper {
-    width: 70rem;
+    width: 650px;
   }
   .swiper-wrapper {
     transition-timing-function: ease !important;
@@ -61,7 +70,7 @@ const StyleAboutSecond = styled.section`
     color: var(--black-100);
   }
   .swiper-button-disabled {
-    opacity: 0;
+    opacity: 0 !important;
   }
 `;
 
@@ -87,33 +96,24 @@ export default function AboutSecond({ activePage }) {
   return (
     <StyleAboutSecond>
       <StyleFilter $background="#00000050" />
-      <div className="center ">
-        <div className="page-description col">
+      <div className="center">
+        <div className="page-description">
           <h3>BEST {ranking}</h3>
-          <p>
-            SPEC에서 현재 가장 핫한 포트폴리오 10선을 소개합니다 <br />
-            <br />
-            SPEC은 누구나 자신의 포트폴리오를 자유롭게 올리고, <br />
-            공유할 수 있는 사이트입니다. <br />
-            SPEC을 통해 창작자와 관람객이 소통하고, <br />
-            서로의 영감을 나눌 수 있는 공간을 만들고자 합니다.
-          </p>
+          <span>포트폴리오</span>
         </div>
-        <div className="wrapper">
-          <Swiper
-            modules={[Navigation]}
-            slidesPerView={1}
-            spaceBetween={10}
-            navigation={true}
-            onSlideChange={swiperSwitchHandler}
-          >
-            {data.portfolios.map((portfolio) => (
-              <SwiperSlide key={portfolio.id}>
-                <AboutPortfolioCard portfolio={portfolio} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
+        <Swiper
+          modules={[Navigation]}
+          slidesPerView={1}
+          spaceBetween={0}
+          navigation={true}
+          onSlideChange={swiperSwitchHandler}
+        >
+          {data.portfolios.map((portfolio) => (
+            <SwiperSlide key={portfolio.id}>
+              <AboutPortfolioCard portfolio={portfolio} />
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
     </StyleAboutSecond>
   );

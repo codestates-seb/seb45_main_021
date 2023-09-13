@@ -13,13 +13,12 @@ const StylePostList = styled.ul`
     gap: 20px;
     padding-bottom: 20px;
   }
-  ${tablet} {
+  \ ${tablet} {
     grid-template-columns: 1fr;
   }
 `;
 
 export default function PostList({ postData, type }) {
-  console.log(postData);
   return (
     <StylePostList>
       {postData.map((post, i) => (

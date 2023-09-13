@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components'
 import defaultImg from '../../static/images/userDefaultImg.jpeg'
 import Like from '../common/Like';
@@ -86,21 +86,21 @@ export default function DetailHead({
             <div className='row'>
                 <div
                     className='row author-wrapper'
-                    onClick={()=>toProfile(detailData.author.id)}
+                    onClick={()=>toProfile(detailData.memberId)}
                 >
-                    <img src={detailData.author.img.length === 0 ? defaultImg : detailData.author.img} alt='작성자이미지'/>
-                    <h3>{detailData.author.userName}</h3>
+                    <img src={detailData.userImgUrl ? detailData.userImgUrl : defaultImg} alt='작성자이미지'/>
+                    <h3>{detailData.userName}</h3>
                 </div>
-                <h3>{dateFormatter(detailData.created_At)}</h3>
+                <h3>{dateFormatter(detailData.createdAt)}</h3>
                 <Like
-                    likes={detailData.likes}
+                    likes={detailData.heartCount}
                     size={'1.6rem'}
                 />
             </div>
             <Border/>
-            <HiX
+            {/* <HiX
                 onClick={()=>type==='project' ? toProject() : toPortfolio()}
-            />
+            /> */}
         </StyleDetailHead>
     )
 }

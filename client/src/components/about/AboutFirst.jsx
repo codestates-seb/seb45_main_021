@@ -5,10 +5,11 @@ import video from '../../static/videos/first.mp4';
 import { MdKeyboardDoubleArrowDown } from 'react-icons/md';
 import { BsMouse } from 'react-icons/bs';
 import StyleFilter from '../common/Filter';
+import { LiaHandPointerSolid } from 'react-icons/lia';
+import { tablet } from '../../static/theme.js';
 
 const StyleAboutFirst = styled.section`
   .center {
-    width: 60rem;
     height: 18rem;
   }
   h3 {
@@ -40,6 +41,13 @@ const StyleAboutFirst = styled.section`
   .mouse {
     animation: mouseUi 1s ease-in-out infinite alternate;
   }
+  .hand {
+    animation: handUi 1s ease-in-out infinite alternate;
+  }
+  .hand {
+    display: none;
+  }
+
   @keyframes mouseUi {
     0%,
     100% {
@@ -51,9 +59,34 @@ const StyleAboutFirst = styled.section`
       margin-bottom: 1rem;
     }
   }
+  @keyframes handUi {
+    0%,
+    100% {
+      opacity: 1;
+      margin-bottom: 1rem;
+    }
+    100% {
+      opacity: 0;
+      margin-bottom: 3rem;
+    }
+  }
   .arrow-down {
     color: var(--black-400);
     margin-bottom: 2rem;
+  }
+  ${tablet} {
+    .hand {
+      display: block;
+    }
+    .mouse {
+      display: none;
+    }
+    h3 {
+      font-size: 8rem;
+    }
+    p {
+      font-size: 1.4rem;
+    }
   }
 `;
 
@@ -82,6 +115,7 @@ export default function AboutFirst({ activePage }) {
       </div>
       <div className="scroll-info">
         <BsMouse size={35} className="mouse" />
+        <LiaHandPointerSolid size={35} className="hand" />
         <MdKeyboardDoubleArrowDown className="arrow-down" size={25} />
       </div>
     </StyleAboutFirst>

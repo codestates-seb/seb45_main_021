@@ -202,13 +202,14 @@ export default function SignIn() {
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
-    try {
-      const isvalidEmail = isValidEmail(email);
-      const isvalidPassword = isValidPassword(password);
-      setIsSubmit(true);
-      if (isvalidEmail && isvalidPassword) {
-        setError({ email: '', password: '' });
-        api.post('/members/login', { email, password }).then((el) => {
+    const isvalidEmail = isValidEmail(email);
+    const isvalidPassword = isValidPassword(password);
+    setIsSubmit(true);
+    if (isvalidEmail && isvalidPassword) {
+      setError({ email: '', password: '' });
+      api
+        .post('/members/login', { email, password })
+        .then((el) => {
           dispatch(
             updateUser({
               isLogin: true,
@@ -225,24 +226,24 @@ export default function SignIn() {
             }),
           );
           toAbout();
+        })
+        .catch((error) => {
+          if (error.response.status === 401) {
+            setError({ ...error, password: '비밀번호가 유효하지 않습니다.' });
+          }
+          if (error.response.status === 404) {
+            setError({ ...error, email: '이메일이 유효하지 않습니다.' });
+          }
         });
-      } else if (!isvalidEmail && !isvalidPassword) {
-        setError({
-          email: '올바른 이메일 형식을 입력해주세요.',
-          password: '영어,숫자,특수기호 포함 8글자 이상으로 입력해주세요.',
-        });
-      } else if (!isvalidEmail) {
-        setError({ ...error, email: '올바른 이메일 형식을 입력해주세요.' });
-      } else if (!isvalidPassword) {
-        setError({ ...error, password: '영어,숫자,특수기호 포함 8글자 이상으로 입력해주세요.' });
-      }
-    } catch (error) {
-      if (error.response.status === 401) {
-        setError({ ...error, password: '비밀번호가 유효하지 않습니다.' });
-      }
-      if (error.response.status === 404) {
-        setError({ ...error, email: '이메일이 유효하지 않습니다.' });
-      }
+    } else if (!isvalidEmail && !isvalidPassword) {
+      setError({
+        email: '올바른 이메일 형식을 입력해주세요.',
+        password: '영어,숫자,특수기호 포함 8글자 이상으로 입력해주세요.',
+      });
+    } else if (!isvalidEmail) {
+      setError({ ...error, email: '올바른 이메일 형식을 입력해주세요.' });
+    } else if (!isvalidPassword) {
+      setError({ ...error, password: '영어,숫자,특수기호 포함 8글자 이상으로 입력해주세요.' });
     }
     setIsSubmit(false);
   };

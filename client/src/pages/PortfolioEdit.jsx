@@ -3,7 +3,6 @@ import { styled } from 'styled-components';
 import Input from '../components/common/Input';
 import Select from '../components/common/Select';
 import FileInput from '../components/common/FileInput';
-import { StyleBorderButton } from '../components/common/Buttons';
 import  useForm  from '../hooks/useForm';
 import Page from './../components/common/Page';
 import useNav from '../hooks/useNav';
@@ -15,8 +14,10 @@ import { checkValidations } from '../utils/checkValidations';
 import ProGress from '../components/common/ProGress';
 import ToggleButton from '../components/common/ToggleButton';
 import languages from '../static/languages';
-import { portFolioErrorInitData, portFolioWriteInitData, portFolioWriteRule } from '../static/portFolioInit';
-import SubmitBox from '../components/PfPjPublic/SubmitBox';
+import { portfolioErrorInitData, portfolioWriteInitData, portfolioWriteRule } from '../static/portfolioInit';
+import SubmitModalBox from '../components/PfPjPublic/SubmitModalBox';
+import { shapingApiData } from '../utils/shapingApiData';
+import { writeSubmitHandler } from '../utils/writeSubmitHandler';
 
 const StyleProjectWrite = styled(Page)`
   height:auto;
@@ -64,73 +65,41 @@ const StyleProjectWrite = styled(Page)`
   }
 `
 
-const DummyData = {
-  id : 1,
-  title : '내가 만든 포트폴리오',
-  created_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-  modified_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-  language : 'JAVA',
-  tags : ['테스트태그', '의미없는 태그', '의미없는 태그2'],
-  body : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-  titleImg : '',
-  imgs : ['https://source.unsplash.com/random','https://source.unsplash.com/random','https://source.unsplash.com/random','https://source.unsplash.com/random'],
-  author : {
-    img : '',
-    userName : '박찬섭', 
-    id : 1,
+const responseData = {
+  projectId : 41,
+  view : 0,
+  memberId : 7,
+  title : '안녕하세요wtrgdrgdhtfth',
+  createdAt : String(new Date()),
+  modifiedAt : String(new Date()),
+  body : '기획안 gfukukfhukhfkfhjukvhjm,hjmvhjmhjmvhj,vhj,vhj,vhj,vhj,vhj,vhj,hvj,vhjhjv입니다기획안 gfukukfhukhfkfhjukvhjm,hjmvhjmhjmvhj,vhj,vhj,vhj,vhj,vhj,vhj,hvj,vhjhjv입니다기획안 gfukukfhukhfkfhjukvhjm,hjmvhjmhjmvhj,vhj,vhj,vhj,vhj,vhj,vhj,hvj,vhjhjv입니다',
+  description : '즐겁게 해보실 분',
+  lang : 'react',
+  images : [
+    {
+      imageId : 10,
+      imageUrl : 'https://source.unsplash.com/random'
+    },
+    {
+      imageId : 11,
+      imageUrl : 'https://source.unsplash.com/random'
+    },
+    {
+      imageId : 12,
+      imageUrl : 'https://source.unsplash.com/random'
+    }
+  ],
+  projectTitleImage : {
+    projectTitleImageId : 6,
+    imageUrl : 'https://source.unsplash.com/random',
   },
-  isComments : true,
-  comments : [{
-    created_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-    modified_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-    img : '',
-    userName : '이종범', 
-    id : 1,
-    body : ', consectetur'
-  },{
-    created_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-    modified_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-    img : '',
-    userName : '유명인', 
-    id : 2,
-    body : 'Lorem ipsum dolor sit amet, consectetㅁ;ㅈ으맞위맞ㅇur'
-  },{
-    created_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-    modified_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",  
-    img : '',
-    userName : 'qkrckstjq', 
-    id : 3,
-    body : 'Lorem ipsum dolor sit amet, conseㅁ;ㅣㅏ주이ㅏㅁ쥬ㅜ이뮤ㅜㅈ이ㅏur'
-  },{
-    created_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-    modified_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-    img : '',
-    userName : 'qkrckstjqtqwe', 
-    id : 4,
-    body : 'Lorem ipsum do송ㅅ료ㅓㅗㄹ효ㅓㄹ허lor sit amet, consectetur'
-  },{
-    created_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-    modified_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-    img : '',
-    userName : 'dlfknkldf', 
-    id : 5,
-    body : 'Lorem ipsuㅊ호ㅓㅇㅊ효ㅓㅊ효ㅓㅕm dolor sit amet, consectetur'
-  },{
-    created_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-    modified_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-    img : '',
-    userName : '박찬SDRG섭', 
-    id : 6,
-    body : 'Lorem ipsum dolor sitㅊ허ㅏㅊ혀ㅏ쳐 amet, consectetur'
-  }],
-  likes : ["1", "2", "3", "4", "5"],
+  tags : ['테1스트','태스1트','태스3트']
 }
 
 export default function PortfolioEdit() {
   const {toPortfolio} = useNav();
-  const [dataForm,handleInputChange, clearForm, setDataForm] = useForm(portFolioWriteInitData);
-  const [errors, handleErrorChange, clearError, setErrors ] = useError(portFolioErrorInitData , portFolioWriteRule);
-  const [willDeletedImgs, setWillDeleteImgs] = useState({titleImg : [], imgs : [],});
+  const [dataForm,handleInputChange, clearForm, setDataForm] = useForm(portfolioWriteInitData);
+  const [errors, handleErrorChange, clearError, setErrors ] = useError({} , portfolioWriteRule);
 
   const width = '100%';
   const height = '70rem';
@@ -138,7 +107,7 @@ export default function PortfolioEdit() {
   useEffect(()=>{
     // api.get()
     //요청후
-    setDataForm({...DummyData});
+    setDataForm(shapingApiData(responseData));
   },[])
 
   //테스트용 언어 옵션들
@@ -150,22 +119,6 @@ export default function PortfolioEdit() {
     }
     return arr;
   })()
-
-  //errors에 하나라도 있으면 오류 뱉음
-  const subMitHandler = () => {
-    if(Object.keys(errors).length) {
-      console.log('유효성검사에 문제가 존재함');
-      const newError = {...errors};
-      for (let key in newError) {
-        newError[key] = true;
-      }
-      setErrors(newError);
-      window.scrollTo(0,0);
-    } else {
-      console.log('유효성검사에 문제없음');
-      console.log(dataForm);
-    }
-  }
 
   return (
     <StyleProjectWrite className='col'>
@@ -190,7 +143,7 @@ export default function PortfolioEdit() {
             width={'100%'}
             height={'1.2rem'}
             fontSize={'1.2rem'}
-            comPleteNum={portFolioWriteRule.title.max}
+            comPleteNum={portfolioWriteRule.title.max}
             proGressNum={dataForm.title.length ?? 0}
             error={dataForm.title.length < 10 ? true : false}
           />
@@ -200,13 +153,13 @@ export default function PortfolioEdit() {
             component={<Select
               width={width}
               options={languagesOptions}
-              defaultLabel={dataForm.language}
+              defaultLabel={dataForm.lang}
               onClickHandler={(e)=>{
                 handleInputChange(null,e,'language')
                 handleErrorChange(null,e,'language',checkValidations)
               }}
             />}
-            error={errors.language}
+            error={errors.lang}
             name='언어'
           />
 
@@ -254,7 +207,7 @@ export default function PortfolioEdit() {
             width={'100%'}
             height={'1.2rem'}
             fontSize={'1.2rem'}
-            comPleteNum={portFolioWriteRule.body.max}
+            comPleteNum={portfolioWriteRule.body.max}
             proGressNum={dataForm.body.length ?? 0}
             error={dataForm.body.length < 100 ? true : false}
           />
@@ -270,9 +223,9 @@ export default function PortfolioEdit() {
             dataForm={dataForm}
             handleInputChange={handleInputChange}
             handleErrorChange={handleErrorChange}
-            setWillDeleteImgs={setWillDeleteImgs}
+            setWillDeleteImgs={true}
             clearError={clearError}
-            defaultImgs={dataForm.titleImg}
+            defaultImgs={dataForm.projectTitleImage}
           />
 
           <FileInput
@@ -282,15 +235,15 @@ export default function PortfolioEdit() {
             number={7}
             dataForm={dataForm}
             handleInputChange={handleInputChange}
-            setWillDeleteImgs={setWillDeleteImgs}
-            defaultImgs={dataForm.imgs}
+            setWillDeleteImgs={true}
+            defaultImgs={dataForm.images}
           />
         </div>
       </div>
-      <SubmitBox
+      <SubmitModalBox
         submitTitle={'작성 확인'}
         submitMessage={'댓글 허락하지 않음 선택 시 기존의 댓글들도 보이지 않습니다.'}
-        submitCheckHandler={subMitHandler}
+        submitCheckHandler={()=>writeSubmitHandler(dataForm, errors,setErrors,'portfolio')}
         cancelTitle={'취소 확인'}
         cancelMessage={'취소시 작성한 내용은 저장되지 않습니다.'}
         cancelCheckHandler ={toPortfolio}

@@ -1,5 +1,10 @@
 export function dateFormatter(date) {
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  const formattedDate = new Date(date).toLocaleDateString('ko-KR', options);
-  return formattedDate;
+  const dateObj = new Date(date);
+  const year = dateObj.getFullYear();
+  const month = dateObj.getMonth() + 1; // 월은 0부터 시작하므로 1을 더합니다.
+  const day = dateObj.getDate(); // 일
+  const hour = dateObj.getHours();
+  const minute = dateObj.getMinutes();
+
+  // console.log(year, month, day, hour, minute);
 }

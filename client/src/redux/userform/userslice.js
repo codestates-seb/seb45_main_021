@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import api from '../../hooks/useAxiosInterceptor';
-import Toast from '../../components/toast/Toast';
 
 const initialvalue = {
   isLogin: false,
@@ -24,6 +23,9 @@ const userSlice = createSlice({
      * @dispatch - {isLogin:false,userInfo:null,jwt:{accessToken:null,refreshToken:null}}
      */
     deleteUser: (state) => {
+      if (state.userInfo?.memberId) {
+        api.post(`/members/logout/${state.userInfo.memberId}`).catch((error) => console.log(error));
+      }
       return { isLogin: false, userInfo: null, jwt: { accessToken: null, refreshToken: null } };
     },
   },

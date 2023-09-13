@@ -4,20 +4,11 @@ import { StyleBorderButton } from '../common/Buttons';
 import { useDispatch } from 'react-redux';
 import { deleteUser } from '../../redux/userForm/userSlice';
 import userDefaultImg from '../../static/images/userDefaultImg.jpeg';
-import api from '../../hooks/useAxiosInterceptor';
 
 export default function LoginActions({ userInfo }) {
   const { memberId, userImgUrl } = userInfo;
   const { toProfile } = useNav();
   const dispatch = useDispatch();
-
-  const handleDelete = () => {
-    try {
-      api.post(`/members/logout/${memberId}`);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <>
@@ -25,15 +16,15 @@ export default function LoginActions({ userInfo }) {
         src={userImgUrl ? userImgUrl : userDefaultImg}
         alt="user profile"
         onClick={() => toProfile(memberId)}
-      />
-      <StyleBorderButton
-        onClick={() => {
-          dispatch(deleteUser());
-          handleDelete();
+        style={{
+          cursor: 'pointer',
+          marginRight: '5px',
+          borderRadius: '50%',
+          width: '45px',
+          border: '1px solid var(--black-800)',
         }}
-      >
-        로그아웃
-      </StyleBorderButton>
+      />
+      <StyleBorderButton onClick={() => dispatch(deleteUser())}>로그아웃</StyleBorderButton>
     </>
   );
 }
