@@ -193,37 +193,41 @@ export default function SignUp() {
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
-    try {
-      const isvalidEmail = isValidEmail(email);
-      const isvalidPassword = isValidPassword(password);
-      setIsSubmit(true);
-      if (isvalidEmail && isvalidPassword) {
-        const data = JSON.stringify({ userName, email, password });
-        console.log('회원가입 요청');
-        api.post('/members/signup', data).then(() => {
+    const isvalidEmail = isValidEmail(email);
+    const isvalidPassword = isValidPassword(password);
+    setIsSubmit(true);
+    if (isvalidEmail && isvalidPassword) {
+      const data = JSON.stringify({ userName, email, password });
+      console.log('회원가입 요청');
+      api
+        .post('/members/signup', data)
+        .then(() => {
           toSignin();
+        })
+        .catch((error) => {
+          if (error.response.status === 409) {
+            setError({ ...error, email: '이미 존재하는 이메일 입니다.' });
+          }
         });
-      } else if (!isvalidEmail && !isvalidPassword) {
-        setError({
-          email: '올바른 이메일 형식을 입력해주세요.',
-          password: '영어,숫자,특수기호 포함 8글자 이상으로 입력해주세요.',
-        });
-      } else if (!isvalidEmail) {
-        setError({ ...error, email: '올바른 이메일 형식을 입력해주세요.' });
-      } else if (!isvalidPassword) {
-        setError({ ...error, password: '영어,숫자,특수기호 포함 8글자 이상으로 입력해주세요.' });
-      }
-    } catch (error) {
-      if (error.response.status === 409) {
-        setError({ ...error, email: '이미 존재하는 이메일 입니다.' });
-      }
+    } else if (!isvalidEmail && !isvalidPassword) {
+      setError({
+        email: '올바른 이메일 형식을 입력해주세요.',
+        password: '영어,숫자,특수기호 포함 8글자 이상으로 입력해주세요.',
+      });
+    } else if (!isvalidEmail) {
+      setError({ ...error, email: '올바른 이메일 형식을 입력해주세요.' });
+    } else if (!isvalidPassword) {
+      setError({ ...error, password: '영어,숫자,특수기호 포함 8글자 이상으로 입력해주세요.' });
     }
     setIsSubmit(false);
   };
 
   const handleClickGoogleBtn = () => {
     try {
-      api.post('/oauth2/authorization/google');
+      // api.post('/oauth2/authorization/google');
+      // window.location.assign(
+      //   'https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=15196070608-ti8mt0m3fo8tj48172bhq72h4re8bcni.apps.googleusercontent.com&scope=email%20profile&state=J8xE05niEcAJo0CAB8XkqVr25Prh7dXvkrqthZ2YJw0%3D&redirect_uri=http://localhost:3000/signup',
+      // );
       // window.location.assign(
       //   'https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=15196070608-ti8mt0m3fo8tj48172bhq72h4re8bcni.apps.googleusercontent.com&scope=email%20profile&state=J8xE05niEcAJo0CAB8XkqVr25Prh7dXvkrqthZ2YJw0%3D&redirect_uri=http://ec2-52-78-224-100.ap-northeast-2.compute.amazonaws.com:8080/login/oauth2/code/google',
       // );
