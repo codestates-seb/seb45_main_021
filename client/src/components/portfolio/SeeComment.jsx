@@ -118,22 +118,14 @@ export default function SeeComment({
             <div className='row'>
                 {isEdit ? 
                     <>
-                        <h3
-                            className='button'
-                            onClick={EditHandler}
-                        >작성</h3>
-                        <h3
-                            className='button'
-                            onClick={cancelEditHandler}
-                        >취소</h3>
+                        <h3 className='button' onClick={EditHandler}>작성</h3>
+                        <h3 className='button' onClick={cancelEditHandler}>취소</h3>
                     </>
                 :
                     <>
-                        <div className='row author-wrapper'
-                            onClick={()=>toProfile(commentData.id)}
-                        >
-                        <img src={commentData.img.length === 0 ? defaultImg : commentData.img} alt='작성자이미지'></img>
-                        <h3>{commentData.userName}</h3>
+                        <div className='row author-wrapper' onClick={()=>toProfile(commentData.id)}>
+                            <img src={commentData.img.length === 0 ? defaultImg : commentData.img} alt='작성자이미지'></img>
+                            <h3>{commentData.userName}</h3>
                         </div>
                         <h3>{dateFormatter(commentData.created_At)}</h3>
                         {detailData.author.id === userId || true &&

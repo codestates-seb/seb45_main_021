@@ -5,15 +5,17 @@ import Tag from '../common/Tag';
 
 const StyleForSubmitCard = styled.div`
     width:100%;
-    padding:2rem;
+    padding:1rem;
     height:300px;
-    background-color:rgba(50,50,50,0.8);
+    background-color:rgba(30,30,30,0.8);
     opacity:${props => props.$selectedCard ? '0.5' : '1'};
     position:relative;
+    > .row {
+        gap:5%;
+    }
     .image-container {
-        flex:1.3;
+        flex:2;
         overflow:hidden;
-        margin-right:3rem;
         justify-content:center;
         align-items:center;
         > img {
@@ -37,8 +39,8 @@ const StyleForSubmitCard = styled.div`
     .see-more-box {
         margin-left:auto;
     }
-    p {
-        font-size:1.5rem;
+    span {
+        font-size:1.5rem !important;
         font-weight:var(--nanum-normal);
     }
     .accept-reject-box {
@@ -68,9 +70,7 @@ const IntroduceBox = styled.div`
     height: 100%;
     border: 1px solid var(--black-300);
     margin-top:2rem;
-    > p {
-        padding:1rem;
-    }
+    padding:1rem;
 `
 
 export default function ForSubmitCard({
@@ -85,17 +85,17 @@ export default function ForSubmitCard({
             className='col'
             onClick={()=>setSelectedCard(idx)}
         >  
-            {selectedCard && <p className='display-selected'>카드 선택됨</p>}
+            {selectedCard && <span className='display-selected'>카드 선택됨</span>}
             <div className='row'>
                 <div className='image-container col'>
-                    <img src={cardData?.img.length === 0 ? defaultImg : cardData.img} alt='신청자이미지'/>
-                    <p>{cardData?.userName}</p>
+                    <img src={cardData?.img ? cardData.img : defaultImg} alt='신청자이미지'/>
+                    <span>{cardData?.userName}</span>
                 </div>
                 <div className='data-box col'>
-                    <p>{`이메일 : ${cardData?.email}`}</p>
-                    <p>{`재직 상태 : ${cardData?.isEmploy ? '재직 중' : '구직 중'}`}</p>
+                    <span>{`이메일 : ${cardData?.email}`}</span>
+                    <span>{`재직 상태 : ${cardData?.working ? '재직 중' : '구직 중'}`}</span>
                     <div className='row'>
-                        <p>{'관심 기술 : '}</p>
+                        <span>{'관심 기술 : '}</span>
                         <div className='tag-box row'>
                             {cardData.tag.map((item,idx)=>
                                 <Tag
@@ -108,11 +108,11 @@ export default function ForSubmitCard({
                             )}
                         </div>
                     </div>
-                    <p>{`연락처 : ${cardData?.hotline}`}</p>
+                    <span>{`연락처 : ${cardData?.tell}`}</span>
                 </div>
             </div>
-            <IntroduceBox className='row'>
-                <p>{cardData.body}</p>
+            <IntroduceBox>
+                <span>{cardData.aboutMe}</span>
             </IntroduceBox>
         </StyleForSubmitCard>
     );

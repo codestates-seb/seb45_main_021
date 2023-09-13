@@ -2,16 +2,24 @@ import { useEffect, useState } from "react";
 import Select from "../common/Select";
 import { checkValidations } from "../../utils/checkValidations";
 
-export default function DateSelect ({defaultDate ,width, setDataForm, setErrors}) {
+export default function DateSelect ({
+    defaultDate,
+    width,
+    handleInputChange,
+    handleErrorChange
+}) {
     const time = new Date()
     const [resetDate, setResetDate] = useState([]);
 
     useEffect(()=>{
-        setResetDate([
-            defaultDate.getFullYear(),
-            defaultDate.getMonth()+1,
-            defaultDate.getDate(),
-        ])
+        if(defaultDate.length) {
+            const parsingDate = new Date(defaultDate);
+            setResetDate([
+                parsingDate.getFullYear(),
+                parsingDate.getMonth()+1,
+                parsingDate.getDate(),
+            ])
+        }
     },[defaultDate]);
     
     const yearOptions = () => {
@@ -69,11 +77,11 @@ export default function DateSelect ({defaultDate ,width, setDataForm, setErrors}
                     onClickHandler={(e)=>{
                         setResetDate(settingByIndex(idx,e));
                         if(idx === 2) {
-                            setDataForm(null,new Date(resetDate[0],resetDate[1],e), 'closed_At')
-                            setErrors(null,String(new Date(resetDate[0],resetDate[1],e)), 'closed_At', checkValidations)
+                            handleInputChange(null,String(new Date(resetDate[0],resetDate[1]-1,e)), 'closedAt')
+                            handleErrorChange(null,String(new Date(resetDate[0],resetDate[1],e)), 'closedAt', checkValidations)
                         } else {
-                            setDataForm(null,'', 'closed_At')
-                            setErrors(null,'', 'closed_At', checkValidations)
+                            handleInputChange(null,'', 'closedAt')
+                            handleErrorChange(null,'', 'closedAt', checkValidations)
                         }
                     }}
                 />

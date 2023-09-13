@@ -41,6 +41,7 @@ export const useAxiosInterceptor = () => {
 
   instance.interceptors.response.use(
     (response) => {
+      console.log(response.headers.accesstoken);
       const { accesstoken, refreshtoken } = response.headers;
       if (accesstoken && refreshtoken) {
         dispatch(updateUser({ jwt: { accesstoken: accesstoken, refreshtoken: refreshtoken } }));

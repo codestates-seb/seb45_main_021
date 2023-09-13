@@ -12,22 +12,18 @@ const StyleEnterTag = styled.div`
     }
 `
 
-const Tag = styled.div`
+const StyleTag = styled.div`
+  padding: ${(props) => props.$padding || '5px 7px'};
+  font-size: ${(props) => props.$padding || '1.4rem'};
+  font-weight: var(--nanum-semi-bold);
+  border: 1px solid var(--black-400);
+  border-radius: 5px;
+  display: inline;
+  transition: all.2s;
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 5px;
-  position: relative;
-  border-radius: 30px;
-  width: fit-content;
-  height: fit-content;
-  background-color: var(--backgroundColor);
-  border:1px solid var(--black-100);
-  color: var(--black-100);
-  text-align: center;
-  padding: 5px 10px;
-  font-size: 1.2rem;
-  svg {
+  gap: 1rem;
+  >svg:hover {
     cursor: pointer;
   }
 `;
@@ -42,7 +38,7 @@ export default function EnterTag({
     const [tags,setTags] = useState(defaultTags);
     useEffect(()=>{
         if(defaultTags.length) {
-            setTags(defaultTags)
+            setTags(defaultTags);
         }
     },[defaultTags])
 
@@ -68,11 +64,12 @@ export default function EnterTag({
                 placeholder={placeholder}
                 type='text'
                 onKeyDown={(e)=>enterTagHandler(e)}
+                maxLength={10}
             >
             </Input>
             <div className='row'>
                 {tags.map((el,idx)=>
-                    <Tag key={idx}>
+                    <StyleTag key={idx}>
                         {el}
                         <AiOutlineClose
                             size={15}
@@ -83,7 +80,7 @@ export default function EnterTag({
                                 handleInputChange(null,newTags,'tags');
                             }}
                         />
-                    </Tag>
+                    </StyleTag>
                 )}
             </div>
         </StyleEnterTag>            

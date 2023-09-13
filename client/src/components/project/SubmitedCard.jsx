@@ -4,16 +4,19 @@ import defaultImg from '../../static/images/userDefaultImg.jpeg'
 import Tag from '../common/Tag';
 import useNav from '../../hooks/useNav';
 
-const StyleApplyCard = styled.div`
+const StyleSubmitedCard = styled.div`
     width:100%;
     padding:2rem;
     background-color:rgba(50,50,50,0.8);
-    .image-container {
+    .image-name-container {
         flex:1.3;
-        overflow:hidden;
         margin-right:3rem;
         justify-content:center;
         align-items:center;
+        > * {
+            cursor: pointer;
+        }
+        
         > img {
             margin-bottom:1rem;
             border-radius:50%;      
@@ -21,8 +24,9 @@ const StyleApplyCard = styled.div`
             height:auto;
             object-fit:cover;    
         }
+        
         &:hover {
-            cursor:pointer;
+            cursor: pointer;
             opacity:0.4;
         }
     }
@@ -39,7 +43,7 @@ const StyleApplyCard = styled.div`
     .see-more-box {
         margin-left:auto;
     }
-    p {
+    span {
         font-size:1.5rem;
         font-weight:var(--nanum-normal);
     }
@@ -53,6 +57,9 @@ const StyleApplyCard = styled.div`
         margin:1rem;
         gap:1rem;
     }
+    .tag-container {
+        gap:1rem;
+    }
 `
 
 const IntroduceBox = styled.div`
@@ -62,13 +69,12 @@ const IntroduceBox = styled.div`
     overflow:hidden;
     border: 1px solid var(--black-300);
     margin-top:2rem;
-
-    > p {
+    > span {
         padding:1rem;
     }
 `
 
-export default function SubmitCard({
+export default function SubmitedCard({
     cardData,
 }) {
     const [isOn, setIsOn] = useState(false);
@@ -77,49 +83,43 @@ export default function SubmitCard({
         setIsOn(!isOn);
     }
     return (
-        <StyleApplyCard className='col'>
+        <StyleSubmitedCard className='col'>
             <div className='row'>
-                <div
-                    className='image-container col'
-                    onClick={()=>toProfile(cardData.id)}
-                >
-                    <img src={cardData?.img.length === 0 ? defaultImg : cardData.img} alt='신청자이미지'/>
-                    <p>{cardData?.userName}</p>
+                <div className='image-name-container col' onClick={()=>toProfile(cardData.memberId)}>
+                    <img src={cardData?.img ? defaultImg : cardData.img} alt='신청자이미지'/>
+                    <span>{cardData?.userName}</span>
                 </div>
                 <div className='data-box col'>
-                    <p>{`이메일 : ${cardData?.email}`}</p>
-                    <p>{`재직 상태 : ${cardData?.isEmploy ? '재직 중' : '구직 중'}`}</p>
-                    <div className='row'>
-                        <p>{'관심 기술 : '}</p>
-                        <div className='tag-box row'>
-                            {cardData.tag.map((item,idx)=>
-                                <Tag
-                                    key={idx}
-                                    text={item}
-                                    size={'1.2rem'}
-                                    padding={'0.4rem'}
-                                    type={'project'}
-                                />
-                            )}
-                        </div>
-                    </div>
-                    <p>{`연락처 : ${cardData?.hotline}`}</p>
-                    <p
+                    <span>{`이메일 : ${cardData?.email}`}</span>
+                    <span>{`재직 상태 : ${cardData?.working ? '재직 중' : '구직 중'}`}</span>
+                    <span className='tag-container row'>
+                        {'관심 기술 :'}
+                        {cardData.tag.map((item,idx)=>
+                        <Tag
+                            key={idx}
+                            text={item}
+                            size={'1.2rem'}
+                            padding={'0.4rem'}
+                            type={'project'}
+                        />)}
+                    </span>
+                    <span>{`연락처 : ${cardData?.tell}`}</span>
+                    <span
                         className='see-more-box button'
                         onClick={isOnHandler}
-                    >{isOn ? '닫기' : '더보기'}</p>
+                    >{isOn ? '닫기' : '더보기'}</span>
                 </div>
             </div>
             <IntroduceBox
                 className='row'
                 $isOn={isOn}
             >
-                <p>{cardData.body}</p>
+                <span>{cardData?.aboutMe}</span>
             </IntroduceBox>
             <div className='row accept-reject-box'>
-                <p className='button'>수락</p>
-                <p className='button'>거절</p>
+                <span className='button'>수락</span>
+                <span className='button'>거절</span>
             </div>
-        </StyleApplyCard>
+        </StyleSubmitedCard>
     );
 }
