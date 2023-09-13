@@ -47,8 +47,8 @@ public class CommentService {
         Member findMember = findComment.getMember();
         findMember.checkMemberId(memberInfo);
 
-        Optional.ofNullable(comment.getContent())
-                .ifPresent(content -> findComment.setContent(content));
+        Optional.ofNullable(comment.getBody())
+                .ifPresent(content -> findComment.setBody(content));
 
         return commentRepository.save(findComment);
 

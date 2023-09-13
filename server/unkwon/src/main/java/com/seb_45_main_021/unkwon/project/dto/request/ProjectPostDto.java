@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -15,14 +16,13 @@ public class ProjectPostDto {
 
     private int totalPeople;
 
-//    private LocalDate closedAt;
+    private String closedAt;
 
     private String body;
 
     private String description;
 
-    private String[] tags;
+    private String tags;
 
-    private String[] lang;
-
+    private String lang;
 }

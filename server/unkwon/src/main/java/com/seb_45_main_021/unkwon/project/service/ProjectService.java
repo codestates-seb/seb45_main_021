@@ -4,9 +4,7 @@ import com.seb_45_main_021.unkwon.commonCode.CommonCode;
 import com.seb_45_main_021.unkwon.commonCode.CommonCodeRepository;
 import com.seb_45_main_021.unkwon.exception.BusinessLogicException;
 import com.seb_45_main_021.unkwon.exception.ExceptionCode;
-import com.seb_45_main_021.unkwon.image.ProjectImage;
-import com.seb_45_main_021.unkwon.image.ProjectTitleImage;
-import com.seb_45_main_021.unkwon.image.S3Service;
+import com.seb_45_main_021.unkwon.image.*;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.member.repository.MemberRepository;
 import com.seb_45_main_021.unkwon.project.dto.response.ProjectApplicationStatusResponseDto;
@@ -14,6 +12,7 @@ import com.seb_45_main_021.unkwon.project.entity.Project;
 import com.seb_45_main_021.unkwon.project.entity.ProjectStatus;
 import com.seb_45_main_021.unkwon.project.repository.ProjectRepository;
 import com.seb_45_main_021.unkwon.project.repository.ProjectStatusRepository;
+import com.seb_45_main_021.unkwon.projectcard.dto.response.ProjectCardApplyResponseDto;
 import com.seb_45_main_021.unkwon.projectcard.dto.response.ProjectCardResponseDto;
 import com.seb_45_main_021.unkwon.projectcard.entity.ProjectCard;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,17 +34,23 @@ public class ProjectService {
     private ProjectStatusRepository projectStatusRepository;
     private CommonCodeRepository commonCodeRepository;
     private MemberRepository memberRepository;
+    private ProjectTitleImageRepository projectTitleImageRepository;
+    private ProjectImageRepository projectImageRepository;
     @Autowired
     private S3Service s3Service;
 
     public ProjectService(ProjectRepository projectRepository,
                           ProjectStatusRepository projectStatusRepository,
+                          ProjectTitleImageRepository projectTitleImageRepository,
                           CommonCodeRepository commonCodeRepository,
-                          MemberRepository memberRepository) {
+                          MemberRepository memberRepository,
+                          ProjectImageRepository projectImageRepository) {
         this.projectRepository = projectRepository;
+        this.projectTitleImageRepository = projectTitleImageRepository;
         this.projectStatusRepository = projectStatusRepository;
         this.commonCodeRepository = commonCodeRepository;
         this.memberRepository = memberRepository;
+        this.projectImageRepository = projectImageRepository;
     }
 
     // 프로젝트 등록
@@ -53,84 +58,94 @@ public class ProjectService {
         String bucketName = s3Service.getBucketName();
 
         // 타이틀 이미지 로직
-        String titleFileName = s3Service.uploadFile(titleImageFile);
-        String titleImageUrl = String.format("https://%s.s3.amazonaws.com/%s", bucketName, titleFileName);
-        ProjectTitleImage titleImage = new ProjectTitleImage();
-        titleImage.setImageUrl(titleImageUrl);
-        project.setProjectTitleImage(titleImage);
+        String titleFileName = s3Service.uploadFile(titleImageFile); // S3 업로드
+        String titleImageUrl = String.format("https://%s.s3.amazonaws.com/%s", bucketName, titleFileName); // URL 생성
+        ProjectTitleImage titleImage = new ProjectTitleImage(); // 타이틀 이미지 객체 생성
+        titleImage.setImageUrl(titleImageUrl); // URL 저장
+        project.setProjectTitleImage(titleImage); // 프로젝트에 반영
 
         // 나머지 이미지 로직
-        for (MultipartFile imageFile : imageFiles) {
-            String fileName = s3Service.uploadFile(imageFile);
-            String imageUrl = String.format("https://%s.s3.amazonaws.com/%s", bucketName, fileName);
+        if (imageFiles != null && !imageFiles.isEmpty()) {
+            for (MultipartFile imageFile : imageFiles) { // 배열로 받은 이미지 순회
+                String fileName = s3Service.uploadFile(imageFile); // S3 업로드
+                String imageUrl = String.format("https://%s.s3.amazonaws.com/%s", bucketName, fileName); // URL 생성
 
-            ProjectImage image = new ProjectImage();
-            image.setImageUrl(imageUrl);
-            project.addImage(image);
+                ProjectImage image = new ProjectImage(); // 이미지 객체 생성
+                image.setImageUrl(imageUrl); // URL 저장
+                project.addImage(image); // 프로젝트에 반영
+            }
         }
 
         return projectRepository.save(project);
     }
 
-//    // 프로젝트 수정
-//    public Project updateProject(Project project,
-//                                 MultipartFile titleImageFile, String titleImageUrl,
-//                                 List<MultipartFile> imageFiles, List<String> imageUrls) {
-//
-//        // 해당 프로젝트의 Id 로 존재하는 프로젝트인지 검증
-//        Project findProject = findVerifiedProject(project.getProjectId());
-//
-//        // 수정된 정보 업데이트
-//        Optional.ofNullable(project.getTitle())
-//                .ifPresent(title -> findProject.setTitle(title));
-//        Optional.ofNullable(project.getTotalPeople())
-//                .ifPresent(totalPeople -> findProject.setTotalPeople(totalPeople));
-//        Optional.ofNullable(project.getTags())
-//                .ifPresent(tags -> findProject.setTags(tags));
-//        Optional.ofNullable(project.getLang())
-//                .ifPresent(lang -> findProject.setLang(lang));
-//        Optional.ofNullable(project.getBody())
-//                .ifPresent(body -> findProject.setBody(body));
-//        Optional.ofNullable(project.getDescription())
-//                .ifPresent(description -> findProject.setDescription(description));
-//
-//        // 타이틀 이미지 업데이트 로직
-//        if(titleImageFile != null) { // 타이틀 이미지 파일을 받았다면
-//            String titleFileName = s3Service.uploadFile(titleImageFile); // S3 업로드
-//            String newTitleImageUrl = String.format("https://%s.s3.amazonaws.com/%s", s3Service.getBucketName(), titleFileName); // URL 생성
-//            ProjectTitleImage titleImage = new ProjectTitleImage(); // 새 ProjectTitleImage 객체 생성
-//            titleImage.setImageUrl(newTitleImageUrl); // imageUrl 저장
-//            findProject.setProjectTitleImage(titleImage); // 프로젝트에 ProjectTitleImage 객체 저장
-//
-//        } else if(titleImageUrl != null) { // 타이틀 이미지 URL 을 받았다면
-//            s3Service.deleteFile(titleImageUrl);  // S3 에서 삭제
-//            findProject.setProjectTitleImage(null); // 프로젝트에 ProjectTitleImage 객체 null 시키기
-//        }
-//
-//        // 나머지 이미지 업데이트 로직
-//        if(imageFiles != null && !imageFiles.isEmpty()) { // 이미지 파일 배열을 받았다면
-//            for (MultipartFile imageFile : imageFiles) { // for 문 돌려서 하나씩
-//                String fileName = s3Service.uploadFile(imageFile); // S3 에 저장
-//                String imageUrl = String.format("https://%s.s3.amazonaws.com/%s", s3Service.getBucketName(), fileName); // URL 생성
-//
-//                ProjectImage image = new ProjectImage(); // 새 ProjectImage 객체 생성
-//                image.setImageUrl(imageUrl); // imageUrl 저장
-//                findProject.addImage(image); // 프로젝트에 ProjectImage 객체 저장
-//            }
-//        }
-//
-//        if(imageUrls != null && !imageUrls.isEmpty()) { // 이미지 URL 배열을 받았다면
-//            for(String imageUrl : imageUrls) { // for 문 돌려서 하나씩
-//                s3Service.deleteFile(imageUrl);  // S3 에서 삭제하기
-//                findProject.removeImage(imageUrl);
-//            }
-//        }
-//
-//        // 수정된 정보 DB 반영
-//        return projectRepository.save(findProject);
-//
-//    }
+    // 프로젝트 수정
+    @Transactional
+    public Project updateProject(Project project,
+                                 MultipartFile titleImageFile, String titleImageUrl,
+                                 List<MultipartFile> imageFiles, List<String> imageUrls) {
 
+        // 해당 프로젝트의 Id 로 존재하는 프로젝트인지 검증
+        Project findProject = findVerifiedProject(project.getProjectId());
+
+        // 수정된 정보 업데이트
+        Optional.ofNullable(project.getTitle())
+                .ifPresent(title -> findProject.setTitle(title));
+        Optional.ofNullable(project.getTotalPeople())
+                .ifPresent(totalPeople -> findProject.setTotalPeople(totalPeople));
+        Optional.ofNullable(project.getTags())
+                .ifPresent(tags -> findProject.setTags(tags));
+        Optional.ofNullable(project.getLang())
+                .ifPresent(lang -> findProject.setLang(lang));
+        Optional.ofNullable(project.getBody())
+                .ifPresent(body -> findProject.setBody(body));
+        Optional.ofNullable(project.getDescription())
+                .ifPresent(description -> findProject.setDescription(description));
+
+        // 타이틀 이미지 삭제
+        if(titleImageUrl != null) { // 타이틀 이미지 URL 을 받았다면
+            s3Service.deleteFile(titleImageUrl);  // S3 에서 삭제
+            projectTitleImageRepository.deleteByImageUrl(titleImageUrl); // DB 에서 삭제
+        }
+        // 타이틀 이미지 추가
+        if(titleImageFile != null) { // 타이틀 이미지 파일을 받았다면
+            String titleFileName = s3Service.uploadFile(titleImageFile); // S3 업로드
+            String newTitleImageUrl = String.format("https://%s.s3.amazonaws.com/%s", s3Service.getBucketName(), titleFileName); // URL 생성
+            ProjectTitleImage titleImage = new ProjectTitleImage(); // 새 ProjectTitleImage 객체 생성
+            titleImage.setImageUrl(newTitleImageUrl); // imageUrl 저장
+            findProject.setProjectTitleImage(titleImage); // 프로젝트에 ProjectTitleImage 객체 저장
+
+        }
+        // 삭제 이미지 URL 배열을 받았다면
+        if(imageUrls != null && !imageUrls.isEmpty()) {
+            for(String imageUrl : imageUrls) { // for 문 돌려서 하나씩
+                s3Service.deleteFile(imageUrl);  // S3 에서 삭제하기
+                projectImageRepository.deleteByImageUrl(imageUrl); // DB 에서 삭제
+//                findProject.getImages().removeIf(image -> (image.getImageUrl().equals(imageUrl))); // 프로젝트에서도 삭제
+            }
+        }
+        // 나머지 이미지 업데이트 로직
+        if(imageFiles != null && !imageFiles.isEmpty()) { // 이미지 파일 배열을 받았다면
+            for (MultipartFile imageFile : imageFiles) { // for 문 돌려서 하나씩
+                String fileName = s3Service.uploadFile(imageFile); // S3 에 저장
+                String imageUrl = String.format("https://%s.s3.amazonaws.com/%s", s3Service.getBucketName(), fileName); // URL 생성
+
+                ProjectImage image = new ProjectImage(); // 새 ProjectImage 객체 생성
+                image.setImageUrl(imageUrl); // imageUrl 저장
+                findProject.addImage(image); // 프로젝트에 ProjectImage 객체 저장
+            }
+        }
+
+        // 수정된 정보 DB 반영
+        return projectRepository.save(findProject);
+
+    }
+    private int indexForImages(String searchUrl, List<ProjectImage> list ) {
+        for (int i = 0; i < list.size(); i++)
+            if (list.get(i).getImageUrl() == searchUrl)
+                return i;
+        return -1;
+    }
     // 특정 프로젝트 조회
     public Project findProject(long projectId) {
         Project findProject = findVerifiedProject(projectId);
@@ -174,7 +189,8 @@ public class ProjectService {
                 projectCard.getProjectCardId(),
                 projectCard.getAboutMe(),
                 projectCard.getTell(),
-                projectCard.getTag()
+                projectCard.getTag(),
+                projectCard.getMember()
         )).collect(Collectors.toList()));
 
         return response;

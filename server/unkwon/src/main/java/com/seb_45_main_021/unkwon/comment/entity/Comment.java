@@ -23,7 +23,7 @@ public class Comment extends Auditable {
     private Long commentId;
 
     @Column(length = 500, nullable = false)
-    private String content;
+    private String body;
 
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")

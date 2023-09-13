@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -17,11 +18,13 @@ public class ProjectResponseDto {
     private long projectId;
     private int view;
     private long memberId;
+    private  String userName;
+    private String userImgUrl;
     private String title;
     private int totalPeople;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-    private LocalDate closedAt;
+    private String closedAt;
     private String body;
     private List<Long> joinPeople;
     private List<Long> requestPeople;
@@ -29,6 +32,6 @@ public class ProjectResponseDto {
     private ProjectTitleImage projectTitleImage;
     private String description;
     private String[] tags;
-    private String[] lang;
+    private String lang;
     private int heartCount;
 }

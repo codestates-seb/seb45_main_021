@@ -28,7 +28,7 @@ public class Portfolio extends Auditable {
     private String title;
 
     @Column(length = 1000, nullable = false)
-    private String content;
+    private String body;
 
     @Column(nullable = false)
     private int view = 0;
@@ -48,8 +48,7 @@ public class Portfolio extends Auditable {
     @JsonManagedReference
     List<Comment> comments;
 
-    @Column(columnDefinition = "TEXT")
-    private String tags;
+    private String[] tags;
 
     private String lang;
 

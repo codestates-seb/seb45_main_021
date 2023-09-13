@@ -13,7 +13,7 @@ public class ProjectPatchDto {
     private int totalPeople;
     private String body;
     private String description;
-    private String[] tags;
-    private String[] lang;
+    private String tags;
+    private String lang;
 
 }

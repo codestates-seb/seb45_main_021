@@ -31,14 +31,13 @@ public interface ProjectMapper {
         member.setMemberId(projectPostDto.getMemberId());
         project.setMember(member);
 
-
         project.setTitle(projectPostDto.getTitle());
         project.setTotalPeople(projectPostDto.getTotalPeople());
-        project.setLang(Arrays.toString(projectPostDto.getLang()));
-        project.setTags(Arrays.toString(projectPostDto.getTags()));
+        project.setLang(projectPostDto.getLang());
+        project.setTags(new String[]{projectPostDto.getTags()});
         project.setBody(projectPostDto.getBody());
         project.setDescription(projectPostDto.getDescription());
-//        project.setClosedAt(projectPostDto.getClosedAt());
+        project.setClosedAt(projectPostDto.getClosedAt());
 
         return project;
     }
@@ -49,8 +48,8 @@ public interface ProjectMapper {
         project.setProjectId(projectPatchDto.getProjectId());
         project.setTitle(projectPatchDto.getTitle());
         project.setTotalPeople(projectPatchDto.getTotalPeople());
-        project.setLang(Arrays.toString(projectPatchDto.getLang()));
-        project.setTags(Arrays.toString(projectPatchDto.getTags()));
+        project.setLang(projectPatchDto.getLang());
+        project.setTags(new String[]{projectPatchDto.getTags()});
         project.setBody(projectPatchDto.getBody());
         project.setDescription(projectPatchDto.getDescription());
 
@@ -109,15 +108,18 @@ public interface ProjectMapper {
         ProjectResponseDto projectResponseDto = ProjectResponseDto.builder()
                 .projectId(project.getProjectId())
                 .memberId(project.getMember().getMemberId())
+                .userName(project.getMember().getUserName())
+                .userImgUrl(project.getMember().getImgUrl())
+
                 .title(project.getTitle())
                 .totalPeople(project.getTotalPeople())
                 .joinPeople(project.getJoinPeople())
                 .requestPeople(project.getRequestPeople())
                 .createdAt(project.getCreatedAt())
                 .modifiedAt(project.getModifiedAt())
-//                .closedAt(project.getClosedAt())
-                .lang(new String[]{project.getLang()})
-                .tags(new String[]{project.getTags()})
+                .closedAt(project.getClosedAt())
+                .lang(project.getLang())
+                .tags(parseTags(Arrays.toString(project.getTags())))
                 .body(project.getBody())
                 .description(project.getDescription())
                 .heartCount(project.getHeartCount())
@@ -135,15 +137,29 @@ public interface ProjectMapper {
                 .collect(Collectors.toList());
     }
 
-    @Mapping(target = "tags", expression = "java(mapping(projectPatchDto.getTags()))")
-    @Mapping(target = "lang", expression = "java(mapping(projectPatchDto.getLang()))")
+    @Mapping(target = "tags", expression = "java(mapTags(projectPatchDto.getTags()))")
     Portfolio projectPatchDtoToPortfolio(ProjectPatchDto projectPatchDto);
 
-    default String mapping(String[] tags) {
-        if (tags == null || tags.length == 0) {
-            return null;
+    default String [] mapTags(String tags) {
+        if (tags == null || tags.isEmpty()) {
+            return new String[0];
         }
-        return String.join(",", tags);
+        return  tags.split(",");
+    }
+    private String[] parseTags(String tags) {
+        if (tags == null || tags.isEmpty()) {
+            return new String[0];
+        }
+
+        // 태그 문자열을 쉼표로 분리하여 배열로 반환
+        String[] tagArray = tags.split(",");
+
+        // 각 태그 문자열의 양 끝에 있는 공백 및 대괄호 제거
+        for (int i = 0; i < tagArray.length; i++) {
+            tagArray[i] = tagArray[i].trim().replaceAll("^\\[|\\]$", "");
+        }
+
+        return tagArray;
     }
 
 

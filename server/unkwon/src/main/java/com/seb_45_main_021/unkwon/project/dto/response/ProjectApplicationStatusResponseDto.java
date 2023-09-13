@@ -1,5 +1,6 @@
 package com.seb_45_main_021.unkwon.project.dto.response;
 
+import com.seb_45_main_021.unkwon.projectcard.dto.response.ProjectCardApplyResponseDto;
 import com.seb_45_main_021.unkwon.projectcard.dto.response.ProjectCardResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import java.util.List;
 public class ProjectApplicationStatusResponseDto {
 
     private List<JoinPeopleResponseDto> joinPeople;
-    private List<ProjectCardResponseDto> requestPeople;
+    private List<ProjectCardApplyResponseDto> requestPeople;
 
     @Getter
     @Setter

@@ -2,15 +2,18 @@ package com.seb_45_main_021.unkwon.projectcard.dto.response;
 
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class ProjectCardApplyResponseDto {
     private Long projectCardId;
     private String[] tags;
     private String tell;
     private String aboutMe;
     private String img;
-    private String userName;
+    private Long memberId;
+    private String username;
     private String email;
     private boolean working;
 
@@ -21,16 +24,19 @@ public class ProjectCardApplyResponseDto {
         this.tell = tell;
         setTag(tags);
         this.userName = member.getUserName();
+        this.memberId = member.getMemberId();
         this.email = member.getEmail();
         this.working = member.isWorking();
     }
 
     public void setTag(String tags){
         // 태그 입력 전 이면 빈배열, 입력 후 라면 split 배열
-        this.tags = tags == null ? new String[]{}
-                : tags.replaceAll(" ", "")
-                .replace("[", "")
-                .replace("]", "")
-                .split(",");
+        if(tags == null || tags.equals("[]")) this.tags = new String[]{};
+        else {
+            this.tags =  tags.replaceAll(" ", "")
+                    .replace("[", "")
+                    .replace("]", "")
+                    .split(",");
+        }
     }
 }
