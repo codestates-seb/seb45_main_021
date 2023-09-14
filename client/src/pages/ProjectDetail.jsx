@@ -145,16 +145,17 @@ export default function ProjectDetail() {
   const [update, setUpdate] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [detailData, setDetailData] = useState({});
-  const [requestPeopleData, setRequestPeopledata] = useState([]);
-  const [error, setError] = useState(false);
+  const [requestPeopleData, setRequestPeopledata] = useState(null);
+  const [apiError, setApirError] = useState(false);
 
-  //디테일페이지조회중인지 신청자현황조회중인지
+  //디테일페이지조회중인지 신청자현황조회중인지 true면 디테일 페이지 false면 신청자 참가자 조회
   const [isOnDetail, setIsOnDetail] = useState(true);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [isRequestLoading, setIsRequestLaoding] = useState(true);
 
   //삭제알림
   const [isOnDeleteModal, setIsOnDeleteModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const {toProjectEdit, toProject} = useNav();
 
   //현재 로그인 한 유저 정보
@@ -198,42 +199,43 @@ export default function ProjectDetail() {
         navigate('/404')
       } else if (err.code === 'ERR_BAD_RESPONSE'){
         console.log(err.code);
-        setError(true);
+        setApirError(true);
         setIsOnDeleteModal(true);
       }
     })
   }
 
   const fetchRequestData = () => {
-    setIsRequestLaoding(true);
-    setTimeout(()=>{
+    if(!requestPeopleData) {
+      setIsRequestLaoding(true);
+      api.get(`project/${projectId}/application-status`)
+      .then(res=>{
+        console.log(res);
+        setRequestPeopledata(res.data);
+      })
+      .catch(err=>{
+        console.log(err);
+      })
+    } else {
       setIsRequestLaoding(false);
-      setRequestPeopledata({...RequestPeopleTestData});
-    }, 1000);
+      setIsOnDetail(false);
+    }
   }
 
-  // const fetchMyProjectCard = () => {
-  //   setIsRequestLaoding(true);
-  //   setTimeout(()=>{
-  //     setIsRequestLaoding(false);
-  //     setRequestPeopledata(DummyData.requestPeople);
-  //   }, 1000);
-  // }
-
   const fetchDeleteProject = (id) => {
-    setError(false);
+    setApirError(false);
     api.delete(`/projects/${id}`)
     .then(res=>{
       toProject();
     })
     .catch(err=>{
-      setError(true);
+      setApirError(true);
     })
   }
 
   useEffect(()=>{
     fetchData()
-  },[]);
+  },[update]);
 
   useEffect(()=>{
     if(loginUserData.userInfo?.memberId === detailData?.memberId) {
@@ -245,12 +247,12 @@ export default function ProjectDetail() {
 
   return (
     <StyleDetailWrapper>
-        {isOnDeleteModal &&
+        {showModal &&
           <Modal
-            setIsOpen={setIsOnDeleteModal}
-            title={error ? '통신 에러' : '정말 삭제하시겠습니까?'}
-            body={error ? '다시 시도해 주세요.' : '삭제된 내용은 복구할 수 없습니다.'}
-            confirmHandler={error ? ()=>{} : ()=>fetchDeleteProject(projectId)}
+            setIsOpen={setShowModal}
+            title={apiError ? '통신 에러' : '정말 삭제하시겠습니까?'}
+            body={apiError ? '다시 시도해 주세요.' : '삭제된 내용은 복구할 수 없습니다.'}
+            confirmHandler={apiError ? ()=>{} : ()=>fetchDeleteProject(projectId)}
           />}
         {isPageLoading
         ? <SuspenseDetailPage/>
@@ -262,7 +264,7 @@ export default function ProjectDetail() {
               <StyleBorderButton
                 key={idx}
                 $fontSize={fontSize}
-                onClick={item.handler}
+                onClick={()=>item.handler()}
               >
                 {item.title}
               </StyleBorderButton>
@@ -292,6 +294,7 @@ export default function ProjectDetail() {
             type='project'
             isAdmin={isAdmin}
             updateHandler={updateHandler}
+            projectId={projectId}
           />
           }
         </StyleDetailContainer>

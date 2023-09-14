@@ -73,15 +73,19 @@ export default function DetailBody({
     detailData,
     type,
     isAdmin,
-    updateHandler
+    updateHandler,
+    projectId,
+    portfolioId,
 }) {
+    
     const [isOnProjectCard, setIsOnProjectCard] = useState(false);
     const [ownProjectCardList, setOwnProjectCardList] = useState(null);
     const [selectedCard, setSelectedCard] = useState(null);
     const [isPossibleApply, setIsPossibleApply] = useState(false);
     const [isOnStateAlert, setIsOnStateAlert] = useState(false);
     const [apiResult,setApiResult] = useState(false);
-    const [apiLoading, setApiLoading] = useState(true);
+    const [isApiLoading, setIsApiLoading] = useState(true);
+
     const loginUserData = useSelector(state=>state.user);
 
     const cancleProjectApply = (projectId,setApiResult) => {
@@ -99,39 +103,33 @@ export default function DetailBody({
         if(ownProjectCardList) {
             setIsOnProjectCard(true);
         } else {
-            setApiLoading(true);
+            setIsApiLoading(true);
             api.get(`/projectcards/${memberId}`)
             .then(res=>{
-                console.log('통신성공')
+                console.log(res.data);
                 setOwnProjectCardList(res.data)
-                setApiLoading(false);
             })
             .catch(err=>{
-                console.log('통신실패')
                 setApiResult(false);
-                setApiLoading(false);
             })
+            .finally(()=>{
+                setIsApiLoading(false);
+            });
         }
-        // if(ownProjectCardList) {
-        //     setIsOnProjectCard(true);
-        // } else {
-        //     setOwnProjectCardList(myProjectCard);
-        //     setIsOnProjectCard(true);
-        // }
     };
 
-    const applyProjectCard = (memberId, projectId, projectCardId) => {
-        const requestData = {
-            memeberId : memberId,
-            projectId : projectId,
-            projectCardId : projectCardId,
-        }
+    const applyProjectCard = () => {
+        const requestData = {};
+        requestData.memberId = ownProjectCardList[selectedCard].memberId;
+        requestData.projectId = Number(projectId);
+        requestData.projectCardId = ownProjectCardList[selectedCard].projectCardId;
+        console.log(requestData);
         api.post(`/projects/request`,requestData)
         .then(res=>{
-
+            console.log('성공')
         })
-        .catch(res=>{
-            
+        .catch(err=>{
+            console.log('실패');
         })
     }
 
@@ -164,9 +162,9 @@ export default function DetailBody({
             {isOnProjectCard && 
             <Modal
                 setIsOpen={setIsOnProjectCard}
-                confirmHandler={()=>selectedCard && applyProjectCard()}
+                confirmHandler={()=>selectedCard!==null && applyProjectCard()}
             >
-                {apiLoading ?<ProjectCardSkeleton/>
+                {isApiLoading ?<ProjectCardSkeleton/>
                 :   <ProjectCardContainer
                         isForSubmit={true}
                         selectedCard={selectedCard}
@@ -220,7 +218,7 @@ export default function DetailBody({
                             <p>{`${detailData.totalPeople}명 / ${detailData.joinPeople ? detailData.joinPeople.length : 0}명`}</p>
                         }
                     />}
-                {type === 'project' && !isAdmin &&
+                {type === 'project' && !isAdmin && loginUserData.isLogin && 
                 <div className='sticky-box'>
                     {detailData.totalPeople !== detailData.joinPeople.length ?
                     <StyleBorderButton 

@@ -206,7 +206,7 @@ export default function ProjectEdit() {
             name='언어'
           />
 
-          <SelectBox
+          {/* <SelectBox
             text={'프로젝트 마감 날짜를 선택 해 주세요. (모집 시작은 작성일 기준입니다.)'}
             component={<div className='data-select-container row'>
               <DateSelect
@@ -217,7 +217,7 @@ export default function ProjectEdit() {
             </div>}
             error={errors.closedAt}
             name='마감 날짜'
-          />
+          /> */}
           
           <EnterTag
             width="100%"

@@ -97,7 +97,7 @@ export default function ForSubmitCard({
                     <div className='row'>
                         <span>{'관심 기술 : '}</span>
                         <div className='tag-box row'>
-                            {cardData.tag.map((item,idx)=>
+                            {cardData.tags.map((item,idx)=>
                                 <Tag
                                     key={idx}
                                     text={item}

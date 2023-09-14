@@ -272,8 +272,8 @@ export default function ProjectWrite() {
         </div>
       </div>
       <SubmitModalBox
-        submitTitle={'작성 확인'}
-        submitMessage={'최초 작성시 설정한 모집 인원은 수정 할 수 없습니다.'}
+        submitTitle={'모집글 작성시 주의사항'}
+        submitMessage={'모집글 작성시 설정한 모집 인원,마감일은 추후에 수정 할 수 없습니다.'}
         submitCheckHandler={() => {
           setShowModal(true);
           setIsLoading(true);

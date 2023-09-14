@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import {HiX} from 'react-icons/hi'
+import Modal from './Modal';
 
 const StyleFileInput = styled.div`
 `
@@ -156,6 +157,7 @@ export default function FileInput({
 }) {
     const [imgs,setImgs] = useState([]);
     const [isDrag, setIsDrag] = useState(false);
+    const [showModal, setShowModal] = useState(false);
     const fileKey = number===1 ? 'titleImageFile' : 'imageFile';
     const willDeleteKey = number === 1? 'titleImageUrl' : 'imageUrls';
     //사용자가 드래그또는클릭으로 사진을 업로드시 미리보기 화면은 readImgToUrl을통해 img의 소스에 넣어서 보여주느것
@@ -203,7 +205,7 @@ export default function FileInput({
             }
             setImgs([ ...tempUrls, ...imgs]);
         } else {
-            alert('정상적인 파일 또는 개수를 맞춰서 올려주세요.');
+            setShowModal(true);
         }
     }
 
@@ -272,7 +274,8 @@ export default function FileInput({
         for(let i = 0; i < files.length; i++) {
             if(files[i].type !== 'image/png' && files[i].type !== 'image/jpeg' && files[i].type !== 'image/jpg') {
                 //파일형식이 정해진 형식이 아닌경우
-                alert('파일형식을 맞춰주세요.');
+                // alert('파일형식을 맞춰주세요.');
+                setShowModal(true);
                 return;
             }
         }
@@ -282,6 +285,14 @@ export default function FileInput({
 
     return (
         <StyleFileInput>
+            {showModal &&
+            <Modal
+                setIsOpen={setShowModal}
+                title={'파일 형식 오류'}
+                body={'파일 확장자 또는 파일 개수가 맞는지 확인 해 주세요.'}
+                type='alert'
+                confirmHandler={()=>setShowModal(false)}
+            />}
             <TextLabel>{`${name} ${imgs.length} / ${number}`}</TextLabel>
             <FileInputContainer
                 $width={width}

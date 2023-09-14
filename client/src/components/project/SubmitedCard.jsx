@@ -94,7 +94,7 @@ export default function SubmitedCard({
                     <span>{`재직 상태 : ${cardData?.working ? '재직 중' : '구직 중'}`}</span>
                     <span className='tag-container row'>
                         {'관심 기술 :'}
-                        {cardData.tag.map((item,idx)=>
+                        {cardData.tags.map((item,idx)=>
                         <Tag
                             key={idx}
                             text={item}

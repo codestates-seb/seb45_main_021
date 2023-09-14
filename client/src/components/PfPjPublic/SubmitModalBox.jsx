@@ -47,7 +47,7 @@ export default function SubmitModalBox({
               title={cancelTitle}
               body={cancelMessage}
               cancelHandler={()=>setIsCancelModalOn(false)}
-              checkHandler={cancelCheckHandler}
+              confirmHandler={()=>cancelCheckHandler()}
           />}
         </StyleBorderButton>
 
