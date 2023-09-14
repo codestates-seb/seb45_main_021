@@ -2,9 +2,8 @@ import React from 'react';
 import { styled } from 'styled-components';
 import { LiaPlusSolid } from 'react-icons/lia';
 import { StyleBorderButton } from '../common/Buttons';
-import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import api from '../../hooks/useAxiosInterceptor';
-import useNav from '../../hooks/useNav';
 import Tag from '../common/Tag';
 import userDefaultImg from '../../static/images/userDefaultImg.jpeg';
 import Skeleton from '@mui/material/Skeleton';
@@ -65,26 +64,47 @@ const AboutMeWrapper = styled.div`
   height: 100%;
   h3 {
     font-weight: 700;
+    font-size: 2rem;
+  }
+  p {
+    font-size: 1rem;
   }
 `;
 
 const ButtonWrapper = styled.div`
+  margin-top: auto;
   justify-content: space-between;
 `;
 
-export default function SwiperItem({ activePage, data, idx, handler, idxHandler, isLoading }) {
-  const { memberId } = useParams();
-  const { toProfile } = useNav();
-
+export default function SwiperItem({
+  activePage,
+  data,
+  idx,
+  handler,
+  idxHandler,
+  isLoading,
+  setData,
+  trueData,
+}) {
+  const userImg = useSelector((state) => state.user.userInfo.userImgUrl);
   const handleEdit = (type) => {
     idxHandler(idx);
     handler(type);
   };
   const deleteHandler = () => {
     console.log('삭제요청');
-    api.delete(`/projectcards/${idx}`).then((el) => {
+    api.delete(`/projectcards/${data.projectCardId}`).then((el) => {
       window.alert('삭제가 완료되었습니다.');
-      toProfile(memberId);
+      const temp = trueData.projectCard;
+      temp[idx] = {
+        tags: [],
+        working: trueData.profile.working,
+        userImgUrl: trueData.profile.userImgUrl,
+      };
+      setData({
+        ...trueData,
+        projectCard: temp,
+      });
     });
   };
   return (
@@ -96,11 +116,7 @@ export default function SwiperItem({ activePage, data, idx, handler, idxHandler,
           {data.tell ? (
             <SwiperCard className="col gap" $active={activePage === idx ? true : false}>
               <InfoWrapper className="row gap">
-                <img
-                  className="userImg"
-                  src={!data.userImgUrl ? userDefaultImg : data.userImgUrl}
-                  alt=""
-                />
+                <img className="userImg" src={!userImg ? userDefaultImg : userImg} alt="" />
                 <div className="col gap">
                   <div className="col gap">
                     <p className="label">연락처</p>

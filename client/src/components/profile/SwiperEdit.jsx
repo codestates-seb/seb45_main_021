@@ -4,7 +4,7 @@ import Input from '../common/Input';
 import { StyleBorderButton } from '../common/Buttons';
 import { AiOutlineClose, AiOutlineCloseCircle } from 'react-icons/ai';
 import api from '../../hooks/useAxiosInterceptor';
-import useNav from '../../hooks/useNav';
+import ProGress from '../common/ProGress';
 import { useParams } from 'react-router-dom';
 import { isValidPhone } from './isValid';
 import Modal from '../common/Modal';
@@ -105,6 +105,7 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
             const index = tem.findIndex((ele) => ele.projectCardId === data.projectCardId);
             tem[index] = {
               ...tem[index],
+              working: trueData.profile.working,
               tags: temp.tags,
               tell: temp.tell.value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'),
               aboutMe: temp.aboutMe.value,
@@ -201,21 +202,25 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
         height="15rem"
         type="textarea"
         borderRadius="10px"
+        maxLength={200}
         placeholder="200글자까지 작성이 가능합니다."
         value={temp.aboutMe.value || ''}
         error={temp.aboutMe.error}
         onChange={(e) => setTemp({ ...temp, aboutMe: { ...temp.aboutMe, value: e.target.value } })}
       />
+      <ProGress comPleteNum={200} proGressNum={temp.aboutMe.value?.length} fontSize="1.5rem" />
       <Input
         label="연락처"
         width="100%"
         type="text"
+        maxLength={11}
         borderRadius="10px"
         placeholder="- 없이 숫자만 입력해주세요."
         value={type === 'new' ? temp.tell.value || '' : temp.tell.value.replace(/-/g, '') || ''}
         error={temp.tell.error}
         onChange={(e) => setTemp({ ...temp, tell: { ...temp.tell, value: e.target.value } })}
       />
+      <ProGress comPleteNum={11} proGressNum={temp.tell.value?.length} fontSize="1.5rem" />
       <div className="tagwrapper">
         <Input
           label="태그"
@@ -223,6 +228,7 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
           height="3.5rem"
           type="text"
           borderRadius="10px"
+          maxLength={10}
           placeholder="태그는 최대 중복제외 3개까지 등록이 가능합니다."
           value={temp.curString || ''}
           onChange={(e) =>
@@ -233,6 +239,7 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
           }
           onKeyDown={handleTagKeyDown}
         />
+        <ProGress comPleteNum={3} proGressNum={temp.tags?.length} fontSize="1.5rem" />
         <div className="row gap">
           {temp.tags?.map((el, i) => (
             <Tag key={i}>

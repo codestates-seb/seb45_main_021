@@ -9,6 +9,7 @@ const instance = axios.create({
   headers: {
     'Content-Type': 'application/json',
     withCredentials: true,
+    'ngrok-skip-browser-warning': '69420',
   },
 });
 
@@ -21,6 +22,7 @@ export const useAxiosInterceptor = () => {
       const localData = JSON.parse(localStorage.getItem('persist:root'));
       const { accesstoken, refreshtoken } = JSON.parse(localData.user).jwt;
       const newHeaders = { ...config.headers };
+      // console.log(accesstoken, refreshtoken);
       if (accesstoken) {
         newHeaders['accesstoken'] = accesstoken;
       } else {

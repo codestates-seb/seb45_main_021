@@ -79,6 +79,8 @@ export default function ProjectCard({ id, data, isLoading, setData, trueData }) 
                 <SwiperItem
                   activePage={activePage}
                   data={el}
+                  setData={setData}
+                  trueData={trueData}
                   idx={i}
                   handler={handleIsEdit}
                   idxHandler={handleEditIdx}

@@ -184,6 +184,23 @@ export default function ProfileCard({ id, data, isLoading }) {
     });
   };
 
+  const handleResetEditPwd = () => {
+    setEditPassword({
+      prevPassword: {
+        value: '',
+        error: '',
+      },
+      newPassword: {
+        value: '',
+        error: '',
+      },
+      newPasswordCheck: {
+        value: '',
+        error: '',
+      },
+    });
+  };
+
   const handleTagKeyDown = (e) => {
     if (e.code !== 'Enter' && e.code !== 'NumpadEnter') return;
     e.preventDefault();
@@ -223,60 +240,72 @@ export default function ProfileCard({ id, data, isLoading }) {
 
   const handleEditProfile = () => {
     console.log('프로필 수정 요청');
+    let regExpPass = false;
     if (
       editProfile.aboutMe.value.length <= 200 &&
       editProfile.userName.value.length <= 5 &&
       editProfile.age.value.toString().length <= 3
     ) {
-      console.log(editProfile.working.value);
+      console.log(editProfile.age.value);
       const responseBody = {
         aboutMe: editProfile.aboutMe.value,
         userName: editProfile.userName.value,
-        age: editProfile.age.value,
+        age: Number(editProfile.age.value),
         tags: editProfile.tags.value,
         isWorking: editProfile.working.value,
       };
       api
         .patch(`members/${memberId}`, responseBody)
         .then((el) => {
-          console.log('프로필 수정 성공');
-          setProfile({
-            ...profile,
-            aboutMe: editProfile.aboutMe.value,
-            userName: editProfile.userName.value,
-            age: editProfile.age.value,
-            tags: editProfile.tags.value,
-            working: editProfile.working.value,
-          });
+          if (el.status === 200) {
+            regExpPass = true;
+            alert('프로필 수정 성공');
+            setProfile({
+              ...profile,
+              aboutMe: editProfile.aboutMe.value,
+              userName: editProfile.userName.value,
+              age: Number(editProfile.age.value),
+              tags: editProfile.tags.value,
+              working: editProfile.working.value,
+            });
+          }
         })
         .catch((error) => {
           console.log(error);
         });
     }
+    if (regExpPass) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   const handleEditPassword = (e) => {
     console.log('비밀번호 수정 요청');
+    let regExpPass = false;
     if (
       editPassword.newPassword === editPassword.newPasswordCheck &&
       isValidPassword(editPassword.prevPassword) &&
       isValidPassword(editPassword.newPassword) &&
       isValidPassword(editPassword.newPasswordCheck)
     ) {
-      console.log('정규식 통과');
       api
         .patch(`/members/password/${memberId}`, {
           prevPassword: editPassword.prevPassword,
           newPassword: editPassword.newPassword,
         })
         .then((el) => {
-          alert('비밀번호 변경이 완료되었습니다');
-          setEditPassword({
-            ...editPassword,
-            prevPassword: { ...editPassword.prevPassword, error: '' },
-            newPassword: { ...editPassword.newPassword, error: '' },
-            newPasswordCheck: { ...editPassword.newPasswordCheck, error: '' },
-          });
+          if (el.status === 200) {
+            regExpPass = true;
+            alert('비밀번호 변경이 완료되었습니다');
+            setEditPassword({
+              ...editPassword,
+              prevPassword: { ...editPassword.prevPassword, error: '' },
+              newPassword: { ...editPassword.newPassword, error: '' },
+              newPasswordCheck: { ...editPassword.newPasswordCheck, error: '' },
+            });
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -306,6 +335,11 @@ export default function ProfileCard({ id, data, isLoading }) {
         newPasswordCheck: { ...editPassword.newPasswordCheck, error: '다시 입력해주세요' },
       });
     }
+    if (regExpPass) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   const handleClickWithdrawal = () => {
@@ -332,6 +366,7 @@ export default function ProfileCard({ id, data, isLoading }) {
           handleEditPassword={handleEditPassword}
           handleClickWithdrawal={handleClickWithdrawal}
           handleResetEditProfile={handleResetEditProfile}
+          handleResetEditPwd={handleResetEditPwd}
         />
       </div>
     </StyleProfileContainer>

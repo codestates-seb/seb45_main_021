@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { useInfiniteQuery } from 'react-query';
 import styled from 'styled-components';
 import TextCoverOver from '../common/TextCoverOver';
 import OneWeekTopTenList from './OneWeekTopTenList';
@@ -7,7 +6,6 @@ import FilterOption from './FilterOption';
 import SearchTabButton from './SearchTabButton';
 import Page from '../common/Page';
 import { useObserver } from '../../hooks/useObserver';
-import useQueryClear from '../../hooks/useQueryClear';
 import PostList from './PostList';
 import ToTopButton from '../common/ToTopButton';
 import PostSkeletonLoading from './PostSkeletonLoading';
@@ -17,7 +15,8 @@ import { StyleBackgroundButton } from '../common/Buttons';
 import Modal from '../common/Modal';
 import useNav from '../../hooks/useNav';
 import { useSelector } from 'react-redux';
-import api from '../../hooks/useAxiosInterceptor';
+import usePostListQuery from '../../hooks/usePostListQuery';
+import scollToTop from '../../utils/scrollToTop';
 
 const StylePostList = styled(Page)`
   .top-menu {
@@ -63,43 +62,33 @@ const StylePostList = styled(Page)`
 export default function PostPage({ options, optionHandler, pageType, getApiUrl }) {
   const bottomTarget = useRef(null);
   const { searchType } = options;
-  const firstRendering = useRef(true);
-  const queryClear = useQueryClear();
   const isPagePortfolios = pageType === 'portfolios' || searchType === 'portfolios';
   const [isOpen, setIsOpen] = useState(false);
   const { toSignin, toProjectWrite, toPortfolioWrite } = useNav();
-  const { isLogin, userInfo } = useSelector((state) => state.user);
-  const fetchPostData = async ({ pageParam = 0 }) => {
-    const res = await api.get(getApiUrl(pageParam));
-    const { data, currentPage, totalPage } = res;
-    return {
-      data: data.data,
-      currentPage: currentPage,
-      totalPage: totalPage,
-    };
-  };
-  // options, pageType, searchType 변경 시 쿼리 클리어
-  useEffect(() => {
-    if (!firstRendering.current) queryClear();
-    else firstRendering.current = false;
-  }, [options, pageType, searchType]);
+  const { isLogin } = useSelector((state) => state.user);
 
   // Infinite Query 사용하여 데이터 가져오기
-  const { data, error, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteQuery(['posts', pageType, options], fetchPostData, {
-      getNextPageParam: (lastPage) =>
-        lastPage.currentPage <= lastPage.totalPage ? lastPage.currentPage + 1 : undefined,
-      staleTime: 10000,
-    });
-
-  console.log(data, isLoading, isFetchingNextPage);
-
+  const {
+    queryResult: { data, error, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage },
+    likeUpdateSuccess,
+  } = usePostListQuery(options, pageType, getApiUrl);
   // Intersection Observer 사용하여 Infinite Scroll 구현
-  const onIntersect = ([entry]) => entry.isIntersecting && fetchNextPage();
+  const onIntersect = ([entry]) => {
+    if ((entry.isIntersecting, !isFetchingNextPage)) {
+      fetchNextPage();
+    }
+  };
   useObserver({ target: bottomTarget, onIntersect });
 
   // 데이터가 있을 때만 PostList 표시
   const postData = data?.pages.flatMap((page) => page.data).map((el) => el);
+
+  useEffect(() => {
+    window.onbeforeunload = () => {
+      scollToTop();
+    };
+  }, []);
+
   const writeButtonHandler = () => {
     if (isLogin) isPagePortfolios ? toPortfolioWrite() : toProjectWrite();
     else setIsOpen(true);
@@ -109,6 +98,7 @@ export default function PostPage({ options, optionHandler, pageType, getApiUrl }
     console.error(error, 'axios error');
     return;
   }
+
   const isNotFound = !isLoading && !isFetchingNextPage && !postData.length;
   const isDataFetching = isLoading || isFetchingNextPage;
   const hasData = !!postData?.length;
@@ -161,7 +151,11 @@ export default function PostPage({ options, optionHandler, pageType, getApiUrl }
         </div>
       </div>
       {hasData && (
-        <PostList postData={postData} type={pageType === 'search' ? searchType : pageType} />
+        <PostList
+          postData={postData}
+          type={pageType === 'search' ? searchType : pageType}
+          likeUpdateSuccess={likeUpdateSuccess}
+        />
       )}
       {isDataFetching && <PostSkeletonLoading />}
       {isNotFound && <div className="not-found">데이터 없다</div>}

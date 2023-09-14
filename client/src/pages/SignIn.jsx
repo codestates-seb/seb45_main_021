@@ -249,6 +249,13 @@ export default function SignIn() {
     setIsSubmit(false);
   };
 
+  const handleClickGoogleBtn = () => {
+    // api.post('/oauth2/authorization/google');
+    window.location.assign(
+      'https://6e0a-119-193-199-218.ngrok-free.app/oauth2/authorization/google',
+    );
+  };
+
   useEffect(() => {
     // 마운트 함수
     dispatch(deleteUser());
@@ -267,7 +274,7 @@ export default function SignIn() {
           </div>
           <StyleRowContainer>
             <StyleColContainer className="col colgap">
-              <StyleBtnContainer>
+              <StyleBtnContainer onClick={handleClickGoogleBtn}>
                 <FcGoogle className="logo" size={30} />
                 Google 로그인
               </StyleBtnContainer>
@@ -303,6 +310,7 @@ export default function SignIn() {
                   width="40rem"
                   height="56.22px"
                   borderRadius="10px"
+                  maxLength={20}
                   fontSize="2rem"
                   autoComplete="off"
                   value={password}

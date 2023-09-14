@@ -5,6 +5,5 @@ export function dateFormatter(date) {
   const day = dateObj.getDate(); // 일
   const hour = dateObj.getHours();
   const minute = dateObj.getMinutes();
-
-  // console.log(year, month, day, hour, minute);
+  return `${year}/${month}/${day} ${hour}시 ${minute}분`;
 }

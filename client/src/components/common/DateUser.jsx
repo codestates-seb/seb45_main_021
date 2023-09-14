@@ -20,13 +20,12 @@ const StyleDateUser = styled.div`
     cursor: pointer;
   }
 `;
-export default function DateUser({ date, size, user }) {
+export default function DateUser({ date, size, userName, memberId }) {
   const { toProfile } = useNav();
   return (
     <StyleDateUser $size={size} className="date-user">
-      <span className="user">
-        {/*  onClick={() => toProfile(id)} */}
-        {/* {name} */}
+      <span className="user" onClick={() => toProfile(memberId)}>
+        {userName}
       </span>
       <span>{dateFormatter(date)}</span>
     </StyleDateUser>

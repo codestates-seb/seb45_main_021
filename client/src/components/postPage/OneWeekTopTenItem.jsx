@@ -17,10 +17,11 @@ const StyleOneWeekTopTenItem = styled.div`
 `;
 
 export default function OneWeekTopTenItem({ item, ranking, pageType }) {
-  const { title, id } = item;
+  const { projectId, portfolioId, title } = item;
   const { toProjectDetail, toPortfolioDetail } = useNav();
+
   const toDetail = () => {
-    pageType === 'project' ? toProjectDetail(id) : toPortfolioDetail(id);
+    pageType === 'projects' ? toProjectDetail(projectId) : toPortfolioDetail(portfolioId);
   };
 
   return (

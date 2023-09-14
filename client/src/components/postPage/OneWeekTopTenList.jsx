@@ -9,6 +9,7 @@ import { tablet } from '../../static/theme';
 import api from '../../hooks/useAxiosInterceptor';
 const StyleOneWeekTopTenList = styled.div`
   padding-bottom: 10px;
+  min-width: 350px;
   ${tablet} {
   }
   .swiper-wrapper {
@@ -28,12 +29,16 @@ export default function OneWeekTopTenList({ pageType }) {
   useEffect(() => {
     async function fetchOneWeekTopTenList() {
       let res;
-      if (pageType === 'projects') {
-        res = await api.get('/project/hearts/weekly-top');
-      } else if (pageType === 'portfolios') {
-        res = await api.get('/portfolio/hearts/weekly-top');
+      try {
+        if (pageType === 'projects') {
+          res = await api.get('/project/hearts/weekly-top');
+        } else if (pageType === 'portfolios') {
+          res = await api.get('/portfolio/hearts/weekly-top');
+        }
+        setTopTenList(res.data);
+      } catch (e) {
+        console.error(e);
       }
-      console.log({ res });
     }
     fetchOneWeekTopTenList();
   }, [pageType]);
@@ -50,7 +55,7 @@ export default function OneWeekTopTenList({ pageType }) {
         autoplay={{ delay: 4000 }}
       >
         {topTenList.map((item, i) => (
-          <SwiperSlide key={item.id}>
+          <SwiperSlide key={item.projectId || item.portfolioId}>
             <OneWeekTopTenItem pageType={pageType} ranking={i + 1} item={item} />
           </SwiperSlide>
         ))}

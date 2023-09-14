@@ -131,7 +131,7 @@ export default function Project({ id, data, isLoading }) {
           options={filter.options}
           onClickHandler={handleClickFilter}
           width="25rem"
-          fontSize="2rem"
+          fontSize="1.5rem"
         />
       </div>
       <table>
