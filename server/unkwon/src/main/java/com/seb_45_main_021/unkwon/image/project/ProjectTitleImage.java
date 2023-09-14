@@ -1,4 +1,4 @@
-package com.seb_45_main_021.unkwon.image;
+package com.seb_45_main_021.unkwon.image.project;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.seb_45_main_021.unkwon.project.entity.Project;
