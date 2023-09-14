@@ -5,12 +5,13 @@ import DetailBody from '../components/PfPjPublic/DetailBody';
 import { StyleBorderButton } from '../components/common/Buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import { StyleDetailWrapper, StyleDetailContainer } from './ProjectDetail';
-import AnchorToComment from '../components/portfolio/AncholToComment';
 import Comment from '../components/portfolio/Comment';
 import useNav from '../hooks/useNav';
 import Modal from '../components/common/Modal';
 import api from '../hooks/useAxiosInterceptor'
+import SuspenseDetailPage from '../components/PfPjPublic/DetailSkeletonLoading';
 import { shapingApiData } from '../utils/shapingApiData';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const OnlyAdmin = styled.div`
   width:100%;
@@ -20,132 +21,151 @@ const OnlyAdmin = styled.div`
 `
 
 const DummyData = {
-  id : 1,
-  title : '내가 만든 포트폴리오',
-  created_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-  modified_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-  lang : 'JAVA',
-  tags : ['테스트태그', '의미없는 태그', '의미없는 태그2'],
-  body : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-  titleImg : '',
-  imgs : ['https://source.unsplash.com/random','https://source.unsplash.com/random','https://source.unsplash.com/random','https://source.unsplash.com/random'],
-  author : {
-    img : '',
-    userName : '박찬섭', 
-    id : 1,
-  },
-  isComments : true,
-  comments : [{
-    created_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-    modified_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-    img : '',
-    userName : '이종범', 
-    id : 1,
-    body : ', consectetur'
-  },{
-    created_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-    modified_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-    img : '',
-    userName : '유명인', 
-    id : 2,
-    body : 'Lorem ipsum dolor sit amet, consectetㅁ;ㅈ으맞위맞ㅇur'
-  },{
-    created_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-    modified_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",  
-    img : '',
-    userName : 'qkrckstjq', 
-    id : 3,
-    body : 'Lorem ipsum dolor sit amet, conseㅁ;ㅣㅏ주이ㅏㅁ쥬ㅜ이뮤ㅜㅈ이ㅏur'
-  },{
-    created_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-    modified_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-    img : '',
-    userName : 'qkrckstjqtqwe', 
-    id : 4,
-    body : 'Lorem ipsum do송ㅅ료ㅓㅗㄹ효ㅓㄹ허lor sit amet, consectetur'
-  },{
-    created_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-    modified_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-    img : '',
-    userName : 'dlfknkldf', 
-    id : 5,
-    body : 'Lorem ipsuㅊ호ㅓㅇㅊ효ㅓㅊ효ㅓㅕm dolor sit amet, consectetur'
-  },{
-    created_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-    modified_At : "Wed Aug 30 2023 16:07:06 GMT+0900 (한국 표준시)",
-    img : '',
-    userName : '박찬SDRG섭', 
-    id : 6,
-    body : 'Lorem ipsum dolor sitㅊ허ㅏㅊ혀ㅏ쳐 amet, consectetur'
-  }],
-  likes : ["1", "2", "3", "4", "5"],
+  "memberId": 1,
+  "userName": "한휘용",
+  "userImgUrl": null,
+  "portfolioId": 1,
+  "title": "제목1",
+  "body": "내용1",
+  "view": 1,
+  "createdAt": "2023-09-13T10:16:03.452348",
+  "modifiedAt": "2023-09-13T10:17:17.7792741",
+  "comments": [],
+  "tags": [
+      "aaa",
+      "bbb",
+      "ccc"
+  ],
+  "lang": "C",
+  "heartCount": 0,
+  "isComment": true,
+  "isEmploy": true
 }
 
 export default function ProjectDetail() {
+  const navigate = useNavigate();
+  const [update, setUpdate] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [detailData, setDetailData] = useState(DummyData);
-  const [isOnDeleteAlert,setIsOnDeleteAlert] = useState(false);
-  const dispatch = useDispatch();
-  const loginUserData = useSelector(state=>state.user);
-  const isAdmin = true;
-  const {toPortfolioEdit} = useNav();
-  // loginUserData?.userInfo === detailData.id 
-  const fontSize = '1.6rem'
+  const [apiResult, setApiResult] = useState('');
 
+  const [isDeleteModal,setIsDeleteModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [deleteApiResult, setDeleteApiResult] = useState(false);
+  const {toPortfolioEdit, toPortfolio} = useNav();
+
+  const loginUserData = useSelector(state=>state.user);
+  const fontSize = '1.6rem'
+  const {portfolioId} = useParams();
+
+  const updateHandler = () => {
+    setUpdate((prev)=>!prev);
+  }
+
+  const adminFunction = [
+    {
+      title : '수정',
+      handler : ()=>{
+        toPortfolioEdit(detailData.portfolioId);
+      },
+    },{
+      title : '삭제',
+      handler : ()=>{
+        setShowModal(true);
+        setIsDeleteModal(true);
+        setApiResult('해당 프로젝트를 삭제하시겠습니까?');
+      },
+    }
+  ]
 
   const fetchData = () => {
-    api.get(`/portfolios/1`)
+    setIsLoading(true);
+    api.get(`/portfolios/${portfolioId}`)
     .then(res=>{
-      
       console.log(shapingApiData(res.data));
+      setIsLoading(false);
       setDetailData(shapingApiData(res.data));
     })
     .catch(err=>{
-      console.log(err);
-      // if(err.code === 'ERR_BAD_REQUEST') {
-      //   navigate('/404')
-      // } else if (err.code === 'ERR_BAD_RESPONSE'){
-      //   console.log(err.code);
-      //   setError(true);
-      //   setIsOnDeleteModal(true);
-      // }
+      if(err.code === 'ERR_BAD_REQUEST') {
+        navigate('/404')
+      } else if (err.code === 'ERR_BAD_RESPONSE'){
+        console.log(err.code);
+        setApiResult(false);
+        setIsDeleteModal(true);
+      }
+    })
+    .finally(()=>setIsLoading(false));
+  }
+
+  const fetchDeletPortfolio = (id) => {
+    setIsDeleteModal(true);
+    setShowModal(true);
+    api.delete(`/portfolios/${id}`)
+    .then(res=>{
+      setIsDeleteModal(false);
+      setDeleteApiResult(true);
+      setApiResult('포트폴리오를 삭제했습니다. 확인 버튼 클릭시 포트폴리오 리스트로 돌아갑니다.')
+    })
+    .catch(err=>{
+      // if(err.code === 'ERR_BAD_REQUEST')
+      setIsDeleteModal(false);
+      setDeleteApiResult(false);
+      setApiResult('포트폴리오 삭제에 실패했습니다. 다시 시도해 주세요')
     })
   }
 
   useEffect(()=>{
-    // fetchData()
-    // setDetailData({...DummyData})
-    
-  },[])
+    fetchData()
+  },[update])
+
+  useEffect(()=>{
+    if(loginUserData.userInfo?.memberId === detailData?.memberId) {
+      setIsAdmin(true);
+    } else {
+      setIsAdmin(false);
+    }
+  },[detailData])
 
   return (
     <StyleDetailWrapper>
-       {isOnDeleteAlert && <Modal
-        type={'confirm'}
-        title={'정말 삭제 하시겠습니까?'}
-        message={'삭제된 내용은 복귀, 열람이 불가능합니다.'}
-        setIsOpen={()=>setIsOnDeleteAlert(!isOnDeleteAlert)}
-        checkHandler={()=>{}}
-      />}
-      <StyleDetailContainer className='col'>
+      {showModal &&
+          <Modal
+            type={isDeleteModal ? 'confirm' : 'alert'}
+            setIsOpen={setShowModal}
+            title={'알림'}
+            body={apiResult}
+            confirmHandler={()=>isDeleteModal ? fetchDeletPortfolio(portfolioId) : deleteApiResult ? toPortfolio() : setShowModal(false)}
+          />}
+      {isLoading
+      ? <SuspenseDetailPage/>
+      : <StyleDetailContainer className='col'>
         <DetailHead detailData={detailData} type='portfolio'/>
-        {isAdmin && <OnlyAdmin className='row'>
-          <StyleBorderButton
-            $fontSize={fontSize}
-            onClick={()=>toPortfolioEdit(detailData.id)}>수정
-          </StyleBorderButton>
-          <StyleBorderButton
-            $fontSize={fontSize}
-            onClick={()=>setIsOnDeleteAlert(!isOnDeleteAlert)}>삭제
-          </StyleBorderButton>
+        {isAdmin && 
+        <OnlyAdmin className='row'>
+          {adminFunction.map((item,idx)=>
+            <StyleBorderButton
+              key={idx}
+              $fontSize={fontSize}
+              onClick={()=>item.handler()}
+            >
+              {item.title}
+            </StyleBorderButton>
+          )}
         </OnlyAdmin>}
         <DetailBody
           detailData={detailData} 
           type='portfolio'
+          isAdmin={isAdmin}
+          updateHandler={updateHandler}
+          portfolioId={portfolioId}
         />
-        {/* <AnchorToComment/> */}
       </StyleDetailContainer>
+      }
       {detailData.isComments &&
         <Comment
+          updateHandler={updateHandler}
           isAdmin={isAdmin}
           detailData={detailData}
         />

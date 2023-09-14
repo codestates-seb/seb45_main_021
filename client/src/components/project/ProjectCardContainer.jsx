@@ -24,11 +24,12 @@ export const StyleProjectCardContainer = styled.div`
 `
 
 export default function ProjectCardContainer({
+    detailData,
     cardList,
     isForSubmit = false,
     selectedCard,
     setSelectedCard,
-    updateHandler,
+    requestUpdateHandler,
 }) {
     return (
         <StyleProjectCardContainer
@@ -47,8 +48,9 @@ export default function ProjectCardContainer({
                         setSelectedCard={setSelectedCard}
                     />
                     : <SubmitedCard
+                        detailData={detailData}
                         cardData={item}
-                        updateHandler={updateHandler}
+                        requestUpdateHandler={requestUpdateHandler}
                     />
                     }
                 </React.Fragment>

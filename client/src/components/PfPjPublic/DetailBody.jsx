@@ -142,10 +142,12 @@ export default function DetailBody({
             openApiResultModal('프로젝트에 신청하였습니다.')
         })
         .catch(err=>{
-            // if(err.code === "ERR_BAD_REQUEST") {
-            //     openApiResultModal('로그인 상태가 유효하지 않거나, 중복 신청은 불가능합니다.')    
-            // }
-            openApiResultModal('신청에 실패하였습니다. 다시 시도해 주세요.')
+            console.log(err);
+            if(err.code === "ERR_BAD_REQUEST") {
+                openApiResultModal('이미 거절당한 프로젝트 또는 잘못된 요청입니다.')    
+            } else {
+                openApiResultModal('신청에 실패하였습니다. 다시 시도해 주세요.')
+            }
         })
     }
 
@@ -197,7 +199,7 @@ export default function DetailBody({
             <div className='post-data-box col'>
                     <TextBox
                         title={'개발 언어'}
-                        component={<Tag text={detailData.lang} type={'project'}/>}
+                        component={<Tag text={detailData.lang} type={type}/>}
                     />
                     <TextBox
                         title={'검색 키워드'}
@@ -240,7 +242,7 @@ export default function DetailBody({
                     />}
                 {type === 'project' && !isAdmin && loginUserData.isLogin && 
                 <div className='sticky-box'>
-                    {detailData.totalPeople !== detailData.joinPeople.length && !isClosedProject() ?
+                    {detailData.totalPeople >= detailData.joinPeople.length && !isClosedProject() ?
                     <StyleBorderButton 
                         $width={'100%'}
                         onClick={()=>{

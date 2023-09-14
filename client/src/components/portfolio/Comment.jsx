@@ -5,21 +5,24 @@ import SeeComment from './SeeComment';
 
 export default function Comment({
     isAdmin,
-    detailData
+    detailData,
+    updateHandler
 }) {
     return (
         <StyleDetailContainer
             id='comment'
             className='col'
         >
-            <WriteComment/>
+            <WriteComment
+                updateHandler={updateHandler}
+            />
             {detailData.comments.map((item,idx)=>
                 <SeeComment
                     key={idx}
                     isAdmin={isAdmin}
                     text={item.body}
                     detailData={detailData}
-                    commentData={detailData.comments[idx]}
+                    commentData={item}
                 />
             )}
         </StyleDetailContainer>

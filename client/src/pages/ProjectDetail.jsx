@@ -154,6 +154,7 @@ export default function ProjectDetail() {
   const [isDeleteModal, setIsDeleteModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [deleteApiResult, setDeleteApiResult] = useState(false);
+  const [requestUpdate, setRequestUpdate] = useState(undefined);
   const {toProjectEdit, toProject} = useNav();
 
   //현재 로그인 한 유저 정보
@@ -163,18 +164,12 @@ export default function ProjectDetail() {
   // console.log(loginUserData);
   // console.log(isAdmin);
 
-  const makeErrorModal = () => {
-    setShowModal(true);
-    setApiResult(true);
-  }
-
-  const closeErrorModal = () => {
-    setShowModal(false);
-    setApiResult(false);
-  }
-
   const updateHandler = () => {
     setUpdate((prev)=>!prev);
+  }
+
+  const requestUpdateHandler = () => {
+    setRequestUpdate((prev)=>!prev);
   }
 
   const adminFunction = [
@@ -221,22 +216,18 @@ export default function ProjectDetail() {
   }
 
   const fetchRequestData = () => {
-    if(!requestPeopleData) {
       setIsLoading(true);
       api.get(`projects/${projectId}/application-status`)
       .then(res=>{
-        console.log(res.data);
         setRequestPeopledata(res.data);
       })
       .catch(err=>{
-        makeErrorModal();
+        setShowModal(true);
+        setApiResult(true);
       })
       .finally(()=>{
         setIsLoading(false);
       })
-    } else {
-      setIsOnDetail(false);
-    }
   }
 
   const fetchDeleteProject = (id) => {
@@ -249,16 +240,27 @@ export default function ProjectDetail() {
       setApiResult('프로젝트를 삭제했습니다. 확인 버튼 클릭시 프로젝트 리스트로 돌아갑니다.')
     })
     .catch(err=>{
-      // if(err.code === 'ERR_BAD_REQUEST')
+      console.log(err);
       setIsDeleteModal(false);
       setDeleteApiResult(false);
-      setApiResult('프로젝트 삭제에 실패했습니다. 다시 시도해 주세요')
+      if(err.code === 'ERR_BAD_RESPONSE') {
+        setApiResult('프로젝트에 신청한 사람이 존재하거나 참가한 사람이 있으면 삭제 할 수 없습니다.')  
+      } else {
+        setApiResult('프로젝트 삭제에 실패했습니다. 다시 시도해 주세요')
+      }
     })
   }
 
   useEffect(()=>{
-    fetchData()
+    fetchData();
   },[update]);
+
+  useEffect(()=>{
+    if (requestUpdate !== undefined) {
+      console.log('리퀘스트 업데이트')
+      fetchRequestData(); 
+    }
+  },[requestUpdate])
 
   useEffect(()=>{
     if(loginUserData.userInfo?.memberId === detailData?.memberId) {
@@ -278,7 +280,7 @@ export default function ProjectDetail() {
             setIsOpen={setShowModal}
             title={'알림'}
             body={apiResult}
-            confirmHandler={()=>isDeleteModal ? fetchDeleteProject(projectId) : setShowModal(false)}
+            confirmHandler={()=>isDeleteModal ? fetchDeleteProject(projectId) : deleteApiResult ? toProject() : setShowModal(false)}
           />}
         {isLoading
         ? <SuspenseDetailPage/>
@@ -311,8 +313,9 @@ export default function ProjectDetail() {
               {isLoading
               ? <ProjectCardSkeletion/>
               : <ProjectCardContainer
+                  detailData={detailData}
                   cardList={requestPeopleData.requestPeople}
-                  updateHandler={updateHandler}
+                  requestUpdateHandler={requestUpdateHandler}
                 />
               }
             </StyleStatusContainer>
