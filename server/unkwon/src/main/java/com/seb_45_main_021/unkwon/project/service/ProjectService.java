@@ -1,5 +1,6 @@
 package com.seb_45_main_021.unkwon.project.service;
 
+import com.seb_45_main_021.unkwon.auth.userdetails.MemberInfo;
 import com.seb_45_main_021.unkwon.commonCode.CommonCode;
 import com.seb_45_main_021.unkwon.commonCode.CommonCodeRepository;
 import com.seb_45_main_021.unkwon.exception.BusinessLogicException;
@@ -86,10 +87,15 @@ public class ProjectService {
     @Transactional
     public Project updateProject(Project project,
                                  MultipartFile titleImageFile, String titleImageUrl,
-                                 List<MultipartFile> imageFiles, List<String> imageUrls) {
+                                 List<MultipartFile> imageFiles, List<String> imageUrls,
+                                 MemberInfo memberInfo) {
 
         // 해당 프로젝트의 Id 로 존재하는 프로젝트인지 검증
         Project findProject = findVerifiedProject(project.getProjectId());
+
+        // 작성자와 수정자 memberId 일치 검증
+        Member findMember = findProject.getMember();
+        findMember.checkMemberId(memberInfo);
 
         // 수정된 정보 업데이트
         Optional.ofNullable(project.getTitle())
@@ -149,6 +155,7 @@ public class ProjectService {
                 return i;
         return -1;
     }
+
     // 특정 프로젝트 조회
     public Project findProject(long projectId) {
         Project findProject = findVerifiedProject(projectId);
@@ -249,9 +256,13 @@ public class ProjectService {
     }
 
     // 프로젝트 삭제
-    public void deleteProject(long projectId) {
+    public void deleteProject(long projectId, MemberInfo memberInfo) {
 
         Project findProject = findVerifiedProject(projectId);
+
+        Member findMember = findProject.getMember();
+        findMember.checkMemberId(memberInfo);
+
         projectRepository.delete(findProject);
 
     }
@@ -297,9 +308,9 @@ public class ProjectService {
 
     // 프로젝트 지원 취소
     @Transactional
-    public void revokeProject(long projectStatusId) {
+    public void revokeProject(long projectId, long memberId) {
 
-        ProjectStatus projectStatus = projectStatusRepository.findById(projectStatusId)
+        ProjectStatus projectStatus = projectStatusRepository.findByMember_MemberIdAndProject_ProjectId(memberId, projectId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PROJECT_NOT_FOUND));
 
         projectStatusRepository.delete(projectStatus);

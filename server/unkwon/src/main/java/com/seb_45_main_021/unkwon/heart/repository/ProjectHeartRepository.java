@@ -23,8 +23,8 @@ public interface ProjectHeartRepository extends JpaRepository<ProjectHeart, Long
 
     List<ProjectHeart> findByProject(Project project);
 
-    @Query("SELECT p.project FROM ProjectHeart p WHERE p.createdAt >= :oneWeekAgo GROUP BY p.project ORDER BY COUNT(p.project) DESC")
-    List<Project> findTop10ProjectsByHeartsLast7Days(@Param("oneWeekAgo") LocalDateTime oneWeekAgo);
+    @Query("SELECT p.project FROM ProjectHeart p WHERE p.createdAt >= :oneWeekAgo GROUP BY p.project ORDER BY COUNT(p.project) DESC ")
+    List<Project> findTop10ProjectsByHeartsLast7Days(@Param("oneWeekAgo") LocalDateTime oneWeekAgo, Pageable pageable);
 
     List<ProjectHeart> findByMember(Member member);
 }
