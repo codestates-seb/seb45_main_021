@@ -67,6 +67,7 @@ const StyleTextArea = styled.textarea`
  * @param {any} rest - 기타 프로퍼티들은 인풋 요소에 스프레드 문법으로 전달됩니다.
  * @returns {JSX.Element}
  */
+
 export default function Input({
   label,
   error,

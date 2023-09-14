@@ -3,7 +3,10 @@ import { FaRegHeart } from 'react-icons/fa';
 import { styled } from 'styled-components';
 import Modal from './Modal';
 import useNav from '../../hooks/useNav';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { heartListUpdate } from '../../redux/userForm/userSlice';
+import api from '../../hooks/useAxiosInterceptor';
+
 const StyleLike = styled.div`
   display: flex;
   font-size: ${(props) => props.$size || '2rem'};
@@ -27,29 +30,34 @@ const StyleLike = styled.div`
  * @returns {JSX.Element}
  */
 
-export default function Like({ likes, size, unLikePost, likePost, postId }) {
-  const { isLogin, userInfo } = useSelector((state) => state.user);
-  const [userLikes, setUserLikes] = useState([1, 3, 4, 5, 6, 7, 8, 9, 10]);
-  const isUserLiked = userLikes.includes(+postId);
+export default function Like({ heartCount, size, postId, type, likeUpdateSuccess }) {
+  const { isLogin, userInfo, likeList } = useSelector((state) => state.user);
+  const { portfolioList, projectList } = likeList;
+  const dispatch = useDispatch();
+  const listType = type === 'projects' ? 'projectList' : 'portfolioList';
+  const isUserLiked =
+    type === 'projects' ? projectList.includes(postId) : portfolioList.includes(postId);
   const [isOpen, setIsOpen] = useState(false);
   const { toSignin } = useNav();
-  // ?? 여기서 해당 유저 정보 객체에 하트 리스트를 업데이트 한다고해서 리스트에 있는 하트가 업데이트 되는가?
-  // 만약 안된다면 어떻게 할 것인가?
 
-  const unLikePostHandler = () => {
-    setUserLikes((prevLikes) => prevLikes.filter((id) => +id !== +postId));
-    // 서버에다가 좋아요 해제 요청
-    // unLikePost();
-  };
-  const likePostHandler = () => {
-    setUserLikes((prevLikes) => [...prevLikes, +postId]);
-    // 서버에다가 좋아요 업데이트 요청
-    // likePost();
-  };
-  const likeUpdateHandler = () => {
+  const likeUpdateHandler = async () => {
     if (!isLogin) setIsOpen(true);
-    else isUserLiked ? unLikePostHandler() : likePostHandler();
+    else {
+      try {
+        await api.post(`/${type === 'projects' ? 'project' : 'portfolio'}/hearts/${postId}`, {
+          memberId: userInfo.memberId,
+        });
+        const updatedList = isUserLiked
+          ? likeList[listType].filter((item) => item !== postId)
+          : [...likeList[listType], postId];
+        dispatch(heartListUpdate({ ...likeList, [listType]: updatedList }));
+        likeUpdateSuccess(postId, isUserLiked ? 'decrease' : 'increase');
+      } catch (e) {
+        console.error('좋아요 등록에 실패했습니다.', e);
+      }
+    }
   };
+
   return (
     <StyleLike $size={size}>
       {isOpen && (
@@ -64,7 +72,7 @@ export default function Like({ likes, size, unLikePost, likePost, postId }) {
         onClick={likeUpdateHandler}
         color={isUserLiked ? '#ff0000' : 'var(--black-100)'}
       />
-      <span>{likes}</span>
+      <span>{heartCount}</span>
     </StyleLike>
   );
 }
