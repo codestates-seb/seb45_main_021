@@ -161,19 +161,21 @@ public class ProjectController {
     }
 
     // 프로젝트 지원 수락
-    @PatchMapping("/request/{projectStatusId}/accept")
-    public ResponseEntity acceptProject(@PathVariable Long projectStatusId) {
+    @PatchMapping("/{project-id}/request/{member-id}/accept")
+    public ResponseEntity acceptProject(@PathVariable("project-id") @Positive long projectId,
+                                        @PathVariable("member-id") @Positive long memberId) {
 
-        projectService.approveProject(projectStatusId);
+        projectService.approveProject(projectId, memberId);
 
         return ResponseEntity.ok().build();
     }
 
     // 프로젝트 지원 거절
-    @PatchMapping("/request/{projectStatusId}/refuse")
-    public ResponseEntity refuseProject(@PathVariable Long projectStatusId) {
+    @PatchMapping("/{project-id}/request/{member-id}/refuse")
+    public ResponseEntity refuseProject(@PathVariable("project-id") @Positive long projectId,
+                                        @PathVariable("member-id") @Positive long memberId) {
 
-        projectService.rejectProject(projectStatusId);
+        projectService.rejectProject(projectId, memberId);
 
         return ResponseEntity.ok().build();
 
