@@ -35,6 +35,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "build": "react-scripts build",
     "deploy": "react-scripts build && cp build/index.html build/404.html && gh-pages -d build"
   },
   "homepage": "https://spec.today",
