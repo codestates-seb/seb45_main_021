@@ -10,6 +10,7 @@ spring:
     url: jdbc:mysql://spec-db-1.c8qdyivupwng.ap-northeast-2.rds.amazonaws.com:13306/SPEC
     username: admin
     password: ${MYSQL_SECRET}
+
   jpa:
     open-in-view: true
     hibernate:

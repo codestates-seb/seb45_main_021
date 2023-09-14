@@ -1,7 +1,7 @@
 package com.seb_45_main_021.unkwon.heart.controller;
 
+import com.seb_45_main_021.unkwon.auth.userdetails.MemberInfo;
 import com.seb_45_main_021.unkwon.dto.MultiResponseDto;
-import com.seb_45_main_021.unkwon.heart.dto.ProjectHeartDto;
 import com.seb_45_main_021.unkwon.heart.service.ProjectHeartService;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.member.service.MemberService;
@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,8 +43,9 @@ public class ProjectHeartController {
     @PostMapping("/{projectId}")
     @ResponseBody
     public ResponseEntity heartProject(@PathVariable Long projectId,
-                                       @RequestBody ProjectHeartDto projectHeartDto) {
-        Long memberId = Long.valueOf(projectHeartDto.getMemberId());
+                                       UsernamePasswordAuthenticationToken token) {
+        MemberInfo memberInfo = (MemberInfo) token.getPrincipal();
+        Long memberId = memberInfo.getMemberId();
         Member member = memberService.findVerifiedMember(memberId);
 
         Project project = projectService.findVerifiedProject(projectId);

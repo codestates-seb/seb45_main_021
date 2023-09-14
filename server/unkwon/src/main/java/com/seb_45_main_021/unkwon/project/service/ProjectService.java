@@ -314,7 +314,7 @@ public class ProjectService {
     public void revokeProject(long projectId, long memberId) {
 
         ProjectStatus projectStatus = projectStatusRepository.findByMember_MemberIdAndProject_ProjectId(memberId, projectId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PROJECT_NOT_FOUND));
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PROJECT_STATUS_NOT_FOUND));
 
         projectStatusRepository.delete(projectStatus);
 
@@ -337,10 +337,10 @@ public class ProjectService {
     }
 
     // 프로젝트 지원 수락
-    public void approveProject(Long projectStatusId) {
+    public void approveProject(long projectId, long memberId) {
 
         // 프로젝트 지원 상태 식별자로 상태 찾기
-        ProjectStatus projectStatus = projectStatusRepository.findById(projectStatusId)
+        ProjectStatus projectStatus = projectStatusRepository.findByMember_MemberIdAndProject_ProjectId(memberId, projectId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PROJECT_STATUS_NOT_FOUND));
 
         // 변경할 상태코드가 존재하는지 검증
@@ -354,11 +354,11 @@ public class ProjectService {
     }
 
     // 프로젝트 지원 거절
-    public void rejectProject(Long projectStatusId) {
+    public void rejectProject(long projectId, long memberId) {
 
         // 프로젝트 지원 상태 식별자로 상태 찾기
-        ProjectStatus projectStatus = projectStatusRepository.findById(projectStatusId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PROJECT_NOT_FOUND));
+        ProjectStatus projectStatus = projectStatusRepository.findByMember_MemberIdAndProject_ProjectId(memberId, projectId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PROJECT_STATUS_NOT_FOUND));
 
         // 변경할 상태코드가 존재하는지 검증
         CommonCode acceptedStatus = commonCodeRepository.findByCodeId(3L)
