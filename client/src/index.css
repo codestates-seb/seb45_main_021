@@ -2,6 +2,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;500;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;500;700&family=Monoton&display=swap');
 
+* {
+  text-shadow: 2px 2px 2px var(--shadow);
+  cursor: default;
+}
+
 html {
   --nanum: 'Nanum Gothic', sans-serif;
   --nanum-normal: 300;
@@ -30,6 +35,18 @@ html {
   --backgroundColor: #1e1c1c;
   background-color: var(--backgroundColor);
   overflow-x: hidden;
+  font-size: 10px;
+  font-family: var(--nanum);
+  color: var(--black-100);
+  -webkit-font-smoothing: antialiased;
+  --inner: 1250px;
+  @media (max-width: 1250px) {
+    --inner: 85%;
+    font-size: 8.5px;
+  }
+  @media (max-width: 520px) {
+    --inner: 95%;
+  }
 }
 
 .hidden {
@@ -90,4 +107,14 @@ path {
 
 a {
   text-decoration: none;
+}
+
+input {
+  outline: none;
+  cursor: text;
+}
+textarea {
+  outline: none;
+  cursor: text;
+  resize: none;
 }
