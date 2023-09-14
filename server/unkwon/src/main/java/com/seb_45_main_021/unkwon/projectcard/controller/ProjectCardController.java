@@ -3,6 +3,7 @@ package com.seb_45_main_021.unkwon.projectcard.controller;
 import com.seb_45_main_021.unkwon.projectcard.dto.request.ProjectCardPatchDto;
 import com.seb_45_main_021.unkwon.projectcard.dto.request.ProjectCardPostDto;
 import com.seb_45_main_021.unkwon.projectcard.dto.response.ProjectCardApplyResponseDto;
+import com.seb_45_main_021.unkwon.projectcard.dto.response.ProjectCardPostResponseDto;
 import com.seb_45_main_021.unkwon.projectcard.entity.ProjectCard;
 import com.seb_45_main_021.unkwon.projectcard.mapper.ProjectCardMapper;
 import com.seb_45_main_021.unkwon.projectcard.service.ProjectCardService;
@@ -27,10 +28,11 @@ public class ProjectCardController {
     public ResponseEntity postProjectCard(@PathVariable("member-id") @Positive Long memberId,
                                 @Valid @RequestBody ProjectCardPostDto dto){
         dto.setMemberId(memberId);
+        ProjectCard projectCard = projectCardService.postProjectCard(dto);
+        ProjectCardPostResponseDto postResponseDto = ProjectCardPostResponseDto.builder()
+                .projectCardId(projectCard.getProjectCardId()).build();
 
-        projectCardService.postProjectCard(dto);
-
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(postResponseDto, HttpStatus.CREATED);
     }
 
     @GetMapping("/{member-id}")

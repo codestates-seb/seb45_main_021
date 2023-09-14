@@ -114,7 +114,6 @@ public class ProjectService {
             ProjectTitleImage titleImage = new ProjectTitleImage(); // 새 ProjectTitleImage 객체 생성
             titleImage.setImageUrl(newTitleImageUrl); // imageUrl 저장
             findProject.setProjectTitleImage(titleImage); // 프로젝트에 ProjectTitleImage 객체 저장
-
         }
         // 삭제 이미지 URL 배열을 받았다면
         if(imageUrls != null && !imageUrls.isEmpty()) {

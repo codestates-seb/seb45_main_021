@@ -26,7 +26,7 @@ public class ProjectCard extends Auditable {
     private String tag;
 
     // 연락망
-    @Column(length = 13, nullable = false)
+    @Column(length = 13)
     private String tell;
 
     @Column(nullable = false)
