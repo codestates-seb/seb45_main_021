@@ -8,6 +8,7 @@ import ProGress from '../common/ProGress';
 import { useParams } from 'react-router-dom';
 import { isValidPhone } from './isValid';
 import Modal from '../common/Modal';
+import { isValidTag } from './isValid';
 
 const SwiperCard = styled.div`
   width: 100%;
@@ -52,6 +53,7 @@ const Tag = styled.div`
   text-align: center;
   padding: 5px 10px;
   font-size: 1.2rem;
+  margin-top: 8px;
   svg {
     cursor: pointer;
   }
@@ -67,7 +69,6 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
     tell: { value: data.tell, error: '' },
     aboutMe: { value: data.aboutMe, error: '' },
     tags: data.tags,
-    curString: '',
   });
   const { memberId } = useParams();
   const [isSubmit, setIsSubmit] = useState(false);
@@ -77,14 +78,7 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
       setTemp({
         tell: { value: '', error: '' },
         aboutMe: { value: '', error: '' },
-        tags: [],
-        curString: '',
-      });
-    }
-    if (type === 'fetch' && temp.tags[0] === undefined) {
-      setTemp({
-        ...temp,
-        tags: [],
+        tags: { value: [], error: '', curString: '' },
       });
     }
   }, []);
@@ -92,10 +86,14 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
   const handleClickSubmit = () => {
     const isvalidPhone = isValidPhone(temp.tell.value.replace(/-/g, ''));
     if (type === 'fetch') {
-      if (isvalidPhone && temp.aboutMe.value.length <= 200) {
+      if (
+        isvalidPhone &&
+        temp.aboutMe.value.length <= 200 &&
+        temp.abooutMe.value.trim().length > 0
+      ) {
         api
           .patch(`/projectcards/${data.projectCardId}`, {
-            tags: temp.tags,
+            tags: temp.tags.value,
             tell: temp.tell.value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'),
             aboutMe: temp.aboutMe.value,
           })
@@ -106,26 +104,42 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
             tem[index] = {
               ...tem[index],
               working: trueData.profile.working,
-              tags: temp.tags,
+              tags: { value: temp.tags.value, error: '', curString: '' },
               tell: temp.tell.value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'),
               aboutMe: temp.aboutMe.value,
             };
             setData({ ...trueData, projectCard: tem });
             handleClickCancel();
           });
-      } else if (!isvalidPhone) {
-        setTemp({ ...temp, tell: { ...temp.tell, error: '-를 제외한 전화번호를 입력해주세요.' } });
-      } else if (temp.aboutMe.value.length > 200) {
-        setTemp({
-          ...temp,
-          abooutMe: { ...temp.abooutMe.slice(0, 200), error: '200 글자 이하로 입력해주세요.' },
-        });
+      } else {
+        if (!isvalidPhone) {
+          setTemp({
+            ...temp,
+            tell: { ...temp.tell, error: '-를 제외한 전화번호를 입력해주세요.' },
+          });
+        }
+        if (temp.aboutMe.value.length > 200) {
+          setTemp({
+            ...temp,
+            abooutMe: { ...temp.abooutMe.slice(0, 200), error: '200 글자 이하로 입력해주세요.' },
+          });
+        }
+        if (!temp.abooutMe.value.trim().length > 0) {
+          setTemp({
+            ...temp,
+            abooutMe: { ...temp.aboutMe, error: '비워둘 수 없습니다.' },
+          });
+        }
       }
     } else if (type === 'new') {
-      if (isvalidPhone && temp.aboutMe.value.length <= 200) {
+      if (
+        isvalidPhone &&
+        temp.aboutMe.value.length <= 200 &&
+        temp.aboutMe.value.trim().length > 0
+      ) {
         api
           .post(`/projectcards/${memberId}`, {
-            tags: temp.tags,
+            tags: temp.tags.value,
             tell: temp.tell.value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'),
             aboutMe: temp.aboutMe.value,
           })
@@ -139,20 +153,32 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
               projectCardId: el.data.projectCardId,
               working: trueData.profile.working,
               userImgUrl: trueData.profile.userImgUrl,
-              tags: temp.tags,
+              tags: { value: temp.tags.value, error: '', curString: '' },
               tell: temp.tell.value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'),
               aboutMe: temp.aboutMe.value,
             };
             setData({ ...trueData, projectCard: tem });
             handleClickCancel();
           });
-      } else if (!isvalidPhone) {
-        setTemp({ ...temp, tell: { ...temp.tell, error: '-를 제외한 전화번호를 입력해주세요.' } });
-      } else if (temp.aboutMe.value.length > 200) {
-        setTemp({
-          ...temp,
-          abooutMe: { ...temp.abooutMe, error: '200 글자 이하로 입력해주세요.' },
-        });
+      } else {
+        if (!isvalidPhone) {
+          setTemp({
+            ...temp,
+            tell: { ...temp.tell, error: '-를 제외한 전화번호를 입력해주세요.' },
+          });
+        }
+        if (temp.aboutMe.value.length > 200) {
+          setTemp({
+            ...temp,
+            abooutMe: { ...temp.abooutMe, error: '200 글자 이하로 입력해주세요.' },
+          });
+        }
+        if (!temp.aboutMe.value.trim().length > 0) {
+          setTemp({
+            ...temp,
+            aboutMe: { ...temp.aboutMe, error: '비워둘 수 없습니다.' },
+          });
+        }
       }
     }
   };
@@ -165,20 +191,44 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
     if (e.code !== 'Enter' && e.code !== 'NumpadEnter') return;
     e.preventDefault();
     if (
-      temp.curString.split(' ').join('').length <= 10 &&
-      temp.curString.split(' ').join('').length > 0
+      temp.tags.curString.split(' ').join('').length <= 10 &&
+      temp.tags.curString.split(' ').join('').length > 0
     ) {
       if (
-        temp.tags?.length <= 2 &&
-        temp.tags.filter((el) => el.toLowerCase() === temp.curString.toLowerCase()).length === 0
+        temp.tags.value?.length <= 2 &&
+        temp.tags.value.filter((el) => el.toLowerCase() === temp.tags.curString.toLowerCase())
+          .length === 0 &&
+        isValidTag(temp.tags.curString)
       ) {
         setTemp({
           ...temp,
-          tags: [...temp.tags, temp.curString.split(' ').join('')],
+          tags: {
+            value: [...temp.tags.value, temp.tags.curString.split(' ').join('')],
+            error: '',
+            curString: '',
+          },
         });
         setTimeout(() => {
           e.target.value = '';
         }, 0);
+      } else if (!isValidTag(temp.tags.curString)) {
+        setTemp({
+          ...temp,
+          tags: {
+            ...temp.tags,
+            error: '한글은 자음과 모음만 등록할 수 없습니다.',
+            curString: '',
+          },
+        });
+      } else {
+        setTemp({
+          ...temp,
+          tags: {
+            ...temp.tags,
+            error: '중복은 허용하지 않습니다.',
+            curString: '',
+          },
+        });
       }
     }
   };
@@ -230,18 +280,19 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
           borderRadius="10px"
           maxLength={10}
           placeholder="태그는 최대 중복제외 3개까지 등록이 가능합니다."
-          value={temp.curString || ''}
+          value={temp.tags.curString || ''}
+          error={temp.tags.error}
           onChange={(e) =>
             setTemp({
               ...temp,
-              curString: e.target.value,
+              tags: { ...temp.tags, curString: e.target.value },
             })
           }
           onKeyDown={handleTagKeyDown}
         />
-        <ProGress comPleteNum={3} proGressNum={temp.tags?.length} fontSize="1.5rem" />
+        <ProGress comPleteNum={3} proGressNum={temp.tags.value.length} fontSize="1.5rem" />
         <div className="row gap">
-          {temp.tags?.map((el, i) => (
+          {temp.tags.value.map((el, i) => (
             <Tag key={i}>
               {el}
               <AiOutlineClose
@@ -250,7 +301,11 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
                 onClick={() =>
                   setTemp({
                     ...temp,
-                    tags: temp.tags.filter((_, idx) => i !== idx),
+                    tags: {
+                      value: temp.tags.value.filter((_, idx) => i !== idx),
+                      error: '',
+                      curString: '',
+                    },
                   })
                 }
               />

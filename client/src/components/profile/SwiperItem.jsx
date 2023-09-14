@@ -97,7 +97,7 @@ export default function SwiperItem({
       window.alert('삭제가 완료되었습니다.');
       const temp = trueData.projectCard;
       temp[idx] = {
-        tags: [],
+        tags: { value: [], error: '', curString: '' },
         working: trueData.profile.working,
         userImgUrl: trueData.profile.userImgUrl,
       };
@@ -125,11 +125,11 @@ export default function SwiperItem({
                     <p>{data.working ? '재직중' : '구직중'}</p>
                   </div>
                   <div className="col gap">
-                    {data.tags.length !== 0 && (
+                    {data.tags.value.length !== 0 && (
                       <>
                         <p className="label">기술</p>
                         <div className="row gap">
-                          {data.tags.map((el, i) => (
+                          {data.tags.value.map((el, i) => (
                             <Tag key={i} text={el} />
                           ))}
                         </div>

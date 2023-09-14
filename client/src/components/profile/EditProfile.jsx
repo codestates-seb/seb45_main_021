@@ -111,7 +111,7 @@ export default function EditProfile({ editProfile, setEditProfile, handleTagKeyD
               onChange={(e) => {
                 setEditProfile({
                   ...editProfile,
-                  tags: { value: [...editProfile.tags.value], curString: e.target.value },
+                  tags: { ...editProfile.tags, curString: e.target.value },
                 });
               }}
               onKeyDown={handleTagKeyDown}
@@ -138,6 +138,7 @@ export default function EditProfile({ editProfile, setEditProfile, handleTagKeyD
                             tags: {
                               value: editProfile.tags.value.filter((_, idx) => i !== idx),
                               curString: editProfile.tags.curString,
+                              error: '',
                             },
                           })
                         }

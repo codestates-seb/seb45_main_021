@@ -12,3 +12,8 @@ export const isValidPhone = (phone) => {
   const phonePattern = /^010\d{8}$/;
   return phonePattern.test(phone);
 };
+
+export const isValidTag = (tag) => {
+  const tagPattern = /^[a-zA-Z0-9가-힣]+$/;
+  return tagPattern.test(tag);
+};
