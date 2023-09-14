@@ -22,7 +22,6 @@ spring:
       hibernate:
         connection:
           characterEncoding: utf8mb4
-
   servlet:
     multipart:
       max-file-size: 50MB
@@ -37,7 +36,6 @@ spring:
             scope:
               - email
               - profile
-
 logging:
   level:
     org.hibernate.SQL: debug
@@ -53,7 +51,6 @@ jwt:
     secret: ${JWT_SECRET_KEY}
   access-token-expiration-minutes: 420
   refresh-token-expiration-minutes: 420
-
 cloud:
   aws:
     s3:

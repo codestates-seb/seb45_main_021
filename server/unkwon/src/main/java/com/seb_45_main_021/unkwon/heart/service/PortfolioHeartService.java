@@ -8,6 +8,7 @@ import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,7 +60,8 @@ public class PortfolioHeartService {
     }
     public List<Portfolio> getTop10PortfoliosByHeartsLast7Days() {
         LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7);
-        return portfolioHeartRepository.findTop10PortfoliosByHeartsLast7Days(oneWeekAgo);
+        Pageable pageable = PageRequest.of(0,10);
+        return portfolioHeartRepository.findTop10PortfoliosByHeartsLast7Days(oneWeekAgo,pageable);
     }
 
     public List<PortfolioHeart> getHeartByPortfolio(Portfolio portFolio){

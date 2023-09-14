@@ -53,8 +53,12 @@ public class PortfolioService {
                 .ifPresent(title -> findPortfolio.setTitle(title));
         Optional.ofNullable(portFolio.getBody())
                 .ifPresent(content -> findPortfolio.setBody(content));
-        Optional.ofNullable(portFolio.getTags())
-                .ifPresent(tags -> findPortfolio.setTags(tags));
+        Optional.ofNullable(portFolio.getTagA())
+                .ifPresent(tagA -> findPortfolio.setTagA(tagA));
+        Optional.ofNullable(portFolio.getTagB())
+                .ifPresent(tagB -> findPortfolio.setTagA(tagB));
+        Optional.ofNullable(portFolio.getTagC())
+                .ifPresent(tagC -> findPortfolio.setTagA(tagC));
         Optional.ofNullable(portFolio.getLang())
                 .ifPresent(lang-> findPortfolio.setLang(lang));
         Optional.ofNullable(portFolio.isIsEmploy())
@@ -77,20 +81,18 @@ public class PortfolioService {
     public Page<Portfolio> findPortfolios(String[] tags,String[] lang, Pageable pageable){
 
         if(tags != null && lang != null){
-            Arrays.sort(tags);
-            Arrays.sort(lang);
 
             StringBuilder tagsLikeQueryBuilder = new StringBuilder("");
 
             for (int i = 0; i < tags.length; i++) {
-                String temp = "%"+ tags[i] + "%";
+                String temp = tags[i];
                 tagsLikeQueryBuilder.append(temp);
             }
 
             StringBuilder langsLikeQueryBuilder = new StringBuilder("");
 
             for (int i = 0; i < lang.length; i++) {
-                String temp = "%" + lang[i] + "%";
+                String temp = lang[i];
                 langsLikeQueryBuilder.append(temp);
             }
             return portfolioRepository.findByTagsAndLang(tagsLikeQueryBuilder.toString(),langsLikeQueryBuilder.toString(),pageable);
@@ -101,7 +103,7 @@ public class PortfolioService {
             StringBuilder tagLikeQueryBuilder = new StringBuilder("");
 
             for (int i = 0; i < tags.length; i++) {
-                String temp = "%"+ tags[i] + "%";
+                String temp = tags[i];
                 tagLikeQueryBuilder.append(temp);
             }
             return portfolioRepository.findByTags(tagLikeQueryBuilder.toString(),pageable);
@@ -112,7 +114,7 @@ public class PortfolioService {
             StringBuilder langLikeQueryBuilder = new StringBuilder("");
 
             for (int i = 0; i < lang.length; i++) {
-                String temp = "%" + lang[i] + "%";
+                String temp =lang[i];
                 langLikeQueryBuilder.append(temp);
             }
             return portfolioRepository.findByLang(langLikeQueryBuilder.toString(),pageable);
@@ -132,14 +134,14 @@ public class PortfolioService {
             StringBuilder tagsLikeQueryBuilder = new StringBuilder("");
 
             for (int i = 0; i < tags.length; i++) {
-                String temp = "%"+ tags[i] + "%";
+                String temp =tags[i];
                 tagsLikeQueryBuilder.append(temp);
             }
 
             StringBuilder langsLikeQueryBuilder = new StringBuilder("");
 
             for (int i = 0; i < lang.length; i++) {
-                String temp = "%" + lang[i] + "%";
+                String temp =lang[i];
                 langsLikeQueryBuilder.append(temp);
             }
             return portfolioRepository.findByTagsAndLangAndIsEmploy(tagsLikeQueryBuilder.toString(),langsLikeQueryBuilder.toString(),pageable);
@@ -150,7 +152,7 @@ public class PortfolioService {
             StringBuilder tagLikeQueryBuilder = new StringBuilder("");
 
             for (int i = 0; i < tags.length; i++) {
-                String temp = "%"+ tags[i] + "%";
+                String temp =tags[i];
                 tagLikeQueryBuilder.append(temp);
             }
             return portfolioRepository.findByTagsAndIsEmploy(tagLikeQueryBuilder.toString(),pageable);
@@ -161,7 +163,7 @@ public class PortfolioService {
             StringBuilder langLikeQueryBuilder = new StringBuilder("");
 
             for (int i = 0; i < lang.length; i++) {
-                String temp = "%" + lang[i] + "%";
+                String temp =lang[i];
                 langLikeQueryBuilder.append(temp);
             }
             return portfolioRepository.findByLangAndIsEmploy(langLikeQueryBuilder.toString(),pageable);
