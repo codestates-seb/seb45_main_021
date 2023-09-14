@@ -8,6 +8,7 @@ import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
 import com.seb_45_main_021.unkwon.project.entity.Project;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,7 +59,8 @@ public class ProjectHeartService {
 
     public List<Project> getTop10ProjectsByHeartsLast7Days() {
         LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7);
-        return projectHeartRepository.findTop10ProjectsByHeartsLast7Days(oneWeekAgo);
+        Pageable pageable = PageRequest.of(0, 10);
+        return projectHeartRepository.findTop10ProjectsByHeartsLast7Days(oneWeekAgo,pageable);
     }
 
     public List<ProjectHeart> getHeartByProject(Project project){
