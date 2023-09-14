@@ -47,7 +47,12 @@ public class Project extends Auditable {
     private String closedAt;
 
 
-    private String[] tags;
+    private String tagA;
+
+    private String tagB;
+
+    private String tagC;
+
 
     private String lang;
 

@@ -17,6 +17,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import java.util.List;
@@ -34,10 +35,16 @@ public interface ProjectMapper {
         project.setTitle(projectPostDto.getTitle());
         project.setTotalPeople(projectPostDto.getTotalPeople());
         project.setLang(projectPostDto.getLang());
-        project.setTags(new String[]{projectPostDto.getTags()});
         project.setBody(projectPostDto.getBody());
         project.setDescription(projectPostDto.getDescription());
         project.setClosedAt(projectPostDto.getClosedAt());
+
+        if(projectPostDto.getTags() != null) {
+            String[] tags = projectPostDto.getTags().split(",");
+            project.setTagA(tags[0]);
+            if(tags.length >= 2) project.setTagB(tags[1]);
+            if(tags.length >= 3) project.setTagC(tags[2]);
+        }
 
         return project;
     }
@@ -49,10 +56,16 @@ public interface ProjectMapper {
         project.setTitle(projectPatchDto.getTitle());
         project.setTotalPeople(projectPatchDto.getTotalPeople());
         project.setLang(projectPatchDto.getLang());
-        project.setTags(new String[]{projectPatchDto.getTags()});
         project.setBody(projectPatchDto.getBody());
         project.setDescription(projectPatchDto.getDescription());
         project.setClosedAt(projectPatchDto.getClosedAt());
+
+        if(projectPatchDto.getTags() != null) {
+            String[] tags = projectPatchDto.getTags().split(",");
+            project.setTagA(tags[0]);
+            if(tags.length >= 2) project.setTagB(tags[1]);
+            if(tags.length >= 3) project.setTagC(tags[2]);
+        }
 
         return project;
     }
@@ -106,6 +119,18 @@ public interface ProjectMapper {
 
     default ProjectResponseDto projectToProjectResponseDto(Project project) {
 
+        List<String> tagsList = new ArrayList<>();
+        if (project.getTagA() != null) {
+            tagsList.add(project.getTagA());
+        }
+        if (project.getTagB() != null) {
+            tagsList.add(project.getTagB());
+        }
+        if (project.getTagC() != null) {
+            tagsList.add(project.getTagC());
+        }
+        String[] tags = tagsList.toArray(new String[0]);
+
         ProjectResponseDto projectResponseDto = ProjectResponseDto.builder()
                 .projectId(project.getProjectId())
                 .memberId(project.getMember().getMemberId())
@@ -119,7 +144,7 @@ public interface ProjectMapper {
                 .modifiedAt(project.getModifiedAt())
                 .closedAt(project.getClosedAt())
                 .lang(project.getLang())
-                .tags(parseTags(Arrays.toString(project.getTags())))
+                .tags(tags)
                 .body(project.getBody())
                 .description(project.getDescription())
                 .heartCount(project.getHeartCount())
@@ -136,29 +161,6 @@ public interface ProjectMapper {
                 .map(this::projectToProjectResponseDto)
                 .collect(Collectors.toList());
     }
-
-    default String [] mapTags(String tags) {
-        if (tags == null || tags.isEmpty()) {
-            return new String[0];
-        }
-        return  tags.split(",");
-    }
-    private String[] parseTags(String tags) {
-        if (tags == null || tags.isEmpty()) {
-            return null;
-        }
-
-        // 태그 문자열을 쉼표로 분리하여 배열로 반환
-        String[] tagArray = tags.split(",");
-
-        // 각 태그 문자열의 양 끝에 있는 공백 및 대괄호 제거
-        for (int i = 0; i < tagArray.length; i++) {
-            tagArray[i] = tagArray[i].trim().replaceAll("^\\[|\\]$", "");
-        }
-
-        return tagArray;
-    }
-
 
     default List<ProjectProfileResponseDto> projectToProfileResponseDto(List<Project> projectList){
         return projectList.stream()
