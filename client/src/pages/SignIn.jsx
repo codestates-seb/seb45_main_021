@@ -21,16 +21,6 @@ const StyleContainer = styled(Page)`
   align-items: center;
   gap: 2rem;
   font-size: 2rem;
-  scale: 1;
-  ${desktop} {
-    scale: 1;
-  }
-  @media (max-width: 800px) {
-    scale: 0.8;
-  }
-  ${mobile} {
-    scale: 0.8;
-  }
   h3 {
     font-size: 5rem;
     font-weight: 700;
@@ -50,7 +40,7 @@ const StyleContainer = styled(Page)`
     ${desktop} {
       margin-bottom: 5rem;
     }
-    @media (max-width: 800px) {
+    @media (max-width: 900px) {
       margin-bottom: 3rem;
     }
     ${mobile} {
@@ -75,13 +65,13 @@ const StyleContainer = styled(Page)`
 
 const StyleRowContainer = styled.div`
   justify-content: center;
-  width: fit-content;
+  width: 100%;
   gap: 6rem;
   display: flex;
   ${desktop} {
     flex-direction: row;
   }
-  @media (max-width: 800px) {
+  @media (max-width: 900px) {
     flex-direction: column;
     gap: 4rem;
   }
@@ -128,7 +118,7 @@ const StyleDivider = styled.div`
     ${desktop} {
       top: 0;
     }
-    @media (max-width: 800px) {
+    @media (max-width: 900px) {
       left: 0;
       width: 40%;
       border-bottom: 1px solid var(--black-500);
@@ -149,7 +139,7 @@ const StyleDivider = styled.div`
     ${desktop} {
       bottom: 0;
     }
-    @media (max-width: 800px) {
+    @media (max-width: 900px) {
       right: 0;
       width: 40%;
       border-bottom: 1px solid var(--black-500);
@@ -174,7 +164,7 @@ const StyleDivider = styled.div`
       top: 0;
       bottom: 0;
     }
-    @media (max-width: 800px) {
+    @media (max-width: 900px) {
       left: 0;
       right: 0;
     }
@@ -251,9 +241,9 @@ export default function SignIn() {
 
   const handleClickGoogleBtn = () => {
     // api.post('/oauth2/authorization/google');
-    window.location.assign(
-      'https://6e0a-119-193-199-218.ngrok-free.app/oauth2/authorization/google',
-    );
+    // window.location.assign(
+    //   'https://6e0a-119-193-199-218.ngrok-free.app/oauth2/authorization/google',
+    // );
   };
 
   useEffect(() => {
