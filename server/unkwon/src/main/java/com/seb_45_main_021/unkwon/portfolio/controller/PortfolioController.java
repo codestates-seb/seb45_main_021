@@ -1,5 +1,7 @@
 package com.seb_45_main_021.unkwon.portfolio.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seb_45_main_021.unkwon.auth.userdetails.MemberInfo;
 import com.seb_45_main_021.unkwon.dto.MultiResponseDto;
 import com.seb_45_main_021.unkwon.dto.SingleResponseDto;
@@ -19,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -44,29 +47,49 @@ public class PortfolioController {
 
     //포트폴리오 생성
     @PostMapping
-    public ResponseEntity postPortfolio(@RequestBody @Valid PortfolioDto.Post portfolioPostDto){
-        Portfolio portFolio = portfolioService.createPortfolio(mapper.portfolioPostDtoToPortfolio(portfolioPostDto));
+    public ResponseEntity postPortfolio(@RequestParam("portfolio") String portfolioAsString,
+                                        @RequestParam("titleImageFile") MultipartFile titleImageFile,
+                                        @RequestParam(value = "imageFile", required = false) List<MultipartFile> imageFiles) {
+        try {
+            PortfolioDto.Post portfolioPostDto = new ObjectMapper().readValue(portfolioAsString, PortfolioDto.Post.class);
 
-        URI location = UriCreator.createUri(PORTFOLIO_DEFAULT_URL, portFolio.getPortfolioId());
+            Portfolio portFolio = portfolioService.createPortfolio(mapper.portfolioPostDtoToPortfolio(portfolioPostDto),titleImageFile, imageFiles);
 
-        return ResponseEntity.created(location).build();
+            URI location = UriCreator.createUri(PORTFOLIO_DEFAULT_URL, portFolio.getPortfolioId());
+
+            return ResponseEntity.created(location).body(mapper.portfolioToPortfolioDetailResponseDto(portFolio));
+        }
+        catch (JsonProcessingException e){
+            e.printStackTrace();
+
+            return ResponseEntity.badRequest().body("Invalid JSON format.");
+        }
     }
 
     //포트폴리오 수정
     @PatchMapping("/{portfolio-id}")
     public ResponseEntity updatePortfolio(@PathVariable("portfolio-id")@Positive long portfolioId,
-                                          @Valid @RequestBody PortfolioDto.Patch portfolioPatchDto,
-                                          UsernamePasswordAuthenticationToken token){
+                                          @RequestParam("portfolio") String portfolioAsString,
+                                          @RequestParam(value = "titleImageFile", required = false) MultipartFile titleImageFile,
+                                          @RequestParam(value = "titleImageUrl", required = false) String titleImageUrl,
+                                          @RequestParam(value = "imageFile", required = false) List<MultipartFile> imageFiles,
+                                          @RequestParam(value = "imageUrls", required = false) List<String> imageUrls,
+                                          UsernamePasswordAuthenticationToken token) {
 
         MemberInfo memberInfo = (MemberInfo) token.getPrincipal();
+        try {
+                PortfolioDto.Patch portfolioPatchDto = new ObjectMapper().readValue(portfolioAsString, PortfolioDto.Patch.class);
+            portfolioPatchDto.setPortfolioId(portfolioId);
 
-        portfolioPatchDto.setPortfolioId(portfolioId);
+            Portfolio portFolio = portfolioService.updatePortfolio(mapper.portfolioPatchDtoToPortfolio(portfolioPatchDto),
+                    titleImageFile, titleImageUrl, imageFiles, imageUrls, memberInfo);
 
-        Portfolio portFolio = portfolioService.updatePortfolio(mapper.portfolioPatchDtoToPortfolio(portfolioPatchDto),memberInfo);
-
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(
-                        mapper.portfolioToPortfolioDetailResponseDto(portFolio)), HttpStatus.OK);
+            return new ResponseEntity<>(mapper.portfolioToPortfolioDetailResponseDto(portFolio), HttpStatus.OK);
+        }
+        catch (JsonProcessingException e){
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Invalid JSON format."+e.getMessage());
+        }
     }
 
     //포트폴리오 상세조회

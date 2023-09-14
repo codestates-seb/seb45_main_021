@@ -1,6 +1,8 @@
 package com.seb_45_main_021.unkwon.portfolio.dto;
 
 import com.seb_45_main_021.unkwon.dto.Author;
+import com.seb_45_main_021.unkwon.image.portfolio.PortfolioImage;
+import com.seb_45_main_021.unkwon.image.portfolio.PortfolioTitleImage;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,7 +28,6 @@ public class PortfolioDto {
 
     @Getter
     @Setter
-    @Builder
     public static class Patch{
 
         private long portfolioId;
@@ -34,9 +35,8 @@ public class PortfolioDto {
         private String body;
         private String tags;
         private String lang;
-        private boolean IsEmploy;
-        private boolean IsComment;
-
+        private boolean isEmploy;
+        private boolean isComment;
     }
 
     @Getter
@@ -50,6 +50,7 @@ public class PortfolioDto {
         private String userImgUrl;
         private String title;
         private LocalDateTime createdAt;
+        private PortfolioTitleImage portfolioTitleImage;
         private String[] tags;
         private String lang;
         private int heartCount;
@@ -74,6 +75,8 @@ public class PortfolioDto {
         private long portfolioId;
         private String title;
         private String body;
+        private List<PortfolioImage> images;
+        private PortfolioTitleImage portfolioTitleImage;
         private int view;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
