@@ -49,6 +49,8 @@ export default function useFilterOption() {
       params.push(`page=${pageNum}`);
     }
     params.forEach((el, i) => (newUrl += `${i === 0 ? '?' : '&'}${el}`));
+    console.log(newUrl);
+
     return newUrl;
   };
 
