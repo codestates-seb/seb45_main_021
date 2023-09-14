@@ -24,7 +24,7 @@ public class ProjectCardService {
     private final MemberService memberService;
     private static final int MAX_COUNT = 3;
 
-    public void postProjectCard(ProjectCardPostDto dto){
+    public ProjectCard postProjectCard(ProjectCardPostDto dto){
         // 회원 존재 확인
         Member findMember = memberService.findVerifiedMember(dto.getMemberId());
 
@@ -35,7 +35,9 @@ public class ProjectCardService {
         ProjectCard projectCard = new ProjectCard(dto.getTell(), dto.getAboutMe(), findMember, dto.getTags());
         findMember.setProjectCardList(projectCard);
 
-        projectCardRepository.save(projectCard);
+        ProjectCard newProjectCard = projectCardRepository.save(projectCard);
+
+        return newProjectCard;
     }
 
     public List<ProjectCard> getProjectCards(Long memberId){

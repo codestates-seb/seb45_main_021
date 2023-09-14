@@ -84,6 +84,7 @@ public class PortfolioDto {
         private String lang;
         private int heartCount;
     }
+
     @Getter @Setter
     @Builder
     @AllArgsConstructor
@@ -104,23 +105,20 @@ public class PortfolioDto {
         private String title;
         private String createdAt;
         private int heartCount;
-        private int view;
         private Author author;
 
-        public PortfolioProfileResponseDto(Long portFolioId, String title, LocalDateTime createdAt, int heartCount, int view) {
+        public PortfolioProfileResponseDto(Long portFolioId, String title, LocalDateTime createdAt, int heartCount) {
             this.portFolioId = portFolioId;
             this.title = title;
             setCreatedAt(createdAt);
             this.heartCount = heartCount;
-            this.view = view;
         }
 
-        public PortfolioProfileResponseDto(Long portFolioId, String title, LocalDateTime createdAt, int heartCount, int view, Member member) {
+        public PortfolioProfileResponseDto(Long portFolioId, String title, LocalDateTime createdAt, int heartCount, Member member) {
             this.portFolioId = portFolioId;
             this.title = title;
             setCreatedAt(createdAt);
             this.heartCount = heartCount;
-            this.view = view;
             author = Author.builder()
                     .username(member.getUserName())
                     .memberId(member.getMemberId())

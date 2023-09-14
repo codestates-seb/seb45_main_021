@@ -123,8 +123,7 @@ public interface PortfolioMapper {
                         portFolio.getPortfolioId(),
                         portFolio.getTitle(),
                         portFolio.getCreatedAt(),
-                        portFolio.getHeartCount(),
-                        portFolio.getView()
+                        portFolio.getHeartCount()
                 )).collect(Collectors.toList());
     }
 
@@ -135,7 +134,6 @@ public interface PortfolioMapper {
                         portfolioHeart.getPortFolio().getTitle(),
                         portfolioHeart.getPortFolio().getCreatedAt(),
                         portfolioHeart.getPortFolio().getHeartCount(),
-                        portfolioHeart.getPortFolio().getView(),
                         portfolioHeart.getMember()
                 )).collect(Collectors.toList());
     }

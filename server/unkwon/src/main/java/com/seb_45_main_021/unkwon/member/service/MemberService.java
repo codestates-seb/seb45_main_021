@@ -9,6 +9,7 @@ import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
 import com.seb_45_main_021.unkwon.heart.entity.ProjectHeart;
 import com.seb_45_main_021.unkwon.heart.repository.PortfolioHeartRepository;
 import com.seb_45_main_021.unkwon.heart.repository.ProjectHeartRepository;
+import com.seb_45_main_021.unkwon.image.S3Service;
 import com.seb_45_main_021.unkwon.member.dto.request.MemberInformUpdateDto;
 import com.seb_45_main_021.unkwon.member.dto.request.MemberPasswordUpdateDto;
 import com.seb_45_main_021.unkwon.member.dto.request.MemberSignupDto;
@@ -19,10 +20,12 @@ import com.seb_45_main_021.unkwon.member.repository.MemberRepository;
 import com.seb_45_main_021.unkwon.project.entity.ProjectStatus;
 import com.seb_45_main_021.unkwon.project.repository.ProjectStatusRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
@@ -38,6 +41,8 @@ public class MemberService {
     private final ProjectStatusRepository projectStatusRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
+    @Autowired
+    private S3Service s3Service;
 
     private static final String IMG_URL = ""; // 회원 가입시 기본 이미지 URL
     private final SocialType socialType = SocialType.SPEC;
@@ -64,8 +69,6 @@ public class MemberService {
     /** 회원 정보 조회(공통) **/
     public Member getMemberInform(Long memberId){
         Member findMember = findVerifiedMember(memberId);
-
-        System.out.println("get: " + findMember.getTags());
 
         // 회원 개인 정보
         return findMember;
@@ -108,12 +111,26 @@ public class MemberService {
         Optional.ofNullable(dto.getTags())
                 .ifPresent(tags -> findMember.setTag(tags));
 
-        System.out.println(dto.getTags());
-        System.out.println(findMember.getTags());
-        System.out.println(dto.isIsWorking());
-        System.out.println(findMember.isWorking());
-
         memberRepository.save(findMember);
+    }
+
+    public String updateProfileImg(Long memberid, MemberInfo memberInfo, MultipartFile uploadImgFile){
+        Member findMember = findVerifiedMember(memberid);
+        findMember.checkMemberId(memberInfo);
+
+        String userImgName = s3Service.uploadFile(uploadImgFile); // S3 업로드
+        String userImageUrl = String.format("https://%s.s3.amazonaws.com/%s", s3Service.getBucketName(), userImgName); // URL 생성
+
+        // 기본 프로필이 아닐 경우
+        if(!findMember.getUserImgUrl().equals(IMG_URL)){
+            // 기존 이미지 삭제
+            s3Service.deleteFile(findMember.getUserImgUrl());
+        }
+        // 이미지 url 변경
+        findMember.setUserImgUrl(userImageUrl);
+        memberRepository.save(findMember);
+
+        return userImageUrl;
     }
 
     /** 회원 정보 수정(비밀 번호) **/
