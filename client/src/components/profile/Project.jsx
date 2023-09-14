@@ -59,6 +59,7 @@ const StyleContainer = styled(Page)`
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    width: 250px;
     ${desktop} {
       width: 230px;
     }
@@ -139,7 +140,7 @@ export default function Project({ id, data, isLoading }) {
             <th className="title">제목</th>
             {filter.value === 'attend' && <th className="author">작성자</th>}
             <th className="created_At">작성시간</th>
-            <th className="views">조회수</th>
+            {filter.value === 'attend' && <th>상태</th>}
             <th className="likes">좋아요</th>
           </tr>
         </thead>

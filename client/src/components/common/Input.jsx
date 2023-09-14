@@ -21,7 +21,7 @@ const StyleInput = styled.input`
   border: 1px solid;
   font-size: ${(props) => props.$fontSize};
   border-color: ${(props) => (props.$borderColor ? props.$borderColor : 'var(--black-100)')};
-  border-radius: 3px;
+  border-radius: ${(props) => (props.$borderRadius ? props.$borderRadius : '3px')};
   width: ${(props) => props.$width};
   height: ${(props) => props.$height};
   color: ${(props) => (props.$color ? props.$color : 'var(--black-100)')};
@@ -41,7 +41,7 @@ const StyleTextArea = styled.textarea`
   background: none;
   border: 1px solid;
   border-color: ${(props) => (props.$borderColor ? props.$borderColor : 'var(--black-100)')};
-  border-radius: 3px;
+  border-radius: ${(props) => (props.$borderRadius ? props.$borderRadius : '3px')};
   font-size: ${(props) => props.$fontSize};
   width: ${(props) => props.$width};
   min-height: ${(props) => props.$height};
@@ -77,6 +77,7 @@ export default function Input({
   fontSize,
   labelColor,
   borderColor,
+  borderRadius,
   onChangeHandler,
   type,
   ...rest
@@ -86,28 +87,7 @@ export default function Input({
       <Label htmlFor={name} $labelColor={labelColor}>
         {label}
       </Label>
-      {type === 'text' ? (
-        <StyleInput
-          $width={width}
-          $height={height}
-          $color={color}
-          $fontSize={fontSize}
-          $borderColor={borderColor}
-          onChange={onChangeHandler}
-          {...rest}
-        />
-      ) : type === 'password' ? (
-        <StyleInput
-          $width={width}
-          $height={height}
-          $color={color}
-          $fontSize={fontSize}
-          $borderColor={borderColor}
-          onChange={onChangeHandler}
-          type="password"
-          {...rest}
-        />
-      ) : type === 'textarea' ? (
+      {type === 'textarea' ? (
         <StyleTextArea
           rows={1}
           $width={width}
@@ -115,6 +95,7 @@ export default function Input({
           $color={color}
           $fontSize={fontSize}
           $borderColor={borderColor}
+          $borderRadius={borderRadius}
           onChange={onChangeHandler}
           {...rest}
         />
@@ -125,6 +106,7 @@ export default function Input({
           $color={color}
           $fontSize={fontSize}
           $borderColor={borderColor}
+          $borderRadius={borderRadius}
           onChange={onChangeHandler}
           type={type}
           {...rest}

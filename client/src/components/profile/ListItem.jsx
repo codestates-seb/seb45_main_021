@@ -46,16 +46,18 @@ export default function ListItem({ data, type, isLoading }) {
           data.createdAt
         )}
       </td>
-      <td className="views">
-        {isLoading ? (
-          <Skeleton width="90%" height="40px" sx={{ bgcolor: 'grey.700' }} animation="wave" />
-        ) : (
-          <>
-            <FaRegEye color="gray" size="20" />
-            <span>{data.view}</span>
-          </>
-        )}
-      </td>
+      {data.codeValue && (
+        <td>
+          {isLoading ? (
+            <Skeleton width="90%" height="40px" sx={{ bgcolor: 'grey.700' }} animation="wave" />
+          ) : (
+            <>
+              <FaRegEye color="gray" size="20" />
+              <span>{data.codeValue}</span>
+            </>
+          )}
+        </td>
+      )}
       <td className="likes">
         {isLoading ? (
           <Skeleton width="90%" height="40px" sx={{ bgcolor: 'grey.700' }} animation="wave" />

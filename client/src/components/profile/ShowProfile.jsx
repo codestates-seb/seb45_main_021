@@ -10,6 +10,7 @@ import Skeleton from '@mui/material/Skeleton';
 import Modal from '../common/Modal';
 import EditProfile from './EditProfile';
 import EditPassword from './EditPassword';
+import Profile from '../../pages/Profile';
 
 export default function ShowProfile({
   profile,
@@ -95,7 +96,7 @@ export default function ShowProfile({
             <>
               <img
                 className="userImg"
-                src={profile.userImgUrl ? profile.userImgUrl : userDefaultImg}
+                src={!profile.userImgUrl ? userDefaultImg : profile.userImgUrl}
                 alt="userImage"
               />
               {user.isLogin && Number(memberId) === user.userInfo.memberId && (
@@ -220,7 +221,7 @@ export default function ShowProfile({
               <>
                 <div>
                   <p className="label">소개</p>
-                  <p>{profile.aboutMe}</p>
+                  <p>{!profile.aboutMe ? '아직 소개가 등록되지 않았습니다.' : profile.aboutMe}</p>
                 </div>
                 <div>
                   <p className="label">이름</p>
@@ -228,7 +229,7 @@ export default function ShowProfile({
                 </div>
                 <div>
                   <p className="label">나이</p>
-                  <p>{profile.age}</p>
+                  <p>{profile.age === 0 ? '아직 나이가 등록되지 않았습니다.' : Profile.age}</p>
                 </div>
                 <div>
                   <p className="label">이메일</p>
@@ -248,6 +249,7 @@ export default function ShowProfile({
                     {profile.tags.map((el, i) => (
                       <Tag key={i} text={el} />
                     ))}
+                    {profile.tags.length === 0 && '아직 태그가 등록되지 않았습니다.'}
                   </div>
                 </div>
               </>
