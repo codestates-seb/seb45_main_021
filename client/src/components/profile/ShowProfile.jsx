@@ -41,11 +41,18 @@ export default function ShowProfile({
   const handleFileChange = (e) => {
     console.log('유저 이미지 교체 요청');
     const file = e.target.files[0];
-    api.patch(`/members/profileImg/${memberId}`).then((el) => {
-      setProfile({ ...profile, userImgUrl: el.data.userImgUrl });
-      dispatch(updateUser({ userInfo: { ...user.userInfo, userImgUrl: el.data.userImgUrl } }));
-    });
-    console.log(file);
+    const formData = new FormData();
+    formData.append('uploadImg', file);
+    api
+      .patch(`/members/profileImg/${memberId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((el) => {
+        setProfile({ ...profile, userImgUrl: el.data.userImgUrl });
+        dispatch(updateUser({ userInfo: { ...user.userInfo, userImgUrl: el.data.userImgUrl } }));
+      });
   };
 
   return (

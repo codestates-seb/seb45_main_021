@@ -113,7 +113,6 @@ export default function LikeList({ id, data, isLoading }) {
       { label: '프로젝트', value: 'project' },
     ],
   });
-  console.log(data);
   const PortFolio = data[0];
   const Project = data[1];
 
