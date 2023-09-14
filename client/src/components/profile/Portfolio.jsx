@@ -68,18 +68,6 @@ const StyleContainer = styled(Page)`
       width: 200px;
     }
   }
-  th:nth-child(2),
-  td:nth-child(2) {
-    ${desktop} {
-      display: table-cell;
-    }
-    @media (max-width: 900px) {
-      display: none;
-    }
-    ${mobile} {
-      display: none;
-    }
-  }
   th:nth-child(3),
   td:nth-child(3) {
     ${desktop} {
@@ -130,7 +118,7 @@ export default function Portfolio({ id, data, isLoading }) {
           options={filter.options}
           onClickHandler={handleClickFilter}
           width="25rem"
-          fontSize="2rem"
+          fontSize="1.5rem"
         />
       </div>
       <table>

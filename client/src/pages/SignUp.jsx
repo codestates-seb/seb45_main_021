@@ -224,17 +224,10 @@ export default function SignUp() {
   };
 
   const handleClickGoogleBtn = () => {
-    try {
-      // api.post('/oauth2/authorization/google');
-      // window.location.assign(
-      //   'https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=15196070608-ti8mt0m3fo8tj48172bhq72h4re8bcni.apps.googleusercontent.com&scope=email%20profile&state=J8xE05niEcAJo0CAB8XkqVr25Prh7dXvkrqthZ2YJw0%3D&redirect_uri=http://localhost:3000/signup',
-      // );
-      // window.location.assign(
-      //   'https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=15196070608-ti8mt0m3fo8tj48172bhq72h4re8bcni.apps.googleusercontent.com&scope=email%20profile&state=J8xE05niEcAJo0CAB8XkqVr25Prh7dXvkrqthZ2YJw0%3D&redirect_uri=http://ec2-52-78-224-100.ap-northeast-2.compute.amazonaws.com:8080/login/oauth2/code/google',
-      // );
-    } catch (error) {
-      console.log(error);
-    }
+    // api.post('/oauth2/authorization/google');
+    // window.location.assign(
+    //   'https://6e0a-119-193-199-218.ngrok-free.app/oauth2/authorization/google',
+    // );
   };
 
   useEffect(() => {

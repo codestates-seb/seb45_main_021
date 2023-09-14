@@ -73,6 +73,7 @@ const StyleModal = styled.div`
  * @param body - 내용 문자열 전달 (alert,confirm)
  * @param children - 자식 요소 엘리먼트 렌더링 (children)
  * @param confirmHandler - 확인 버튼 클릭시 실행할 함수
+ * @param absoluteConfirm - 컨펌 핸들러에서 true 반환을 해야 모달 창 닫히게 함
  * @param cancelHandler - 취소 버튼 클릭시 실행할 함수
  * @returns {JSX.Element}
  */
@@ -85,6 +86,7 @@ export default function Modal({
   confirmHandler,
   cancelHandler,
   children,
+  absoluteConfirm = false,
 }) {
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -93,15 +95,18 @@ export default function Modal({
     };
   }, []);
 
-  const modalCloser = () => {
-    if (type === 'confirm') setIsOpen(false);
+  const modalCloser = (bool) => {
+    if (type === 'confirm') setIsOpen(true);
+    setIsOpen(bool);
   };
 
   const confirmOnClickHandler = () => {
-    if (confirmHandler) {
-      confirmHandler();
+    if (absoluteConfirm) {
+      if (confirmHandler()) modalCloser(false);
+    } else {
+      if (confirmHandler) confirmHandler();
+      modalCloser(false);
     }
-    modalCloser(false);
   };
 
   const cancelOnClickHandler = () => {

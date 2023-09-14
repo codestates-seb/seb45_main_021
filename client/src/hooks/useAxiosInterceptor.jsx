@@ -9,6 +9,7 @@ const instance = axios.create({
   headers: {
     'Content-Type': 'application/json',
     withCredentials: true,
+    'ngrok-skip-browser-warning': '69420',
   },
 });
 

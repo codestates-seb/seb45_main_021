@@ -105,6 +105,7 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
             const index = tem.findIndex((ele) => ele.projectCardId === data.projectCardId);
             tem[index] = {
               ...tem[index],
+              working: trueData.profile.working,
               tags: temp.tags,
               tell: temp.tell.value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'),
               aboutMe: temp.aboutMe.value,
