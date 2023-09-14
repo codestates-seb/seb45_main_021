@@ -23,13 +23,10 @@ spring:
         connection:
           characterEncoding: utf8mb4
 
-
   servlet:
     multipart:
       max-file-size: 50MB
       max-request-size: 50MB
-
-
   security:
     oauth2:
       client:

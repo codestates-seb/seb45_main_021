@@ -31,6 +31,7 @@ public class MemberInformResponseDto {
         }
     }
 
+
     public void setCreatedAt(LocalDateTime createdAt){
         // YYYY-DD-MM 포맷 형식
         this.createdAt = createdAt.format(DateTimeFormatter.ISO_DATE);
