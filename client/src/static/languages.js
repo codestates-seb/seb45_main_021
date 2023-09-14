@@ -2,7 +2,7 @@ const languages = [
   'JavaScript',
   'Python',
   'Java',
-  'C#',
+  'C',
   'Ruby',
   'PHP',
   'Swift',
@@ -11,7 +11,6 @@ const languages = [
   'Go',
   'Rust',
   'Dart',
-  'C++',
 ];
 
 export default languages;

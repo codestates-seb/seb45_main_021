@@ -3,7 +3,7 @@ export const languagesOption = [
   { label: 'JavaScript', value: 'javascript' },
   { label: 'Python', value: 'python' },
   { label: 'Java', value: 'java' },
-  { label: 'C#', value: 'c#' },
+  { label: 'C', value: 'c' },
   { label: 'Ruby', value: 'ruby' },
   { label: 'PHP', value: 'php' },
   { label: 'Swift', value: 'swift' },
@@ -12,7 +12,6 @@ export const languagesOption = [
   { label: 'Go', value: 'go' },
   { label: 'Rust', value: 'rust' },
   { label: 'Dart', value: 'dart' },
-  { label: 'C++', value: 'c++' },
 ];
 
 export const sortOption = [

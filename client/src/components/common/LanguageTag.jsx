@@ -13,7 +13,6 @@ const TYPESCRIPT_COLOR = '#007ACC';
 const GO_COLOR = '#00ADD8';
 const RUST_COLOR = '#DEA584';
 const DART_COLOR = '#0175C2';
-const CPP_COLOR = '#00599C';
 
 const StyleLanguageTag = styled.span`
   background-color: ${(props) => props.$background};
@@ -55,7 +54,7 @@ export default function LanguageTag({ language }) {
     case 'Java':
       background = JAVA_COLOR;
       break;
-    case 'C#':
+    case 'C':
       background = C_SHARP_COLOR;
       break;
     case 'Ruby':
@@ -83,9 +82,6 @@ export default function LanguageTag({ language }) {
       break;
     case 'Dart':
       background = DART_COLOR;
-      break;
-    case 'C++':
-      background = CPP_COLOR;
       break;
     default:
       background = '';

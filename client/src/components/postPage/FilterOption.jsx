@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
 import Select from '../common/Select';
 import { languagesOption, sortOption } from '../../static/options.js';
-import { tablet, mobile } from '../../static/theme.js';
+import { mobile } from '../../static/theme.js';
 
 const StyleFilterOption = styled.div`
   display: flex;
@@ -21,8 +21,8 @@ const StyleFilterOption = styled.div`
   }
 `;
 
-export default function FilterOption({ optionHandler, options, pageType }) {
-  const { employ, lang, sort } = options;
+export default function FilterOption({ optionHandler, options }) {
+  const { lang, sort } = options;
 
   let defaultLanguages;
 
