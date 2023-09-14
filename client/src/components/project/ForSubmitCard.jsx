@@ -4,14 +4,16 @@ import defaultImg from '../../static/images/userDefaultImg.jpeg'
 import Tag from '../common/Tag';
 
 const StyleForSubmitCard = styled.div`
-    width:100%;
+    max-width:500px;
     padding:1rem;
-    height:300px;
+    height:100%;
     background-color:rgba(30,30,30,0.8);
     opacity:${props => props.$selectedCard ? '0.5' : '1'};
     position:relative;
-    > .row {
-        gap:5%;
+    gap:1rem;
+    .card-box {
+        flex:1;
+        gap:1rem;
     }
     .image-container {
         flex:2;
@@ -27,25 +29,20 @@ const StyleForSubmitCard = styled.div`
         }
     }
     .data-box {
-        flex:8;
+        flex:10;
         align-items:start;
-        justify-content:center;
+        justify-content:space-around;
         gap:0.5rem;
     }
     .tag-box {
-        margin-left:0.5rem;
         gap:0.5rem;
+        justify-content:center;
+        align-items:center;
     }
-    .see-more-box {
-        margin-left:auto;
-    }
+
     span {
-        font-size:1.5rem !important;
+        font-size:1.6rem;
         font-weight:var(--nanum-normal);
-    }
-    .accept-reject-box {
-        margin:1rem;
-        gap:1rem;
     }
     &:hover{
         cursor: pointer;
@@ -62,15 +59,12 @@ const StyleForSubmitCard = styled.div`
         font-size:3rem;
         font-weight: var(--nanum-bold);
     }
-`
-
-const IntroduceBox = styled.div`
-    width:100%;
-    /* background-color:white; */
-    height: 100%;
-    border: 1px solid var(--black-300);
-    margin-top:2rem;
-    padding:1rem;
+    .aboutme-box {
+        width:100%;
+        flex:1;
+        border: 1px solid var(--black-300);
+        padding:1rem;
+    }
 `
 
 export default function ForSubmitCard({
@@ -83,37 +77,35 @@ export default function ForSubmitCard({
         <StyleForSubmitCard
             $selectedCard={selectedCard}
             className='col'
-            onClick={()=>setSelectedCard(idx)}
+            onClick={()=>setSelectedCard(prev=>prev===idx ? null : idx)}
         >  
             {selectedCard && <span className='display-selected'>카드 선택됨</span>}
-            <div className='row'>
+            <div className='card-box row'>
                 <div className='image-container col'>
                     <img src={cardData?.img ? cardData.img : defaultImg} alt='신청자이미지'/>
                     <span>{cardData?.userName}</span>
                 </div>
                 <div className='data-box col'>
                     <span>{`이메일 : ${cardData?.email}`}</span>
-                    <span>{`재직 상태 : ${cardData?.working ? '재직 중' : '구직 중'}`}</span>
-                    <div className='row'>
-                        <span>{'관심 기술 : '}</span>
-                        <div className='tag-box row'>
-                            {cardData.tag.map((item,idx)=>
-                                <Tag
-                                    key={idx}
-                                    text={item}
-                                    size={'1.2rem'}
-                                    padding={'0.4rem'}
-                                    type={'project'}
-                                />
-                            )}
-                        </div>
+                    <span>{`재직 상태 : ${cardData?.working ? '재직 중' : '구직 중'}`}</span>    
+                    <div className='tag-box row'>
+                    <span>{'관심 기술 : '}</span>
+                        {cardData.tags.map((item,idx)=>
+                            <Tag
+                                key={idx}
+                                text={item}
+                                size={'1.2rem'}
+                                padding={'0.4rem'}
+                                type={'project'}
+                            />
+                        )}
                     </div>
                     <span>{`연락처 : ${cardData?.tell}`}</span>
                 </div>
             </div>
-            <IntroduceBox>
+            <div className='aboutme-box'>
                 <span>{cardData.aboutMe}</span>
-            </IntroduceBox>
+            </div>
         </StyleForSubmitCard>
     );
 }

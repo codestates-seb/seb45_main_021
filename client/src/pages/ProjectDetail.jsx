@@ -145,16 +145,15 @@ export default function ProjectDetail() {
   const [update, setUpdate] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [detailData, setDetailData] = useState({});
-  const [requestPeopleData, setRequestPeopledata] = useState([]);
-  const [error, setError] = useState(false);
+  const [requestPeopleData, setRequestPeopledata] = useState(null);
+  const [apiResult, setApiResult] = useState('');
 
-  //디테일페이지조회중인지 신청자현황조회중인지
+  //디테일페이지조회중인지 신청자현황조회중인지 true면 디테일 페이지 false면 신청자 참가자 조회
   const [isOnDetail, setIsOnDetail] = useState(true);
-  const [isPageLoading, setIsPageLoading] = useState(true);
-  const [isRequestLoading, setIsRequestLaoding] = useState(true);
-
-  //삭제알림
-  const [isOnDeleteModal, setIsOnDeleteModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isDeleteModal, setIsDeleteModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [deleteApiResult, setDeleteApiResult] = useState(false);
   const {toProjectEdit, toProject} = useNav();
 
   //현재 로그인 한 유저 정보
@@ -163,6 +162,16 @@ export default function ProjectDetail() {
   const {projectId} = useParams()
   // console.log(loginUserData);
   // console.log(isAdmin);
+
+  const makeErrorModal = () => {
+    setShowModal(true);
+    setApiResult(true);
+  }
+
+  const closeErrorModal = () => {
+    setShowModal(false);
+    setApiResult(false);
+  }
 
   const updateHandler = () => {
     setUpdate((prev)=>!prev);
@@ -178,19 +187,25 @@ export default function ProjectDetail() {
       },
     },{
       title : '수정',
-      handler : ()=>{toProjectEdit(detailData.projectId)},
+      handler : ()=>{
+        toProjectEdit(detailData.projectId)
+      },
     },{
       title : '삭제',
-      handler : ()=>{setIsOnDeleteModal(!isOnDeleteModal)},
+      handler : ()=>{
+        setShowModal(true);
+        setIsDeleteModal(true);
+        setApiResult('해당 프로젝트를 삭제하시겠습니까?');
+      },
     }
   ]
 
   const fetchData = () => {
-    setIsPageLoading(true);
+    setIsLoading(true);
     api.get(`/projects/${projectId}`)
     .then(res=>{
       console.log(shapingApiData(res.data));
-      setIsPageLoading(false);
+      setIsLoading(false);
       setDetailData(shapingApiData(res.data));
     })
     .catch(err=>{
@@ -198,42 +213,52 @@ export default function ProjectDetail() {
         navigate('/404')
       } else if (err.code === 'ERR_BAD_RESPONSE'){
         console.log(err.code);
-        setError(true);
-        setIsOnDeleteModal(true);
+        setApiResult(false);
+        setIsDeleteModal(true);
       }
     })
+    .finally(()=>setIsLoading(false));
   }
 
   const fetchRequestData = () => {
-    setIsRequestLaoding(true);
-    setTimeout(()=>{
-      setIsRequestLaoding(false);
-      setRequestPeopledata({...RequestPeopleTestData});
-    }, 1000);
+    if(!requestPeopleData) {
+      setIsLoading(true);
+      api.get(`projects/${projectId}/application-status`)
+      .then(res=>{
+        console.log(res.data);
+        setRequestPeopledata(res.data);
+      })
+      .catch(err=>{
+        makeErrorModal();
+      })
+      .finally(()=>{
+        setIsLoading(false);
+      })
+    } else {
+      setIsOnDetail(false);
+    }
   }
 
-  // const fetchMyProjectCard = () => {
-  //   setIsRequestLaoding(true);
-  //   setTimeout(()=>{
-  //     setIsRequestLaoding(false);
-  //     setRequestPeopledata(DummyData.requestPeople);
-  //   }, 1000);
-  // }
-
   const fetchDeleteProject = (id) => {
-    setError(false);
+    setIsDeleteModal(true);
+    setShowModal(true);
     api.delete(`/projects/${id}`)
     .then(res=>{
-      toProject();
+      setIsDeleteModal(false);
+      setDeleteApiResult(true);
+      setApiResult('프로젝트를 삭제했습니다. 확인 버튼 클릭시 프로젝트 리스트로 돌아갑니다.')
     })
     .catch(err=>{
-      setError(true);
+      // if(err.code === 'ERR_BAD_REQUEST')
+      setIsDeleteModal(false);
+      setDeleteApiResult(false);
+      setApiResult('프로젝트 삭제에 실패했습니다. 다시 시도해 주세요')
     })
   }
 
   useEffect(()=>{
     fetchData()
-  },[]);
+  },[update]);
 
   useEffect(()=>{
     if(loginUserData.userInfo?.memberId === detailData?.memberId) {
@@ -243,16 +268,19 @@ export default function ProjectDetail() {
     }
   },[detailData])
 
+  
+
   return (
     <StyleDetailWrapper>
-        {isOnDeleteModal &&
+        {showModal &&
           <Modal
-            setIsOpen={setIsOnDeleteModal}
-            title={error ? '통신 에러' : '정말 삭제하시겠습니까?'}
-            body={error ? '다시 시도해 주세요.' : '삭제된 내용은 복구할 수 없습니다.'}
-            confirmHandler={error ? ()=>{} : ()=>fetchDeleteProject(projectId)}
+            type={isDeleteModal ? 'confirm' : 'alert'}
+            setIsOpen={setShowModal}
+            title={'알림'}
+            body={apiResult}
+            confirmHandler={()=>isDeleteModal ? fetchDeleteProject(projectId) : setShowModal(false)}
           />}
-        {isPageLoading
+        {isLoading
         ? <SuspenseDetailPage/>
         : <StyleDetailContainer className='col'>
           <DetailHead detailData={detailData} type='project'/>
@@ -262,7 +290,7 @@ export default function ProjectDetail() {
               <StyleBorderButton
                 key={idx}
                 $fontSize={fontSize}
-                onClick={item.handler}
+                onClick={()=>item.handler()}
               >
                 {item.title}
               </StyleBorderButton>
@@ -272,7 +300,7 @@ export default function ProjectDetail() {
           <div className='row status'>
             <StyleStatusContainer className='col' $flex={4}>
               <h2 className='status-title'>참가자 현황</h2>
-              {isRequestLoading
+              {isLoading
               ? <JoinCardSkeleton/>
               : <JoinStatusContainer joinPeople={requestPeopleData.joinPeople}/>
               }
@@ -280,9 +308,12 @@ export default function ProjectDetail() {
             <div className='vertical-line'/>
             <StyleStatusContainer className='col' $flex={6}>
               <h2 className='status-title'>신청자 현황</h2>
-              {isRequestLoading 
+              {isLoading
               ? <ProjectCardSkeletion/>
-              : <ProjectCardContainer cardList={requestPeopleData.requestPeople}/>
+              : <ProjectCardContainer
+                  cardList={requestPeopleData.requestPeople}
+                  updateHandler={updateHandler}
+                />
               }
             </StyleStatusContainer>
           </div>
@@ -292,6 +323,7 @@ export default function ProjectDetail() {
             type='project'
             isAdmin={isAdmin}
             updateHandler={updateHandler}
+            projectId={projectId}
           />
           }
         </StyleDetailContainer>

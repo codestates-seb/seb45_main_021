@@ -92,10 +92,10 @@ export default function DetailHead({
                     <h3>{detailData.userName}</h3>
                 </div>
                 <h3>{dateFormatter(detailData.createdAt)}</h3>
-                <Like
+                {/* <Like
                     likes={detailData.heartCount}
                     size={'1.6rem'}
-                />
+                /> */}
             </div>
             <Border/>
             {/* <HiX

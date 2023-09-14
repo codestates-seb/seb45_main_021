@@ -25,6 +25,9 @@ import { writeSubmitHandler } from '../utils/writeSubmitHandler';
 import { useParams } from 'react-router-dom';
 import api from '../hooks/useAxiosInterceptor';
 import Modal from '../components/common/Modal';
+import { StyleBorderButton } from '../components/common/Buttons';
+import { useSelector } from 'react-redux';
+import useSubmitWriteEdit from '../hooks/useSubmitWriteEdit';
 
 const StyleProjectWrite = styled(Page)`
   height: auto;
@@ -78,24 +81,22 @@ export default function PortfolioEdit() {
   const [dataForm, handleInputChange, clearForm, setDataForm] = useForm(portfolioWriteInitData);
   const [errors, handleErrorChange, clearError, setErrors] = useError({}, portfolioWriteRule);
   const [showModal, setShowModal] = useState(false);
-  const [apiResult, setApiResult] = useState(false);
-  //false면 프론트측 에러 true면 백측에러
-  const [whichError, setWhichError] = useState(false);
-  const [firstResult, setFirstResult] = useState(true);
+  const [apiResult, isSuccess, submitHandler] = useSubmitWriteEdit();
+  const [firstApiSuccess, setFirstApiSuccess] = useState(true);
+  const loginUserData = useSelector(state=>state.user);
 
   const width = '100%';
   const height = '70rem';
 
   useEffect(() => {
-    api
-      .get(`/portfolios/${portfolioId}`)
+    api.get(`/portfolios/${portfolioId}`)
       .then((res) => {
         setDataForm(shapingApiData(res.data));
+        setFirstApiSuccess(true);
       })
       .catch((err) => {
         setShowModal(true);
-        setWhichError(true);
-        setFirstResult(false);
+        setFirstApiSuccess(false);
       });
   }, []);
 
@@ -111,33 +112,13 @@ export default function PortfolioEdit() {
 
   return (
     <StyleProjectWrite className="col">
-      {showModal && (
-        <Modal
-          type={'alert'}
-          setIsOpen={setShowModal}
-          title={apiResult ? '수정 완료' : `${whichError ? '통신 에러' : '입력 형식 오류'}`}
-          body={
-            apiResult
-              ? '확인 버튼 클릭시 프로젝트리스트 화면으로 넘어갑니다.'
-              : `${
-                  whichError
-                    ? '서버와의 통신에 실패했습니다. 다시 시도해 주세요.'
-                    : '필수 입력 양식을 다시 확인해 주세요.'
-                }`
-          }
-          confirmHandler={
-            apiResult
-              ? () => {
-                  toPortfolio();
-                }
-              : firstResult
-              ? undefined
-              : () => {
-                  toPortfolio();
-                }
-          }
-        />
-      )}
+      {showModal && <Modal
+        type={'alert'}
+        setIsOpen={setShowModal}
+        title={'알림'}
+        body={firstApiSuccess ? apiResult : '서버와의 통신에 실패했습니다. 다시 시도해 주세요.'}
+        confirmHandler={() => !firstApiSuccess || isSuccess ? toPortfolio() : setShowModal(false)}
+      />}
       <WriteHeader type="portfolio" state="edit" />
       <div className="row">
         <div className="input-container col">
@@ -256,14 +237,19 @@ export default function PortfolioEdit() {
           />
         </div>
       </div>
-      <SubmitModalBox
-        submitTitle={'수정 확인'}
-        submitMessage={'댓글 허락하지 않음 선택 시 기존의 댓글들도 보이지 않습니다.'}
-        submitCheckHandler={() => writeSubmitHandler(dataForm, errors, setErrors, 'portfolio')}
-        cancelTitle={'취소 확인'}
-        cancelMessage={'취소시 작성한 내용은 저장되지 않습니다.'}
-        cancelCheckHandler={toPortfolio}
-      />
+      <div className='button-box'>
+        <StyleBorderButton
+            onClick={()=>{
+              setShowModal(true);
+              submitHandler(dataForm,errors,setErrors,'project',loginUserData.userInfo.memberId, portfolioId)
+            }}
+        >
+          수정
+        </StyleBorderButton>
+        <StyleBorderButton>
+          취소
+        </StyleBorderButton>
+      </div>
     </StyleProjectWrite>
   );
 }
