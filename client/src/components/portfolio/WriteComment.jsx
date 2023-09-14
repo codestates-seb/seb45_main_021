@@ -20,11 +20,11 @@ const StyleWriteComment = styled.div`
 
 
 export default function WriteComment() {
-    const [string,setString] = useState('');
+    const [comments,setComments] = useState('');
 
     //제출할때 
     const submitHandler = () => {
-        console.log(string)
+        console.log(comments)
         api.post('/portfolio/:id',)
         .then(res=>{
             console.log('성공')   
@@ -32,6 +32,10 @@ export default function WriteComment() {
         .catch(err=>{
             console.log('실패')
         })
+    }
+
+    const commentsHandler = (e) => {
+        setComments(e.target.value);
     }
 
     return (
@@ -42,11 +46,11 @@ export default function WriteComment() {
                 height={'8rem'}
                 maxLength={200}
                 type='textarea'
-                onChangeHandler={(e)=>setString(e.target.value)}
+                onChangeHandler={commentsHandler}
             />
             <ProGress
                 comPleteNum={200}
-                proGressNum={string.length}
+                proGressNum={comments.length}
                 top='-1.8rem'
                 width='100%'
                 height='1rem'

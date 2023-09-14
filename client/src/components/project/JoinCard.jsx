@@ -44,10 +44,10 @@ export default function JoinCard({
         <StyleJoinCard>
             <div 
                 className='col author-wrapper'
-                onClick={()=>toProfile(cardData.id)}
+                onClick={()=>toProfile(cardData.memberId)}
             >
                 <img src={cardData?.imgUrl.length === 0 ? defaultImg : cardData.imgUrl} alt='신청자이미지'/>
-                <p>{cardData?.userName}</p>
+                <p>{cardData?.username}</p>
             </div>
         </StyleJoinCard>
     );

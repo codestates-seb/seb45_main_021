@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import defaultImg from '../../static/images/userDefaultImg.jpeg'
 import Tag from '../common/Tag';
@@ -78,22 +78,31 @@ const IntroduceBox = styled.div`
 
 export default function SubmitedCard({
     cardData,
-    updateHandler
+    requestUpdateHandler,
+    detailData,
 }) {
     const [isOn, setIsOn] = useState(false);
     const {projectId} = useParams();
     const {toProfile} = useNav();
     const [showModal, setShowModal] = useState(false);
     const isOnHandler = () => {setIsOn(!isOn)}
+    const isImpossibleAccept = detailData.joinPeople.length >= detailData.totalPeople;
     
     const acceptRefuseHandler = (projectId, memberId,type) => {
-        api.patch(`/projects/${projectId}/request/${memberId}/${type}`)
-        .then((res)=>{
-            updateHandler();
-        })
-        .catch(()=>{
+        if(isImpossibleAccept && type==='accept') {
             setShowModal(true);
-        })
+        } else {
+            api.patch(`/projects/${projectId}/request/${memberId}/${type}`)
+            .then((res)=>{
+                requestUpdateHandler();
+            })
+            .catch(()=>{
+                setShowModal(true);
+            })
+            .finally(()=>{
+                requestUpdateHandler();
+            })
+        }
     };
     
 
@@ -104,7 +113,7 @@ export default function SubmitedCard({
                 setIsOpen={setShowModal}
                 type='alert'
                 title='알림'
-                body={'통신 실패 다시 시도해 주세요.'}
+                body={isImpossibleAccept ? '모집인원이 모두 찼습니다.' : '통신 실패 다시 시도해 주세요.'}
                 confirmHandler={()=>setShowModal(false)}
             />}
             <div className='card-box row'>
