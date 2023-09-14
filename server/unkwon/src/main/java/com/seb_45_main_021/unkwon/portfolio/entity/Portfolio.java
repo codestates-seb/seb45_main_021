@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.seb_45_main_021.unkwon.audit.Auditable;
 import com.seb_45_main_021.unkwon.comment.entity.Comment;
 import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
+import com.seb_45_main_021.unkwon.image.portfolio.PortfolioImage;
+import com.seb_45_main_021.unkwon.image.portfolio.PortfolioTitleImage;
+import com.seb_45_main_021.unkwon.image.project.ProjectImage;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -52,8 +55,29 @@ public class Portfolio extends Auditable {
     private String tagB;
     private String tagC;
 
-
     private String lang;
+
+    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<PortfolioImage> images = new ArrayList<>();
+
+    public void addImage(PortfolioImage image){
+        this.images.add(image);
+        image.setPortfolio(this);
+    }
+    @OneToOne(mappedBy = "portfolio", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private PortfolioTitleImage portfolioTitleImage;
+
+    public void setPortfolioTitleImage(PortfolioTitleImage titleImage){
+        if(this.portfolioTitleImage != null){
+            this.portfolioTitleImage.setPortfolio(null);
+        }
+        this.portfolioTitleImage = titleImage;
+        titleImage.setPortfolio(this);
+    }
+
+
 
     public static List<Portfolio> getPortfolioIsEmployList(List<Portfolio> portFolioList){
         return portFolioList.stream()
@@ -66,12 +90,8 @@ public class Portfolio extends Auditable {
                 .collect(Collectors.toList());
     }
 
-
     @OneToMany(mappedBy = "portFolio", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<PortfolioHeart> portfolioHearts = new ArrayList<>();
-
-//    private String img;
-//    private String titleImg;
 
 }

@@ -11,6 +11,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,13 +21,8 @@ public interface PortfolioMapper {
 
     default Portfolio portfolioPostDtoToPortfolio(PortfolioDto.Post portfolioPostDto){
 
-
-
         Member member = new Member();
         member.setMemberId(portfolioPostDto.getMemberId());
-
-
-
 
         Portfolio portfolio = new Portfolio();
         portfolio.setTitle(portfolioPostDto.getTitle());
@@ -55,8 +51,8 @@ public interface PortfolioMapper {
         portfolio.setTitle(portfolioPatchDto.getTitle());
         portfolio.setBody(portfolioPatchDto.getBody());
         portfolio.setLang(portfolioPatchDto.getLang());
-        portfolio.setIsComment(portfolioPatchDto.isIsComment());
-        portfolio.setIsEmploy(portfolioPatchDto.isIsEmploy());
+        portfolio.setIsComment(portfolioPatchDto.isComment());
+        portfolio.setIsEmploy(portfolioPatchDto.isEmploy());
 
         if(portfolioPatchDto.getTags() != null) {
             String[] tags = portfolioPatchDto.getTags().split(",");
@@ -69,32 +65,33 @@ public interface PortfolioMapper {
     };
 
 
-    default PortfolioDto.Response portfolioToPortfolioResponseDto(Portfolio portFolio){
+    default PortfolioDto.Response portfolioToPortfolioResponseDto(Portfolio portfolio){
 
         List<String> tagsList = new ArrayList<>();
-        if (portFolio.getTagA() != null) {
-            tagsList.add(portFolio.getTagA());
+        if (portfolio.getTagA() != null) {
+            tagsList.add(portfolio.getTagA());
         }
-        if (portFolio.getTagB() != null) {
-            tagsList.add(portFolio.getTagB());
+        if (portfolio.getTagB() != null) {
+            tagsList.add(portfolio.getTagB());
         }
-        if (portFolio.getTagC() != null) {
-            tagsList.add(portFolio.getTagC());
+        if (portfolio.getTagC() != null) {
+            tagsList.add(portfolio.getTagC());
         }
         String[] tags = tagsList.toArray(new String[0]);
 
 
         PortfolioDto.Response response = PortfolioDto.Response.builder()
-                .portfolioId(portFolio.getPortfolioId())
-                .memberId(portFolio.getMember().getMemberId())
-                .userName(portFolio.getMember().getUserName())
-                .userImgUrl(portFolio.getMember().getUserImgUrl())
-                .title(portFolio.getTitle())
-                .createdAt(portFolio.getCreatedAt())
+                .portfolioId(portfolio.getPortfolioId())
+                .memberId(portfolio.getMember().getMemberId())
+                .userName(portfolio.getMember().getUserName())
+                .userImgUrl(portfolio.getMember().getUserImgUrl())
+                .title(portfolio.getTitle())
+                .createdAt(portfolio.getCreatedAt())
                 .tags(tags)
-                .lang(portFolio.getLang())
-                .heartCount(portFolio.getHeartCount())
-                .IsEmploy(portFolio.isIsEmploy())
+                .lang(portfolio.getLang())
+                .heartCount(portfolio.getHeartCount())
+                .IsEmploy(portfolio.isIsEmploy())
+                .portfolioTitleImage(portfolio.getPortfolioTitleImage())
                 .build();
 
 
@@ -105,51 +102,58 @@ public interface PortfolioMapper {
 
     List<PortfolioDto.Response> portfoliosToPortfolioResponseDtos(List<Portfolio> portfolios);
 
-    default PortfolioDto.DetailResponse portfolioToPortfolioDetailResponseDto(Portfolio portFolio){
+    default PortfolioDto.DetailResponse portfolioToPortfolioDetailResponseDto(Portfolio portfolio){
         List<String> tagsList = new ArrayList<>();
-        if (portFolio.getTagA() != null) {
-            tagsList.add(portFolio.getTagA());
+        if (portfolio.getTagA() != null) {
+            tagsList.add(portfolio.getTagA());
         }
-        if (portFolio.getTagB() != null) {
-            tagsList.add(portFolio.getTagB());
+        if (portfolio.getTagB() != null) {
+            tagsList.add(portfolio.getTagB());
         }
-        if (portFolio.getTagC() != null) {
-            tagsList.add(portFolio.getTagC());
+        if (portfolio.getTagC() != null) {
+            tagsList.add(portfolio.getTagC());
         }
         String[] tags = tagsList.toArray(new String[0]);
 
         PortfolioDto.DetailResponse detailResponse = PortfolioDto.DetailResponse.builder()
-                .portfolioId(portFolio.getPortfolioId())
-                .memberId(portFolio.getMember().getMemberId())
-                .userName(portFolio.getMember().getUserName())
-                .title(portFolio.getTitle())
-                .body(portFolio.getBody())
-                .createdAt(portFolio.getCreatedAt())
-                .modifiedAt(portFolio.getModifiedAt())
-                .view(portFolio.getView())
+                .portfolioId(portfolio.getPortfolioId())
+                .memberId(portfolio.getMember().getMemberId())
+                .userName(portfolio.getMember().getUserName())
+                .title(portfolio.getTitle())
+                .body(portfolio.getBody())
+                .createdAt(portfolio.getCreatedAt())
+                .modifiedAt(portfolio.getModifiedAt())
+                .view(portfolio.getView())
                 .tags(tags)
-                .lang(portFolio.getLang())
-                .IsEmploy(portFolio.isIsEmploy())
-                .IsComment(portFolio.isIsComment())
-                .heartCount(portFolio.getHeartCount())
+                .lang(portfolio.getLang())
+                .IsEmploy(portfolio.isIsEmploy())
+                .IsComment(portfolio.isIsComment())
+                .heartCount(portfolio.getHeartCount())
+                .images(portfolio.getImages())
+                .portfolioTitleImage(portfolio.getPortfolioTitleImage())
                 .build();
 
-        List<Comment> comments = portFolio.getComments();
+        // 댓글이 있는 경우에만 댓글을 추가
+        if (portfolio.getComments() != null && !portfolio.getComments().isEmpty()) {
+            List<Comment> comments = portfolio.getComments();
 
-        List<PortfolioDto.CommentResponse> commentResponses =
-                comments.stream().map(comment -> PortfolioDto.CommentResponse.builder()
-                        .commentId(comment.getCommentId())
-                        .body(comment.getBody())
-                        .createdAt(comment.getCreatedAt())
-                        .modifiedAt(comment.getModifiedAt())
-                        .memberId(comment.getMember().getMemberId())
-                        .userName(comment.getMember().getUserName())
-                        .portfolioId(comment.getPortFolio().getPortfolioId())
-                        .build()
-                ).collect(Collectors.toList());
+            List<PortfolioDto.CommentResponse> commentResponses =
+                    comments.stream().map(comment -> PortfolioDto.CommentResponse.builder()
+                            .commentId(comment.getCommentId())
+                            .body(comment.getBody())
+                            .createdAt(comment.getCreatedAt())
+                            .modifiedAt(comment.getModifiedAt())
+                            .memberId(comment.getMember().getMemberId())
+                            .userName(comment.getMember().getUserName())
+                            .portfolioId(comment.getPortFolio().getPortfolioId())
+                            .build()
+                    ).collect(Collectors.toList());
 
-        detailResponse.setComments(commentResponses);
-
+            detailResponse.setComments(commentResponses);
+        } else {
+            // 댓글이 없는 경우 빈 배열로 초기화
+            detailResponse.setComments(Collections.emptyList());
+        }
         return detailResponse;
     }
 
