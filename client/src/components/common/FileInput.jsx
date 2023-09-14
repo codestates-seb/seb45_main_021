@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import {HiX} from 'react-icons/hi'
 import Modal from './Modal';
@@ -158,6 +158,7 @@ export default function FileInput({
     const [imgs,setImgs] = useState([]);
     const [isDrag, setIsDrag] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const input = useRef();
     const fileKey = number===1 ? 'titleImageFile' : 'imageFile';
     const willDeleteKey = number === 1? 'titleImageUrl' : 'imageUrls';
     //사용자가 드래그또는클릭으로 사진을 업로드시 미리보기 화면은 readImgToUrl을통해 img의 소스에 넣어서 보여주느것
@@ -223,7 +224,6 @@ export default function FileInput({
         if(setWillDeleteImgs) {
             if(number === 1) {
                 if(dataForm.projectTitleImage[0] === imgs[idx]) {
-                    console.log('받은데이터에서 삭제');
                     handleInputChange(null,imgs[idx],willDeleteKey)        
                 }
             } else {
@@ -237,6 +237,7 @@ export default function FileInput({
                 }   
             }
         }
+        if(input.current) {input.current.value = null};
         const tempFiles = dataForm[fileKey].getAll(fileKey);
         const newForm = dataForm[fileKey];
         newForm.delete(fileKey);
@@ -303,6 +304,7 @@ export default function FileInput({
             >
                 
                 <input
+                    ref={input}
                     type='file'
                     id={name}
                     multiple

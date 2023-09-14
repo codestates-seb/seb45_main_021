@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 import scollToTop from '../../utils/scrollToTop';
 const StyleTag = styled.div`
   padding: ${(props) => props.$padding || '5px 7px'};
-  font-size: ${(props) => props.$padding || '1.4rem'};
+  font-size: ${(props) => props.$size || '1.4rem'};
   font-weight: var(--nanum-semi-bold);
   border: 1px solid var(--black-400);
   border-radius: 5px;

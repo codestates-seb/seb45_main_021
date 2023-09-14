@@ -2,12 +2,13 @@ import React from 'react';
 import styled from 'styled-components'
 import SubmitedCard from './SubmitedCard';
 import ForSubmitCard from './ForSubmitCard';
-import { desktop, mobile } from '../../static/theme';
+import { desktop, mobile, tablet } from '../../static/theme';
 import EmptyData from '../PfPjPublic/EmptyData';
 
 export const StyleProjectCardContainer = styled.div`
-    width:${props => props.$isForSubmit ? '60vw' : '100%'};
+    width:100%;
     gap:2rem;
+    height:${props=>props.$isForSubmit ? '100%' : 'auto'};
     overflow:auto;
     div {
         border-radius:5px;
@@ -26,11 +27,12 @@ export default function ProjectCardContainer({
     cardList,
     isForSubmit = false,
     selectedCard,
-    setSelectedCard
+    setSelectedCard,
+    updateHandler,
 }) {
     return (
         <StyleProjectCardContainer
-            className={isForSubmit ? 'row' : 'col'}
+            className='col'
             $isForSubmit={isForSubmit}
         >
             {cardList.length !== 0 ? cardList.map((item, idx) =>
@@ -44,7 +46,10 @@ export default function ProjectCardContainer({
                         selectedCard={selectedCard===idx ? true : false}
                         setSelectedCard={setSelectedCard}
                     />
-                    : <SubmitedCard cardData={item}/>
+                    : <SubmitedCard
+                        cardData={item}
+                        updateHandler={updateHandler}
+                    />
                     }
                 </React.Fragment>
             ) : 

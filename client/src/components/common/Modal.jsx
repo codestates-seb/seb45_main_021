@@ -86,7 +86,7 @@ export default function Modal({
   confirmHandler,
   cancelHandler,
   children,
-  absoluteConfirm = false,
+  absoluteConfirm=true,
 }) {
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -102,13 +102,16 @@ export default function Modal({
 
   const confirmOnClickHandler = () => {
     if (absoluteConfirm) {
-      if (confirmHandler()) modalCloser(false);
+      if (confirmHandler()) {
+        modalCloser(false);
+      }
     } else {
-      if (confirmHandler) confirmHandler();
+      if (confirmHandler) {
+        confirmHandler();
+      }
       modalCloser(false);
     }
   };
-
   const cancelOnClickHandler = () => {
     if (cancelHandler) cancelHandler();
     modalCloser(false);

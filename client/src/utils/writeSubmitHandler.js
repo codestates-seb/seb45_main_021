@@ -52,7 +52,7 @@ const transferToFormData = (obj, type, memberId) => {
 }
 
 export const writeSubmitHandler = (obj, error, setError, type, memberId, postId) => {
-    console.log(error);
+    console.log(`포스트아이디 ${postId}`)
     return new Promise((resolve,reject)=>{
         if(Object.keys(error).length) {
             console.log('에러존재')
@@ -69,6 +69,7 @@ export const writeSubmitHandler = (obj, error, setError, type, memberId, postId)
                 console.log(subKey, value);
             }
             if(postId) {
+                console.log('패치요청')
                 api.patch(`/${type}s/${postId}`,requestForm, {
                     headers:formDataHeader,
                 })
@@ -87,6 +88,7 @@ export const writeSubmitHandler = (obj, error, setError, type, memberId, postId)
                     return reject();
                 });
             } else {
+                console.log('포스트요청')
                 api.post(`/${type}s`,requestForm, {
                     headers:formDataHeader,
                 })

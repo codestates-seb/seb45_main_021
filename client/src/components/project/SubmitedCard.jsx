@@ -3,6 +3,9 @@ import styled from 'styled-components';
 import defaultImg from '../../static/images/userDefaultImg.jpeg'
 import Tag from '../common/Tag';
 import useNav from '../../hooks/useNav';
+import { useParams } from 'react-router-dom';
+import Modal from '../common/Modal';
+import api from '../../hooks/useAxiosInterceptor'
 
 const StyleSubmitedCard = styled.div`
     width:100%;
@@ -10,8 +13,6 @@ const StyleSubmitedCard = styled.div`
     background-color:rgba(50,50,50,0.8);
     .image-name-container {
         flex:1.3;
-        margin-right:3rem;
-        justify-content:center;
         align-items:center;
         > * {
             cursor: pointer;
@@ -30,15 +31,19 @@ const StyleSubmitedCard = styled.div`
             opacity:0.4;
         }
     }
+    .card-box {
+        gap:2rem;
+    }
     .data-box {
         flex:8;
         align-items:start;
-        justify-content:center;
+        justify-content:space-around;
         gap:0.5rem;
     }
     .tag-box {
-        margin-left:0.5rem;
         gap:0.5rem;
+        justify-content:center;
+        align-items:center;
     }
     .see-more-box {
         margin-left:auto;
@@ -57,9 +62,6 @@ const StyleSubmitedCard = styled.div`
         margin:1rem;
         gap:1rem;
     }
-    .tag-container {
-        gap:1rem;
-    }
 `
 
 const IntroduceBox = styled.div`
@@ -76,29 +78,50 @@ const IntroduceBox = styled.div`
 
 export default function SubmitedCard({
     cardData,
+    updateHandler
 }) {
     const [isOn, setIsOn] = useState(false);
+    const {projectId} = useParams();
     const {toProfile} = useNav();
-    const isOnHandler = () => {
-        setIsOn(!isOn);
-    }
+    const [showModal, setShowModal] = useState(false);
+    const isOnHandler = () => {setIsOn(!isOn)}
+    
+    const acceptRefuseHandler = (projectId, memberId,type) => {
+        api.patch(`/projects/${projectId}/request/${memberId}/${type}`)
+        .then((res)=>{
+            updateHandler();
+        })
+        .catch(()=>{
+            setShowModal(true);
+        })
+    };
+    
+
     return (
         <StyleSubmitedCard className='col'>
-            <div className='row'>
+            {showModal &&
+            <Modal
+                setIsOpen={setShowModal}
+                type='alert'
+                title='알림'
+                body={'통신 실패 다시 시도해 주세요.'}
+                confirmHandler={()=>setShowModal(false)}
+            />}
+            <div className='card-box row'>
                 <div className='image-name-container col' onClick={()=>toProfile(cardData.memberId)}>
-                    <img src={cardData?.img ? defaultImg : cardData.img} alt='신청자이미지'/>
+                    <img src={cardData?.img ? cardData.img : defaultImg} alt='신청자이미지'/>
                     <span>{cardData?.userName}</span>
                 </div>
                 <div className='data-box col'>
                     <span>{`이메일 : ${cardData?.email}`}</span>
                     <span>{`재직 상태 : ${cardData?.working ? '재직 중' : '구직 중'}`}</span>
-                    <span className='tag-container row'>
+                    <span className='tag-box row'>
                         {'관심 기술 :'}
                         {cardData.tags.map((item,idx)=>
                         <Tag
                             key={idx}
                             text={item}
-                            size={'1.2rem'}
+                            size={'1rem'}
                             padding={'0.4rem'}
                             type={'project'}
                         />)}
@@ -117,8 +140,12 @@ export default function SubmitedCard({
                 <span>{cardData?.aboutMe}</span>
             </IntroduceBox>
             <div className='row accept-reject-box'>
-                <span className='button'>수락</span>
-                <span className='button'>거절</span>
+                <span className='button'
+                onClick={()=>acceptRefuseHandler(projectId,cardData.memberId,'accept')}
+                >수락</span>
+                <span className='button'
+                onClick={()=>acceptRefuseHandler(projectId,cardData.memberId,'refuse')}
+                >거절</span>
             </div>
         </StyleSubmitedCard>
     );

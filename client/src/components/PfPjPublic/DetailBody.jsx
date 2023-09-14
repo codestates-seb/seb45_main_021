@@ -82,19 +82,33 @@ export default function DetailBody({
     const [ownProjectCardList, setOwnProjectCardList] = useState(null);
     const [selectedCard, setSelectedCard] = useState(null);
     const [isPossibleApply, setIsPossibleApply] = useState(false);
-    const [isOnStateAlert, setIsOnStateAlert] = useState(false);
-    const [apiResult,setApiResult] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [apiResult,setApiResult] = useState('');
     const [isApiLoading, setIsApiLoading] = useState(true);
-
     const loginUserData = useSelector(state=>state.user);
 
-    const cancleProjectApply = (projectId,setApiResult) => {
-        api.delete(`/projects/cancle/${projectId}`)
+    const isClosedProject = () => {
+        const nowTime = new Date();
+        const closedAt = new Date(detailData.closedAt);
+        return closedAt.getTime() < nowTime.getTime();
+    }
+
+    const openApiResultModal = (text) => {
+        setShowModal(true);
+        setApiResult(text);
+    }
+
+    const closeApiResultModal = () => {
+        setShowModal(false);   
+    }
+ 
+    const cancleProjectApply = (projectId) => {
+        api.delete(`/projects/${projectId}/cancel/${loginUserData.userInfo.memberId}`)
         .then(res=>{
-            setApiResult(true);
+            openApiResultModal('프로젝트에 참가 신청을 취소하였습니다.')
         })
         .catch(err=>{
-            setApiResult(false);
+            openApiResultModal('신청을 취소를 실패하였습니다. 다시 시도해 주세요.')
         })
     }
 
@@ -106,7 +120,6 @@ export default function DetailBody({
             setIsApiLoading(true);
             api.get(`/projectcards/${memberId}`)
             .then(res=>{
-                console.log(res.data);
                 setOwnProjectCardList(res.data)
             })
             .catch(err=>{
@@ -126,10 +139,13 @@ export default function DetailBody({
         console.log(requestData);
         api.post(`/projects/request`,requestData)
         .then(res=>{
-            console.log('성공')
+            openApiResultModal('프로젝트에 신청하였습니다.')
         })
         .catch(err=>{
-            console.log('실패');
+            // if(err.code === "ERR_BAD_REQUEST") {
+            //     openApiResultModal('로그인 상태가 유효하지 않거나, 중복 신청은 불가능합니다.')    
+            // }
+            openApiResultModal('신청에 실패하였습니다. 다시 시도해 주세요.')
         })
     }
 
@@ -138,7 +154,7 @@ export default function DetailBody({
         console.log(loginUserData);
         if(!isAdmin && loginUserData.isLogin) {
             for(let i = 0; i < detailData.requestPeople.length; i++) {
-                if(Number(detailData.requestPeople[i]) === Number(loginUserData.userInfo.memeberId)) {
+                if(Number(detailData.requestPeople[i]) === Number(loginUserData.userInfo.memberId)) {
                     setIsPossibleApply(false);
                     return;
                 }
@@ -147,16 +163,20 @@ export default function DetailBody({
         } else {
             setIsPossibleApply(false);
         }
-    },[])
+    },[detailData])
 
     return (
         <StyleDetailBody className='row'>
-            {isOnStateAlert && 
+            {showModal && 
                 <Modal 
+                    type='alert'
                     title={'알림'}
-                    body={apiResult ? '프로젝트 신청을 취소하였습니다.' : '다시 시도해 주세요.'}
-                    setIsOpen={setIsOnStateAlert}
-                    confirmHandler={()=>apiResult ? updateHandler : setIsOnStateAlert}
+                    body={apiResult}
+                    setIsOpen={setShowModal}
+                    confirmHandler={()=>{
+                        updateHandler()
+                        closeApiResultModal()
+                    }}
                 />
             }
             {isOnProjectCard && 
@@ -220,20 +240,22 @@ export default function DetailBody({
                     />}
                 {type === 'project' && !isAdmin && loginUserData.isLogin && 
                 <div className='sticky-box'>
-                    {detailData.totalPeople !== detailData.joinPeople.length ?
+                    {detailData.totalPeople !== detailData.joinPeople.length && !isClosedProject() ?
                     <StyleBorderButton 
                         $width={'100%'}
                         onClick={()=>{
                             if(isPossibleApply) {
                                 getOwnProjectCard(loginUserData.userInfo?.memberId);
                             } else {
-                                cancleProjectApply(detailData.projectId, apiResult);
+                                cancleProjectApply(detailData.projectId);
                             }
                         }}
                         >{isPossibleApply ? '프로젝트 신청하기' : '프로젝트 신청 취소하기'}
                     </StyleBorderButton> :
-                    <StyleBorderButton>
-                        프로젝트 마감됌
+                    <StyleBorderButton
+                    $width={'100%'}
+                    >
+                        프로젝트 마감
                     </StyleBorderButton>
                     }
                 </div>}

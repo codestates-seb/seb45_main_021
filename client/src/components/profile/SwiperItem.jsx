@@ -125,11 +125,11 @@ export default function SwiperItem({
                     <p>{data.working ? '재직중' : '구직중'}</p>
                   </div>
                   <div className="col gap">
-                    {data.tag.length !== 0 && (
+                    {data.tags.length !== 0 && (
                       <>
                         <p className="label">기술</p>
                         <div className="row gap">
-                          {data.tag.map((el, i) => (
+                          {data.tags.map((el, i) => (
                             <Tag key={i} text={el} />
                           ))}
                         </div>
