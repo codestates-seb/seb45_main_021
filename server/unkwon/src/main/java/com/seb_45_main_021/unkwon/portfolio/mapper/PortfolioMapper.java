@@ -44,7 +44,7 @@ public interface PortfolioMapper {
     }
     private String[] parseTags(String tags) {
         if (tags == null || tags.isEmpty()) {
-            return new String[0];
+            return null;
         }
 
         // 태그 문자열을 쉼표로 분리하여 배열로 반환
@@ -74,7 +74,7 @@ public interface PortfolioMapper {
                 .build();
 
         return response;
-    };
+    }
 
 
     List<PortfolioDto.Response> portfoliosToPortfolioResponseDtos(List<Portfolio> portfolios);
@@ -114,7 +114,7 @@ public interface PortfolioMapper {
         detailResponse.setComments(commentResponses);
 
         return detailResponse;
-    };
+    }
 
 
     default List<PortfolioDto.PortfolioProfileResponseDto> portFolioListToProfileResponseDto(List<Portfolio> portFolioList){

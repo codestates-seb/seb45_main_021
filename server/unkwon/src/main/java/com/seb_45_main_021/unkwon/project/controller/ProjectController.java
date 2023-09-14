@@ -3,6 +3,8 @@ package com.seb_45_main_021.unkwon.project.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seb_45_main_021.unkwon.dto.MultiResponseDto;
+import com.seb_45_main_021.unkwon.portfolio.dto.PortfolioDto;
+import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
 import com.seb_45_main_021.unkwon.project.dto.request.ProjectPatchDto;
 import com.seb_45_main_021.unkwon.project.dto.request.ProjectPostDto;
 import com.seb_45_main_021.unkwon.project.dto.request.ProjectRequestDto;
@@ -15,6 +17,7 @@ import com.seb_45_main_021.unkwon.project.mapper.ProjectMapper;
 import com.seb_45_main_021.unkwon.project.service.ProjectService;
 import com.seb_45_main_021.unkwon.utils.UriCreator;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -86,7 +89,7 @@ public class ProjectController {
             return new ResponseEntity<>(mapper.projectToProjectResponseDto(project), HttpStatus.OK);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            return ResponseEntity.badRequest().body("Invalid JSON format.");
+            return ResponseEntity.badRequest().body("Invalid JSON format."+e.getMessage());
         }
 
     }
@@ -210,7 +213,6 @@ public class ProjectController {
 
         return ResponseEntity.ok(mapper.projectsToProjectResponseDtos(project));
     }
-
 
 //    // 프로젝트 전체 조회
 //    @GetMapping

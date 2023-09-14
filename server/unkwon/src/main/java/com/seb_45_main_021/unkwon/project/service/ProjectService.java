@@ -5,6 +5,10 @@ import com.seb_45_main_021.unkwon.commonCode.CommonCodeRepository;
 import com.seb_45_main_021.unkwon.exception.BusinessLogicException;
 import com.seb_45_main_021.unkwon.exception.ExceptionCode;
 import com.seb_45_main_021.unkwon.image.*;
+import com.seb_45_main_021.unkwon.image.project.ProjectImage;
+import com.seb_45_main_021.unkwon.image.project.ProjectImageRepository;
+import com.seb_45_main_021.unkwon.image.project.ProjectTitleImage;
+import com.seb_45_main_021.unkwon.image.project.ProjectTitleImageRepository;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.member.repository.MemberRepository;
 import com.seb_45_main_021.unkwon.project.dto.response.ProjectApplicationStatusResponseDto;
@@ -13,7 +17,6 @@ import com.seb_45_main_021.unkwon.project.entity.ProjectStatus;
 import com.seb_45_main_021.unkwon.project.repository.ProjectRepository;
 import com.seb_45_main_021.unkwon.project.repository.ProjectStatusRepository;
 import com.seb_45_main_021.unkwon.projectcard.dto.response.ProjectCardApplyResponseDto;
-import com.seb_45_main_021.unkwon.projectcard.dto.response.ProjectCardResponseDto;
 import com.seb_45_main_021.unkwon.projectcard.entity.ProjectCard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -108,7 +111,7 @@ public class ProjectService {
             projectTitleImageRepository.deleteByImageUrl(titleImageUrl); // DB 에서 삭제
         }
         // 타이틀 이미지 추가
-        if(titleImageFile != null) { // 타이틀 이미지 파일을 받았다면
+        if(titleImageFile != null && !titleImageFile.isEmpty()) { // 타이틀 이미지 파일을 받았다면
             String titleFileName = s3Service.uploadFile(titleImageFile); // S3 업로드
             String newTitleImageUrl = String.format("https://%s.s3.amazonaws.com/%s", s3Service.getBucketName(), titleFileName); // URL 생성
             ProjectTitleImage titleImage = new ProjectTitleImage(); // 새 ProjectTitleImage 객체 생성
