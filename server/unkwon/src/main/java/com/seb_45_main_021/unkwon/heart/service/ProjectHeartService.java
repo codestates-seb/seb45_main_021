@@ -59,7 +59,7 @@ public class ProjectHeartService {
 
     public List<Project> getTop10ProjectsByHeartsLast7Days() {
         LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7);
-        Pageable pageable = PageRequest.of(0,10);
+        Pageable pageable = PageRequest.of(0, 10);
         return projectHeartRepository.findTop10ProjectsByHeartsLast7Days(oneWeekAgo,pageable);
     }
 

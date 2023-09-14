@@ -1,12 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/han_db
-    username: root
-    password: gks0923
-#    url: jdbc:mysql://spec-db-1.c8qdyivupwng.ap-northeast-2.rds.amazonaws.com:13306/SPEC
-#    username: admin
-#    password: qwer1234 #${MYSQL_SECRET}
+    url: jdbc:mysql://spec-db-1.c8qdyivupwng.ap-northeast-2.rds.amazonaws.com:13306/SPEC
+    username: admin
+    password: qwer1234
 
   jpa:
     open-in-view: true
@@ -26,6 +23,8 @@ spring:
     multipart:
       max-file-size: 50MB
       max-request-size: 50MB
+
+
   security:
     oauth2:
       client:
@@ -56,8 +55,8 @@ cloud:
     s3:
       bucket: mainproject-bucket
     credentials:
-      access-key: AKIATUJ7QKHFUAP67DGX
-      secret-key: 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
+      access-key: 
+      secret-key: 
     region:
       static: ap-northeast-2
       auto: false

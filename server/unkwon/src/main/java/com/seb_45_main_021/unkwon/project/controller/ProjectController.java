@@ -2,6 +2,7 @@ package com.seb_45_main_021.unkwon.project.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.seb_45_main_021.unkwon.auth.userdetails.MemberInfo;
 import com.seb_45_main_021.unkwon.dto.MultiResponseDto;
 import com.seb_45_main_021.unkwon.portfolio.dto.PortfolioDto;
 import com.seb_45_main_021.unkwon.portfolio.entity.Portfolio;
@@ -24,6 +25,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -77,14 +79,17 @@ public class ProjectController {
                                        @RequestParam(value = "titleImageFile", required = false) MultipartFile titleImageFile,
                                        @RequestParam(value = "titleImageUrl", required = false) String titleImageUrl,
                                        @RequestParam(value = "imageFile", required = false) List<MultipartFile> imageFiles,
-                                       @RequestParam(value = "imageUrls", required = false) List<String> imageUrls) {
+                                       @RequestParam(value = "imageUrls", required = false) List<String> imageUrls,
+                                       UsernamePasswordAuthenticationToken token) {
+
+        MemberInfo memberInfo = (MemberInfo) token.getPrincipal();
 
         try {
             ProjectPatchDto projectPatchDto = new ObjectMapper().readValue(projectAsString, ProjectPatchDto.class);
             projectPatchDto.setProjectId(projectId);
 
             Project project = projectService.updateProject(mapper.projectPatchDtoToProject(projectPatchDto),
-                    titleImageFile, titleImageUrl, imageFiles, imageUrls);
+                    titleImageFile, titleImageUrl, imageFiles, imageUrls, memberInfo);
 
             return new ResponseEntity<>(mapper.projectToProjectResponseDto(project), HttpStatus.OK);
         } catch (JsonProcessingException e) {
@@ -123,9 +128,12 @@ public class ProjectController {
 
     // 프로젝트 삭제
     @DeleteMapping("/{project-id}")
-    public ResponseEntity deleteProject(@PathVariable("project-id")@Positive long projectId) {
+    public ResponseEntity deleteProject(@PathVariable("project-id")@Positive long projectId,
+                                        UsernamePasswordAuthenticationToken token) {
 
-        projectService.deleteProject(projectId);
+        MemberInfo memberInfo = (MemberInfo) token.getPrincipal();
+
+        projectService.deleteProject(projectId, memberInfo);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
@@ -143,10 +151,11 @@ public class ProjectController {
     }
 
     // 프로젝트 지원 취소
-    @DeleteMapping("cancel/{projectStatus-id}")
-    public ResponseEntity cancelProject(@PathVariable("projectStatus-id") @Positive long projectStatusId) {
+    @DeleteMapping("/{project-id}/cancel/{member-id}")
+    public ResponseEntity cancelProject(@PathVariable("project-id") @Positive long projectId,
+                                        @PathVariable("member-id") @Positive long memberId) {
 
-        projectService.revokeProject(projectStatusId);
+        projectService.revokeProject(projectId, memberId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

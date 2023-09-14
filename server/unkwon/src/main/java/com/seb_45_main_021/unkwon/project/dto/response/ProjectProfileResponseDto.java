@@ -14,23 +14,33 @@ public class ProjectProfileResponseDto {
     private String title;
     private String createdAt;
     private int heartCount;
-    private int view;
     private Author author;
+    private String codeValue;
 
-    public ProjectProfileResponseDto(Long projectId, String title, LocalDateTime createdAt, int heartCount, int view) {
+    public ProjectProfileResponseDto(Long projectId, String title, LocalDateTime createdAt, int heartCount) {
         this.projectId = projectId;
         this.title = title;
         setCreatedAt(createdAt);
         this.heartCount = heartCount;
-        this.view = view;
     }
 
-    public ProjectProfileResponseDto(Long projectId, String title, LocalDateTime createdAt, int heartCount, int view, Member member) {
+    public ProjectProfileResponseDto(Long projectId, String title, LocalDateTime createdAt, int heartCount, Member member, String codeValue) {
         this.projectId = projectId;
         this.title = title;
         setCreatedAt(createdAt);
         this.heartCount = heartCount;
-        this.view = view;
+        author = Author.builder()
+                .username(member.getUserName())
+                .memberId(member.getMemberId())
+                .build();
+        this.codeValue = codeValue;
+    }
+
+    public ProjectProfileResponseDto(Long projectId, String title, LocalDateTime createdAt, int heartCount, Member member) {
+        this.projectId = projectId;
+        this.title = title;
+        setCreatedAt(createdAt);
+        this.heartCount = heartCount;
         author = Author.builder()
                 .username(member.getUserName())
                 .memberId(member.getMemberId())

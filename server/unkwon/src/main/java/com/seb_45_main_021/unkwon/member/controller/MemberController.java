@@ -8,6 +8,7 @@ import com.seb_45_main_021.unkwon.member.dto.request.MemberInformUpdateDto;
 import com.seb_45_main_021.unkwon.member.dto.request.MemberPasswordUpdateDto;
 import com.seb_45_main_021.unkwon.member.dto.request.MemberSignupDto;
 import com.seb_45_main_021.unkwon.member.dto.response.MemberInformResponseDto;
+import com.seb_45_main_021.unkwon.member.dto.response.UserImgUrlResponseDto;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.member.mapper.MemberMapper;
 import com.seb_45_main_021.unkwon.member.service.MemberService;
@@ -23,6 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -104,9 +106,16 @@ public class MemberController {
 
     /** 회원 정보 수정 (프로필 사진) **/
     @PatchMapping("/profileImg/{member-id}")
-    public void updateProfile(@PathVariable("member-id") @Positive Long memberId,
-                              UsernamePasswordAuthenticationToken authentication){
+    public ResponseEntity updateProfile(@PathVariable("member-id") @Positive Long memberId,
+                              UsernamePasswordAuthenticationToken authentication,
+                              @RequestParam(value = "uploadImg", required = false) MultipartFile uploadImgFile){
         MemberInfo memberInfo = (MemberInfo) authentication.getPrincipal();
+        String userImgUrl = memberService.updateProfileImg(memberId, memberInfo, uploadImgFile);
+        UserImgUrlResponseDto dto = UserImgUrlResponseDto
+                                    .builder()
+                                    .userImgUrl(userImgUrl).build();
+
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     /** 회원 정보 수정 (개인 정보) **/
