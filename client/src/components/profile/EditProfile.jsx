@@ -43,6 +43,7 @@ export default function EditProfile({ editProfile, setEditProfile, handleTagKeyD
           placeholder="200 글자까지 가능합니다."
           fontSize="6rem"
           type="textarea"
+          maxLength={200}
           value={editProfile.aboutMe.value}
           error={editProfile.aboutMe.error}
           onChange={(e) =>
@@ -58,7 +59,7 @@ export default function EditProfile({ editProfile, setEditProfile, handleTagKeyD
           label="이름"
           width="100%"
           height="3rem"
-          placeholder="한글 이름을 적어주세요."
+          placeholder="이름을 입력해주세요"
           type="text"
           value={editProfile.userName.value}
           error={editProfile.userName.error}
@@ -76,6 +77,7 @@ export default function EditProfile({ editProfile, setEditProfile, handleTagKeyD
           width="100%"
           height="3rem"
           placeholder="숫자로 적어주세요."
+          maxLength={3}
           type="text"
           value={editProfile.age.value}
           onChange={(e) => setEditProfile({ ...editProfile, age: { value: e.target.value } })}
@@ -101,6 +103,7 @@ export default function EditProfile({ editProfile, setEditProfile, handleTagKeyD
               height="3rem"
               type="text"
               placeholder="태그는 최대 중복제외 3개까지 등록이 가능합니다."
+              maxLength={10}
               value={editProfile.tags.curString}
               error={editProfile.tags.error}
               onChange={(e) => {

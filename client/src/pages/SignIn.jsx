@@ -303,6 +303,7 @@ export default function SignIn() {
                   width="40rem"
                   height="56.22px"
                   borderRadius="10px"
+                  maxLength={20}
                   fontSize="2rem"
                   autoComplete="off"
                   value={password}

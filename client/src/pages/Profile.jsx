@@ -62,7 +62,6 @@ export default function Profile() {
         const temp = [{}, {}, {}];
         temp.map((ele, i) => {
           temp[i] = {
-            ...ele,
             tags: [],
             working: el.data.profile.working,
             userImgUrl: el.data.profile.userImgUrl,
@@ -72,15 +71,11 @@ export default function Profile() {
         el.data.projectCard.map((ele, i) => {
           temp[i] = {
             ...ele,
-            tags: ele.tag,
+            tags: ele.tags,
           };
         });
         setData({
-          profile: {
-            ...el.data.profile,
-            tags: el.data.profile.tags,
-            userImgUrl: el.data.profile.userImgUrl,
-          },
+          profile: el.data.profile,
           project: el.data.project,
           portfolio: el.data.portFolio,
           likeList: [el.data.portfolioHeart, el.data.projectHeart],

@@ -65,26 +65,46 @@ const AboutMeWrapper = styled.div`
   height: 100%;
   h3 {
     font-weight: 700;
+    font-size: 2rem;
+  }
+  p {
+    font-size: 1rem;
   }
 `;
 
 const ButtonWrapper = styled.div`
+  margin-top: auto;
   justify-content: space-between;
 `;
 
-export default function SwiperItem({ activePage, data, idx, handler, idxHandler, isLoading }) {
-  const { memberId } = useParams();
-  const { toProfile } = useNav();
-
+export default function SwiperItem({
+  activePage,
+  data,
+  idx,
+  handler,
+  idxHandler,
+  isLoading,
+  setData,
+  trueData,
+}) {
   const handleEdit = (type) => {
     idxHandler(idx);
     handler(type);
   };
   const deleteHandler = () => {
     console.log('삭제요청');
-    api.delete(`/projectcards/${idx}`).then((el) => {
+    api.delete(`/projectcards/${data.projectCardId}`).then((el) => {
       window.alert('삭제가 완료되었습니다.');
-      toProfile(memberId);
+      const temp = trueData.projectCard;
+      temp[idx] = {
+        tags: [],
+        working: el.data.profile.working,
+        userImgUrl: el.data.profile.userImgUrl,
+      };
+      setData({
+        ...trueData,
+        projectCard: temp,
+      });
     });
   };
   return (
