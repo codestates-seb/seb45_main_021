@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
-import userDefaultImg from '../static/images/userDefaultImg.jpeg';
 import ProfileCard from '../components/profile/ProfileCard';
 import Project from '../components/profile/Project';
 import Portfolio from '../components/profile/Portfolio';
@@ -50,182 +49,6 @@ const StyleDiv = styled.div`
   flex: 1;
 `;
 
-const data1 = {
-  profile: {
-    userName: '유명인',
-    userImgUrl: userDefaultImg,
-    email: 'kimcoding@gmail.com',
-    age: 50,
-    tags: ['JavaScript', 'React', 'CSS'],
-    working: false,
-    aboutMe: '나 안산에 사는 코딩을 공부중인 23살 명인쓰인데 리액트 잘하고 css 맛깔나게 짠다.',
-    createdAt: '1999-3-3',
-  },
-  project: [
-    [
-      {
-        projectId: '1',
-        title: '같이 @@ 프로젝트 참여하실분 모집합니다123123 한대 두대 세대 네대 이렇게 이녀석 ',
-        createdAt: '2000-2-2',
-        view: 320,
-        heartCount: 100,
-      },
-      {
-        projectId: '1',
-        title: '같이 @@ 프로젝트 참여하실분 모집합니다',
-        createdAt: '2000-2-2',
-        view: 320,
-        heartCount: 100,
-      },
-      {
-        projectId: '1',
-        title: '같이 @@ 프로젝트 참여하실분 모집합니다',
-        createdAt: '2000-2-2',
-        view: 320,
-        heartCount: 100,
-      },
-      {
-        projectId: '1',
-        title: '같이 @@ 프로젝트 참여하실분 모집합니다',
-        createdAt: '2000-2-2',
-        view: 320,
-        heartCount: 100,
-      },
-    ],
-    [
-      {
-        projectId: '1',
-        title: '같이 @@ 프로젝트 참여하실분 모집합니다',
-        createdAt: '2000-2-2',
-        view: 320,
-        author: { userName: '박찬섭', memberId: 1 },
-        heartCount: 100,
-      },
-      {
-        projectId: '1',
-        title: '같이 @@ 프로젝트 참여하실분 모집합니다',
-        createdAt: '2000-2-2',
-        view: 320,
-        author: { userName: '박찬섭', memberId: 1 },
-        heartCount: 100,
-      },
-    ],
-  ],
-  portfolio: [
-    [
-      {
-        portFolioId: '1',
-        title: '같이 @@ 프로젝트 참여하실분 모집합니다',
-        createdAt: '2000-2-2',
-        view: 320,
-        heartCount: 232,
-      },
-      {
-        portFolioId: '1',
-        title: '같이 @@ 프로젝트 참여하실분 모집합니다',
-        createdAt: '2000-2-2',
-        view: 320,
-        heartCount: 232,
-      },
-      {
-        portFolioId: '1',
-        title: '같이 @@ 프로젝트 참여하실분 모집합니다',
-        createdAt: '2000-2-2',
-        view: 320,
-        heartCount: 232,
-      },
-      {
-        portFolioId: '1',
-        title: '같이 @@ 프로젝트 참여하실분 모집합니다',
-        createdAt: '2000-2-2',
-        view: 320,
-        heartCount: 232,
-      },
-    ],
-    [
-      {
-        portFolioId: '1',
-        title: '같이 @@ 프로젝트 참여하실분 모집합니다',
-        createdAt: '2000-2-2',
-        view: 320,
-        heartCount: 232,
-      },
-      {
-        portFolioId: '1',
-        title: '같이 @@ 프로젝트 참여하실분 모집합니다',
-        createdAt: '2000-2-2',
-        view: 320,
-        heartCount: 232,
-      },
-    ],
-  ],
-  likeList: [
-    [
-      {
-        postId: '1',
-        title: '같이 @@ 프로젝트 참여하실분 모집합니다',
-        created_At: '2000-2-2',
-        views: 320,
-        likeList: new Array(100),
-      },
-      {
-        postId: '2',
-        title: '같이 프로젝트 함 하자asdasdasdasdasdasdasdasdasdsaasdasdasdasddasdasdasdasdasd',
-        created_At: '2000-12-12',
-        views: 10,
-        likeList: new Array(200),
-      },
-      {
-        postId: '2',
-        title: '같이 프로젝트 함 하자asdasdasdasdasdasdasdasdasdsaasdasdasdasddasdasd',
-        created_At: '2000-12-12',
-        views: 10,
-        likeList: new Array(200),
-      },
-      {
-        postId: '2',
-        title: '같이 프로젝트 함 하자asdasdasdasdasdasdasdasdasdsaasdasdasdasddasdasd',
-        created_At: '2000-12-12',
-        views: 10,
-        likeList: new Array(200),
-      },
-    ],
-    [
-      {
-        postId: '1',
-        title: '같이 @@ 프로젝트 참여하실분 모집합니다',
-        created_At: '2000-2-2',
-        views: 120,
-        likeList: new Array(100),
-      },
-      {
-        postId: '2',
-        title: '같이 프로젝트 함 하자',
-        created_At: '2000-2-12',
-        views: 560,
-        likeList: new Array(200),
-      },
-    ],
-  ],
-  projectCard: [
-    {
-      userImg: userDefaultImg,
-      working: true,
-      aboutMe: '자기소개 이렇게 적는게 맞는걸까요오오오드용액 가버렷 컽컽컽 !!@!@',
-      tell: '010-1111-2222',
-      tags: ['JavaScript', 'React', 'CSS'],
-    },
-    {
-      userImg: userDefaultImg,
-      working: true,
-      aboutMe: '내가 자신없으면 너가 뭘 할 수 있는데 으이 ?!!?',
-      tell: '010-3333-2222',
-      tags: [],
-    },
-    {},
-  ],
-};
-
 export default function Profile() {
   const { memberId } = useParams();
   const user = useSelector((state) => state.user);
@@ -236,11 +59,11 @@ export default function Profile() {
     api
       .get(`/members/${memberId}`)
       .then((el) => {
-        console.log(el.data);
         const temp = [{}, {}, {}];
         temp.map((ele, i) => {
           temp[i] = {
             ...ele,
+            tags: [],
             working: el.data.profile.working,
             userImgUrl: el.data.profile.userImgUrl,
           };
@@ -249,14 +72,14 @@ export default function Profile() {
         el.data.projectCard.map((ele, i) => {
           temp[i] = {
             ...ele,
+            tags: ele.tag,
           };
         });
         setData({
           profile: {
             ...el.data.profile,
             tags: el.data.profile.tags,
-            userImgUrl:
-              el.data.profile.userImgUrl === '' ? userDefaultImg : el.data.profile.userImgUrl,
+            userImgUrl: el.data.profile.userImgUrl,
           },
           project: el.data.project,
           portfolio: el.data.portFolio,
@@ -269,7 +92,7 @@ export default function Profile() {
       });
     setTimeout(() => {
       setIsLoading(false);
-    }, 3000);
+    }, 2000);
   }, []);
 
   useEffect(() => {

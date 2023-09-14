@@ -99,6 +99,7 @@ const StyleColContainer = styled.div`
 const StyleBtnContainer = styled.button`
   width: 40rem;
   height: 56.22px;
+  font-size: 2rem;
   border: 1px solid var(--black-300);
   display: flex;
   align-items: center;
@@ -268,11 +269,11 @@ export default function SignIn() {
             <StyleColContainer className="col colgap">
               <StyleBtnContainer>
                 <FcGoogle className="logo" size={30} />
-                <span>Google 로그인</span>
+                Google 로그인
               </StyleBtnContainer>
               <StyleBtnContainer>
                 <AiFillGithub className="logo" size={30} />
-                <span>Github 로그인</span>
+                Github 로그인
               </StyleBtnContainer>
             </StyleColContainer>
             <div>
@@ -287,10 +288,12 @@ export default function SignIn() {
                   placeholder="name@example.com"
                   width="40rem"
                   height="56.22px"
+                  borderRadius="10px"
                   fontSize="2rem"
                   type="text"
                   value={email}
                   onChange={handleChangeEmail}
+                  autoComplete="on"
                   error={error.email}
                 />
                 <Input
@@ -299,15 +302,14 @@ export default function SignIn() {
                   type="password"
                   width="40rem"
                   height="56.22px"
+                  borderRadius="10px"
                   fontSize="2rem"
                   autoComplete="off"
                   value={password}
                   onChange={handleChangePassword}
                   error={error.password}
                 />
-                <StyleBtnContainer onClick={handleSubmitForm}>
-                  <span>로그인</span>
-                </StyleBtnContainer>
+                <StyleBtnContainer onClick={handleSubmitForm}>로그인</StyleBtnContainer>
               </form>
             </StyleColContainer>
           </StyleRowContainer>

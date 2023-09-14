@@ -97,6 +97,7 @@ const StyleColContainer = styled.div`
 const StyleBtnContainer = styled.button`
   width: 40rem;
   height: 56.22px;
+  font-size: 2rem;
   border: 1px solid var(--black-300);
   display: flex;
   align-items: center;
@@ -256,11 +257,11 @@ export default function SignUp() {
             <StyleColContainer className="col colgap">
               <StyleBtnContainer onClick={handleClickGoogleBtn}>
                 <FcGoogle className="logo" size={30} />
-                <span>Google 회원가입</span>
+                Google 회원가입
               </StyleBtnContainer>
               <StyleBtnContainer>
                 <AiFillGithub className="logo" size={30} />
-                <span>Github 회원가입</span>
+                Github 회원가입
               </StyleBtnContainer>
             </StyleColContainer>
             <div>
@@ -275,10 +276,12 @@ export default function SignUp() {
                   placeholder="이름을 입력해주세요"
                   width="40rem"
                   height="56.22px"
+                  borderRadius="10px"
                   fontSize="2rem"
                   type="text"
                   value={userName}
                   onChange={handleChangeName}
+                  autoComplete="on"
                   error={error.userName}
                 />
                 <Input
@@ -286,10 +289,12 @@ export default function SignUp() {
                   placeholder="userName@example.com"
                   width="40rem"
                   height="56.22px"
+                  borderRadius="10px"
                   fontSize="2rem"
                   type="text"
                   value={email}
                   onChange={handleChangeEmail}
+                  autoComplete="on"
                   error={error.email}
                 />
                 <Input
@@ -297,6 +302,7 @@ export default function SignUp() {
                   placeholder="영어,숫자,특수기호 포함 8글자 이상"
                   width="40rem"
                   height="56.22px"
+                  borderRadius="10px"
                   fontSize="2rem"
                   type="password"
                   autoComplete="off"
@@ -305,7 +311,7 @@ export default function SignUp() {
                   error={error.password}
                 />
                 <StyleBtnContainer type="submit" onClick={handleSubmitForm}>
-                  <span>회원가입</span>
+                  회원가입
                 </StyleBtnContainer>
               </form>
             </StyleColContainer>

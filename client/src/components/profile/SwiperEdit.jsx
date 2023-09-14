@@ -13,7 +13,7 @@ const SwiperCard = styled.div`
   width: 100%;
   height: 100%;
   border: 1px solid white;
-  border-radius: 3rem;
+  border-radius: 10px;
   padding: 2rem;
   transition: all 0.4s;
   position: relative;
@@ -92,9 +92,9 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
   const handleClickSubmit = () => {
     const isvalidPhone = isValidPhone(temp.tell.value.replace(/-/g, ''));
     if (type === 'fetch') {
-      if (isvalidPhone && temp.title.value.length <= 20 && temp.aboutMe.value.length <= 200) {
+      if (isvalidPhone && temp.aboutMe.value.length <= 200) {
         api
-          .patch(`/projectcards/${idx}`, {
+          .patch(`/projectcards/${data.projectCardId}`, {
             tags: temp.tags,
             tell: temp.tell.value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'),
             aboutMe: temp.aboutMe.value,
@@ -102,7 +102,9 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
           .then((el) => {
             setIsSubmit(true);
             const tem = trueData.projectCard;
-            tem[idx] = {
+            const index = tem.findIndex((ele) => ele.projectCardId === data.projectCardId);
+            tem[index] = {
+              ...tem[index],
               tags: temp.tags,
               tell: temp.tell.value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'),
               aboutMe: temp.aboutMe.value,
@@ -115,7 +117,7 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
       } else if (temp.aboutMe.value.length > 200) {
         setTemp({
           ...temp,
-          abooutMe: { ...temp.abooutMe, error: '200 글자 이하로 입력해주세요.' },
+          abooutMe: { ...temp.abooutMe.slice(0, 200), error: '200 글자 이하로 입력해주세요.' },
         });
       }
     } else if (type === 'new') {
@@ -128,9 +130,14 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
           })
           .then((el) => {
             setIsSubmit(true);
-            const idx = trueData.projectCard.findIndex((item) => Object.keys(item).length === 0);
+            const idx = trueData.projectCard.findIndex(
+              (item) => !item.hasOwnProperty('projectCardId'),
+            );
             const tem = trueData.projectCard;
             tem[idx] = {
+              projectCardId: el.data.projectCardId,
+              working: trueData.profile.working,
+              userImgUrl: trueData.profile.userImgUrl,
               tags: temp.tags,
               tell: temp.tell.value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'),
               aboutMe: temp.aboutMe.value,
@@ -156,16 +163,21 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
   const handleTagKeyDown = (e) => {
     if (e.code !== 'Enter' && e.code !== 'NumpadEnter') return;
     e.preventDefault();
-    if (temp.curString.length <= 10 && temp.curString.length > 0) {
+    if (
+      temp.curString.split(' ').join('').length <= 10 &&
+      temp.curString.split(' ').join('').length > 0
+    ) {
       if (
         temp.tags?.length <= 2 &&
         temp.tags.filter((el) => el.toLowerCase() === temp.curString.toLowerCase()).length === 0
       ) {
         setTemp({
           ...temp,
-          tags: [...temp.tags, temp.curString],
-          curString: '',
+          tags: [...temp.tags, temp.curString.split(' ').join('')],
         });
+        setTimeout(() => {
+          e.target.value = '';
+        }, 0);
       }
     }
   };
@@ -188,6 +200,7 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
         width="100%"
         height="15rem"
         type="textarea"
+        borderRadius="10px"
         placeholder="200글자까지 작성이 가능합니다."
         value={temp.aboutMe.value || ''}
         error={temp.aboutMe.error}
@@ -197,6 +210,7 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
         label="연락처"
         width="100%"
         type="text"
+        borderRadius="10px"
         placeholder="- 없이 숫자만 입력해주세요."
         value={type === 'new' ? temp.tell.value || '' : temp.tell.value.replace(/-/g, '') || ''}
         error={temp.tell.error}
@@ -208,6 +222,7 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
           width="100%"
           height="3.5rem"
           type="text"
+          borderRadius="10px"
           placeholder="태그는 최대 중복제외 3개까지 등록이 가능합니다."
           value={temp.curString || ''}
           onChange={(e) =>
@@ -241,6 +256,7 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
           $width="100%"
           $borderColor="green"
           $color="green"
+          $radius="10px"
           $fontSize="4rem"
           onClick={handleClickSubmit}
         >

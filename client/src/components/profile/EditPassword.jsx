@@ -48,8 +48,8 @@ export default function EditPassword({ editPassword, setEditPassword }) {
             fontSize="1.5rem"
             width="100%"
             height="4rem"
-            value={editPassword.newPassword2.value}
-            error={editPassword.newPassword2.error}
+            value={editPassword.newPasswordCheck.value}
+            error={editPassword.newPasswordCheck.error}
             onChange={(e) => setEditPassword({ ...editPassword, newPasswordCheck: e.target.value })}
           />
         </form>

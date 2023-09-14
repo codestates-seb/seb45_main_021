@@ -6,13 +6,14 @@ import { useParams } from 'react-router-dom';
 import api from '../../hooks/useAxiosInterceptor';
 import useNav from '../../hooks/useNav';
 import Tag from '../common/Tag';
+import userDefaultImg from '../../static/images/userDefaultImg.jpeg';
 import Skeleton from '@mui/material/Skeleton';
 
 const SwiperCard = styled.div`
   width: 100%;
   min-height: 500px;
   border: 1px solid white;
-  border-radius: 3rem;
+  border-radius: 10px;
   padding: 2rem;
   transition: all 0.4s;
   position: relative;
@@ -95,7 +96,11 @@ export default function SwiperItem({ activePage, data, idx, handler, idxHandler,
           {data.tell ? (
             <SwiperCard className="col gap" $active={activePage === idx ? true : false}>
               <InfoWrapper className="row gap">
-                <img className="userImg" src={data.userImg} alt="" />
+                <img
+                  className="userImg"
+                  src={!data.userImgUrl ? userDefaultImg : data.userImgUrl}
+                  alt=""
+                />
                 <div className="col gap">
                   <div className="col gap">
                     <p className="label">연락처</p>

@@ -12,10 +12,9 @@ import { desktop, mobile } from '../../static/theme';
 const StyleProfileContainer = styled.div`
   display: flex;
   position: relative;
-  background-color: #00000046;
   padding-top: 2rem;
   .label {
-    font-size: 2.5rem;
+    font-size: 2rem;
     margin-bottom: 10px;
     font-weight: 700;
   }
@@ -96,7 +95,7 @@ const StyleProfileContainer = styled.div`
       .info {
         height: 100%;
         gap: 2rem;
-        font-size: 2rem;
+        font-size: 1.5rem;
         display: flex;
         justify-content: space-between;
         p {
@@ -120,7 +119,7 @@ export default function ProfileCard({ id, data, isLoading }) {
     working: data.working,
     age: data.age,
     tags: data.tags,
-    aboutMe: data.aboutMe,
+    aboutMe: data.aboutMe === null ? '' : data.aboutMe,
     createdAt: data.createdAt,
   });
   const [editProfile, setEditProfile] = useState({
@@ -154,7 +153,7 @@ export default function ProfileCard({ id, data, isLoading }) {
       value: '',
       error: '',
     },
-    newPassword2: {
+    newPasswordCheck: {
       value: '',
       error: '',
     },
@@ -201,16 +200,20 @@ export default function ProfileCard({ id, data, isLoading }) {
         setEditProfile({
           ...editProfile,
           tags: {
+            ...editProfile.tags,
             value: [...editProfile.tags.value, editProfile.tags.curString.split(' ').join('')],
-            curString: '',
             error: '',
           },
         });
+        setTimeout(() => {
+          e.target.value = '';
+        }, 0);
       } else {
         setEditProfile({
           ...editProfile,
           tags: {
             ...editProfile.tags,
+            curString: '',
             error: '중복은 허용하지않습니다.',
           },
         });
@@ -252,65 +255,65 @@ export default function ProfileCard({ id, data, isLoading }) {
     }
   };
 
-  const handleEditPassword = async (e) => {
-    e.preventDefault();
+  const handleEditPassword = (e) => {
     console.log('비밀번호 수정 요청');
-    try {
-      if (
-        editPassword.newPassword === editPassword.newPassword2 &&
-        isValidPassword(editPassword.prevPassword) &&
-        isValidPassword(editPassword.newPassword) &&
-        isValidPassword(editPassword.newPassword2)
-      ) {
-        api
-          .patch(`/members/password/${memberId}`, {
-            prevPassword: editPassword.prevPassword,
-            newPassword: editPassword.newPassword,
-          })
-          .then((el) => {
-            alert('비밀번호 변경이 완료되었습니다');
-            setEditPassword({
-              ...editPassword,
-              prevPassword: { ...editPassword.prevPassword, error: '' },
-              newPassword: { ...editPassword.newPassword, error: '' },
-              newPassword2: { ...editPassword.newPassword, error: '' },
-            });
+    if (
+      editPassword.newPassword === editPassword.newPasswordCheck &&
+      isValidPassword(editPassword.prevPassword) &&
+      isValidPassword(editPassword.newPassword) &&
+      isValidPassword(editPassword.newPasswordCheck)
+    ) {
+      console.log('정규식 통과');
+      api
+        .patch(`/members/password/${memberId}`, {
+          prevPassword: editPassword.prevPassword,
+          newPassword: editPassword.newPassword,
+        })
+        .then((el) => {
+          alert('비밀번호 변경이 완료되었습니다');
+          setEditPassword({
+            ...editPassword,
+            prevPassword: { ...editPassword.prevPassword, error: '' },
+            newPassword: { ...editPassword.newPassword, error: '' },
+            newPasswordCheck: { ...editPassword.newPasswordCheck, error: '' },
           });
-      } else if (!(editPassword.newPassword === editPassword.newPassword2)) {
-        setEditPassword({
-          ...editPassword,
-          newPassword: { ...editPassword.newPassword, error: '새 비밀번호는 같아야 합니다.' },
-          newPassword2: { ...editPassword.newPassword, error: '새 비밀번호는 같아야 합니다.' },
+        })
+        .catch((error) => {
+          console.log(error);
         });
-      } else if (!isValidPassword(editPassword.prevPassword)) {
-        setEditPassword({
-          ...editPassword,
-          prevPassword: { ...editPassword.prevPassword, error: '다시 입력해주세요' },
-        });
-      } else if (!isValidPassword(editPassword.newPassword)) {
-        setEditPassword({
-          ...editPassword,
-          newPassword: { ...editPassword.newPassword, error: '다시 입력해주세요' },
-        });
-      } else if (isValidPassword(editPassword.newPassword)) {
-        setEditPassword({
-          ...editPassword,
-          newPassword2: { ...editPassword.newPassword2, error: '다시 입력해주세요' },
-        });
-      }
-    } catch (error) {
-      console.log(error);
+    } else if (!(editPassword.newPassword === editPassword.newPasswordCheck)) {
+      setEditPassword({
+        ...editPassword,
+        newPassword: { ...editPassword.newPassword, error: '새 비밀번호는 같아야 합니다.' },
+        newPasswordCheck: {
+          ...editPassword.newPasswordCheck,
+          error: '새 비밀번호는 같아야 합니다.',
+        },
+      });
+    } else if (!isValidPassword(editPassword.prevPassword)) {
+      setEditPassword({
+        ...editPassword,
+        prevPassword: { ...editPassword.prevPassword, error: '다시 입력해주세요' },
+      });
+    } else if (!isValidPassword(editPassword.newPassword)) {
+      setEditPassword({
+        ...editPassword,
+        newPassword: { ...editPassword.newPassword, error: '다시 입력해주세요' },
+      });
+    } else if (isValidPassword(editPassword.newPasswordCheck)) {
+      setEditPassword({
+        ...editPassword,
+        newPasswordCheck: { ...editPassword.newPasswordCheck, error: '다시 입력해주세요' },
+      });
     }
   };
 
   const handleClickWithdrawal = () => {
     console.log('회원탈퇴 요청');
-    if (window.confirm('정말 탈퇴하시겠습니까 ?')) {
-      api.delete(`/members/${memberId}`).then((el) => console.log(el));
-      dispatch(deleteUser());
-      alert('이용해주셔서 감사합니다.');
-      toAbout();
-    }
+    api.delete(`/members/${memberId}`).then((el) => console.log(el));
+    dispatch(deleteUser());
+    alert('이용해주셔서 감사합니다.');
+    toAbout();
   };
 
   return (

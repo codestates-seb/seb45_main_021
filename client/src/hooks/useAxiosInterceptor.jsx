@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { updateUser, deleteUser } from '../redux/userForm/userSlice';
 import useNav from '../hooks/useNav';
 
@@ -14,7 +14,6 @@ const instance = axios.create({
 
 export const useAxiosInterceptor = () => {
   const dispatch = useDispatch();
-  const jwt = useSelector((state) => state.user.jwt);
   const { toAbout, toSignin } = useNav();
 
   instance.interceptors.request.use(

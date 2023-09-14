@@ -20,12 +20,11 @@ const StyleContainer = styled.div`
   }
   .swiper {
     width: 100%;
-    height: 100%;
+    position: relative;
+    overflow-y: visible;
   }
-  .swiper-wrapper {
-    width: 100%;
-    display: flex;
-    align-items: center;
+  .swiper-pagination {
+    bottom: -10px !important;
   }
   .swiper-slide {
     padding: 1rem;
