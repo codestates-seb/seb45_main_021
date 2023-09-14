@@ -1,12 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/han_db
-    username: root
-    password: gks0923
-#    url: jdbc:mysql://spec-db-1.c8qdyivupwng.ap-northeast-2.rds.amazonaws.com:13306/SPEC
-#    username: admin
-#    password: qwer1234 #${MYSQL_SECRET}
+    url: jdbc:mysql://spec-db-1.c8qdyivupwng.ap-northeast-2.rds.amazonaws.com:13306/SPEC
+    username: admin
+    password: ${MYSQL_SECRET}
 
   jpa:
     open-in-view: true
@@ -22,11 +19,12 @@ spring:
       hibernate:
         connection:
           characterEncoding: utf8mb4
-
   servlet:
     multipart:
       max-file-size: 50MB
       max-request-size: 50MB
+
+
   security:
     oauth2:
       client:
