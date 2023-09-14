@@ -48,7 +48,10 @@ public class Portfolio extends Auditable {
     @JsonManagedReference
     List<Comment> comments;
 
-    private String[] tags;
+    private String tagA;
+    private String tagB;
+    private String tagC;
+
 
     private String lang;
 

@@ -19,47 +19,71 @@ public interface PortfolioMapper {
 
 
     default Portfolio portfolioPostDtoToPortfolio(PortfolioDto.Post portfolioPostDto){
+
+
+
         Member member = new Member();
         member.setMemberId(portfolioPostDto.getMemberId());
 
-        Portfolio portFolio = new Portfolio();
-        portFolio.setTitle(portfolioPostDto.getTitle());
-        portFolio.setBody(portfolioPostDto.getBody());
-        portFolio.setTags(new String[]{portfolioPostDto.getTags()});
-        portFolio.setLang((portfolioPostDto.getLang()));
-        portFolio.setMember(member);
 
-        return portFolio;
+
+
+        Portfolio portfolio = new Portfolio();
+        portfolio.setTitle(portfolioPostDto.getTitle());
+        portfolio.setBody(portfolioPostDto.getBody());
+        portfolio.setLang((portfolioPostDto.getLang()));
+        portfolio.setMember(member);
+
+
+        if(portfolioPostDto.getTags() != null) {
+            String[] tags = portfolioPostDto.getTags().split(",");
+            portfolio.setTagA(tags[0]);
+            if(tags.length >= 2) portfolio.setTagB(tags[1]);
+            if(tags.length >= 3) portfolio.setTagC(tags[2]);
+        }
+
+        return portfolio;
     };
 
 
 
-    @Mapping(target = "tags", expression = "java(mapTags(portfolioPatchDto.getTags()))")
-    Portfolio portfolioPatchDtoToPortfolio(PortfolioDto.Patch portfolioPatchDto);
-    default String [] mapTags(String tags) {
-        if (tags == null || tags.isEmpty()) {
-            return new String[0];
-        }
-        return  tags.split(",");
-    }
-    private String[] parseTags(String tags) {
-        if (tags == null || tags.isEmpty()) {
-            return null;
-        }
+    default Portfolio portfolioPatchDtoToPortfolio(PortfolioDto.Patch portfolioPatchDto){
 
-        // 태그 문자열을 쉼표로 분리하여 배열로 반환
-        String[] tagArray = tags.split(",");
+        Portfolio portfolio = new Portfolio();
 
-        // 각 태그 문자열의 양 끝에 있는 공백 및 대괄호 제거
-        for (int i = 0; i < tagArray.length; i++) {
-            tagArray[i] = tagArray[i].trim().replaceAll("^\\[|\\]$", "");
+        portfolio.setPortfolioId(portfolioPatchDto.getPortfolioId());
+        portfolio.setTitle(portfolioPatchDto.getTitle());
+        portfolio.setBody(portfolioPatchDto.getBody());
+        portfolio.setLang(portfolioPatchDto.getLang());
+        portfolio.setIsComment(portfolioPatchDto.isIsComment());
+        portfolio.setIsEmploy(portfolioPatchDto.isIsEmploy());
+
+        if(portfolioPatchDto.getTags() != null) {
+            String[] tags = portfolioPatchDto.getTags().split(",");
+            portfolio.setTagA(tags[0]);
+            if(tags.length >= 2) portfolio.setTagB(tags[1]);
+            if(tags.length >= 3) portfolio.setTagC(tags[2]);
         }
 
-        return tagArray;
-    }
+        return portfolio;
+    };
 
 
     default PortfolioDto.Response portfolioToPortfolioResponseDto(Portfolio portFolio){
+
+        List<String> tagsList = new ArrayList<>();
+        if (portFolio.getTagA() != null) {
+            tagsList.add(portFolio.getTagA());
+        }
+        if (portFolio.getTagB() != null) {
+            tagsList.add(portFolio.getTagB());
+        }
+        if (portFolio.getTagC() != null) {
+            tagsList.add(portFolio.getTagC());
+        }
+        String[] tags = tagsList.toArray(new String[0]);
+
+
         PortfolioDto.Response response = PortfolioDto.Response.builder()
                 .portfolioId(portFolio.getPortfolioId())
                 .memberId(portFolio.getMember().getMemberId())
@@ -67,11 +91,13 @@ public interface PortfolioMapper {
                 .userImgUrl(portFolio.getMember().getUserImgUrl())
                 .title(portFolio.getTitle())
                 .createdAt(portFolio.getCreatedAt())
-                .tags(parseTags(Arrays.toString(portFolio.getTags())))
+                .tags(tags)
                 .lang(portFolio.getLang())
                 .heartCount(portFolio.getHeartCount())
                 .IsEmploy(portFolio.isIsEmploy())
                 .build();
+
+
 
         return response;
     }
@@ -80,6 +106,17 @@ public interface PortfolioMapper {
     List<PortfolioDto.Response> portfoliosToPortfolioResponseDtos(List<Portfolio> portfolios);
 
     default PortfolioDto.DetailResponse portfolioToPortfolioDetailResponseDto(Portfolio portFolio){
+        List<String> tagsList = new ArrayList<>();
+        if (portFolio.getTagA() != null) {
+            tagsList.add(portFolio.getTagA());
+        }
+        if (portFolio.getTagB() != null) {
+            tagsList.add(portFolio.getTagB());
+        }
+        if (portFolio.getTagC() != null) {
+            tagsList.add(portFolio.getTagC());
+        }
+        String[] tags = tagsList.toArray(new String[0]);
 
         PortfolioDto.DetailResponse detailResponse = PortfolioDto.DetailResponse.builder()
                 .portfolioId(portFolio.getPortfolioId())
@@ -90,7 +127,7 @@ public interface PortfolioMapper {
                 .createdAt(portFolio.getCreatedAt())
                 .modifiedAt(portFolio.getModifiedAt())
                 .view(portFolio.getView())
-                .tags(parseTags(Arrays.toString(portFolio.getTags())))
+                .tags(tags)
                 .lang(portFolio.getLang())
                 .IsEmploy(portFolio.isIsEmploy())
                 .IsComment(portFolio.isIsComment())
