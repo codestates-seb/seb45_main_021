@@ -31,8 +31,8 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
             countQuery = "SELECT COUNT(*) FROM PROJECT AS p WHERE p.lang LIKE :langLikeQuery",
             nativeQuery = true)
     Page<Project> findByLang(String langLikeQuery,Pageable pageable);
-    @Query(value = "SELECT * FROM PROJECT AS p WHERE p.tagA LIKE :tagLikeQuery OR p.tagB LIKE :tagLikeQuery OR p.tagC LIKE :tagLikeQuery AND p.lang LIKE :langLikeQuery",
-            countQuery = "SELECT COUNT(*) FROM PROJECT AS p WHERE p.tagA LIKE :tagLikeQuery OR p.tagB LIKE :tagLikeQuery OR p.tagC LIKE :tagLikeQuery AND p.lang LIKE :langsLike",
+    @Query(value = "SELECT * FROM PROJECT AS p WHERE (p.tagA LIKE :tagLikeQuery OR p.tagB LIKE :tagLikeQuery OR p.tagC LIKE :tagLikeQuery) AND p.lang LIKE :langLikeQuery",
+            countQuery = "SELECT COUNT(*) FROM PROJECT AS p WHERE (p.tagA LIKE :tagLikeQuery OR p.tagB LIKE :tagLikeQuery OR p.tagC LIKE :tagLikeQuery) AND p.lang LIKE :langLikeQuery",
             nativeQuery = true)
     Page<Project> findByTagsAndLang(String tagLikeQuery, String langLikeQuery,Pageable pageable);
 
