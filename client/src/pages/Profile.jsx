@@ -76,7 +76,7 @@ export default function Profile() {
         const temp = [{}, {}, {}];
         temp.map((_, i) => {
           temp[i] = {
-            tags: [],
+            tags: { value: [], error: '', curString: '' },
             working: el.data.profile.working,
             userImgUrl: el.data.profile.userImgUrl,
           };
@@ -87,7 +87,7 @@ export default function Profile() {
             ...ele,
             userImgUrl: el.data.profile.userImgUrl,
             working: el.data.profile.working,
-            tags: ele.tags,
+            tags: { value: ele.tags, error: '', curString: '' },
           };
         });
         setData({

@@ -257,10 +257,9 @@ export default function ShowProfile({
                 <div>
                   <p className="label">태그</p>
                   <div className="row tagGap">
-                    {profile.tags.map((el, i) => (
-                      <Tag key={i} text={el} />
-                    ))}
-                    {profile.tags.length === 0 && '아직 태그가 등록되지 않았습니다.'}
+                    {profile.tags.length === 0
+                      ? '아직 태그가 등록되지 않았습니다.'
+                      : profile.tags?.map((el, i) => <Tag key={i} text={el} />)}
                   </div>
                 </div>
               </>

@@ -6,7 +6,7 @@ import api from '../../hooks/useAxiosInterceptor';
 import { deleteUser } from '../../redux/userForm/userSlice';
 import { useDispatch } from 'react-redux';
 import ShowProfile from './ShowProfile';
-import { isValidPassword } from './isValid';
+import { isValidPassword, isValidTag } from './isValid';
 import { desktop, mobile } from '../../static/theme';
 
 const StyleProfileContainer = styled.div`
@@ -212,7 +212,8 @@ export default function ProfileCard({ id, data, isLoading }) {
         editProfile.tags.value.length <= 2 &&
         editProfile.tags.value.filter(
           (el) => el.toLowerCase() === editProfile.tags.curString.toLowerCase(),
-        ).length === 0
+        ).length === 0 &&
+        isValidTag(editProfile.tags.curString)
       ) {
         setEditProfile({
           ...editProfile,
@@ -225,6 +226,15 @@ export default function ProfileCard({ id, data, isLoading }) {
         setTimeout(() => {
           e.target.value = '';
         }, 0);
+      } else if (!isValidTag(editProfile.tags.curString)) {
+        setEditProfile({
+          ...editProfile,
+          tags: {
+            ...editProfile.tags,
+            curString: '',
+            error: '한글은 자음과 모음만 등록할 수 없습니다.',
+          },
+        });
       } else {
         setEditProfile({
           ...editProfile,
@@ -246,7 +256,7 @@ export default function ProfileCard({ id, data, isLoading }) {
       editProfile.userName.value.length <= 5 &&
       editProfile.age.value.toString().length <= 3
     ) {
-      console.log(editProfile.age.value);
+      regExpPass = true;
       const responseBody = {
         aboutMe: editProfile.aboutMe.value,
         userName: editProfile.userName.value,
@@ -257,28 +267,21 @@ export default function ProfileCard({ id, data, isLoading }) {
       api
         .patch(`members/${memberId}`, responseBody)
         .then((el) => {
-          if (el.status === 200) {
-            regExpPass = true;
-            alert('프로필 수정 성공');
-            setProfile({
-              ...profile,
-              aboutMe: editProfile.aboutMe.value,
-              userName: editProfile.userName.value,
-              age: Number(editProfile.age.value),
-              tags: editProfile.tags.value,
-              working: editProfile.working.value,
-            });
-          }
+          alert('프로필 수정 성공');
+          setProfile({
+            ...profile,
+            aboutMe: editProfile.aboutMe.value,
+            userName: editProfile.userName.value,
+            age: Number(editProfile.age.value),
+            tags: editProfile.tags.value,
+            working: editProfile.working.value,
+          });
         })
         .catch((error) => {
           console.log(error);
         });
     }
-    if (regExpPass) {
-      return true;
-    } else {
-      return false;
-    }
+    return regExpPass;
   };
 
   const handleEditPassword = (e) => {
@@ -290,22 +293,20 @@ export default function ProfileCard({ id, data, isLoading }) {
       isValidPassword(editPassword.newPassword) &&
       isValidPassword(editPassword.newPasswordCheck)
     ) {
+      regExpPass = true;
       api
         .patch(`/members/password/${memberId}`, {
           prevPassword: editPassword.prevPassword,
           newPassword: editPassword.newPassword,
         })
         .then((el) => {
-          if (el.status === 200) {
-            regExpPass = true;
-            alert('비밀번호 변경이 완료되었습니다');
-            setEditPassword({
-              ...editPassword,
-              prevPassword: { ...editPassword.prevPassword, error: '' },
-              newPassword: { ...editPassword.newPassword, error: '' },
-              newPasswordCheck: { ...editPassword.newPasswordCheck, error: '' },
-            });
-          }
+          alert('비밀번호 변경이 완료되었습니다');
+          setEditPassword({
+            ...editPassword,
+            prevPassword: { ...editPassword.prevPassword, error: '' },
+            newPassword: { ...editPassword.newPassword, error: '' },
+            newPasswordCheck: { ...editPassword.newPasswordCheck, error: '' },
+          });
         })
         .catch((error) => {
           console.log(error);
@@ -335,11 +336,7 @@ export default function ProfileCard({ id, data, isLoading }) {
         newPasswordCheck: { ...editPassword.newPasswordCheck, error: '다시 입력해주세요' },
       });
     }
-    if (regExpPass) {
-      return true;
-    } else {
-      return false;
-    }
+    return regExpPass;
   };
 
   const handleClickWithdrawal = () => {
