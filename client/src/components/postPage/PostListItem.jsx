@@ -1,13 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
-import defaultImg from '../../static/images/mockImage.png';
 import LanguageTag from '../common/LanguageTag';
 import useNav from '../../hooks/useNav';
 import Tag from '../common/Tag';
 import Like from '../common/Like';
 import DateUser from '../common/DateUser';
 import EmployBadge from '../common/EmployBadge';
+
 const StylePostListItem = styled.li`
+  border: 1px solid var(--black-700);
   border-radius: 3px;
   overflow: hidden;
   background-color: var(--backgroundColor);
@@ -50,23 +51,26 @@ const StylePostListItem = styled.li`
     }
   }
 `;
-export default function PostListItem({ post, type }) {
+export default function PostListItem({ post, type, likeUpdateSuccess }) {
   const { toProjectDetail, toPortfolioDetail } = useNav();
   const {
     lang,
-    titleImg,
     title,
-    tag,
-    likes,
+    tags,
+    heartCount,
     portfolioId,
     projectId,
     createdAt,
-    author,
     isEmploy,
+    userName,
     memberId,
+    projectTitleImage,
+    portfolioTitleImage,
   } = post;
 
-  const id = portfolioId || projectId;
+  const postId = portfolioId || projectId;
+
+  const postTitleImage = projectTitleImage.imageUrl || portfolioTitleImage.imageUrl;
   const onDetailHandler = (id) => {
     type === 'projects' ? toProjectDetail(id) : toPortfolioDetail(id);
   };
@@ -75,17 +79,23 @@ export default function PostListItem({ post, type }) {
     <StylePostListItem>
       {type === 'portfolios' && isEmploy && <EmployBadge />}
       <LanguageTag language={lang} />
-      <img src={titleImg || defaultImg} alt="post title img" onClick={() => onDetailHandler(id)} />
+      <img src={postTitleImage} alt="post title img" onClick={() => onDetailHandler(postId)} />
       <div className="content-box">
-        <h4 onClick={() => onDetailHandler(id)}>{title}</h4>
+        <h4 onClick={() => onDetailHandler(postId)}>{title}</h4>
         <div className="tag">
-          {tag?.map((tagItem) => (
+          {tags?.map((tagItem) => (
             <Tag text={tagItem} key={tagItem} type={type} />
           ))}
         </div>
         <div className="user">
-          <Like size="17px" likes={likes} postId={id} />
-          <DateUser size="13px" date={createdAt} user={author} />
+          <Like
+            size="17px"
+            heartCount={heartCount}
+            postId={postId}
+            type={type}
+            likeUpdateSuccess={likeUpdateSuccess}
+          />
+          <DateUser size="13px" date={createdAt} userName={userName} memberId={memberId} />
         </div>
       </div>
     </StylePostListItem>

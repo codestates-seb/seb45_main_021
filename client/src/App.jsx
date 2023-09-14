@@ -2,7 +2,6 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import Header from './components/header/Header';
 import { useEffect } from 'react';
-import BackGround from './components/common/BackGround';
 import { useAxiosInterceptor } from './hooks/useAxiosInterceptor';
 import Footer from './components/footer/Footer';
 import { styled } from 'styled-components';

@@ -18,11 +18,11 @@ const StylePostList = styled.ul`
   }
 `;
 
-export default function PostList({ postData, type }) {
+export default function PostList({ postData, type, likeUpdateSuccess }) {
   return (
     <StylePostList>
       {postData.map((post, i) => (
-        <PostListItem key={i} post={post} type={type} />
+        <PostListItem key={i} post={post} type={type} likeUpdateSuccess={likeUpdateSuccess} />
       ))}
     </StylePostList>
   );
