@@ -13,7 +13,6 @@ import api from '../hooks/useAxiosInterceptor';
 import { desktop, mobile } from '../static/theme';
 
 const StyleContainer = styled(Page)`
-  gap: 2rem;
   margin-top: 20px;
   display: flex;
   position: relative;
@@ -27,6 +26,7 @@ const StyleContainer = styled(Page)`
   ${mobile} {
     flex-direction: column;
   }
+
   ::-webkit-scrollbar {
     width: 5px;
   }
@@ -47,6 +47,20 @@ const StyleContainer = styled(Page)`
 
 const StyleDiv = styled.div`
   flex: 1;
+  margin-left: 2rem;
+  display: flex;
+  flex-direction: column;
+  ${desktop} {
+    margin-left: 2rem;
+  }
+  @media (max-width: 850px) {
+    margin-top: 2rem;
+    margin-left: 0;
+  }
+  ${mobile} {
+    margin-top: 2rem;
+    margin-left: 0;
+  }
 `;
 
 export default function Profile() {
@@ -60,7 +74,7 @@ export default function Profile() {
       .get(`/members/${memberId}`)
       .then((el) => {
         const temp = [{}, {}, {}];
-        temp.map((ele, i) => {
+        temp.map((_, i) => {
           temp[i] = {
             tags: [],
             working: el.data.profile.working,

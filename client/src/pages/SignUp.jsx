@@ -20,16 +20,6 @@ const StyleContainer = styled(Page)`
   align-items: center;
   gap: 2rem;
   font-size: 2rem;
-  scale: 1;
-  ${desktop} {
-    scale: 1;
-  }
-  @media (max-width: 800px) {
-    scale: 0.8;
-  }
-  ${mobile} {
-    scale: 0.8;
-  }
   h3 {
     font-size: 5rem;
     font-weight: 700;
@@ -49,7 +39,7 @@ const StyleContainer = styled(Page)`
     ${desktop} {
       margin-bottom: 5rem;
     }
-    @media (max-width: 800px) {
+    @media (max-width: 900px) {
       margin-bottom: 3rem;
     }
     ${mobile} {
@@ -79,7 +69,7 @@ const StyleRowContainer = styled.div`
   ${desktop} {
     flex-direction: row;
   }
-  @media (max-width: 800px) {
+  @media (max-width: 900px) {
     flex-direction: column;
     gap: 4rem;
   }
@@ -126,7 +116,7 @@ const StyleDivider = styled.div`
     ${desktop} {
       top: 0;
     }
-    @media (max-width: 800px) {
+    @media (max-width: 900px) {
       left: 0;
       width: 40%;
       border-bottom: 1px solid var(--black-500);
@@ -147,7 +137,7 @@ const StyleDivider = styled.div`
     ${desktop} {
       bottom: 0;
     }
-    @media (max-width: 800px) {
+    @media (max-width: 900px) {
       right: 0;
       width: 40%;
       border-bottom: 1px solid var(--black-500);

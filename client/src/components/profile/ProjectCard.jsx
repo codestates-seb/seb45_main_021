@@ -9,7 +9,7 @@ import SwiperEdit from './SwiperEdit';
 
 const StyleContainer = styled.div`
   width: 100%;
-  height: 70rem;
+  height: calc(fit-content + 50px);
   padding: 1rem;
   background-color: #00000046;
   gap: 1rem;
@@ -20,11 +20,11 @@ const StyleContainer = styled.div`
   }
   .swiper {
     width: 100%;
+    height: 100%;
     position: relative;
-    overflow-y: visible;
   }
   .swiper-pagination {
-    bottom: -10px !important;
+    bottom: 0 !important;
   }
   .swiper-slide {
     padding: 1rem;
@@ -34,6 +34,7 @@ const StyleContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    padding-bottom: 20px;
   }
 `;
 
