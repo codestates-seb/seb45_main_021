@@ -25,6 +25,7 @@ export default function ShowProfile({
   handleEditPassword,
   handleClickWithdrawal,
   handleResetEditProfile,
+  handleResetEditPwd,
 }) {
   const user = useSelector((state) => state.user);
   const fileInputRef = React.createRef();
@@ -62,6 +63,7 @@ export default function ShowProfile({
           <Modal
             setIsOpen={setIsOpenEditInfo}
             confirmHandler={handleEditProfile}
+            absoluteConfirm={true}
             cancelHandler={handleResetEditProfile}
             children={
               <EditProfile
@@ -76,6 +78,8 @@ export default function ShowProfile({
           <Modal
             setIsOpen={setIsOpenEditPwd}
             confirmHandler={handleEditPassword}
+            absoluteConfirm={true}
+            cancelHandler={handleResetEditPwd}
             children={
               <EditPassword editPassword={editPassword} setEditPassword={setEditPassword} />
             }
@@ -236,7 +240,7 @@ export default function ShowProfile({
                 </div>
                 <div>
                   <p className="label">나이</p>
-                  <p>{profile.age === 0 ? '아직 나이가 등록되지 않았습니다.' : Profile.age}</p>
+                  <p>{profile.age === 0 ? '아직 나이가 등록되지 않았습니다.' : `${profile.age}`}</p>
                 </div>
                 <div>
                   <p className="label">이메일</p>

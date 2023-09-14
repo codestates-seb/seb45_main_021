@@ -71,6 +71,8 @@ export default function Profile() {
         el.data.projectCard.map((ele, i) => {
           temp[i] = {
             ...ele,
+            userImgUrl: el.data.profile.userImgUrl,
+            working: el.data.profile.working,
             tags: ele.tags,
           };
         });
