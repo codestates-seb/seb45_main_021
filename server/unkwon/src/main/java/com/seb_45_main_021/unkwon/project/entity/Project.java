@@ -1,25 +1,19 @@
 package com.seb_45_main_021.unkwon.project.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.seb_45_main_021.unkwon.audit.Auditable;
 import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
-import com.seb_45_main_021.unkwon.image.ProjectImage;
-import com.seb_45_main_021.unkwon.image.ProjectTitleImage;
+import com.seb_45_main_021.unkwon.image.project.ProjectImage;
+import com.seb_45_main_021.unkwon.image.project.ProjectTitleImage;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Getter

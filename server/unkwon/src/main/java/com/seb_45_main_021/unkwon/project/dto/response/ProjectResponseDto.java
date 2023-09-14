@@ -1,14 +1,12 @@
 package com.seb_45_main_021.unkwon.project.dto.response;
 
-import com.seb_45_main_021.unkwon.image.ProjectImage;
-import com.seb_45_main_021.unkwon.image.ProjectTitleImage;
+import com.seb_45_main_021.unkwon.image.project.ProjectImage;
+import com.seb_45_main_021.unkwon.image.project.ProjectTitleImage;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Getter
