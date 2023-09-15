@@ -4,8 +4,7 @@ import { updateUser, deleteUser } from '../redux/userForm/userSlice';
 import useNav from '../hooks/useNav';
 
 const instance = axios.create({
-  // baseURL: 'http://ec2-52-78-224-100.ap-northeast-2.compute.amazonaws.com:8080/',
-  baseURL: 'https://cf5e-119-193-199-218.ngrok-free.app/',
+  baseURL: 'http://ec2-52-78-224-100.ap-northeast-2.compute.amazonaws.com:8080/',
   timeout: 7000,
   headers: {
     'Content-Type': 'application/json',
