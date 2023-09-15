@@ -4,6 +4,9 @@ import Input from '../common/Input';
 import { StyleBorderButton } from '../common/Buttons';
 import ProGress from '../common/ProGress';
 import api from '../../hooks/useAxiosInterceptor'
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { updateUser } from '../../redux/userForm/userSlice';
 
 const StyleWriteComment = styled.div`
     width:100%;
@@ -17,25 +20,37 @@ const StyleWriteComment = styled.div`
     }
 `
 
-
-
-export default function WriteComment() {
+export default function WriteComment({
+    updateHandler,
+}) {
     const [comments,setComments] = useState('');
+    const {portfolioId} = useParams();
+    const loginUserdata = useSelector(state=>state.user);
 
-    //제출할때 
     const submitHandler = () => {
-        console.log(comments)
-        api.post('/portfolio/:id',)
+        const body = {
+            memberId : loginUserdata.userInfo.memberId,
+            portfolioId : portfolioId,
+            body : comments 
+        }
+        console.log(body);
+        api.post('/comments',body)
         .then(res=>{
-            console.log('성공')   
+            updateHandler();
+            setComments('')
         })
         .catch(err=>{
-            console.log('실패')
         })
     }
 
     const commentsHandler = (e) => {
         setComments(e.target.value);
+    }
+
+    const keyDownHandler = (e) => {
+        if(e.code === 'Enter' || e.code === 'NumpadEnter') {
+            submitHandler()
+        }
     }
 
     return (
@@ -46,7 +61,9 @@ export default function WriteComment() {
                 height={'8rem'}
                 maxLength={200}
                 type='textarea'
+                value={comments}
                 onChangeHandler={commentsHandler}
+                onKeyDown={keyDownHandler}
             />
             <ProGress
                 comPleteNum={200}

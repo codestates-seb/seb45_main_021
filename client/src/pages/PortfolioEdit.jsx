@@ -14,14 +14,8 @@ import { checkValidations } from '../utils/checkValidations';
 import ProGress from '../components/common/ProGress';
 import ToggleButton from '../components/common/ToggleButton';
 import languages from '../static/languages';
-import {
-  portfolioErrorInitData,
-  portfolioWriteInitData,
-  portfolioWriteRule,
-} from '../static/portfolioInit';
-import SubmitModalBox from '../components/PfPjPublic/SubmitModalBox';
+import {portfolioWriteInitData,portfolioWriteRule,} from '../static/portfolioInit';
 import { shapingApiData } from '../utils/shapingApiData';
-import { writeSubmitHandler } from '../utils/writeSubmitHandler';
 import { useParams } from 'react-router-dom';
 import api from '../hooks/useAxiosInterceptor';
 import Modal from '../components/common/Modal';
@@ -91,7 +85,7 @@ export default function PortfolioEdit() {
   useEffect(() => {
     api.get(`/portfolios/${portfolioId}`)
       .then((res) => {
-        setDataForm(shapingApiData(res.data));
+        setDataForm(shapingApiData(res.data.data));
         setFirstApiSuccess(true);
       })
       .catch((err) => {
@@ -168,14 +162,31 @@ export default function PortfolioEdit() {
                 width="10rem"
                 height="5rem"
                 onClickHandler={() => {
-                  handleInputChange(null, !dataForm.isComments, 'isComments');
+                  handleInputChange(null, dataForm.isComment ? 0 : 1, 'isComment');
                 }}
-                defaultValue={dataForm.isComments}
+                defaultValue={dataForm.isComment}
                 hideError={true}
               />
             }
             hideError={true}
-            customText={dataForm.isComments ? '허용됨' : '허용되지 않음'}
+            customText={dataForm.isComment ? '허용됨' : '허용되지 않음'}
+          />
+
+          <SelectBox
+            text={'구직용, 재직용 임시'}
+            component={
+              <ToggleButton
+                width='10rem'
+                height='5rem'
+                onClickHandler={()=>{
+                  handleInputChange(null, dataForm.isEmploy ? 0 : 1, 'isEmploy')
+                }}
+                defaultValue={dataForm.isEmploy}
+                hideError={true}
+              />
+            }
+            hideError={true}
+            customText={dataForm.isEmploy ? '구직을 위한 포트폴리오' : '일반 포트폴리오'}
           />
 
           <EnterTag
@@ -183,7 +194,7 @@ export default function PortfolioEdit() {
             height="3.5rem"
             placeholder="태그는 최대 3개까지 등록이 가능합니다."
             handleInputChange={handleInputChange}
-            defaultTags={dataForm.tags}
+            defaultTags={(dataForm.tags.length === 1 && dataForm.tags[0] === '') ? [] : dataForm.tags}
           />
 
           <Input
@@ -222,7 +233,7 @@ export default function PortfolioEdit() {
             handleErrorChange={handleErrorChange}
             setWillDeleteImgs={true}
             clearError={clearError}
-            defaultImgs={dataForm.projectTitleImage}
+            defaultImgs={dataForm.titleImage}
           />
 
           <FileInput
@@ -241,7 +252,7 @@ export default function PortfolioEdit() {
         <StyleBorderButton
             onClick={()=>{
               setShowModal(true);
-              submitHandler(dataForm,errors,setErrors,'project',loginUserData.userInfo.memberId, portfolioId)
+              submitHandler(dataForm,errors,setErrors,'portfolio',loginUserData.userInfo.memberId, portfolioId)
             }}
         >
           수정

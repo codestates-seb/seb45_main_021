@@ -83,9 +83,9 @@ export default function ProjectDetail() {
     setIsLoading(true);
     api.get(`/portfolios/${portfolioId}`)
     .then(res=>{
-      console.log(shapingApiData(res.data));
+      console.log(res.data.data);
       setIsLoading(false);
-      setDetailData(shapingApiData(res.data));
+      setDetailData(shapingApiData(res.data.data));
     })
     .catch(err=>{
       if(err.code === 'ERR_BAD_REQUEST') {
@@ -163,7 +163,7 @@ export default function ProjectDetail() {
         />
       </StyleDetailContainer>
       }
-      {detailData.isComments &&
+      {Number(detailData.isComment) === 1 &&
         <Comment
           updateHandler={updateHandler}
           isAdmin={isAdmin}

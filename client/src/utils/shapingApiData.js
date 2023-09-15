@@ -9,11 +9,12 @@ export const shapingApiData = (obj,type) => {
             newData[key] = tempArr;
             newData.imageFile = new FormData();
             newData.imageUrls = [];
-        } else if (key === 'projectTitleImage') {
-            newData[key] = [obj[key].imageUrl];
+        } else if (key === 'projectTitleImage' || key === 'portfolioTitleImage') {
+            newData.titleImage = [obj[key].imageUrl];
             newData.titleImageFile = new FormData();
             newData.titleImageUrl = '';
         }
+        
     }
     return newData;
 }
