@@ -26,7 +26,7 @@ const ImgContainer = styled.div`
     position:relative;
     border-radius : 3px;
     width: 100%;
-    height:90%;
+    height:100%;
     overflow-x:scroll;
     overflow-y:hidden;
     align-items:center;
@@ -57,7 +57,7 @@ const ImgBox = styled.div`
         bottom: 0;
         top:0;
         opacity:0;
-        color:white;
+        /* color:white; */
         :hover{
             cursor:pointer;
         }
@@ -75,7 +75,7 @@ const DragDropBox = styled.label`
     position:absolute;
     z-index: 1;
     width:100%;
-    height:90%;
+    height:100%;
     display:flex;
     justify-content:center;
     align-items:center;

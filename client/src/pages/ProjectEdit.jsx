@@ -20,6 +20,7 @@ import { useSelector } from 'react-redux';
 import Modal from '../components/common/Modal';
 import useSubmitWriteEdit from '../hooks/useSubmitWriteEdit';
 import { StyleProjectWrite } from './ProjectWrite';
+import NotFound from './NotFound';
 
 export default function ProjectEdit() {
   const {toProject} = useNav();
@@ -40,7 +41,11 @@ export default function ProjectEdit() {
     })
     .catch(err=>{
       setShowModal(true);
-      setFirstApiSuccess(false);
+      if(err.message === "Request failed with status code 404") {
+        setFirstApiSuccess('404');
+      } else {
+        setFirstApiSuccess(false);
+      }
     });
   },[])
 
@@ -57,6 +62,8 @@ export default function ProjectEdit() {
   })()
   
   return (
+    <>
+    {firstApiSuccess === '404' ? <NotFound/> : firstApiSuccess === true &&
     <StyleProjectWrite className='col'>
       {showModal && <Modal
         type={'alert'}
@@ -167,7 +174,7 @@ export default function ProjectEdit() {
           <FileInput
             name={'타이틀 이미지'}
             width={'100%'}
-            height={'65rem'}
+            height={'55rem'}
             number={1}
             dataForm={dataForm}
             handleInputChange={handleInputChange}
@@ -180,7 +187,7 @@ export default function ProjectEdit() {
           <FileInput
             name={'이미지'}
             width={'100%'}
-            height={'65rem'}
+            height={'55rem'}
             number={10}
             dataForm={dataForm}
             handleInputChange={handleInputChange}
@@ -203,6 +210,7 @@ export default function ProjectEdit() {
           취소
         </StyleBorderButton>
       </div>
-    </StyleProjectWrite>
+    </StyleProjectWrite>}
+    </>
   );
 }

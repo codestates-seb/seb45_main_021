@@ -96,7 +96,7 @@ export default function DetailHead({ type = 'project', height = '15rem', detailD
           />
           <h3>{detailData.userName}</h3>
         </div>
-        <h3>{dateFormatter(detailData.createdAt)}</h3>
+        <h3>{dateFormatter(detailData.createdAt, true)}</h3>
         <Like
           heartCount={heartCount}
           size="1.6rem"

@@ -14,7 +14,7 @@ const StyleTextBox = styled.div`
     }
 
     p {
-        line-height:2.2rem;
+        line-height:1.3;
         font-size:1.6rem;
         overflow-wrap: break-word;
         word-break: break-all;
@@ -27,7 +27,7 @@ export default function TextBox({
 }) {
     return (
         <StyleTextBox className='col'>
-            <p className='textbox-title'>{title}</p>
+            <h4 className='textbox-title'>{title}</h4>
             <div className='row'>{component}</div>            
         </StyleTextBox>
     );

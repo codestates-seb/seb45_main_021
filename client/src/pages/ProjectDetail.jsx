@@ -3,7 +3,11 @@ import styled from 'styled-components';
 import Page from '../components/common/Page';
 import DetailHead from '../components/PfPjPublic/DetailHead';
 import DetailBody from '../components/PfPjPublic/DetailBody';
-import { StyleBorderButton } from '../components/common/Buttons';
+import {
+  StyleBackgroundButton,
+  StyleBorderButton,
+  StyleBottomButton,
+} from '../components/common/Buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import ProjectCardContainer from '../components/project/ProjectCardContainer';
 import JoinStatusContainer from '../components/project/JoinStatusContainer';
@@ -16,13 +20,12 @@ import ProjectCardSkeletion from './../components/project/ProjectCardSkeleton';
 import JoinCardSkeleton from '../components/project/JoinCardSkeleton';
 import { useNavigate, useParams } from 'react-router-dom';
 import { shapingApiData } from './../utils/shapingApiData';
+import NotFound from './NotFound';
 
 export const StyleDetailWrapper = styled(Page)`
   padding-top: 6rem;
-  * {
-    border-radius: 6px;
-    transition: all 0.2s;
-  }
+  transition: all 0.2s;
+  border-radius: 6px;
 `;
 
 export const StyleDetailContainer = styled.div`
@@ -119,7 +122,7 @@ export default function ProjectDetail() {
 
   const adminFunction = [
     {
-      title: isOnDetail ? '프로젝트 조회' : '현황 조회',
+      title: isOnDetail ? '현황 조회' : '프로젝트 조회',
       handler: () => {
         // requestPeopleData.length===0 &&
         fetchRequestData();
@@ -153,7 +156,7 @@ export default function ProjectDetail() {
       })
       .catch((err) => {
         if (err.code === 'ERR_BAD_REQUEST') {
-          navigate('/404');
+          setApiResult(false);
         } else if (err.code === 'ERR_BAD_RESPONSE') {
           console.log(err.code);
           setApiResult(false);
@@ -190,7 +193,6 @@ export default function ProjectDetail() {
         setApiResult('프로젝트를 삭제했습니다. 확인 버튼 클릭시 프로젝트 리스트로 돌아갑니다.');
       })
       .catch((err) => {
-        console.log(err);
         setIsDeleteModal(false);
         setDeleteApiResult(false);
         if (err.code === 'ERR_BAD_RESPONSE') {
@@ -200,7 +202,9 @@ export default function ProjectDetail() {
         } else {
           setApiResult('프로젝트 삭제에 실패했습니다. 다시 시도해 주세요');
         }
-      });
+        setShowModal(true);
+      })
+      .finally(() => setShowModal(true));
   };
 
   useEffect(() => {
@@ -223,71 +227,81 @@ export default function ProjectDetail() {
   }, [detailData]);
 
   return (
-    <StyleDetailWrapper>
-      {showModal && (
-        <Modal
-          type={isDeleteModal ? 'confirm' : 'alert'}
-          setIsOpen={setShowModal}
-          title={'알림'}
-          body={apiResult}
-          confirmHandler={() =>
-            isDeleteModal
-              ? fetchDeleteProject(projectId)
-              : deleteApiResult
-              ? toProject()
-              : setShowModal(false)
-          }
-        />
-      )}
-      {isLoading ? (
-        <SuspenseDetailPage />
+    <>
+      {apiResult === false ? (
+        <NotFound />
       ) : (
-        <StyleDetailContainer className="col">
-          <DetailHead detailData={detailData} type="project" setter={setDetailData} />
-          {isAdmin && (
-            <OnlyAdmin className="row">
-              {adminFunction.map((item, idx) => (
-                <StyleBorderButton key={idx} $fontSize={fontSize} onClick={() => item.handler()}>
-                  {item.title}
-                </StyleBorderButton>
-              ))}
-            </OnlyAdmin>
-          )}
-          {isAdmin && !isOnDetail ? (
-            <div className="row status">
-              <StyleStatusContainer className="col" $flex={4}>
-                <h2 className="status-title">참가자 현황</h2>
-                {isLoading ? (
-                  <JoinCardSkeleton />
-                ) : (
-                  <JoinStatusContainer joinPeople={requestPeopleData.joinPeople} />
-                )}
-              </StyleStatusContainer>
-              <div className="vertical-line" />
-              <StyleStatusContainer className="col" $flex={6}>
-                <h2 className="status-title">신청자 현황</h2>
-                {isLoading ? (
-                  <ProjectCardSkeletion />
-                ) : (
-                  <ProjectCardContainer
-                    detailData={detailData}
-                    cardList={requestPeopleData.requestPeople}
-                    requestUpdateHandler={requestUpdateHandler}
-                  />
-                )}
-              </StyleStatusContainer>
-            </div>
-          ) : (
-            <DetailBody
-              detailData={detailData}
-              type="project"
-              isAdmin={isAdmin}
-              updateHandler={updateHandler}
-              projectId={projectId}
+        <StyleDetailWrapper>
+          {showModal && (
+            <Modal
+              type={isDeleteModal ? 'confirm' : 'alert'}
+              setIsOpen={setShowModal}
+              title={'알림'}
+              body={apiResult}
+              confirmHandler={() =>
+                isDeleteModal
+                  ? fetchDeleteProject(projectId)
+                  : deleteApiResult
+                  ? toProject()
+                  : setShowModal(false)
+              }
             />
           )}
-        </StyleDetailContainer>
+          {isLoading ? (
+            <SuspenseDetailPage />
+          ) : (
+            <StyleDetailContainer className="col">
+              <DetailHead detailData={detailData} type="project" />
+              {isAdmin && (
+                <OnlyAdmin className="row">
+                  {adminFunction.map((item, idx) => (
+                    <StyleBackgroundButton
+                      key={idx}
+                      $fontSize={fontSize}
+                      onClick={() => item.handler()}
+                    >
+                      {item.title}
+                    </StyleBackgroundButton>
+                  ))}
+                </OnlyAdmin>
+              )}
+              {isAdmin && !isOnDetail ? (
+                <div className="row status">
+                  <StyleStatusContainer className="col" $flex={4}>
+                    <h2 className="status-title">참가자 현황</h2>
+                    {isLoading ? (
+                      <JoinCardSkeleton />
+                    ) : (
+                      <JoinStatusContainer joinPeople={requestPeopleData.joinPeople} />
+                    )}
+                  </StyleStatusContainer>
+                  <div className="vertical-line" />
+                  <StyleStatusContainer className="col" $flex={6}>
+                    <h2 className="status-title">신청자 현황</h2>
+                    {isLoading ? (
+                      <ProjectCardSkeletion />
+                    ) : (
+                      <ProjectCardContainer
+                        detailData={detailData}
+                        cardList={requestPeopleData.requestPeople}
+                        requestUpdateHandler={requestUpdateHandler}
+                      />
+                    )}
+                  </StyleStatusContainer>
+                </div>
+              ) : (
+                <DetailBody
+                  detailData={detailData}
+                  type="project"
+                  isAdmin={isAdmin}
+                  updateHandler={updateHandler}
+                  projectId={projectId}
+                />
+              )}
+            </StyleDetailContainer>
+          )}
+        </StyleDetailWrapper>
       )}
-    </StyleDetailWrapper>
+    </>
   );
 }
