@@ -8,7 +8,7 @@ export default function useSubmitWriteEdit() {
     const submitHandler = (dataForm, errors, setErrors, type, memberId, postId) => {
         writeSubmitHandler(dataForm,errors,setErrors,type, memberId, postId)
         .then(()=>{
-            setApiResult('작성 완료. 확인 버튼 클릭시 이전 페이지로 돌아갑니다.')
+            setApiResult(`${postId ? '수정' : '작성'} 완료. 확인 버튼 클릭시 이전 페이지로 돌아갑니다.`)
             setIsSuccess(true);
         })
         .catch((err)=>{

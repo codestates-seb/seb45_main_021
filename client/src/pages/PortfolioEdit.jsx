@@ -22,52 +22,53 @@ import Modal from '../components/common/Modal';
 import { StyleBorderButton } from '../components/common/Buttons';
 import { useSelector } from 'react-redux';
 import useSubmitWriteEdit from '../hooks/useSubmitWriteEdit';
+import { StyleProjectWrite } from './ProjectWrite';
 
-const StyleProjectWrite = styled(Page)`
-  height: auto;
-  background-color: transparent;
-  padding-top: 6rem;
-  font-size: 1.6rem;
+// const StyleProjectWrite = styled(Page)`
+//   height: auto;
+//   background-color: transparent;
+//   padding-top: 6rem;
+//   font-size: 1.6rem;
 
-  .margin-top-remove {
-    margin-top: -20px !important;
-  }
-  .input-container {
-    flex: 5;
-    height: 100%;
-    margin-right: 3rem;
-    > div {
-      margin-bottom: 3rem;
-    }
-  }
-  .imgs-container {
-    flex: 6;
-    height: auto;
-    > div {
-      margin-bottom: 6rem;
-    }
-  }
-  .submit-box {
-    width: 100%;
-    margin-bottom: 10rem;
-    display: flex;
-    button {
-      font-size: 1.6rem;
-      padding: 5px 15px;
-      margin-right: 5rem;
-    }
-  }
-  .data-select-container {
-    gap: 1rem;
-    div {
-      flex: 1;
-    }
-  }
-  .error {
-    color: var(--error);
-    margin-top: 1rem;
-  }
-`;
+//   .margin-top-remove {
+//     margin-top: -20px !important;
+//   }
+//   .input-container {
+//     flex: 5;
+//     height: 100%;
+//     margin-right: 3rem;
+//     > div {
+//       margin-bottom: 3rem;
+//     }
+//   }
+//   .imgs-container {
+//     flex: 6;
+//     height: auto;
+//     > div {
+//       margin-bottom: 6rem;
+//     }
+//   }
+//   .submit-box {
+//     width: 100%;
+//     margin-bottom: 10rem;
+//     display: flex;
+//     button {
+//       font-size: 1.6rem;
+//       padding: 5px 15px;
+//       margin-right: 5rem;
+//     }
+//   }
+//   .data-select-container {
+//     gap: 1rem;
+//     div {
+//       flex: 1;
+//     }
+//   }
+//   .error {
+//     color: var(--error);
+//     margin-top: 1rem;
+//   }
+// `;
 
 export default function PortfolioEdit() {
   const { toPortfolio } = useNav();
@@ -114,7 +115,7 @@ export default function PortfolioEdit() {
         confirmHandler={() => !firstApiSuccess || isSuccess ? toPortfolio() : setShowModal(false)}
       />}
       <WriteHeader type="portfolio" state="edit" />
-      <div className="row">
+      <div className="write-wrapper row">
         <div className="input-container col">
           <Input
             label={'포트폴리오 제목'}
@@ -169,6 +170,7 @@ export default function PortfolioEdit() {
               />
             }
             hideError={true}
+            margin='3rem'
             customText={dataForm.isComment ? '허용됨' : '허용되지 않음'}
           />
 
@@ -186,6 +188,7 @@ export default function PortfolioEdit() {
               />
             }
             hideError={true}
+            margin='3rem'
             customText={dataForm.isEmploy ? '구직을 위한 포트폴리오' : '일반 포트폴리오'}
           />
 
@@ -225,7 +228,7 @@ export default function PortfolioEdit() {
         <div className="imgs-container col">
           <FileInput
             name={'타이틀 이미지'}
-            width={'70rem'}
+            width={'100%'}
             height={'65rem'}
             number={1}
             dataForm={dataForm}
@@ -238,7 +241,7 @@ export default function PortfolioEdit() {
 
           <FileInput
             name={'이미지'}
-            width={'70rem'}
+            width={'100%'}
             height={'65rem'}
             number={7}
             dataForm={dataForm}

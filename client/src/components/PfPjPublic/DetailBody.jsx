@@ -44,31 +44,6 @@ export const StyleDetailBody = styled.div`
     }
 `
 
-const myProjectCard = [
-    {
-        projectCardId : 1,
-        tag : ["java"],
-        tell : "010-1234-5678",
-        aboutMe : "저는 개발 공부중인 학생입니다.",
-        img : null,
-        memberId : 6,
-        userName : '박찬섭',
-        email : 'cksk49@naver.com',
-        working : false,
-    },
-    {
-        projectCardId : 2,
-        tag : ["javascript"],
-        tell : "010-1234-5678",
-        aboutMe : "저는 학생입니다.",
-        img : null,
-        memberId : 6,
-        userName : '박찬섭2',
-        email : 'cksk49@naver.com',
-        working : false,
-    },
-]
-
 export default function DetailBody({
     detailData,
     type,

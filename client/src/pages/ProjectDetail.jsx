@@ -16,6 +16,7 @@ import ProjectCardSkeletion from './../components/project/ProjectCardSkeleton';
 import JoinCardSkeleton from '../components/project/JoinCardSkeleton';
 import { useNavigate, useParams } from 'react-router-dom';
 import { shapingApiData } from './../utils/shapingApiData';
+import NotFound from './NotFound';
 
 export const StyleDetailWrapper = styled(Page)`
   padding-top:6rem;
@@ -120,7 +121,7 @@ export default function ProjectDetail() {
 
   const adminFunction = [
     {
-      title : isOnDetail ? '프로젝트 조회' : '현황 조회',
+      title : isOnDetail ? '현황 조회' : '프로젝트 조회',
       handler : ()=>{
         // requestPeopleData.length===0 && 
         fetchRequestData();
@@ -151,7 +152,7 @@ export default function ProjectDetail() {
     })
     .catch(err=>{
       if(err.code === 'ERR_BAD_REQUEST') {
-        navigate('/404')
+        setApiResult(false);
       } else if (err.code === 'ERR_BAD_RESPONSE'){
         console.log(err.code);
         setApiResult(false);
@@ -186,7 +187,6 @@ export default function ProjectDetail() {
       setApiResult('프로젝트를 삭제했습니다. 확인 버튼 클릭시 프로젝트 리스트로 돌아갑니다.')
     })
     .catch(err=>{
-      console.log(err);
       setIsDeleteModal(false);
       setDeleteApiResult(false);
       if(err.code === 'ERR_BAD_RESPONSE') {
@@ -194,7 +194,9 @@ export default function ProjectDetail() {
       } else {
         setApiResult('프로젝트 삭제에 실패했습니다. 다시 시도해 주세요')
       }
+      setShowModal(true);
     })
+    .finally(()=>setShowModal(true));
   }
 
   useEffect(()=>{
@@ -219,6 +221,8 @@ export default function ProjectDetail() {
   
 
   return (
+    <>
+    {apiResult === false ? <NotFound/> :
     <StyleDetailWrapper>
         {showModal &&
           <Modal
@@ -278,5 +282,7 @@ export default function ProjectDetail() {
         </StyleDetailContainer>
         }
     </StyleDetailWrapper>
+    }
+    </>
   );
 }
