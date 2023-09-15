@@ -11,6 +11,7 @@ import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import api from '../hooks/useAxiosInterceptor';
 import { desktop, mobile } from '../static/theme';
+import NotFound from '../components/profile/NotFound';
 
 const StyleContainer = styled(Page)`
   margin-top: 20px;
@@ -68,6 +69,8 @@ export default function Profile() {
   const user = useSelector((state) => state.user);
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState(null);
+  const [isNotFound, setIsNotFound] = useState(false);
+
   useEffect(() => {
     setIsLoading(true);
     api
@@ -99,7 +102,9 @@ export default function Profile() {
         });
       })
       .catch((error) => {
-        console.log(error);
+        if (error.response.status === 404) {
+          setIsNotFound(true);
+        }
       });
     setTimeout(() => {
       setIsLoading(false);
@@ -113,7 +118,8 @@ export default function Profile() {
 
   return (
     <StyleContainer>
-      {data !== null && (
+      {isNotFound && <NotFound />}
+      {data !== null && !isNotFound && (
         <>
           <ProfileCard id="profile" data={data.profile} isLoading={isLoading} />
           <StyleDiv>

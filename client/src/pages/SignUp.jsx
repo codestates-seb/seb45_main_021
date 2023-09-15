@@ -183,16 +183,18 @@ export default function SignUp() {
     e.preventDefault();
     const isvalidEmail = isValidEmail(email);
     const isvalidPassword = isValidPassword(password);
-    setIsSubmit(true);
     if (isvalidEmail && isvalidPassword) {
+      setIsSubmit(true);
       const data = JSON.stringify({ userName, email, password });
       console.log('회원가입 요청');
       api
         .post('/members/signup', data)
         .then(() => {
+          setIsSubmit(false);
           toSignin();
         })
         .catch((error) => {
+          setIsSubmit(false);
           if (error.response.status === 409) {
             setError({ ...error, email: '이미 존재하는 이메일 입니다.' });
           }
@@ -207,7 +209,6 @@ export default function SignUp() {
     } else if (!isvalidPassword) {
       setError({ ...error, password: '영어,숫자,특수기호 포함 8글자 이상으로 입력해주세요.' });
     }
-    setIsSubmit(false);
   };
 
   const handleClickGoogleBtn = () => {
@@ -218,35 +219,23 @@ export default function SignUp() {
 
   const handleClickGithubBtn = () => {
     window.location.assign(
-      'https://github.com/login/oauth/authorize?client_id=b7cd8d79c75bb40d352a',
+      'https://github.com/login/oauth/authorize?client_id=b7cd8d79c75bb40d352a&scope=user:email,read:user',
     );
   };
 
   useEffect(() => {
     // 마운트 함수
     const url = new URL(window.location.href);
-    const state = url.searchParams.get('state');
     const authorizationCode = url.searchParams.get('code');
     if (authorizationCode) {
-      if (state) {
-        api
-          .get(`/oauth2/google/signup?code=${authorizationCode}`)
-          .then((el) => {
-            if (el.status === 201) toSignin();
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      } else {
-        api
-          .get(`/oauth2/github?code=${authorizationCode}`)
-          .then((el) => {
-            if (el.status === 201) toSignin();
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
+      api
+        .get(`/oauth2/google/signup?code=${authorizationCode}`)
+        .then((el) => {
+          if (el.status === 201) toSignin();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   }, []);
 
