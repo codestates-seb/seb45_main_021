@@ -22,7 +22,7 @@ export default function PostList({ postData, type, likeUpdateSuccess }) {
   return (
     <StylePostList>
       {postData.map((post, i) => (
-        <PostListItem key={i} post={post} type={type} likeUpdateSuccess={likeUpdateSuccess} />
+        <PostListItem key={i} post={post} type={type}  />
       ))}
     </StylePostList>
   );
