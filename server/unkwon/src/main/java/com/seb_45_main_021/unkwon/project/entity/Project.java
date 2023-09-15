@@ -3,6 +3,7 @@ package com.seb_45_main_021.unkwon.project.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.seb_45_main_021.unkwon.audit.Auditable;
 import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
+import com.seb_45_main_021.unkwon.heart.entity.ProjectHeart;
 import com.seb_45_main_021.unkwon.image.project.ProjectImage;
 import com.seb_45_main_021.unkwon.image.project.ProjectTitleImage;
 import com.seb_45_main_021.unkwon.member.entity.Member;
@@ -70,9 +71,9 @@ public class Project extends Auditable {
     @JoinColumn(name = "memberId")
     private Member member;
 
-    @OneToMany(mappedBy = "portFolio", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<PortfolioHeart> portfolioHearts = new ArrayList<>();
+    private List<ProjectHeart> projectHearts = new ArrayList<>();
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference

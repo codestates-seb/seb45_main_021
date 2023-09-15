@@ -107,7 +107,7 @@ public class ProjectService {
         Optional.ofNullable(project.getTagB())
                 .ifPresent(tagB -> findProject.setTagB(tagB));
         Optional.ofNullable(project.getTagC())
-                .ifPresent(tagC -> findProject.setTagB(tagC));
+                .ifPresent(tagC -> findProject.setTagC(tagC));
         Optional.ofNullable(project.getLang())
                 .ifPresent(lang -> findProject.setLang(lang));
         Optional.ofNullable(project.getBody())
