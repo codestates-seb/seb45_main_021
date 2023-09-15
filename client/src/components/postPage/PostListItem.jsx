@@ -77,10 +77,9 @@ export default function PostListItem({ post, type }) {
   const onDetailHandler = (id) => {
     type === 'projects' ? toProjectDetail(id) : toPortfolioDetail(id);
   };
-
   return (
     <StylePostListItem>
-      {type === 'portfolios' && isEmploy && <EmployBadge />}
+      {type === 'portfolios' && !!isEmploy && <EmployBadge />}
       <LanguageTag language={lang} />
       <img src={postTitleImage} alt="post title img" onClick={() => onDetailHandler(postId)} />
       <div className="content-box">

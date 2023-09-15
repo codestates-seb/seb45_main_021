@@ -71,11 +71,19 @@ const Border = styled.div`
   border-bottom: 3px solid var(--black-300);
 `;
 
-export default function DetailHead({ type = 'project', height = '15rem', detailData }) {
+export default function DetailHead({ type = 'project', height = '15rem', detailData, setter }) {
   const { toProfile, toProject, toPortfolio } = useNav();
   const options = useSelector((state) => state.filterOption);
   const { projectId, portfolioId, heartCount } = detailData;
   const likeUpdateSuccess = useLikeUpdate(options, `${type}s`);
+
+  const detailLikeUpdate = (postId, updateType) => {
+    likeUpdateSuccess(postId, updateType);
+    const updatedHeartCount =
+      updateType === 'increase' ? detailData.heartCount + 1 : detailData.heartCount - 1;
+    setter((pre) => ({ ...pre, heartCount: updatedHeartCount }));
+  };
+
   return (
     <StyleDetailHead className="col" $height={height}>
       <h2 className="project-detail">{type === 'project' ? 'PROJECT' : 'PORTFOLIO'}</h2>
@@ -94,7 +102,7 @@ export default function DetailHead({ type = 'project', height = '15rem', detailD
           size="1.6rem"
           postId={projectId || portfolioId}
           type={`${type}s`}
-          likeUpdateSuccess={likeUpdateSuccess}
+          likeUpdateSuccess={detailLikeUpdate}
         />
       </div>
       <Border />

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components'
+import styled from 'styled-components';
 import Page from '../components/common/Page';
 import DetailHead from '../components/PfPjPublic/DetailHead';
 import DetailBody from '../components/PfPjPublic/DetailBody';
@@ -18,76 +18,75 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { shapingApiData } from './../utils/shapingApiData';
 
 export const StyleDetailWrapper = styled(Page)`
-  padding-top:6rem;
+  padding-top: 6rem;
   * {
     border-radius: 6px;
-    transition:all 0.2s;
+    transition: all 0.2s;
   }
-`
+`;
 
 export const StyleDetailContainer = styled.div`
-  width:100%;
-  background-color:rgba(0,0,0,0.3);
-  border-radius:10px;
-  padding:4rem;
-  margin-bottom:2rem;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  padding: 4rem;
+  margin-bottom: 2rem;
 
   .join-people {
-    flex:4;
-    overflow:auto;
+    flex: 4;
+    overflow: auto;
     &::-webkit-scrollbar {
       display: none;
     }
   }
 
   .request-people {
-    flex:6;
-    overflow:auto;
+    flex: 6;
+    overflow: auto;
     &::-webkit-scrollbar {
       display: none;
     }
   }
 
   .vertical-line {
-    margin:0 3rem;
-    height:auto;
-    border:3px solid var(--black-300);
-    border-radius:10px;
+    margin: 0 3rem;
+    height: auto;
+    border: 3px solid var(--black-300);
+    border-radius: 10px;
   }
 
   .status {
-    height:600px;
-    overflow:auto;
+    height: 600px;
+    overflow: auto;
     &::-webkit-scrollbar {
-        display: none;
+      display: none;
     }
   }
 
   ${desktop} {
     .status {
-      flex-direction:column;
+      flex-direction: column;
     }
     .vertical-line {
-      margin:3rem 0;
+      margin: 3rem 0;
     }
   }
-
-`
+`;
 
 const StyleStatusContainer = styled.div`
-    flex:${props => props.$flex};
-    > h2 {
-      font-size:1.6rem;
-      margin-bottom:1rem;
-    }
-`
+  flex: ${(props) => props.$flex};
+  > h2 {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+  }
+`;
 
 const OnlyAdmin = styled.div`
-  width:100%;
-  justify-content:end;
-  gap:2rem;
-  margin-bottom:1rem;
-`
+  width: 100%;
+  justify-content: end;
+  gap: 2rem;
+  margin-bottom: 1rem;
+`;
 export default function ProjectDetail() {
   const navigate = useNavigate();
   const [update, setUpdate] = useState(false);
@@ -103,180 +102,192 @@ export default function ProjectDetail() {
   const [showModal, setShowModal] = useState(false);
   const [deleteApiResult, setDeleteApiResult] = useState(false);
   const [requestUpdate, setRequestUpdate] = useState(undefined);
-  const {toProjectEdit, toProject} = useNav();
+  const { toProjectEdit, toProject } = useNav();
 
   //현재 로그인 한 유저 정보
-  const loginUserData = useSelector(state=>state.user);
-  const fontSize = '1.6rem'
-  const {projectId} = useParams()
+  const loginUserData = useSelector((state) => state.user);
+  const fontSize = '1.6rem';
+  const { projectId } = useParams();
 
   const updateHandler = () => {
-    setUpdate((prev)=>!prev);
-  }
+    setUpdate((prev) => !prev);
+  };
 
   const requestUpdateHandler = () => {
-    setRequestUpdate((prev)=>!prev);
-  }
+    setRequestUpdate((prev) => !prev);
+  };
 
   const adminFunction = [
     {
-      title : isOnDetail ? '프로젝트 조회' : '현황 조회',
-      handler : ()=>{
-        // requestPeopleData.length===0 && 
+      title: isOnDetail ? '프로젝트 조회' : '현황 조회',
+      handler: () => {
+        // requestPeopleData.length===0 &&
         fetchRequestData();
         setIsOnDetail(!isOnDetail);
       },
-    },{
-      title : '수정',
-      handler : ()=>{
-        toProjectEdit(detailData.projectId)
+    },
+    {
+      title: '수정',
+      handler: () => {
+        toProjectEdit(detailData.projectId);
       },
-    },{
-      title : '삭제',
-      handler : ()=>{
+    },
+    {
+      title: '삭제',
+      handler: () => {
         setShowModal(true);
         setIsDeleteModal(true);
         setApiResult('해당 프로젝트를 삭제하시겠습니까?');
       },
-    }
-  ]
+    },
+  ];
 
   const fetchData = () => {
     setIsLoading(true);
-    api.get(`/projects/${projectId}`)
-    .then(res=>{
-      console.log(shapingApiData(res.data));
-      setIsLoading(false);
-      setDetailData(shapingApiData(res.data));
-    })
-    .catch(err=>{
-      if(err.code === 'ERR_BAD_REQUEST') {
-        navigate('/404')
-      } else if (err.code === 'ERR_BAD_RESPONSE'){
-        console.log(err.code);
-        setApiResult(false);
-        setIsDeleteModal(true);
-      }
-    })
-    .finally(()=>setIsLoading(false));
-  }
+    api
+      .get(`/projects/${projectId}`)
+      .then((res) => {
+        console.log(shapingApiData(res.data));
+        setIsLoading(false);
+        setDetailData(shapingApiData(res.data));
+      })
+      .catch((err) => {
+        if (err.code === 'ERR_BAD_REQUEST') {
+          navigate('/404');
+        } else if (err.code === 'ERR_BAD_RESPONSE') {
+          console.log(err.code);
+          setApiResult(false);
+          setIsDeleteModal(true);
+        }
+      })
+      .finally(() => setIsLoading(false));
+  };
 
   const fetchRequestData = () => {
-      setIsLoading(true);
-      api.get(`projects/${projectId}/application-status`)
-      .then(res=>{
+    setIsLoading(true);
+    api
+      .get(`projects/${projectId}/application-status`)
+      .then((res) => {
         setRequestPeopledata(res.data);
       })
-      .catch(err=>{
+      .catch((err) => {
         setShowModal(true);
         setApiResult(true);
       })
-      .finally(()=>{
+      .finally(() => {
         setIsLoading(false);
-      })
-  }
+      });
+  };
 
   const fetchDeleteProject = (id) => {
     setIsDeleteModal(true);
     setShowModal(true);
-    api.delete(`/projects/${id}`)
-    .then(res=>{
-      setIsDeleteModal(false);
-      setDeleteApiResult(true);
-      setApiResult('프로젝트를 삭제했습니다. 확인 버튼 클릭시 프로젝트 리스트로 돌아갑니다.')
-    })
-    .catch(err=>{
-      console.log(err);
-      setIsDeleteModal(false);
-      setDeleteApiResult(false);
-      if(err.code === 'ERR_BAD_RESPONSE') {
-        setApiResult('프로젝트에 신청한 사람이 존재하거나 참가한 사람이 있으면 삭제 할 수 없습니다.')  
-      } else {
-        setApiResult('프로젝트 삭제에 실패했습니다. 다시 시도해 주세요')
-      }
-    })
-  }
+    api
+      .delete(`/projects/${id}`)
+      .then((res) => {
+        setIsDeleteModal(false);
+        setDeleteApiResult(true);
+        setApiResult('프로젝트를 삭제했습니다. 확인 버튼 클릭시 프로젝트 리스트로 돌아갑니다.');
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsDeleteModal(false);
+        setDeleteApiResult(false);
+        if (err.code === 'ERR_BAD_RESPONSE') {
+          setApiResult(
+            '프로젝트에 신청한 사람이 존재하거나 참가한 사람이 있으면 삭제 할 수 없습니다.',
+          );
+        } else {
+          setApiResult('프로젝트 삭제에 실패했습니다. 다시 시도해 주세요');
+        }
+      });
+  };
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchData();
-  },[update]);
+  }, [update]);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (requestUpdate !== undefined) {
-      console.log('리퀘스트 업데이트')
-      fetchRequestData(); 
+      console.log('리퀘스트 업데이트');
+      fetchRequestData();
     }
-  },[requestUpdate])
+  }, [requestUpdate]);
 
-  useEffect(()=>{
-    if(loginUserData.userInfo?.memberId === detailData?.memberId) {
+  useEffect(() => {
+    if (loginUserData.userInfo?.memberId === detailData?.memberId) {
       setIsAdmin(true);
     } else {
       setIsAdmin(false);
     }
-  },[detailData])
-
-  
+  }, [detailData]);
 
   return (
     <StyleDetailWrapper>
-        {showModal &&
-          <Modal
-            type={isDeleteModal ? 'confirm' : 'alert'}
-            setIsOpen={setShowModal}
-            title={'알림'}
-            body={apiResult}
-            confirmHandler={()=>isDeleteModal ? fetchDeleteProject(projectId) : deleteApiResult ? toProject() : setShowModal(false)}
-          />}
-        {isLoading
-        ? <SuspenseDetailPage/>
-        : <StyleDetailContainer className='col'>
-          <DetailHead detailData={detailData} type='project'/>
-          {isAdmin &&
-          <OnlyAdmin className='row'>
-            {adminFunction.map((item,idx)=>
-              <StyleBorderButton
-                key={idx}
-                $fontSize={fontSize}
-                onClick={()=>item.handler()}
-              >
-                {item.title}
-              </StyleBorderButton>
-            )}
-          </OnlyAdmin>}
-          {isAdmin && !isOnDetail ? 
-          <div className='row status'>
-            <StyleStatusContainer className='col' $flex={4}>
-              <h2 className='status-title'>참가자 현황</h2>
-              {isLoading
-              ? <JoinCardSkeleton/>
-              : <JoinStatusContainer joinPeople={requestPeopleData.joinPeople}/>
-              }
-            </StyleStatusContainer>
-            <div className='vertical-line'/>
-            <StyleStatusContainer className='col' $flex={6}>
-              <h2 className='status-title'>신청자 현황</h2>
-              {isLoading
-              ? <ProjectCardSkeletion/>
-              : <ProjectCardContainer
-                  detailData={detailData}
-                  cardList={requestPeopleData.requestPeople}
-                  requestUpdateHandler={requestUpdateHandler}
-                />
-              }
-            </StyleStatusContainer>
-          </div>
-          : 
-          <DetailBody 
-            detailData={detailData}
-            type='project'
-            isAdmin={isAdmin}
-            updateHandler={updateHandler}
-            projectId={projectId}
-          />
+      {showModal && (
+        <Modal
+          type={isDeleteModal ? 'confirm' : 'alert'}
+          setIsOpen={setShowModal}
+          title={'알림'}
+          body={apiResult}
+          confirmHandler={() =>
+            isDeleteModal
+              ? fetchDeleteProject(projectId)
+              : deleteApiResult
+              ? toProject()
+              : setShowModal(false)
           }
+        />
+      )}
+      {isLoading ? (
+        <SuspenseDetailPage />
+      ) : (
+        <StyleDetailContainer className="col">
+          <DetailHead detailData={detailData} type="project" setter={setDetailData} />
+          {isAdmin && (
+            <OnlyAdmin className="row">
+              {adminFunction.map((item, idx) => (
+                <StyleBorderButton key={idx} $fontSize={fontSize} onClick={() => item.handler()}>
+                  {item.title}
+                </StyleBorderButton>
+              ))}
+            </OnlyAdmin>
+          )}
+          {isAdmin && !isOnDetail ? (
+            <div className="row status">
+              <StyleStatusContainer className="col" $flex={4}>
+                <h2 className="status-title">참가자 현황</h2>
+                {isLoading ? (
+                  <JoinCardSkeleton />
+                ) : (
+                  <JoinStatusContainer joinPeople={requestPeopleData.joinPeople} />
+                )}
+              </StyleStatusContainer>
+              <div className="vertical-line" />
+              <StyleStatusContainer className="col" $flex={6}>
+                <h2 className="status-title">신청자 현황</h2>
+                {isLoading ? (
+                  <ProjectCardSkeletion />
+                ) : (
+                  <ProjectCardContainer
+                    detailData={detailData}
+                    cardList={requestPeopleData.requestPeople}
+                    requestUpdateHandler={requestUpdateHandler}
+                  />
+                )}
+              </StyleStatusContainer>
+            </div>
+          ) : (
+            <DetailBody
+              detailData={detailData}
+              type="project"
+              isAdmin={isAdmin}
+              updateHandler={updateHandler}
+              projectId={projectId}
+            />
+          )}
         </StyleDetailContainer>
-        }
+      )}
     </StyleDetailWrapper>
   );
 }
