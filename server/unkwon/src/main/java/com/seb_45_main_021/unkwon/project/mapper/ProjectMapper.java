@@ -61,8 +61,14 @@ public interface ProjectMapper {
         project.setClosedAt(projectPatchDto.getClosedAt());
 
         if(projectPatchDto.getTags() != null) {
+            // 태그 초기화
+            project.setTagA(null);
+            project.setTagB(null);
+            project.setTagC(null);
+
             String[] tags = projectPatchDto.getTags().split(",");
-            project.setTagA(tags[0]);
+
+            if(tags.length >= 1) project.setTagA(tags[0]);
             if(tags.length >= 2) project.setTagB(tags[1]);
             if(tags.length >= 3) project.setTagC(tags[2]);
         }
