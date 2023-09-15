@@ -57,9 +57,13 @@ public interface PortfolioMapper {
         portfolio.setIsComment(portfolioPatchDto.getIsComment());
         portfolio.setIsEmploy(portfolioPatchDto.getIsEmploy());
 
+
         if(portfolioPatchDto.getTags() != null) {
+            portfolio.setTagA(null);
+            portfolio.setTagB(null);
+            portfolio.setTagC(null);
             String[] tags = portfolioPatchDto.getTags().split(",");
-            portfolio.setTagA(tags[0]);
+            if(tags.length >= 1) portfolio.setTagA(tags[0]);
             if(tags.length >= 2) portfolio.setTagB(tags[1]);
             if(tags.length >= 3) portfolio.setTagC(tags[2]);
         }
