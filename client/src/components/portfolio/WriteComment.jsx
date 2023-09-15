@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components'
 import Input from '../common/Input';
-import { StyleBorderButton } from '../common/Buttons';
+import { StyleBackgroundButton, StyleBorderButton } from '../common/Buttons';
 import ProGress from '../common/ProGress';
 import api from '../../hooks/useAxiosInterceptor'
 import { useParams } from 'react-router-dom';
@@ -28,6 +28,7 @@ export default function WriteComment({
     const loginUserdata = useSelector(state=>state.user);
 
     const submitHandler = () => {
+        console.log('실행');
         const body = {
             memberId : loginUserdata.userInfo.memberId,
             portfolioId : portfolioId,
@@ -37,7 +38,7 @@ export default function WriteComment({
         api.post('/comments',body)
         .then(res=>{
             updateHandler();
-            setComments('')
+            setComments('');
         })
         .catch(err=>{
         })
@@ -48,8 +49,9 @@ export default function WriteComment({
     }
 
     const keyDownHandler = (e) => {
-        if(e.code === 'Enter' || e.code === 'NumpadEnter') {
-            submitHandler()
+        if (e.code === 'Enter' || e.code === 'NumpadEnter') {
+            e.preventDefault();
+            submitHandler();
         }
     }
 
@@ -63,7 +65,7 @@ export default function WriteComment({
                 type='textarea'
                 value={comments}
                 onChangeHandler={commentsHandler}
-                onKeyDown={keyDownHandler}
+                // onKeyDown={keyDownHandler}
             />
             <ProGress
                 comPleteNum={200}
@@ -73,11 +75,11 @@ export default function WriteComment({
                 height='1rem'
             />
             <div className='submit-box row'>
-                <StyleBorderButton 
+                <StyleBackgroundButton
                     $width={'15rem'}
                     $fontSize={'1.6rem'}
                     onClick={submitHandler}
-                >작성</StyleBorderButton>
+                >작성</StyleBackgroundButton>
             </div>
         </StyleWriteComment>
     );

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components'
 import DetailHead from '../components/PfPjPublic/DetailHead';
 import DetailBody from '../components/PfPjPublic/DetailBody';
-import { StyleBorderButton } from '../components/common/Buttons';
+import { StyleBackgroundButton, StyleBorderButton } from '../components/common/Buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import { StyleDetailWrapper, StyleDetailContainer } from './ProjectDetail';
 import Comment from '../components/portfolio/Comment';
@@ -12,6 +12,7 @@ import api from '../hooks/useAxiosInterceptor'
 import SuspenseDetailPage from '../components/PfPjPublic/DetailSkeletonLoading';
 import { shapingApiData } from '../utils/shapingApiData';
 import { useNavigate, useParams } from 'react-router-dom';
+import NotFound from './NotFound';
 
 const OnlyAdmin = styled.div`
   width:100%;
@@ -89,7 +90,7 @@ export default function ProjectDetail() {
     })
     .catch(err=>{
       if(err.code === 'ERR_BAD_REQUEST') {
-        navigate('/404')
+        setApiResult(false);
       } else if (err.code === 'ERR_BAD_RESPONSE'){
         console.log(err.code);
         setApiResult(false);
@@ -114,6 +115,7 @@ export default function ProjectDetail() {
       setDeleteApiResult(false);
       setApiResult('포트폴리오 삭제에 실패했습니다. 다시 시도해 주세요')
     })
+    .finally(()=>setShowModal(true));
   }
 
   useEffect(()=>{
@@ -129,6 +131,8 @@ export default function ProjectDetail() {
   },[detailData])
 
   return (
+    <>
+    {apiResult === false ? <NotFound/> :
     <StyleDetailWrapper>
       {showModal &&
           <Modal
@@ -145,13 +149,13 @@ export default function ProjectDetail() {
         {isAdmin && 
         <OnlyAdmin className='row'>
           {adminFunction.map((item,idx)=>
-            <StyleBorderButton
+            <StyleBackgroundButton
               key={idx}
               $fontSize={fontSize}
               onClick={()=>item.handler()}
             >
               {item.title}
-            </StyleBorderButton>
+            </StyleBackgroundButton>
           )}
         </OnlyAdmin>}
         <DetailBody
@@ -171,5 +175,7 @@ export default function ProjectDetail() {
         />
       }
     </StyleDetailWrapper>
+    }
+    </>
   );
 }
