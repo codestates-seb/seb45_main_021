@@ -6,6 +6,8 @@ import Tag from '../common/Tag';
 import Like from '../common/Like';
 import DateUser from '../common/DateUser';
 import EmployBadge from '../common/EmployBadge';
+import useLikeUpdate from '../../hooks/useLikeUpdate';
+import { useSelector } from 'react-redux';
 
 const StylePostListItem = styled.li`
   border: 1px solid var(--black-700);
@@ -51,7 +53,7 @@ const StylePostListItem = styled.li`
     }
   }
 `;
-export default function PostListItem({ post, type, likeUpdateSuccess }) {
+export default function PostListItem({ post, type }) {
   const { toProjectDetail, toPortfolioDetail } = useNav();
   const {
     lang,
@@ -67,10 +69,11 @@ export default function PostListItem({ post, type, likeUpdateSuccess }) {
     projectTitleImage,
     portfolioTitleImage,
   } = post;
-
+  const options = useSelector((state) => state.filterOption);
+  const likeUpdateSuccess = useLikeUpdate(options, type);
   const postId = portfolioId || projectId;
 
-  const postTitleImage = projectTitleImage.imageUrl || portfolioTitleImage.imageUrl;
+  const postTitleImage = projectTitleImage?.imageUrl || portfolioTitleImage?.imageUrl;
   const onDetailHandler = (id) => {
     type === 'projects' ? toProjectDetail(id) : toPortfolioDetail(id);
   };
@@ -84,7 +87,7 @@ export default function PostListItem({ post, type, likeUpdateSuccess }) {
         <h4 onClick={() => onDetailHandler(postId)}>{title}</h4>
         <div className="tag">
           {tags?.map((tagItem) => (
-            <Tag text={tagItem} key={tagItem} type={type} />
+            <Tag text={tagItem} key={postId + tagItem} type={type} />
           ))}
         </div>
         <div className="user">

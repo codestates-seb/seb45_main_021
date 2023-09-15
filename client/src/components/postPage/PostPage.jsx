@@ -17,6 +17,7 @@ import useNav from '../../hooks/useNav';
 import { useSelector } from 'react-redux';
 import usePostListQuery from '../../hooks/usePostListQuery';
 import scollToTop from '../../utils/scrollToTop';
+import useLikeUpdate from '../../hooks/useLikeUpdate';
 
 const StylePostList = styled(Page)`
   .top-menu {
@@ -51,9 +52,9 @@ const StylePostList = styled(Page)`
     display: none;
   }
   .not-found {
-    text-align: center;
     font-size: 3rem;
-    margin-top: 100px;
+    padding-top: 15%;
+    text-align: center;
     color: var(--black-500);
     font-weight: var(--nanum-bold);
   }
@@ -68,10 +69,9 @@ export default function PostPage({ options, optionHandler, pageType, getApiUrl }
   const { isLogin } = useSelector((state) => state.user);
 
   // Infinite Query 사용하여 데이터 가져오기
-  const {
-    queryResult: { data, error, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage },
-    likeUpdateSuccess,
-  } = usePostListQuery(options, pageType, getApiUrl);
+  const { data, error, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    usePostListQuery(options, pageType, getApiUrl);
+
   // Intersection Observer 사용하여 Infinite Scroll 구현
   const onIntersect = ([entry]) => {
     if ((entry.isIntersecting, !isFetchingNextPage)) {
@@ -84,9 +84,7 @@ export default function PostPage({ options, optionHandler, pageType, getApiUrl }
   const postData = data?.pages.flatMap((page) => page.data).map((el) => el);
 
   useEffect(() => {
-    window.onbeforeunload = () => {
-      scollToTop();
-    };
+    window.onbeforeunload = () => scollToTop();
   }, []);
 
   const writeButtonHandler = () => {
@@ -145,20 +143,20 @@ export default function PostPage({ options, optionHandler, pageType, getApiUrl }
               onChange={(value) => optionHandler('employ', value)}
             />
           )}
-          <StyleBackgroundButton $padding="10px 15px" onClick={writeButtonHandler}>
+          <StyleBackgroundButton
+            $padding="10px 15px"
+            $margin="0 0 0 auto"
+            onClick={writeButtonHandler}
+          >
             글 작성
           </StyleBackgroundButton>
         </div>
       </div>
       {hasData && (
-        <PostList
-          postData={postData}
-          type={pageType === 'search' ? searchType : pageType}
-          likeUpdateSuccess={likeUpdateSuccess}
-        />
+        <PostList postData={postData} type={pageType === 'search' ? searchType : pageType} />
       )}
       {isDataFetching && <PostSkeletonLoading />}
-      {isNotFound && <div className="not-found">데이터 없다</div>}
+      {isNotFound && <div className="not-found">검색결과가 없습니다</div>}
       <div
         ref={bottomTarget}
         className={`${isFetchingNextPage || !hasNextPage ? 'hidden' : 'ref'}`}

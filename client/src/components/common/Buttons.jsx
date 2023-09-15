@@ -71,7 +71,7 @@ export const StyleBackgroundButton = styled.button`
   position: relative;
   transition: 0.2s;
   opacity: 0.8;
-  margin-left: auto;
+  margin: ${(props) => (props.$margin ? props.$margin : '0')};
   background-color: var(--black-700);
   border-radius: ${(props) => (props.$radius ? props.$radius : '5px')};
   color: ${(props) => (props.$color ? props.$color : 'var(--black-100)')};
