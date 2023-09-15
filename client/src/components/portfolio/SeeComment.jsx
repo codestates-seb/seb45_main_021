@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import useNav from '../../hooks/useNav';
 import defaultImg from '../../static/images/userDefaultImg.jpeg'
 import { dateFormatter } from '../../utils/dateFormatter';
+import Modal from '../common/Modal';
 
 const StyleSeeComment = styled.div`
     min-width:35rem;
@@ -67,38 +68,82 @@ export default function SeeComment({
     isAdmin,
     detailData,
     commentData,
+    updateHandler,
 }) {
     const {toProfile} = useNav();
     const [customText,setCustomText] = useState(commentData.body);
     const [isEdit, setIsEdit] = useState(false);
     const loginUserData = useSelector(state=>state.user);
-    const userId = loginUserData?.userInfo?.id;
+    const [showModal,setShowModal] = useState(false);
+
+    console.log(commentData);
 
     const cancelEditHandler = () => {
         setCustomText(commentData.body);
         setIsEdit(false);
     }
 
+    const inputHandler = (e) => {
+        const inputText = e.target.value;
+
+        if (inputText.length <= 200) {
+        setCustomText(inputText);
+        }
+    }
+
     const EditHandler = () => {
-        api.post(`/comments/${detailData.id}}`,)
+        const body = {
+            body : customText
+        }
+        api.patch(`/comments/${commentData.commentId}`,body)
+        .then((res)=>{
+            updateHandler()
+            setIsEdit(false);
+        })
+        .catch(err=>{
+            setShowModal(true);
+        })
     }
 
     const deleteHandler = () => {
-        api.delete(`/comments/${detailData.id}}`,)
+        api.delete(`/comments/${commentData.commentId}`)
+        .then((res)=>{
+            updateHandler()
+        })
+        .catch(err=>{
+            setShowModal(true);
+        })
+    }
+
+    const keyDownHandler = (e) => {
+        if(e.code === 'Enter' || e.code === 'NumpadEnter') {
+            EditHandler()
+        }
     }
 
     return (
-        <>
         <StyleSeeComment
             className='col'
             $isEdit={isEdit}
         >
+            {showModal && 
+            <Modal
+                setIsOpen={setShowModal}
+                type='alert'
+                title='알림'
+                body='다시 시도해 주세요.'
+                confirmHandler={()=>setShowModal(false)}
+            />}
             {isEdit ?
                 <>
                     <Input 
                         type='textarea'
+                        value={customText}
                         defaultValue={commentData.body}
-                        onChangeHandler={(e)=>setCustomText(e.target.value)}
+                        onChangeHandler={inputHandler}
+                        height={'100px'}
+                        onKeyDown={keyDownHandler}
+                        onBlur={cancelEditHandler}
                     />
                     <ProGress
                         top={'-1.7rem'}
@@ -123,17 +168,17 @@ export default function SeeComment({
                     </>
                 :
                     <>
-                        <div className='row author-wrapper' onClick={()=>toProfile(commentData.id)}>
-                            <img src={commentData.img.length === 0 ? defaultImg : commentData.img} alt='작성자이미지'></img>
+                        <div className='row author-wrapper' onClick={()=>toProfile(commentData.memberId)}>
+                            {/* <img src={commentData.img.length === 0 ? defaultImg : commentData.img} alt='작성자이미지'></img> */}
                             <h3>{commentData.userName}</h3>
                         </div>
-                        <h3>{dateFormatter(commentData.created_At)}</h3>
-                        {detailData.author.id === userId || true &&
+                        <h3>{dateFormatter(commentData.createdAt)}</h3>
+                        {commentData.memberId === loginUserData.userInfo?.memberId &&
                             <h3 
                                 className='button'
                                 onClick={()=>setIsEdit(true)}
                             >수정</h3>}
-                        {(isAdmin || detailData.author.id === userId) || true &&
+                        {(isAdmin || (commentData.memberId === loginUserData.userInfo?.memberId)) &&
                             <h3 
                                 className='button'
                                 onClick={deleteHandler}
@@ -143,7 +188,5 @@ export default function SeeComment({
                 
             </div>            
         </StyleSeeComment>
-        {/* <BorderLine/> */}
-        </>
     );
 }

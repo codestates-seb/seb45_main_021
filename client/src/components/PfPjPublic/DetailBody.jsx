@@ -154,16 +154,18 @@ export default function DetailBody({
     useEffect(()=>{
         console.log(detailData);
         console.log(loginUserData);
-        if(!isAdmin && loginUserData.isLogin) {
-            for(let i = 0; i < detailData.requestPeople.length; i++) {
-                if(Number(detailData.requestPeople[i]) === Number(loginUserData.userInfo.memberId)) {
-                    setIsPossibleApply(false);
-                    return;
+        if(type === 'project') {
+            if(!isAdmin && loginUserData.isLogin) {
+                for(let i = 0; i < detailData.requestPeople.length; i++) {
+                    if(Number(detailData.requestPeople[i]) === Number(loginUserData.userInfo.memberId)) {
+                        setIsPossibleApply(false);
+                        return;
+                    }
                 }
+                setIsPossibleApply(true);
+            } else {
+                setIsPossibleApply(false);
             }
-            setIsPossibleApply(true);
-        } else {
-            setIsPossibleApply(false);
         }
     },[detailData])
 
@@ -197,6 +199,14 @@ export default function DetailBody({
             </Modal>
             }
             <div className='post-data-box col'>
+                    {(Number(detailData.isEmploy) === 0 || Number(detailData.isEmploy) === 1) && 
+                    <TextBox
+                        title={'포트폴리오 상태'}
+                        component={
+                            <p>{Number(detailData.isEmploy) === 1 ? '구직용입니다.' : '재직용입니다.'}</p>
+                        }
+                    />
+                    }
                     <TextBox
                         title={'개발 언어'}
                         component={<Tag text={detailData.lang} type={type}/>}

@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 import Input from '../components/common/Input';
 import Select from '../components/common/Select';
 import FileInput from '../components/common/FileInput';
 import { StyleBorderButton } from '../components/common/Buttons';
 import  useForm  from '../hooks/useForm';
-import DateSelect from '../components/project/DateSelect';
-import Page from './../components/common/Page';
 import useNav from '../hooks/useNav';
 import EnterTag from '../components/PfPjPublic/EnterTag';
 import WriteHeader from '../components/PfPjPublic/WriteHeader';
@@ -16,15 +13,11 @@ import { checkValidations } from '../utils/checkValidations';
 import ProGress from '../components/common/ProGress';
 import languages from '../static/languages'
 import api from '../hooks/useAxiosInterceptor';
-import { projectErrorInitData, projectWriteInitData, projectWriteRule } from '../static/projectInit';
-import SubmitModalBox from '../components/PfPjPublic/SubmitModalBox';
-import { writeSubmitHandler } from '../utils/writeSubmitHandler';
-import { apiWriteDataCheckError, shapingApiData } from '../utils/shapingApiData';
-import { useNavigate, useParams } from 'react-router-dom';
+import { projectWriteInitData, projectWriteRule } from '../static/projectInit';
+import { shapingApiData } from '../utils/shapingApiData';
+import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { custom } from '../static/theme';
 import Modal from '../components/common/Modal';
-import { useStepContext } from '@mui/material';
 import useSubmitWriteEdit from '../hooks/useSubmitWriteEdit';
 import { StyleProjectWrite } from './ProjectWrite';
 
@@ -180,7 +173,7 @@ export default function ProjectEdit() {
             handleInputChange={handleInputChange}
             handleErrorChange={handleErrorChange}
             clearError={clearError}
-            defaultImgs={dataForm.projectTitleImage}
+            defaultImgs={dataForm.titleImage}
             setWillDeleteImgs={true}
           />
 
@@ -188,7 +181,7 @@ export default function ProjectEdit() {
             name={'이미지'}
             width={'100%'}
             height={'65rem'}
-            number={7}
+            number={10}
             dataForm={dataForm}
             handleInputChange={handleInputChange}
             defaultImgs={dataForm.images}

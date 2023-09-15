@@ -7,8 +7,7 @@ const formDataHeader = {
     withCredentials: true,
 }
 
-const transferToFormData = (obj, type, memberId) => {
-    console.log(obj)
+const transferToFormData = (obj, type, memberId, postId) => {
     const formData = new FormData();
     const jsonData = {};
     const standardInitData = type === 'project' ? projectWriteInitData : portfolioWriteInitData;
@@ -28,12 +27,13 @@ const transferToFormData = (obj, type, memberId) => {
                     formData.append(key, obj[key][i]);    
                 }
             }
-            // formData.append(key, obj[key]);
         } else {
             jsonData[key] = value;
         }
     }
-    jsonData.memberId = memberId;
+    if(!postId) {
+        jsonData.memberId = memberId
+    }
     let tempStr = '';
     if(obj.tags.length) {
         for(let i = 0; i < obj.tags.length; i++ ){
@@ -52,10 +52,8 @@ const transferToFormData = (obj, type, memberId) => {
 }
 
 export const writeSubmitHandler = (obj, error, setError, type, memberId, postId) => {
-    console.log(`포스트아이디 ${postId}`)
     return new Promise((resolve,reject)=>{
         if(Object.keys(error).length) {
-            console.log('에러존재')
             const newError = {...error}
             for(let key in error) {
                 newError[key] = true;
@@ -64,7 +62,7 @@ export const writeSubmitHandler = (obj, error, setError, type, memberId, postId)
             window.scrollTo(0,0);
             return reject('formError')
         } else {
-            const requestForm = transferToFormData(obj, type, memberId);
+            const requestForm = transferToFormData(obj, type, memberId, postId);
             for(const [subKey,value] of requestForm.entries()) {
                 console.log(subKey, value);
             }

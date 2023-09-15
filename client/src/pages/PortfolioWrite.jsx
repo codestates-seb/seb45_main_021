@@ -95,7 +95,7 @@ export default function PortfolioWrite() {
                 width='10rem'
                 height='5rem'
                 onClickHandler={()=>{
-                  handleInputChange(null, !dataForm.isComment, 'isComments')
+                  handleInputChange(null, dataForm.isComment ? 0 : 1 , 'isComment')
                 }}
                 defaultValue={dataForm.isComment}
                 hideError={true}
@@ -103,6 +103,23 @@ export default function PortfolioWrite() {
             }
             hideError={true}
             customText={dataForm.isComment ? '허용됨' : '허용되지 않음'}
+          />
+
+          <SelectBox
+            text={'구직용, 재직용 임시'}
+            component={
+              <ToggleButton
+                width='10rem'
+                height='5rem'
+                onClickHandler={()=>{
+                  handleInputChange(null, dataForm.isEmploy ? 0 : 1, 'isEmploy')
+                }}
+                defaultValue={dataForm.isEmploy}
+                hideError={true}
+              />
+            }
+            hideError={true}
+            customText={dataForm.isEmploy ? '구직을 위한 포트폴리오' : '일반 포트폴리오'}
           />
           
           <EnterTag width="100%" height="3.5rem" placeholder="태그는 최대 3개까지 등록이 가능합니다." dataForm={dataForm} handleInputChange={handleInputChange}/>
@@ -127,7 +144,7 @@ export default function PortfolioWrite() {
             fontSize={'1.2rem'}
             comPleteNum={portfolioWriteRule.body.max}
             proGressNum={dataForm.body.length ?? 0}
-            error={dataForm.body.length < 100 ? true : false}
+            error={dataForm.body.length < 200 ? true : false}
           />
 
         </div>

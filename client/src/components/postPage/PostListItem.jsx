@@ -70,7 +70,7 @@ export default function PostListItem({ post, type, likeUpdateSuccess }) {
 
   const postId = portfolioId || projectId;
 
-  const postTitleImage = projectTitleImage.imageUrl || portfolioTitleImage.imageUrl;
+  const postTitleImage = projectTitleImage?.imageUrl || portfolioTitleImage?.imageUrl;
   const onDetailHandler = (id) => {
     type === 'projects' ? toProjectDetail(id) : toPortfolioDetail(id);
   };

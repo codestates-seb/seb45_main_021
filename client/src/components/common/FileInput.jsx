@@ -223,7 +223,7 @@ export default function FileInput({
         setImgs(newImgs);
         if(setWillDeleteImgs) {
             if(number === 1) {
-                if(dataForm.projectTitleImage[0] === imgs[idx]) {
+                if(dataForm.titleImage[0] === imgs[idx]) {
                     handleInputChange(null,imgs[idx],willDeleteKey)        
                 }
             } else {

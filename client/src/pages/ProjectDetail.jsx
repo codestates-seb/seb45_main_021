@@ -88,58 +88,6 @@ const OnlyAdmin = styled.div`
   gap:2rem;
   margin-bottom:1rem;
 `
-
-const DummyData = {
-  projectId : 1,
-  view : 0,
-  memberId : 9,
-  userName : '박찬섭',
-  userImgUrl : '',
-  title : '안녕하세요wtrgdrgdhtfth',
-  totalPeople : 6,
-  createdAt : String(new Date()),
-  modifiedAt : String(new Date()),
-  closedAt : String(new Date()),
-  body : '기획안 gfukukfhukhfkfhjukvhjm,hjmvhjmhjmvhj,vhj,vhj,vhj,vhj,vhj,vhj,hvj,vmvhjmhjmvhj,vhj,vhj,vhj,vhj,vhj,vhj,hvj,vhjhjv입니다기획안gfukukfhukhfkfhjukvhjm,hjmvhjmhjmvhj,vhj,vhj,vhj,vhj,vhj,vhj,hvj,vhjhjv입니다',
-  joinPeople : 'null', 
-  requestPeople : 'null',
-  description : '즐겁게 해보실 분',
-  lang : 'react',
-  images : [
-    {
-      imageId : 10,
-      imageUrl : 'https://source.unsplash.com/random'
-    },
-    {
-      imageId : 11,
-      imageUrl : 'https://source.unsplash.com/random'
-    },
-    {
-      imageId : 12,
-      imageUrl : 'https://source.unsplash.com/random'
-    }
-  ],
-  projectTitleImage : {
-    projectTitleImageId : 6,
-    imageUrl : 'https://source.unsplash.com/random',
-  },
-  tags : ['테1스트','태스1트','태스3트'],
-  heartCount : 6,
-}
-
-const RequestPeopleTestData = {
-  joinPeople : [{
-    memberId : 1,
-    imgUrl : '',
-    userName : '테스터'
-  },{
-    memberId : 2,
-    imgUrl : '',
-    userName : '바차서'
-  }],
-  requestPeople : []
-}
-
 export default function ProjectDetail() {
   const navigate = useNavigate();
   const [update, setUpdate] = useState(false);
@@ -161,8 +109,6 @@ export default function ProjectDetail() {
   const loginUserData = useSelector(state=>state.user);
   const fontSize = '1.6rem'
   const {projectId} = useParams()
-  // console.log(loginUserData);
-  // console.log(isAdmin);
 
   const updateHandler = () => {
     setUpdate((prev)=>!prev);
