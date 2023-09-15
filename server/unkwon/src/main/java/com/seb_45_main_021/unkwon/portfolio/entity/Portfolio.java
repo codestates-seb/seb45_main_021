@@ -38,9 +38,9 @@ public class Portfolio extends Auditable {
 
     private int heartCount = 0;
 
-    private boolean IsComment = true;
+    private int IsComment = 0;
 
-    private boolean IsEmploy = true;
+    private int IsEmploy = 0;
 
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
@@ -81,12 +81,12 @@ public class Portfolio extends Auditable {
 
     public static List<Portfolio> getPortfolioIsEmployList(List<Portfolio> portFolioList){
         return portFolioList.stream()
-                .filter(portFolio -> portFolio.IsEmploy)
+                .filter(portFolio -> portFolio.IsEmploy==1 )
                 .collect(Collectors.toList());
     }
     public static List<Portfolio> getPortfolioIsNotEmployList(List<Portfolio> portFolioList){
         return portFolioList.stream()
-                .filter(portFolio -> !portFolio.IsEmploy)
+                .filter(portFolio -> portFolio.IsEmploy==0 )
                 .collect(Collectors.toList());
     }
 

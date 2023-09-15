@@ -29,19 +29,25 @@ public interface PortfolioRepository extends JpaRepository<Portfolio,Long> {
 
 
     @Query(
-            value = "SELECT * FROM PORTFOLIO AS p WHERE WHERE (p.tagA LIKE :tagLikeQuery OR p.tagB LIKE :tagLikeQuery OR p.tagC LIKE :tagLikeQuery) AND p.IsEmploy = true",
-            countQuery = "SELECT COUNT(*) FROM PORTFOLIO AS p WHERE p.tagA LIKE :tagLikeQuery OR p.tagB LIKE :tagLikeQuery OR p.tagC LIKE :tagLikeQuery AND p.IsEmploy",
+            value = "SELECT * FROM PORTFOLIO AS p WHERE (p.tagA LIKE :tagLikeQuery OR p.tagB LIKE :tagLikeQuery OR p.tagC LIKE :tagLikeQuery) AND p.IsEmploy = 1",
+            countQuery = "SELECT COUNT(*) FROM PORTFOLIO AS p WHERE (p.tagA LIKE :tagLikeQuery OR p.tagB LIKE :tagLikeQuery OR p.tagC LIKE :tagLikeQuery) AND p.IsEmploy = 1",
             nativeQuery = true)
-    Page<Portfolio> findByTagsAndIsEmploy(String tagLikeQuery,Pageable pageable);
+    Page<Portfolio> findByTagsAndIsEmploy(String tagLikeQuery, Pageable pageable);
+
     @Query(
-            value = "SELECT * FROM PORTFOLIO AS p WHERE p.lang LIKE :langLikeQuery AND p.IsEmploy",
-            countQuery = "SELECT COUNT(*) FROM PORTFOLIO AS p WHERE p.lang LIKE :langLikeQuery AND p.IsEmploy",
+            value = "SELECT * FROM PORTFOLIO AS p WHERE p.lang LIKE :langLikeQuery AND p.IsEmploy = 1",
+            countQuery = "SELECT COUNT(*) FROM PORTFOLIO AS p WHERE p.lang LIKE :langLikeQuery AND p.IsEmploy = 1",
             nativeQuery = true)
-    Page<Portfolio> findByLangAndIsEmploy(String langLikeQuery,Pageable pageable);
-    @Query(value = "SELECT * FROM PORTFOLIO AS p WHERE (p.tagA LIKE :tagLikeQuery OR p.tagB LIKE :tagLikeQuery OR p.tagC LIKE :tagLikeQuery) AND p.lang LIKE :langLikeQuery AND p.IsEmploy= true",
-            countQuery = "SELECT COUNT(*) FROM PORTFOLIO AS p WHERE (p.tagA LIKE :tagLikeQuery OR p.tagB LIKE :tagLikeQuery OR p.tagC LIKE :tagLikeQuery) AND p.lang LIKE :langLikeQuery AND p.IsEmploy= true",
+    Page<Portfolio> findByLangAndIsEmploy(String langLikeQuery, Pageable pageable);
+
+    @Query(value = "SELECT * FROM PORTFOLIO AS p WHERE (p.tagA LIKE :tagLikeQuery OR p.tagB LIKE :tagLikeQuery OR p.tagC LIKE :tagLikeQuery) AND p.lang LIKE :langLikeQuery AND p.IsEmploy = 1",
+            countQuery = "SELECT COUNT(*) FROM PORTFOLIO AS p WHERE (p.tagA LIKE :tagLikeQuery OR p.tagB LIKE :tagLikeQuery OR p.tagC LIKE :tagLikeQuery) AND p.lang LIKE :langLikeQuery AND p.IsEmploy = 1",
             nativeQuery = true)
     Page<Portfolio> findByTagsAndLangAndIsEmploy(String tagLikeQuery, String langLikeQuery, Pageable pageable);
-    @Query("SELECT p FROM Portfolio p WHERE p.IsEmploy = true")
+
+    @Query(
+            value = "SELECT * FROM PORTFOLIO AS p WHERE p.IsEmploy = 1",
+            countQuery = "SELECT COUNT(*) FROM PORTFOLIO AS p WHERE p.IsEmploy = 1",
+            nativeQuery = true)
     Page<Portfolio> findEmployedPortfolios(Pageable pageable);
 }

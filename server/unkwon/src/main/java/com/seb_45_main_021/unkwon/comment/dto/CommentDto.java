@@ -24,7 +24,6 @@ public class CommentDto {
         private long portfolioId;
 
         @NotBlank(message = "댓글 내용을 작성해주세요.")
-        @Size(max = 500, message = "500자 이하로 입력해 주세요.")
         private String body;
     }
 
@@ -34,7 +33,6 @@ public class CommentDto {
         private long commentId;
 
         @NotBlank(message = "댓글 내용을 작성해주세요.")
-        @Size(max = 500, message = "500자 이하로 입력해 주세요.")
         private String body;
     }
 
@@ -49,8 +47,8 @@ public class CommentDto {
         private long portfolioId;
 
         private long memberId;
-        private String email;
         private String userName;
+        private String userImageUrl;
 
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;

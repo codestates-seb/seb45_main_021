@@ -23,7 +23,8 @@ public class PortfolioDto {
         private String body;
         private String tags;
         private String lang;
-
+        private int isEmploy;
+        private int isComment;
     }
 
     @Getter
@@ -35,8 +36,8 @@ public class PortfolioDto {
         private String body;
         private String tags;
         private String lang;
-        private boolean isEmploy;
-        private boolean isComment;
+        private int isEmploy;
+        private int isComment;
     }
 
     @Getter
@@ -54,7 +55,7 @@ public class PortfolioDto {
         private String[] tags;
         private String lang;
         private int heartCount;
-        private boolean IsEmploy;
+        private int IsEmploy;
     }
 
     @Getter
@@ -81,8 +82,8 @@ public class PortfolioDto {
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
         private List<PortfolioDto.CommentResponse> comments;
-        private boolean IsComment;
-        private boolean IsEmploy;
+        private int IsComment;
+        private int IsEmploy;
         private String[] tags;
         private String lang;
         private int heartCount;
