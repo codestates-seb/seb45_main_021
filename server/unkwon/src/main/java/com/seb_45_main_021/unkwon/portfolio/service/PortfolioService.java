@@ -92,18 +92,16 @@ public class PortfolioService {
                 .ifPresent(title -> findPortfolio.setTitle(title));
         Optional.ofNullable(portFolio.getBody())
                 .ifPresent(content -> findPortfolio.setBody(content));
-        Optional.ofNullable(portFolio.getTagA())
-                .ifPresent(tagA -> findPortfolio.setTagA(tagA));
-        Optional.ofNullable(portFolio.getTagB())
-                .ifPresent(tagB -> findPortfolio.setTagB(tagB));
-        Optional.ofNullable(portFolio.getTagC())
-                .ifPresent(tagC -> findPortfolio.setTagC(tagC));
         Optional.ofNullable(portFolio.getLang())
                 .ifPresent(lang-> findPortfolio.setLang(lang));
         Optional.ofNullable(portFolio.getIsEmploy())
                 .ifPresent(IsEmploy -> findPortfolio.setIsEmploy(IsEmploy));
         Optional.ofNullable(portFolio.getIsComment())
                 .ifPresent(IsComment -> findPortfolio.setIsComment(IsComment));
+        findPortfolio.setTagA(portFolio.getTagA());
+        findPortfolio.setTagB(portFolio.getTagB());
+        findPortfolio.setTagC(portFolio.getTagC());
+
 
         // 타이틀 이미지 삭제
         if(titleImageUrl != null) { // 타이틀 이미지 URL 을 받았다면
