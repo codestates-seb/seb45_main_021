@@ -102,12 +102,9 @@ public class ProjectService {
                 .ifPresent(title -> findProject.setTitle(title));
         Optional.ofNullable(project.getTotalPeople())
                 .ifPresent(totalPeople -> findProject.setTotalPeople(totalPeople));
-        Optional.ofNullable(project.getTagA())
-                .ifPresent(tagA -> findProject.setTagA(tagA));
-        Optional.ofNullable(project.getTagB())
-                .ifPresent(tagB -> findProject.setTagB(tagB));
-        Optional.ofNullable(project.getTagC())
-                .ifPresent(tagC -> findProject.setTagC(tagC));
+        findProject.setTagA(project.getTagA());
+        findProject.setTagB(project.getTagB());
+        findProject.setTagC(project.getTagC());
         Optional.ofNullable(project.getLang())
                 .ifPresent(lang -> findProject.setLang(lang));
         Optional.ofNullable(project.getBody())
