@@ -1,4 +1,8 @@
 import { useLocation, useNavigate } from 'react-router';
+import { useEffect, useMemo } from 'react';
+import { useDispatch } from 'react-redux';
+import { updateOption } from '../redux/filterOptionForm/filterOptionSlice';
+
 const DEFAULT_OPTIONS = {
   lang: 'all',
   sort: 'latest',
@@ -10,15 +14,23 @@ const DEFAULT_OPTIONS = {
 export default function useFilterOption() {
   const location = useLocation();
   const navigate = useNavigate();
-  const queryParams = new URLSearchParams(location.search);
+  const dispatch = useDispatch();
+  // useMemo를 사용하여 queryParams 객체 생성
+  const queryParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
+
   const pageType = location.pathname.split('/')[1];
-  const options = {
-    lang: queryParams.get('lang') || DEFAULT_OPTIONS.lang,
-    sort: queryParams.get('sort') || DEFAULT_OPTIONS.sort,
-    employ: queryParams.get('employ') === 'true' || false,
-    keyword: queryParams.get('keyword') || DEFAULT_OPTIONS.keyword,
-    searchType: queryParams.get('searchType') || DEFAULT_OPTIONS.searchType,
-  };
+
+  // useMemo를 사용하여 options 객체 생성
+  const options = useMemo(
+    () => ({
+      lang: queryParams.get('lang') || DEFAULT_OPTIONS.lang,
+      sort: queryParams.get('sort') || DEFAULT_OPTIONS.sort,
+      employ: queryParams.get('employ') === 'true' || false,
+      keyword: queryParams.get('keyword') || DEFAULT_OPTIONS.keyword,
+      searchType: queryParams.get('searchType') || DEFAULT_OPTIONS.searchType,
+    }),
+    [queryParams],
+  );
 
   const { searchType, lang, sort, employ, keyword } = options;
 
@@ -29,9 +41,14 @@ export default function useFilterOption() {
     navigate(newUrl);
   };
 
+  useEffect(() => {
+    dispatch(updateOption(options));
+  }, [options]);
+
   const getApiUrl = (pageNum) => {
     const type = pageType === 'search' ? searchType : pageType;
     let newUrl = `${type}/search`;
+
     if (employ && type === 'portfolios') newUrl += '/employ';
     const params = [];
 

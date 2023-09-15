@@ -35,7 +35,6 @@ const userSlice = createSlice({
     },
 
     heartListUpdate: (state, action) => {
-      console.log({ ...state.likeList, ...action.payload });
       return { ...state, likeList: { ...action.payload } };
     },
   },
