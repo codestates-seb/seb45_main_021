@@ -153,7 +153,7 @@ export default function PortfolioWrite() {
           <FileInput
             name={'타이틀 이미지'}
             width={'100%'}
-            height={'65rem'}
+            height={'55rem'}
             number={1}
             dataForm={dataForm}
             handleInputChange={handleInputChange}
@@ -164,7 +164,7 @@ export default function PortfolioWrite() {
           <FileInput
             name={'이미지'}
             width={'100%'}
-            height={'65rem'}
+            height={'55rem'}
             number={10}
             dataForm={dataForm}
             handleInputChange={handleInputChange}

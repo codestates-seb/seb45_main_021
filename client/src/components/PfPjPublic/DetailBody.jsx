@@ -202,7 +202,7 @@ export default function DetailBody({
                     <TextBox
                         title={'프로젝트 마감 날짜'}
                         component={
-                            <p>{`${dateFormatter(detailData.createdAt)} ~ ${dateFormatter(detailData.closedAt)}`}</p>
+                            <p>{`${dateFormatter(detailData.createdAt,true)} ~ ${dateFormatter(detailData.closedAt,true)}`}</p>
                         }
                     />}
                     <TextBox

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components'
-import { StyleBorderButton } from '../common/Buttons';
+import { StyleBorderButton, StyleBottomButton } from '../common/Buttons';
 import Input from '../common/Input';
 import ProGress from '../common/ProGress';
 import api from '../../hooks/useAxiosInterceptor'
@@ -20,6 +20,7 @@ const StyleSeeComment = styled.div`
         font-size:1.6rem;
     }
     h3 {
+        padding:5px 7px;
         font-size:1.2rem;
     }
     .button {
@@ -141,7 +142,7 @@ export default function SeeComment({
                         value={customText}
                         defaultValue={commentData.body}
                         onChangeHandler={inputHandler}
-                        height={'100px'}
+                        height={'8rem'}
                         onKeyDown={keyDownHandler}
                         onBlur={cancelEditHandler}
                     />
@@ -163,26 +164,26 @@ export default function SeeComment({
             <div className='row'>
                 {isEdit ? 
                     <>
-                        <h3 className='button' onClick={EditHandler}>작성</h3>
-                        <h3 className='button' onClick={cancelEditHandler}>취소</h3>
+                        <StyleBottomButton className='button' onClick={EditHandler}>작성</StyleBottomButton>
+                        <StyleBottomButton className='button' onClick={cancelEditHandler}>취소</StyleBottomButton>
                     </>
                 :
                     <>
                         <div className='row author-wrapper' onClick={()=>toProfile(commentData.memberId)}>
                             {/* <img src={commentData.img.length === 0 ? defaultImg : commentData.img} alt='작성자이미지'></img> */}
-                            <h3>{commentData.userName}</h3>
+                            <StyleBottomButton>{commentData.userName}</StyleBottomButton>
                         </div>
                         <h3>{dateFormatter(commentData.createdAt)}</h3>
                         {commentData.memberId === loginUserData.userInfo?.memberId &&
-                            <h3 
+                            <StyleBottomButton
                                 className='button'
                                 onClick={()=>setIsEdit(true)}
-                            >수정</h3>}
+                            >수정</StyleBottomButton>}
                         {(isAdmin || (commentData.memberId === loginUserData.userInfo?.memberId)) &&
-                            <h3 
+                            <StyleBottomButton
                                 className='button'
                                 onClick={deleteHandler}
-                            >삭제</h3>}
+                            >삭제</StyleBottomButton>}
                     </>
                 }
                 

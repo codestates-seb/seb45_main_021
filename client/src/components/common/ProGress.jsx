@@ -5,7 +5,6 @@ const StyleProGress = styled.div`
     position:relative;
     width:${props=>props.$width};
     height:${props=>props.$height};
-    background-color:var(--black-400);
     display: flex;
     > span {
         position:absolute;
@@ -56,12 +55,6 @@ export default function ProGress({
             {...rest}
         >
             <span>{`${proGressNum} / ${comPleteNum}`}</span>
-            <ProGressBar
-                $comPleteNum={comPleteNum}
-                $proGressNum={proGressNum}
-                $error={error}
-            > 
-            </ProGressBar>
         </StyleProGress>
     );
 }

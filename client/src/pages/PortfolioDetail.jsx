@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components'
 import DetailHead from '../components/PfPjPublic/DetailHead';
 import DetailBody from '../components/PfPjPublic/DetailBody';
-import { StyleBorderButton } from '../components/common/Buttons';
+import { StyleBackgroundButton, StyleBorderButton } from '../components/common/Buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import { StyleDetailWrapper, StyleDetailContainer } from './ProjectDetail';
 import Comment from '../components/portfolio/Comment';
@@ -149,13 +149,13 @@ export default function ProjectDetail() {
         {isAdmin && 
         <OnlyAdmin className='row'>
           {adminFunction.map((item,idx)=>
-            <StyleBorderButton
+            <StyleBackgroundButton
               key={idx}
               $fontSize={fontSize}
               onClick={()=>item.handler()}
             >
               {item.title}
-            </StyleBorderButton>
+            </StyleBackgroundButton>
           )}
         </OnlyAdmin>}
         <DetailBody

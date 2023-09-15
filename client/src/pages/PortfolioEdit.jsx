@@ -23,6 +23,7 @@ import { StyleBorderButton } from '../components/common/Buttons';
 import { useSelector } from 'react-redux';
 import useSubmitWriteEdit from '../hooks/useSubmitWriteEdit';
 import { StyleProjectWrite } from './ProjectWrite';
+import NotFound from './NotFound';
 
 // const StyleProjectWrite = styled(Page)`
 //   height: auto;
@@ -91,7 +92,11 @@ export default function PortfolioEdit() {
       })
       .catch((err) => {
         setShowModal(true);
-        setFirstApiSuccess(false);
+        if(err.message === "Request failed with status code 404") {
+          setFirstApiSuccess('404');
+        } else {
+          setFirstApiSuccess(false);
+        }
       });
   }, []);
 
@@ -106,6 +111,8 @@ export default function PortfolioEdit() {
   })();
 
   return (
+    <>
+    {firstApiSuccess === '404' ? <NotFound/> : firstApiSuccess === true &&
     <StyleProjectWrite className="col">
       {showModal && <Modal
         type={'alert'}
@@ -229,7 +236,7 @@ export default function PortfolioEdit() {
           <FileInput
             name={'타이틀 이미지'}
             width={'100%'}
-            height={'65rem'}
+            height={'55rem'}
             number={1}
             dataForm={dataForm}
             handleInputChange={handleInputChange}
@@ -242,7 +249,7 @@ export default function PortfolioEdit() {
           <FileInput
             name={'이미지'}
             width={'100%'}
-            height={'65rem'}
+            height={'55rem'}
             number={7}
             dataForm={dataForm}
             handleInputChange={handleInputChange}
@@ -264,6 +271,7 @@ export default function PortfolioEdit() {
           취소
         </StyleBorderButton>
       </div>
-    </StyleProjectWrite>
+    </StyleProjectWrite>}
+    </>
   );
 }

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Page from '../components/common/Page';
 import DetailHead from '../components/PfPjPublic/DetailHead';
 import DetailBody from '../components/PfPjPublic/DetailBody';
-import { StyleBorderButton } from '../components/common/Buttons';
+import { StyleBackgroundButton, StyleBorderButton, StyleBottomButton } from '../components/common/Buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import ProjectCardContainer from '../components/project/ProjectCardContainer';
 import JoinStatusContainer from '../components/project/JoinStatusContainer';
@@ -20,10 +20,8 @@ import NotFound from './NotFound';
 
 export const StyleDetailWrapper = styled(Page)`
   padding-top:6rem;
-  * {
-    border-radius: 6px;
-    transition:all 0.2s;
-  }
+  transition:all 0.2s;
+  border-radius: 6px;
 `
 
 export const StyleDetailContainer = styled.div`
@@ -239,13 +237,13 @@ export default function ProjectDetail() {
           {isAdmin &&
           <OnlyAdmin className='row'>
             {adminFunction.map((item,idx)=>
-              <StyleBorderButton
+              <StyleBackgroundButton
                 key={idx}
                 $fontSize={fontSize}
                 onClick={()=>item.handler()}
               >
                 {item.title}
-              </StyleBorderButton>
+              </StyleBackgroundButton>
             )}
           </OnlyAdmin>}
           {isAdmin && !isOnDetail ? 

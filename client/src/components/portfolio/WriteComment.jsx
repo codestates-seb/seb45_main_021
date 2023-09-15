@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components'
 import Input from '../common/Input';
-import { StyleBorderButton } from '../common/Buttons';
+import { StyleBackgroundButton, StyleBorderButton } from '../common/Buttons';
 import ProGress from '../common/ProGress';
 import api from '../../hooks/useAxiosInterceptor'
 import { useParams } from 'react-router-dom';
@@ -75,11 +75,11 @@ export default function WriteComment({
                 height='1rem'
             />
             <div className='submit-box row'>
-                <StyleBorderButton 
+                <StyleBackgroundButton
                     $width={'15rem'}
                     $fontSize={'1.6rem'}
                     onClick={submitHandler}
-                >작성</StyleBorderButton>
+                >작성</StyleBackgroundButton>
             </div>
         </StyleWriteComment>
     );

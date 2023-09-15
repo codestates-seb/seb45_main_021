@@ -49,6 +49,7 @@ const StyleTextArea = styled.textarea`
   padding: 8px 6px;
   font-size: 1.5rem;
   font-family: var(--nanum);
+  line-height:1.3
 `;
 
 /**
