@@ -112,7 +112,7 @@ export default function ProjectEdit() {
             width="100%"
             height="3.5rem"
             placeholder="태그는 최대 3개까지 등록이 가능합니다."
-            defaultTags={dataForm.tags}
+            defaultTags={(dataForm.tags.length === 1 && dataForm.tags[0] === '') ? [] : dataForm.tags}
             handleInputChange={handleInputChange}
           />
           
