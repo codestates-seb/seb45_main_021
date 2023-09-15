@@ -240,11 +240,13 @@ export default function ShowProfile({
                 </div>
                 <div>
                   <p className="label">나이</p>
-                  <p>{profile.age === 0 ? '아직 나이가 등록되지 않았습니다.' : `${profile.age}`}</p>
+                  <p>{profile.age === 0 ? '아직 나이가 등록되지 않았습니다.' : profile.age}</p>
                 </div>
                 <div>
                   <p className="label">이메일</p>
-                  <p>{profile.email}</p>
+                  <p>
+                    {profile.email === null ? '아직 이메일이 등록되지 않았습니다.' : profile.email}
+                  </p>
                 </div>
                 <div>
                   <p className="label">상태</p>

@@ -7,9 +7,8 @@ import { AiFillGithub } from 'react-icons/ai';
 import Input from '../components/common/Input';
 import api from '../hooks/useAxiosInterceptor';
 import { useDispatch } from 'react-redux';
-import { updateUser, deleteUser } from '../redux/userForm/userSlice';
+import { updateUser } from '../redux/userForm/userSlice';
 import { isValidEmail, isValidPassword } from '../components/profile/isValid';
-import userDefaultImg from '../static/images/userDefaultImg.jpeg';
 import Spinner from '../components/common/Spinner';
 import { desktop, mobile } from '../static/theme';
 
@@ -240,15 +239,77 @@ export default function SignIn() {
   };
 
   const handleClickGoogleBtn = () => {
-    // api.post('/oauth2/authorization/google');
-    // window.location.assign(
-    //   'https://6e0a-119-193-199-218.ngrok-free.app/oauth2/authorization/google',
-    // );
+    window.location.assign(
+      'https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=15196070608-ti8mt0m3fo8tj48172bhq72h4re8bcni.apps.googleusercontent.com&scope=email%20profile&state=J8xE05niEcAJo0CAB8XkqVr25Prh7dXvkrqthZ2YJw0%3D&redirect_uri=http://localhost:3000/signin',
+    );
+  };
+
+  const handleClickGithubBtn = () => {
+    window.location.assign(
+      'https://github.com/login/oauth/authorize?client_id=b7cd8d79c75bb40d352a',
+    );
   };
 
   useEffect(() => {
     // 마운트 함수
-    dispatch(deleteUser());
+    const url = new URL(window.location.href);
+    const state = url.searchParams.get('state');
+    const authorizationCode = url.searchParams.get('code');
+    if (authorizationCode) {
+      if (state) {
+        api
+          .get(`/oauth2/google/signin?code=${authorizationCode}`)
+          .then((el) => {
+            if (el.status === 200) {
+              dispatch(
+                updateUser({
+                  isLogin: true,
+                  userInfo: {
+                    memberId: el.data.memberId,
+                    userName: el.data.userName,
+                    userImgUrl: el.data.userImgUrl,
+                    socialType: el.data.socialType,
+                  },
+                  likeList: {
+                    portfolioList: el.data.portfolioList,
+                    projectList: el.data.projectList,
+                  },
+                }),
+              );
+              toAbout();
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        api
+          .get(`/oauth2/github?code=${authorizationCode}`)
+          .then((el) => {
+            if (el.status === 200) {
+              dispatch(
+                updateUser({
+                  isLogin: true,
+                  userInfo: {
+                    memberId: el.data.memberId,
+                    userName: el.data.userName,
+                    userImgUrl: el.data.userImgUrl,
+                    socialType: el.data.socialType,
+                  },
+                  likeList: {
+                    portfolioList: el.data.portfolioList,
+                    projectList: el.data.projectList,
+                  },
+                }),
+              );
+              toAbout();
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    }
   }, []);
 
   return (
@@ -268,7 +329,7 @@ export default function SignIn() {
                 <FcGoogle className="logo" size={30} />
                 Google 로그인
               </StyleBtnContainer>
-              <StyleBtnContainer>
+              <StyleBtnContainer onClick={handleClickGithubBtn}>
                 <AiFillGithub className="logo" size={30} />
                 Github 로그인
               </StyleBtnContainer>
