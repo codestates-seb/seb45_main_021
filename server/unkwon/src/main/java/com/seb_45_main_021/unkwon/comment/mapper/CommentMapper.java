@@ -37,8 +37,8 @@ public interface CommentMapper {
                 comment.getBody(),
                 comment.getPortFolio().getPortfolioId(),
                 comment.getMember().getMemberId(),
-                comment.getMember().getEmail(),
                 comment.getMember().getUserName(),
+                comment.getMember().getUserImgUrl(),
                 comment.getCreatedAt(),
                 comment.getModifiedAt()
         );

@@ -95,14 +95,14 @@ public class PortfolioService {
         Optional.ofNullable(portFolio.getTagA())
                 .ifPresent(tagA -> findPortfolio.setTagA(tagA));
         Optional.ofNullable(portFolio.getTagB())
-                .ifPresent(tagB -> findPortfolio.setTagA(tagB));
+                .ifPresent(tagB -> findPortfolio.setTagB(tagB));
         Optional.ofNullable(portFolio.getTagC())
-                .ifPresent(tagC -> findPortfolio.setTagA(tagC));
+                .ifPresent(tagC -> findPortfolio.setTagC(tagC));
         Optional.ofNullable(portFolio.getLang())
                 .ifPresent(lang-> findPortfolio.setLang(lang));
-        Optional.ofNullable(portFolio.isIsEmploy())
+        Optional.ofNullable(portFolio.getIsEmploy())
                 .ifPresent(IsEmploy -> findPortfolio.setIsEmploy(IsEmploy));
-        Optional.ofNullable(portFolio.isIsComment())
+        Optional.ofNullable(portFolio.getIsComment())
                 .ifPresent(IsComment -> findPortfolio.setIsComment(IsComment));
 
         // 타이틀 이미지 삭제
@@ -199,8 +199,6 @@ public class PortfolioService {
     public Page<Portfolio> findIsEmployPortfolios(String[] tags,String[] lang, Pageable pageable){
 
         if(tags != null && lang != null){
-            Arrays.sort(tags);
-            Arrays.sort(lang);
 
             StringBuilder tagsLikeQueryBuilder = new StringBuilder("");
 

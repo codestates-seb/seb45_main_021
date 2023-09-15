@@ -28,7 +28,10 @@ public interface PortfolioMapper {
         portfolio.setTitle(portfolioPostDto.getTitle());
         portfolio.setBody(portfolioPostDto.getBody());
         portfolio.setLang((portfolioPostDto.getLang()));
+        portfolio.setIsComment(portfolioPostDto.getIsComment());
+        portfolio.setIsEmploy(portfolioPostDto.getIsEmploy());
         portfolio.setMember(member);
+
 
 
         if(portfolioPostDto.getTags() != null) {
@@ -51,8 +54,8 @@ public interface PortfolioMapper {
         portfolio.setTitle(portfolioPatchDto.getTitle());
         portfolio.setBody(portfolioPatchDto.getBody());
         portfolio.setLang(portfolioPatchDto.getLang());
-        portfolio.setIsComment(portfolioPatchDto.isComment());
-        portfolio.setIsEmploy(portfolioPatchDto.isEmploy());
+        portfolio.setIsComment(portfolioPatchDto.getIsComment());
+        portfolio.setIsEmploy(portfolioPatchDto.getIsEmploy());
 
         if(portfolioPatchDto.getTags() != null) {
             String[] tags = portfolioPatchDto.getTags().split(",");
@@ -90,7 +93,7 @@ public interface PortfolioMapper {
                 .tags(tags)
                 .lang(portfolio.getLang())
                 .heartCount(portfolio.getHeartCount())
-                .IsEmploy(portfolio.isIsEmploy())
+                .IsEmploy(portfolio.getIsEmploy())
                 .portfolioTitleImage(portfolio.getPortfolioTitleImage())
                 .build();
 
@@ -126,8 +129,8 @@ public interface PortfolioMapper {
                 .view(portfolio.getView())
                 .tags(tags)
                 .lang(portfolio.getLang())
-                .IsEmploy(portfolio.isIsEmploy())
-                .IsComment(portfolio.isIsComment())
+                .IsEmploy(portfolio.getIsEmploy())
+                .IsComment(portfolio.getIsComment())
                 .heartCount(portfolio.getHeartCount())
                 .images(portfolio.getImages())
                 .portfolioTitleImage(portfolio.getPortfolioTitleImage())
