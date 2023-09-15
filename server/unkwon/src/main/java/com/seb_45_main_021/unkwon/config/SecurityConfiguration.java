@@ -66,6 +66,7 @@ public class SecurityConfiguration {
                         // .antMatchers(HttpMethod.OPTIONS).permitAll() // preflight 요청은 OPTIONS 메서드를 사용하기 때문에  허용
                         .antMatchers("/portfolios/**", "/projects/**", "/members/**", "/projectcards/**", "/oauth2/**", "/h2/**").permitAll()
                         .antMatchers("/portfolio/**", "/project/**").permitAll()
+                        .antMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/swagger-ui.html", "/webjars/**").permitAll()
                         .anyRequest().authenticated());
 //                .oauth2Login()
 //                .successHandler(oAuth2LoginSuccessHandler)
