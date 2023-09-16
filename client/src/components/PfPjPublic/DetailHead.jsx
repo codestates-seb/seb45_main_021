@@ -6,18 +6,40 @@ import { dateFormatter } from '../../utils/dateFormatter';
 import useNav from '../../hooks/useNav';
 import { useSelector } from 'react-redux';
 import useLikeUpdate from '../../hooks/useLikeUpdate';
+import {AiFillFire} from 'react-icons/ai'
 
 const StyleDetailHead = styled.div`
   height: auto;
   padding-bottom: 1rem;
   position: relative;
 
+  .isemploy-box {
+    justify-content:space-between;
+  }
+
   .project-detail {
     font-size: 3rem;
+    font-family: var(--barlow);
+    font-weight: var(--barlow-bold);
     color: var(--black-400);
     margin-bottom: 1rem;
   }
 
+  .portfolio-status {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:2rem;
+    font-weight: var(--nanum-bold);
+    pointer-events:none;
+    :hover {
+      pointer-events:none;
+    }
+    > svg {
+      width:2.5rem;
+      height:2.5rem;
+    }
+  }
   .project-detail-title {
     font-size: 3rem;
     font-weight: var(--nanum-bold);
@@ -78,7 +100,10 @@ export default function DetailHead({ type = 'project', height = '15rem', detailD
   const likeUpdateSuccess = useLikeUpdate(options, `${type}s`);
   return (
     <StyleDetailHead className="col" $height={height}>
-      <h2 className="project-detail">{type === 'project' ? 'PROJECT' : 'PORTFOLIO'}</h2>
+      <div className='row isemploy-box'>
+        <h2 className="project-detail">{type === 'project' ? 'PROJECT' : 'PORTFOLIO'}</h2>
+        <h2 className='portfolio-status'>{Number(detailData.isEmploy) === 1 ? '취업을 위한 포트폴리오' : Number(detailData.isEmploy) === 0 ? '재직자의 포트폴리오' : ''}</h2>
+      </div>
       <h1 className="project-detail-title">{detailData.title}</h1>
       <div className="row">
         <div className="row author-wrapper" onClick={() => toProfile(detailData.memberId)}>
@@ -104,3 +129,4 @@ export default function DetailHead({ type = 'project', height = '15rem', detailD
     </StyleDetailHead>
   );
 }
+

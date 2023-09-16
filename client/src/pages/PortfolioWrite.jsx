@@ -28,7 +28,7 @@ export default function PortfolioWrite() {
   const loginUserData = useSelector(state=>state.user);
 
   const width = '100%';
-  const height = '70rem';
+  const height = '40rem';
 
   //테스트용 언어 옵션들
   const languagesOptions = (() => {
@@ -103,10 +103,11 @@ export default function PortfolioWrite() {
             }
             hideError={true}
             customText={dataForm.isComment ? '허용됨' : '허용되지 않음'}
+            margin='1rem'
           />
 
           <SelectBox
-            text={'구직용, 재직용 임시'}
+            text={'구직용, 재직용 선택'}
             component={
               <ToggleButton
                 width='10rem'

@@ -174,17 +174,17 @@ export default function DetailBody({
             </Modal>
             }
             <div className='post-data-box col'>
-                    {(Number(detailData.isEmploy) === 0 || Number(detailData.isEmploy) === 1) && 
+                    {/* {(Number(detailData.isEmploy) === 0 || Number(detailData.isEmploy) === 1) && 
                     <TextBox
                         title={'포트폴리오 상태'}
                         component={
                             <p>{Number(detailData.isEmploy) === 1 ? '구직용입니다.' : '재직용입니다.'}</p>
                         }
                     />
-                    }
+                    } */}
                     <TextBox
                         title={'개발 언어'}
-                        component={<Tag text={detailData.lang} type={type}/>}
+                        component={<Tag text={detailData.lang} type={`${type}s`}/>}
                     />
                     <TextBox
                         title={'검색 키워드'}
@@ -194,7 +194,7 @@ export default function DetailBody({
                             <p>검색 키워드 없음</p>
                             :
                             detailData.tags?.map(item=>
-                                <Tag key={item} text={item} type={type}/>
+                                <Tag key={item} text={item} type={`${type}s`}/>
                             )
                         }
                     />

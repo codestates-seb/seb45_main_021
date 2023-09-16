@@ -77,8 +77,6 @@ export default function SeeComment({
     const loginUserData = useSelector(state=>state.user);
     const [showModal,setShowModal] = useState(false);
 
-    console.log(commentData);
-
     const cancelEditHandler = () => {
         setCustomText(commentData.body);
         setIsEdit(false);
@@ -96,12 +94,15 @@ export default function SeeComment({
         const body = {
             body : customText
         }
+        console.log(body);
         api.patch(`/comments/${commentData.commentId}`,body)
         .then((res)=>{
+            console.log('수정성공');
             updateHandler()
             setIsEdit(false);
         })
         .catch(err=>{
+            console.log('수정실패');
             setShowModal(true);
         })
     }
@@ -139,12 +140,10 @@ export default function SeeComment({
                 <>
                     <Input 
                         type='textarea'
-                        value={customText}
                         defaultValue={commentData.body}
                         onChangeHandler={inputHandler}
                         height={'8rem'}
                         onKeyDown={keyDownHandler}
-                        onBlur={cancelEditHandler}
                     />
                     <ProGress
                         top={'-1.7rem'}
