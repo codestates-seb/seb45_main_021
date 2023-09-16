@@ -7,8 +7,6 @@ import Input from '../components/common/Input';
 import api from '../hooks/useAxiosInterceptor';
 import Page from '../components/common/Page';
 import { isValidEmail, isValidPassword } from '../components/profile/isValid';
-import { deleteUser } from '../redux/userForm/userSlice';
-import { useDispatch } from 'react-redux';
 import Spinner from '../components/common/Spinner';
 import { desktop, mobile } from '../static/theme';
 
@@ -168,7 +166,6 @@ export default function SignUp() {
   const [error, setError] = useState({ userName: '', email: '', password: '' });
   const [isSubmit, setIsSubmit] = useState(false);
   const { toSignin } = useNav();
-  const dispatch = useDispatch();
 
   const handleChangeEmail = (e) => {
     setEmail(e.target.value);
@@ -186,16 +183,18 @@ export default function SignUp() {
     e.preventDefault();
     const isvalidEmail = isValidEmail(email);
     const isvalidPassword = isValidPassword(password);
-    setIsSubmit(true);
     if (isvalidEmail && isvalidPassword) {
+      setIsSubmit(true);
       const data = JSON.stringify({ userName, email, password });
       console.log('회원가입 요청');
       api
         .post('/members/signup', data)
         .then(() => {
+          setIsSubmit(false);
           toSignin();
         })
         .catch((error) => {
+          setIsSubmit(false);
           if (error.response.status === 409) {
             setError({ ...error, email: '이미 존재하는 이메일 입니다.' });
           }
@@ -210,19 +209,34 @@ export default function SignUp() {
     } else if (!isvalidPassword) {
       setError({ ...error, password: '영어,숫자,특수기호 포함 8글자 이상으로 입력해주세요.' });
     }
-    setIsSubmit(false);
   };
 
   const handleClickGoogleBtn = () => {
-    // api.post('/oauth2/authorization/google');
-    // window.location.assign(
-    //   'https://6e0a-119-193-199-218.ngrok-free.app/oauth2/authorization/google',
-    // );
+    window.location.assign(
+      'https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=15196070608-ti8mt0m3fo8tj48172bhq72h4re8bcni.apps.googleusercontent.com&scope=email%20profile&state=J8xE05niEcAJo0CAB8XkqVr25Prh7dXvkrqthZ2YJw0%3D&redirect_uri=http://localhost:3000/signup',
+    );
+  };
+
+  const handleClickGithubBtn = () => {
+    window.location.assign(
+      'https://github.com/login/oauth/authorize?client_id=b7cd8d79c75bb40d352a&scope=user:email,read:user',
+    );
   };
 
   useEffect(() => {
     // 마운트 함수
-    dispatch(deleteUser());
+    const url = new URL(window.location.href);
+    const authorizationCode = url.searchParams.get('code');
+    if (authorizationCode) {
+      api
+        .get(`/oauth2/google/signup?code=${authorizationCode}`)
+        .then((el) => {
+          if (el.status === 201) toSignin();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   }, []);
 
   return (
@@ -242,7 +256,7 @@ export default function SignUp() {
                 <FcGoogle className="logo" size={30} />
                 Google 회원가입
               </StyleBtnContainer>
-              <StyleBtnContainer>
+              <StyleBtnContainer onClick={handleClickGithubBtn}>
                 <AiFillGithub className="logo" size={30} />
                 Github 회원가입
               </StyleBtnContainer>
