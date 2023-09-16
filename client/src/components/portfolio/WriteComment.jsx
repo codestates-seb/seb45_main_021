@@ -28,13 +28,11 @@ export default function WriteComment({
     const loginUserdata = useSelector(state=>state.user);
 
     const submitHandler = () => {
-        console.log('실행');
         const body = {
             memberId : loginUserdata.userInfo.memberId,
             portfolioId : portfolioId,
             body : comments 
         }
-        console.log(body);
         api.post('/comments',body)
         .then(res=>{
             updateHandler();
