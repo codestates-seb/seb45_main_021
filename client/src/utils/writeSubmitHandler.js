@@ -63,16 +63,14 @@ export const writeSubmitHandler = (obj, error, setError, type, memberId, postId)
             return reject('formError')
         } else {
             const requestForm = transferToFormData(obj, type, memberId, postId);
-            for(const [subKey,value] of requestForm.entries()) {
-                console.log(subKey, value);
-            }
+            // for(const [subKey,value] of requestForm.entries()) {
+            //     console.log(subKey, value);
+            // }
             if(postId) {
-                console.log('패치요청')
                 api.patch(`/${type}s/${postId}`,requestForm, {
                     headers:formDataHeader,
                 })
                 .then(res=>{
-                    console.log('수정성공');
                     return resolve();
                 })
                 .catch((error) => {
@@ -86,12 +84,10 @@ export const writeSubmitHandler = (obj, error, setError, type, memberId, postId)
                     return reject();
                 });
             } else {
-                console.log('포스트요청')
                 api.post(`/${type}s`,requestForm, {
                     headers:formDataHeader,
                 })
                 .then((res)=>{
-                    console.log('작성성공');
                     return resolve();
                 })
                 .catch((error) => {
@@ -108,41 +104,3 @@ export const writeSubmitHandler = (obj, error, setError, type, memberId, postId)
         }
     })
 }
-
-// import api from '../hooks/useAxiosInterceptor';
-// import { projectWriteInitData } from '../static/projectInit';
-
-// const transferToFormData = (obj, willDeletedImgs, type) => {
-//     const formData = new FormData();
-//     const jsonData = {};
-//     for (const key in projectWriteInitData) {
-//         const value = obj[key];
-//         if (value instanceof FormData) {
-//             for (const subValue of value.values()) {
-//                 formData.append(key, subValue);
-//             }
-//         } else if (key !== 'titleImageFile' || key !== 'imageFile'){
-//             jsonData[key] = value;
-//         }
-//     }
-//     formData.append(type, JSON.stringify(jsonData));
-//     return [formData,willDeletedImgs];
-// }
-
-// export const writeSubmitHandler = (obj, error, setError, willDeletedImgs, type) => {
-//     if(Object.keys(error).length) {
-//         console.log('에러존재')
-//         const newError = {...error}
-//         for(let key in error) {
-//             newError[key] = true;
-//         }
-//         setError(newError);
-//         window.scrollTo(0,0);
-//     } else {
-//         const [requestForm,deleteJsonData] = transferToFormData(obj, willDeletedImgs, type);
-//         for(const [subKey,value] of requestForm.entries()) {
-//             console.log(subKey, value);
-//         }
-//         console.log(deleteJsonData);
-//     }
-// }

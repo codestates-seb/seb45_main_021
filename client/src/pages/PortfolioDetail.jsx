@@ -84,7 +84,6 @@ export default function ProjectDetail() {
     setIsLoading(true);
     api.get(`/portfolios/${portfolioId}`)
     .then(res=>{
-      console.log(res.data.data);
       setIsLoading(false);
       setDetailData(shapingApiData(res.data.data));
     })
@@ -92,7 +91,6 @@ export default function ProjectDetail() {
       if(err.code === 'ERR_BAD_REQUEST') {
         setApiResult(false);
       } else if (err.code === 'ERR_BAD_RESPONSE'){
-        console.log(err.code);
         setApiResult(false);
         setIsDeleteModal(true);
       }

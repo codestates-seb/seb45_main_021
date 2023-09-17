@@ -188,7 +188,7 @@ export default function ProjectEdit() {
             name={'이미지'}
             width={'100%'}
             height={'55rem'}
-            number={10}
+            number={7}
             dataForm={dataForm}
             handleInputChange={handleInputChange}
             defaultImgs={dataForm.images}

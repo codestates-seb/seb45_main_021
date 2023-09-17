@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import { tablet } from '../../static/theme';
 import ProjectCardSkeleton from '../project/ProjectCardSkeleton';
 import EmptyData from './EmptyData';
+import ReplaceNewLine from './ReplaceNewLine';
 
 
 export const StyleDetailBody = styled.div`
@@ -111,13 +112,11 @@ export default function DetailBody({
         requestData.memberId = ownProjectCardList[selectedCard].memberId;
         requestData.projectId = Number(projectId);
         requestData.projectCardId = ownProjectCardList[selectedCard].projectCardId;
-        console.log(requestData);
         api.post(`/projects/request`,requestData)
         .then(res=>{
             openApiResultModal('프로젝트에 신청하였습니다.')
         })
         .catch(err=>{
-            console.log(err);
             if(err.code === "ERR_BAD_REQUEST") {
                 openApiResultModal('이미 거절당한 프로젝트 또는 잘못된 요청입니다.')    
             } else {
@@ -127,8 +126,6 @@ export default function DetailBody({
     }
 
     useEffect(()=>{
-        console.log(detailData);
-        console.log(loginUserData);
         if(type === 'project') {
             if(!isAdmin && loginUserData.isLogin) {
                 for(let i = 0; i < detailData.requestPeople.length; i++) {
@@ -208,7 +205,7 @@ export default function DetailBody({
                     <TextBox
                         title={type==='project' ? '프로젝트 설명' : '포트폴리오 설명'}
                         component={
-                            <p>{detailData.body}</p>
+                            <p>{ReplaceNewLine(detailData.body)}</p>
                         }
                     />
                     {detailData.description &&
