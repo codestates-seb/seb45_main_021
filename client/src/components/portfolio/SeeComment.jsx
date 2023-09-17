@@ -26,7 +26,6 @@ const StyleSeeComment = styled.div`
     .button {
         &:hover {
             cursor: pointer;
-            opacity:0.5;
         }
     }
     .row {
@@ -52,7 +51,6 @@ const StyleSeeComment = styled.div`
         }
         &:hover {
             cursor:pointer;
-            opacity:0.4;
         }
     }
 `
@@ -94,15 +92,12 @@ export default function SeeComment({
         const body = {
             body : customText
         }
-        console.log(body);
         api.patch(`/comments/${commentData.commentId}`,body)
         .then((res)=>{
-            console.log('수정성공');
             updateHandler()
             setIsEdit(false);
         })
         .catch(err=>{
-            console.log('수정실패');
             setShowModal(true);
         })
     }

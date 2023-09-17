@@ -39,7 +39,6 @@ export default function DateSelect ({
     const dayOptions = () => {
         const options = []
         const lastDays = new Date(resetDate[0], resetDate[1], 0).getDate();
-        console.log(lastDays);
         for(let i = (time.getFullYear()===resetDate[0] && time.getMonth()+1===resetDate[1]) ? time.getDate()+1 : 1; i <= lastDays; i++) {
             options.push({value:i, label:i});
         }
