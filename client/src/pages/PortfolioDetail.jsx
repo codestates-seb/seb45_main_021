@@ -45,7 +45,6 @@ export default function ProjectDetail() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [detailData, setDetailData] = useState(DummyData);
   const [apiResult, setApiResult] = useState('');
-
   const [isDeleteModal, setIsDeleteModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -154,7 +153,7 @@ export default function ProjectDetail() {
             <SuspenseDetailPage />
           ) : (
             <StyleDetailContainer className="col">
-              <DetailHead detailData={detailData} type="portfolio" />
+              <DetailHead detailData={detailData} type="portfolio" setter={setDetailData} />
               {isAdmin && (
                 <OnlyAdmin className="row">
                   {adminFunction.map((item, idx) => (

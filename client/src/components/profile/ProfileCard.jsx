@@ -100,6 +100,7 @@ const StyleProfileContainer = styled.div`
         justify-content: space-between;
         p {
           word-wrap: break-word;
+          line-height: 1.3;
           overflow-wrap: break-word;
           font-family: var(--nanum);
         }

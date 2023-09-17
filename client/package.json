@@ -3,9 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0",
-    "@mui/material": "^5.14.8",
     "@mui/x-date-pickers": "^6.12.1",
     "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^5.17.0",
@@ -20,7 +17,6 @@
     "react-anchor-link-smooth-scroll": "^1.0.12",
     "react-dom": "^18.2.0",
     "react-icons": "^4.10.1",
-    "react-lazy-load-image-component": "^1.6.0",
     "react-loader-spinner": "^5.3.4",
     "react-query": "^3.39.3",
     "react-redux": "^8.1.2",

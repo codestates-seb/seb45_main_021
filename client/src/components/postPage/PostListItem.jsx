@@ -77,6 +77,7 @@ export default function PostListItem({ post, type }) {
   const onDetailHandler = (id) => {
     type === 'projects' ? toProjectDetail(id) : toPortfolioDetail(id);
   };
+
   return (
     <StylePostListItem>
       {type === 'portfolios' && !!isEmploy && <EmployBadge />}
@@ -85,9 +86,9 @@ export default function PostListItem({ post, type }) {
       <div className="content-box">
         <h4 onClick={() => onDetailHandler(postId)}>{title}</h4>
         <div className="tag">
-          {tags?.map((tagItem) => (
-            <Tag text={tagItem} key={postId + tagItem} type={type} />
-          ))}
+          {tags?.map((tagItem) =>
+            tagItem ? <Tag text={tagItem} key={postId + tagItem} type={type} /> : '',
+          )}
         </div>
         <div className="user">
           <Like

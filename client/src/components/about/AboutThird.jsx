@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
 import useNav from '../../hooks/useNav';
 import VideoPlayer from './VideoPlayer';
 import video from '../../static/videos/third.mp4';
 import { StyleBorderButton } from '../common/Buttons';
 import { useSelector } from 'react-redux';
-import { tablet, mobile } from '../../static/theme';
+import { tablet } from '../../static/theme';
 
 const StyleAboutThird = styled.section`
   width: 100vw;
@@ -24,7 +23,6 @@ const StyleAboutThird = styled.section`
     left: 0;
     margin: auto;
     ${tablet} {
-      transform: none !important;
       flex-direction: column;
       justify-content: center;
       align-items: center;
@@ -69,34 +67,13 @@ const StyleAboutThird = styled.section`
 
 export default function AboutThird({ activePage }) {
   const { toPortfolio, toProject, toSignin, toSignup } = useNav();
-  const [location, setLocation] = useState({ x: 0, y: 0 });
   const stringArr = ['SideProject', 'Portfolio', 'Experience', 'Connection'];
   const { isLogin } = useSelector((state) => state.user);
-
-  const maxRotation = 2;
-  useEffect(() => {
-    if (activePage === 2) {
-      const locationHandler = (e) => {
-        const { clientX, clientY } = e;
-        setLocation({ x: clientX, y: clientY });
-      };
-      window.addEventListener('mousemove', locationHandler);
-      return () => window.removeEventListener('mousemove', locationHandler);
-    }
-  }, [activePage]);
-
-  const rotationX = (location.y / window.innerHeight) * 2 * maxRotation - maxRotation;
-  const rotationY = (location.x / window.innerWidth) * 2 * maxRotation - maxRotation;
 
   return (
     <StyleAboutThird>
       <VideoPlayer src={video} />
-      <div
-        className="rotation-box"
-        style={{
-          transform: `rotateX(${-rotationX}deg) rotateY(${rotationY}deg)`,
-        }}
-      >
+      <div className="rotation-box">
         <div className="info-button-box">
           <StyleBorderButton onClick={toProject}>프로젝트 바로가기</StyleBorderButton>
           <StyleBorderButton onClick={toPortfolio}>포트폴리오 바로가기</StyleBorderButton>

@@ -8,7 +8,6 @@ export default function useLikeUpdate(options, pageType) {
     const postIdType = type === 'projects' ? 'projectId' : 'portfolioId';
     console.log('posts', pageType, options);
     queryClient.setQueryData(['posts', pageType, options], (updater) => {
-      console.log(updater);
       if (!updater) return undefined;
       return {
         ...updater,

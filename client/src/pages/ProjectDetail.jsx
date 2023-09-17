@@ -251,7 +251,7 @@ export default function ProjectDetail() {
             <SuspenseDetailPage />
           ) : (
             <StyleDetailContainer className="col">
-              <DetailHead detailData={detailData} type="project" />
+              <DetailHead detailData={detailData} type="project" setter={setDetailData} />
               {isAdmin && (
                 <OnlyAdmin className="row">
                   {adminFunction.map((item, idx) => (

@@ -1,14 +1,15 @@
 import { styled } from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation } from 'swiper/modules';
+import { Pagination } from 'swiper/modules';
 import 'swiper/css';
-import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 import img from '../../static/images/second.jpg';
 import { useEffect, useState } from 'react';
-import data from '../../static/portfolio.json';
 import AboutPortfolioCard from './AboutPortfolioCard';
 import StyleFilter from '../common/Filter';
-import { tablet, desktop, mobile } from '../../static/theme.js';
+import { tablet } from '../../static/theme.js';
+import api from '../../hooks/useAxiosInterceptor';
+
 const StyleAboutSecond = styled.section`
   width: 100vw;
   height: 100vh;
@@ -20,36 +21,31 @@ const StyleAboutSecond = styled.section`
   align-items: center;
   .center {
     height: 460px;
-    width: 700px;
     ${tablet} {
       width: 90%;
     }
   }
   .page-description {
-    padding-left: 45px;
     display: flex;
     align-items: end;
     padding-bottom: 10px;
+    justify-content: center;
     ${tablet} {
       padding: 0 0 10px 0;
       margin-left: -3px;
     }
-    h3 {
-      font-size: 10rem;
-      font-family: var(--barlow);
-      color: var(--black-100);
-      text-shadow: 3px 3px 6px var(--black-800);
-    }
-    span {
-      padding: 0 0 5px 20px;
-      font-weight: var(--barlow-bold);
-      font-family: var(--barlow);
-      font-size: 2.5rem;
-      text-shadow: 3px 3px 6px var(--black);
+    p {
+      font-size: 3rem;
+      font-weight: var(--nanum-semi-bold);
+      font-style: italic;
+      padding-bottom: 20px;
+      span {
+        font-size: 5rem;
+      }
     }
   }
-  .wrapper {
-    width: 650px;
+  .swiper {
+    overflow: visible;
   }
   .swiper-wrapper {
     transition-timing-function: ease !important;
@@ -57,60 +53,89 @@ const StyleAboutSecond = styled.section`
     transition-duration: 0.7s !important;
   }
   .swiper-slide {
-    transition: all 0.5s;
-    opacity: 0.5;
-    transform: scale(0.8);
+    .about-card {
+      transition: 0.2s;
+      opacity: 0.5;
+      transform: scale(0.9);
+    }
   }
   .swiper-slide-active {
-    transform: scale(1);
-    opacity: 1;
+    .about-card {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
-  .swiper-button-prev,
-  .swiper-button-next {
-    color: var(--black-100);
-  }
-  .swiper-button-disabled {
-    opacity: 0 !important;
+  .swiper-pagination {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center;
+    bottom: -50px !important;
+    .swiper-pagination-bullet {
+      line-height: 20px;
+      font-size: 15px !important;
+      color: #000000 !important;
+      font-weight: 900;
+      width: 30px;
+      height: 20px;
+      border-radius: 5px;
+      opacity: 0.7;
+    }
+    .swiper-pagination-bullet-active {
+      width: 40px;
+      opacity: 1;
+    }
   }
 `;
 
 export default function AboutSecond({ activePage }) {
   const [ranking, setRanking] = useState(1);
-  const [swiperInstance, setSwiperInstance] = useState(null);
   const [portfolios, setPortfolios] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const swiperSwitchHandler = (swiper) => setRanking(swiper.activeIndex + 1);
 
   useEffect(() => {
-    if (swiperInstance) {
-      setTimeout(() => {
-        swiperInstance.slideTo(0);
-        setRanking(1);
-      }, 600);
-    }
+    const fetchPortfolioTopTen = async () => {
+      const res = await api.get('/portfolios/top10');
+      setPortfolios([...res.data.data]);
+    };
+    if (activePage === 1) fetchPortfolioTopTen();
   }, [activePage]);
-
-  const swiperSwitchHandler = (swiper) => {
-    setRanking(swiper.activeIndex + 1);
-    setSwiperInstance(swiper);
-  };
 
   return (
     <StyleAboutSecond>
       <StyleFilter $background="#00000050" />
       <div className="center">
         <div className="page-description">
-          <h3>BEST {ranking}</h3>
-          <span>포트폴리오</span>
+          <p>
+            SPEC TOP <span>{ranking}</span> 포트폴리오
+          </p>
         </div>
         <Swiper
-          modules={[Navigation]}
-          slidesPerView={1}
+          modules={[Pagination]}
           spaceBetween={0}
-          navigation={true}
+          slidesPerView={1}
+          centeredSlides={true}
+          pagination={{
+            clickable: true,
+            renderBullet: (index, className) => `<span class="${className}">${index + 1}</span>`,
+          }}
+          breakpoints={{
+            425: {
+              slidesPerView: 1,
+            },
+            768: {
+              slidesPerView: 2,
+            },
+            1550: {
+              slidesPerView: 3,
+            },
+          }}
           onSlideChange={swiperSwitchHandler}
         >
-          {data.portfolios.map((portfolio) => (
-            <SwiperSlide key={portfolio.id}>
-              <AboutPortfolioCard portfolio={portfolio} />
+          {portfolios?.map((portfolio) => (
+            <SwiperSlide key={portfolio.portfolioId}>
+              <AboutPortfolioCard portfolio={portfolio} setPortfolios={setPortfolios} />
             </SwiperSlide>
           ))}
         </Swiper>

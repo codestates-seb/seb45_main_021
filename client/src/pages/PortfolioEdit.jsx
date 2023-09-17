@@ -14,7 +14,7 @@ import { checkValidations } from '../utils/checkValidations';
 import ProGress from '../components/common/ProGress';
 import ToggleButton from '../components/common/ToggleButton';
 import languages from '../static/languages';
-import {portfolioWriteInitData,portfolioWriteRule,} from '../static/portfolioInit';
+import { portfolioWriteInitData, portfolioWriteRule } from '../static/portfolioInit';
 import { shapingApiData } from '../utils/shapingApiData';
 import { useParams } from 'react-router-dom';
 import api from '../hooks/useAxiosInterceptor';
@@ -79,14 +79,21 @@ export default function PortfolioEdit() {
   const [showModal, setShowModal] = useState(false);
   const [apiResult, isSuccess, submitHandler] = useSubmitWriteEdit();
   const [firstApiSuccess, setFirstApiSuccess] = useState(true);
-  const loginUserData = useSelector(state=>state.user);
-
+  const loginUserData = useSelector((state) => state.user);
+  const {
+    userInfo: { memberId },
+  } = useSelector((state) => state.user);
   const width = '100%';
   const height = '70rem';
 
   useEffect(() => {
-    api.get(`/portfolios/${portfolioId}`)
+    api
+      .get(`/portfolios/${portfolioId}`)
       .then((res) => {
+        if (res.data.memberId !== memberId) {
+          toPortfolio();
+          alert('수정 권한이 없습니다');
+        }
         setDataForm(shapingApiData(res.data.data));
         setFirstApiSuccess(true);
       })
@@ -114,13 +121,17 @@ export default function PortfolioEdit() {
     <>
     {firstApiSuccess === '404' ? <NotFound/> : firstApiSuccess === true &&
     <StyleProjectWrite className="col">
-      {showModal && <Modal
-        type={'alert'}
-        setIsOpen={setShowModal}
-        title={'알림'}
-        body={firstApiSuccess ? apiResult : '서버와의 통신에 실패했습니다. 다시 시도해 주세요.'}
-        confirmHandler={() => !firstApiSuccess || isSuccess ? toPortfolio() : setShowModal(false)}
-      />}
+      {showModal && (
+        <Modal
+          type={'alert'}
+          setIsOpen={setShowModal}
+          title={'알림'}
+          body={firstApiSuccess ? apiResult : '서버와의 통신에 실패했습니다. 다시 시도해 주세요.'}
+          confirmHandler={() =>
+            !firstApiSuccess || isSuccess ? toPortfolio() : setShowModal(false)
+          }
+        />
+      )}
       <WriteHeader type="portfolio" state="edit" />
       <div className="write-wrapper row">
         <div className="input-container col">
@@ -185,10 +196,10 @@ export default function PortfolioEdit() {
             text={'구직용, 재직용 임시'}
             component={
               <ToggleButton
-                width='10rem'
-                height='5rem'
-                onClickHandler={()=>{
-                  handleInputChange(null, dataForm.isEmploy ? 0 : 1, 'isEmploy')
+                width="10rem"
+                height="5rem"
+                onClickHandler={() => {
+                  handleInputChange(null, dataForm.isEmploy ? 0 : 1, 'isEmploy');
                 }}
                 defaultValue={dataForm.isEmploy}
                 hideError={true}
@@ -204,7 +215,7 @@ export default function PortfolioEdit() {
             height="3.5rem"
             placeholder="태그는 최대 3개까지 등록이 가능합니다."
             handleInputChange={handleInputChange}
-            defaultTags={(dataForm.tags.length === 1 && dataForm.tags[0] === '') ? [] : dataForm.tags}
+            defaultTags={dataForm.tags.length === 1 && dataForm.tags[0] === '' ? [] : dataForm.tags}
           />
 
           <Input
@@ -258,18 +269,23 @@ export default function PortfolioEdit() {
           />
         </div>
       </div>
-      <div className='button-box'>
+      <div className="button-box">
         <StyleBorderButton
-            onClick={()=>{
-              setShowModal(true);
-              submitHandler(dataForm,errors,setErrors,'portfolio',loginUserData.userInfo.memberId, portfolioId)
-            }}
+          onClick={() => {
+            setShowModal(true);
+            submitHandler(
+              dataForm,
+              errors,
+              setErrors,
+              'portfolio',
+              loginUserData.userInfo.memberId,
+              portfolioId,
+            );
+          }}
         >
           수정
         </StyleBorderButton>
-        <StyleBorderButton>
-          취소
-        </StyleBorderButton>
+        <StyleBorderButton>취소</StyleBorderButton>
       </div>
     </StyleProjectWrite>}
     </>
