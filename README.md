@@ -1,5 +1,3 @@
-
-
 ## Team. SPEC
 
 <div align="center">
@@ -17,17 +15,21 @@
 
 
 
+
 ### 🖥️ 배포주소 - <a href="https://spec.today/">SPEC</a>
 
 ---
 
+
+
+
+
 ### 팀원
 
-|  |  |   |  |  |  |
+| ![스크린샷 2023-09-18 오전 11 00 40](https://github.com/codestates-seb/seb45_main_021/assets/114664128/c438b6b0-ffae-4b04-8e6e-c82895014734) | ![스크린샷 2023-09-18 오전 10 58 43](https://github.com/codestates-seb/seb45_main_021/assets/114664128/780a09f0-96f7-4eea-8d1d-edb5558b2611) | ![스크린샷 2023-09-18 오전 11 00 06](https://github.com/codestates-seb/seb45_main_021/assets/114664128/91c45f54-e8b1-4c64-b9f6-b438af570553) | ![스크린샷 2023-09-18 오전 11 00 24](https://github.com/codestates-seb/seb45_main_021/assets/114664128/0ad87400-0f42-422d-b2e5-7ca38b46e771) | ![스크린샷 2023-09-18 오전 10 59 50](https://github.com/codestates-seb/seb45_main_021/assets/114664128/69201d21-5bf5-435f-b209-51a8e054eba2) | ![스크린샷 2023-09-18 오전 10 59 32](https://github.com/codestates-seb/seb45_main_021/assets/114664128/63ae3fb6-621a-4412-9f24-81d5757b8273) |
 | :---: | :----------: | :-----: | :----: | :----: | :----: |
-|    유명인    |    박찬섭    | 이종범C | 김예인 | 박동근 | 한휘용 |
+|   <a href="https://github.com/myeongin0926">유명인</a>   |   <a href="https://github.com/qkrckstjq">박찬섭</a>   | <a href="https://github.com/blue7111">이종범C</a> | <a href="https://github.com/brightyein">김예인</a> | <a href="https://github.com/Park-DongGeun">박동근</a> | <a href="https://github.com/HwiyongHan">한휘용</a> |
 |    FE팀장    |      FE      |   FE    | BE팀장 |   BE   |   BE   |
-
 <details>
 <summary>담당 파트</summary>
 <div markdown="1">
