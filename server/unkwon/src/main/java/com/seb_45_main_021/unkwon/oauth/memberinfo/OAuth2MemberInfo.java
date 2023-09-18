@@ -9,7 +9,6 @@ public abstract class OAuth2MemberInfo {
         this.attributes = attributes;
     }
 
-    public abstract String getId();
     public abstract String getUsername();
     public abstract String getImageUrl();
     public abstract String getEmail();

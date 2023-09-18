@@ -215,14 +215,14 @@ public class ProjectService {
             StringBuilder tagsLikeQueryBuilder = new StringBuilder("");
 
             for (int i = 0; i < tags.length; i++) {
-                String temp = "%"+ tags[i] + "%";
+                String temp = tags[i];
                 tagsLikeQueryBuilder.append(temp);
             }
 
             StringBuilder langsLikeQueryBuilder = new StringBuilder("");
 
             for (int i = 0; i < lang.length; i++) {
-                String temp = "%" + lang[i] + "%";
+                String temp = lang[i];
                 langsLikeQueryBuilder.append(temp);
             }
             return projectRepository.findByTagsAndLang(tagsLikeQueryBuilder.toString(),langsLikeQueryBuilder.toString(),pageable);
@@ -233,7 +233,7 @@ public class ProjectService {
             StringBuilder tagLikeQueryBuilder = new StringBuilder("");
 
             for (int i = 0; i < tags.length; i++) {
-                String temp = "%"+ tags[i] + "%";
+                String temp = tags[i];
                 tagLikeQueryBuilder.append(temp);
             }
             return projectRepository.findByTags(tagLikeQueryBuilder.toString(),pageable);
@@ -244,7 +244,7 @@ public class ProjectService {
             StringBuilder langLikeQueryBuilder = new StringBuilder("");
 
             for (int i = 0; i < lang.length; i++) {
-                String temp = "%" + lang[i] + "%";
+                String temp = lang[i];
                 langLikeQueryBuilder.append(temp);
             }
             return projectRepository.findByLang(langLikeQueryBuilder.toString(),pageable);

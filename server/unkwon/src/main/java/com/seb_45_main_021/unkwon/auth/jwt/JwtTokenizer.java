@@ -1,5 +1,7 @@
 package com.seb_45_main_021.unkwon.auth.jwt;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seb_45_main_021.unkwon.exception.ExceptionCode;
 import com.seb_45_main_021.unkwon.exception.JwtException;
 import com.seb_45_main_021.unkwon.member.entity.Member;
@@ -18,10 +20,7 @@ import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 // (1)
 @Component
@@ -41,6 +40,7 @@ public class JwtTokenizer {
     private int refreshTokenExpirationMinutes;          // (4)
 
     private final MemberRepository memberRepository;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public String encodeBase64SecretKey(String secretKey) {
         return Encoders.BASE64.encode(secretKey.getBytes(StandardCharsets.UTF_8));
@@ -93,6 +93,14 @@ public class JwtTokenizer {
                 .getBody().getSubject();
 
         return subject;
+    }
+
+    // subject 를 토큰 만료 등 예외처리 없이 얻기 위한 파싱
+    public String getSubjectNoException(String refreshToken) throws JsonProcessingException {
+        return (String) objectMapper
+                .readValue(new String(Base64.getUrlDecoder()
+                .decode(refreshToken.split("\\.")[1])), Map.class)
+                .get("sub");
     }
 
     public void verifySignature(String jws, String base64EncodedSecretKey) {

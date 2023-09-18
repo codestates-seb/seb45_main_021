@@ -67,8 +67,6 @@ public class Member extends Auditable {
     @Enumerated(EnumType.STRING)
     private SocialType socialType; // 회원가입 방식 (직접 회원가입, GOOGLE, GITHUB)
 
-    private String socialId; // 로그인한 소셜 타입의 식별자 값 ( 일반 로그인의 경우 null )
-
     /** 사용자 매핑 리스트 **/
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -87,7 +85,6 @@ public class Member extends Auditable {
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     @JsonIgnore
     @OrderBy("created_at desc") // 최신순으로 정렬
-
     List<Project> projects = new ArrayList<>(); // 내가 쓴 프로젝트 게시글
 
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true, fetch = FetchType.LAZY)
@@ -119,13 +116,12 @@ public class Member extends Auditable {
     }
 
     // OAuth2 회원 가입 생성자
-    public Member(String email, String userName, List<String> roles, String userImgUrl, SocialType socialType, String socialId) {
+    public Member(String email, String userName, List<String> roles, String userImgUrl, SocialType socialType) {
         this.email = email;
         this.userName = userName;
         this.roles = roles;
         this.userImgUrl = userImgUrl;
         this.socialType = socialType;
-        this.socialId = socialId;
     }
 
     public boolean refreshTokenIsNull(){
