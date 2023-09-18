@@ -78,11 +78,15 @@ export default function EditProfile({ editProfile, setEditProfile, handleTagKeyD
           height="3rem"
           placeholder="숫자로 적어주세요."
           maxLength={3}
-          type="text"
-          value={Number(editProfile.age.value)}
-          onChange={(e) =>
-            setEditProfile({ ...editProfile, age: { value: Number(e.target.value) } })
-          }
+          type="number"
+          value={editProfile.age.value === 0 ? '' : editProfile.age.value}
+          onChange={(e) => {
+            if (e.target.value > 0) {
+              setEditProfile({ ...editProfile, age: { value: e.target.value } });
+            } else {
+              setEditProfile({ ...editProfile, age: { value: 0 } });
+            }
+          }}
         />
         <ProGress
           comPleteNum={3}

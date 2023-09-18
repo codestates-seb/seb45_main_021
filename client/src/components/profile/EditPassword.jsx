@@ -30,11 +30,6 @@ export default function EditPassword({ editPassword, setEditPassword }) {
             error={editPassword.prevPassword.error}
             onChange={(e) => setEditPassword({ ...editPassword, prevPassword: e.target.value })}
           />
-          <ProGress
-            comPleteNum={8}
-            proGressNum={editPassword.prevPassword.value?.length}
-            fontSize="1.5rem"
-          />
           <Input
             type="password"
             autoComplete="off"
@@ -48,11 +43,6 @@ export default function EditPassword({ editPassword, setEditPassword }) {
             error={editPassword.newPassword.error}
             onChange={(e) => setEditPassword({ ...editPassword, newPassword: e.target.value })}
           />
-          <ProGress
-            comPleteNum={8}
-            proGressNum={editPassword.newPassword.value?.length}
-            fontSize="1.5rem"
-          />
           <Input
             type="password"
             autoComplete="off"
@@ -65,11 +55,6 @@ export default function EditPassword({ editPassword, setEditPassword }) {
             value={editPassword.newPasswordCheck.value}
             error={editPassword.newPasswordCheck.error}
             onChange={(e) => setEditPassword({ ...editPassword, newPasswordCheck: e.target.value })}
-          />
-          <ProGress
-            comPleteNum={8}
-            proGressNum={editPassword.newPasswordCheck.value?.length}
-            fontSize="1.5rem"
           />
         </form>
       </Container>
