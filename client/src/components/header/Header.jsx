@@ -7,7 +7,7 @@ import Inner from '../common/Inner';
 import LoginActions from './LoginActions';
 import UnLoginActions from './UnLoginActions';
 import { useSelector } from 'react-redux';
-import { mobile, tablet, desktop, custom } from '../../static/theme.js';
+import { mobile, custom } from '../../static/theme.js';
 import { BiMenu } from 'react-icons/bi';
 import { HiX } from 'react-icons/hi';
 

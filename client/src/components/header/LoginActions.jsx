@@ -21,7 +21,8 @@ export default function LoginActions({ userInfo }) {
           marginRight: '5px',
           borderRadius: '50%',
           width: '45px',
-          border: '1px solid var(--black-800)',
+          height: '45px',
+          border: '1px solid var(--black-400)',
         }}
       />
       <StyleBorderButton
