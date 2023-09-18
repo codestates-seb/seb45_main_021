@@ -34,7 +34,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.OAS_30)
-                .useDefaultResponseMessages(true) // Swagger 에서 제공해주는 기본 응답 코드를 표시할 것이면 true
+                .useDefaultResponseMessages(false) // Swagger 에서 제공해주는 기본 응답 코드를 표시할 것이면 true
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.any()) // Controller가 들어있는 패키지. 이 경로의 하위에 있는 api만 표시됨.
