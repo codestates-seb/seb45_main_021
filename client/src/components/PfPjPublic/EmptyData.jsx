@@ -7,10 +7,12 @@ const StyleEmptyData = styled.div`
   align-items: center;
   width: ${(props) => props.$width};
   height: ${(props) => props.$height};
+  min-height : 400px;
   > p {
     font-size: ${(props) => props.$fontSize};
   }
   background-color: ${(props) => props.$background || 'none'};
+  border-radius:5px;
 `;
 
 export default function EmptyData({

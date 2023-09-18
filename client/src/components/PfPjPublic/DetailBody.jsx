@@ -8,7 +8,7 @@ import Modal from '../common/Modal';
 import ProjectCardContainer from '../project/ProjectCardContainer';
 import api from '../../hooks/useAxiosInterceptor';
 import { useSelector } from 'react-redux';
-import { tablet } from '../../static/theme';
+import { custom, tablet } from '../../static/theme';
 import ProjectCardSkeleton from '../project/ProjectCardSkeleton';
 import EmptyData from './EmptyData';
 import ReplaceNewLine from './ReplaceNewLine';
@@ -37,12 +37,11 @@ export const StyleDetailBody = styled.div`
             object-fit:cover;
         }
     }
-    ${tablet} {
+    ${custom(1000)} {
         flex-direction: column;
-        .image-data-box {
-            
-        }
     }
+
+
 `
 
 export default function DetailBody({
@@ -171,14 +170,6 @@ export default function DetailBody({
             </Modal>
             }
             <div className='post-data-box col'>
-                    {/* {(Number(detailData.isEmploy) === 0 || Number(detailData.isEmploy) === 1) && 
-                    <TextBox
-                        title={'포트폴리오 상태'}
-                        component={
-                            <p>{Number(detailData.isEmploy) === 1 ? '구직용입니다.' : '재직용입니다.'}</p>
-                        }
-                    />
-                    } */}
                     <TextBox
                         title={'개발 언어'}
                         component={<Tag text={detailData.lang} type={`${type}s`}/>}

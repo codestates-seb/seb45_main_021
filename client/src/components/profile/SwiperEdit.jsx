@@ -84,6 +84,7 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
   }, []);
 
   const handleClickSubmit = () => {
+    console.log(temp);
     const isvalidPhone = isValidPhone(temp.tell.value.replace(/-/g, ''));
     if (type === 'fetch') {
       if (
@@ -189,7 +190,7 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
 
   const handleTagKeyDown = (e) => {
     if (e.code !== 'Enter' && e.code !== 'NumpadEnter') return;
-    e.preventDefault();
+    // e.preventDefault();
     if (
       temp.tags.curString.split(' ').join('').length <= 10 &&
       temp.tags.curString.split(' ').join('').length > 0
@@ -203,7 +204,7 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
         setTemp({
           ...temp,
           tags: {
-            value: [...temp.tags.value, temp.tags.curString.split(' ').join('')],
+            value: [...temp.tags.value, e.target.value.split(' ').join('')],
             error: '',
             curString: '',
           },
@@ -280,7 +281,6 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
           borderRadius="10px"
           maxLength={10}
           placeholder="태그는 최대 중복제외 3개까지 등록이 가능합니다."
-          value={temp.tags.curString || ''}
           error={temp.tags.error}
           onChange={(e) =>
             setTemp({

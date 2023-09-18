@@ -264,7 +264,6 @@ export default function ProfileCard({ id, data, isLoading }) {
   };
 
   const handleEditProfile = () => {
-    console.log('함수실행');
     let regExpPass = false;
     if (socialType === 'SPEC') {
       if (
