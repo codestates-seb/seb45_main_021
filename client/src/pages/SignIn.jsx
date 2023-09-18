@@ -282,7 +282,9 @@ export default function SignIn() {
             }
           })
           .catch((error) => {
-            console.log(error);
+            if (error.response.status === 404) {
+              toSignup();
+            }
           });
       } else {
         api
