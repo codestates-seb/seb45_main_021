@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { useAxiosInterceptor } from './hooks/useAxiosInterceptor';
 import Footer from './components/footer/Footer';
 import { styled } from 'styled-components';
+import ProtectedRoute from './pages/ProtectedRoute';
 import Spinner from './components/common/Spinner';
 
 const About = lazy(() => import('./pages/About'));
@@ -51,15 +52,43 @@ function App() {
       <Suspense fallback={<Spinner />}>
         <Routes>
           <Route path="/" element={<About />} />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
+          <Route
+            path="/signin"
+            element={
+              <ProtectedRoute requireUnlogin>
+                <SignIn />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/signup"
+            element={
+              <ProtectedRoute requireUnlogin>
+                <SignUp />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/profile/:memberId" element={<Profile />} />
           <Route path="/projects" element={<Projects />} />
-          <Route path="/project/write" element={<ProjectWrite />} />
+          <Route
+            path="/project/write"
+            element={
+              <ProtectedRoute requireLogin>
+                <ProjectWrite />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/project/detail/:projectId" element={<ProjectDetail />} />
           <Route path="/project/edit/:projectId" element={<ProjectEdit />} />
           <Route path="/portfolios" element={<Portfolios />} />
-          <Route path="/portfolio/write" element={<PortfolioWrite />} />
+          <Route
+            path="/portfolio/write"
+            element={
+              <ProtectedRoute requireLogin>
+                <PortfolioWrite />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/portfolio/detail/:portfolioId" element={<PortfolioDetail />} />
           <Route path="/portfolio/edit/:portfolioId" element={<PortfolioEdit />} />
           <Route path="/search" element={<Search />} />

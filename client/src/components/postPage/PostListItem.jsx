@@ -80,15 +80,15 @@ export default function PostListItem({ post, type }) {
 
   return (
     <StylePostListItem>
-      {type === 'portfolios' && isEmploy && <EmployBadge />}
+      {type === 'portfolios' && !!isEmploy && <EmployBadge />}
       <LanguageTag language={lang} />
       <img src={postTitleImage} alt="post title img" onClick={() => onDetailHandler(postId)} />
       <div className="content-box">
         <h4 onClick={() => onDetailHandler(postId)}>{title}</h4>
         <div className="tag">
-          {tags?.map((tagItem) => (
-            <Tag text={tagItem} key={postId + tagItem} type={type} />
-          ))}
+          {tags?.map((tagItem) =>
+            tagItem ? <Tag text={tagItem} key={postId + tagItem} type={type} /> : '',
+          )}
         </div>
         <div className="user">
           <Like

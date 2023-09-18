@@ -47,9 +47,9 @@ export default function useFilterOption() {
 
   const getApiUrl = (pageNum) => {
     const type = pageType === 'search' ? searchType : pageType;
-    let newUrl = `${type}/search`;
-
+    let newUrl = `${type}`;
     if (employ && type === 'portfolios') newUrl += '/employ';
+    newUrl += '/search';
     const params = [];
 
     if (keyword !== DEFAULT_OPTIONS.keyword) {
@@ -66,8 +66,6 @@ export default function useFilterOption() {
       params.push(`page=${pageNum}`);
     }
     params.forEach((el, i) => (newUrl += `${i === 0 ? '?' : '&'}${el}`));
-    console.log(newUrl);
-
     return newUrl;
   };
 

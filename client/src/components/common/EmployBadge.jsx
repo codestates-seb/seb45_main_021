@@ -3,6 +3,7 @@ import { AiOutlineFire } from 'react-icons/ai';
 import { styled } from 'styled-components';
 
 const StyleEmployBadge = styled.div`
+  padding: 2px;
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
@@ -13,8 +14,13 @@ const StyleEmployBadge = styled.div`
   path,
   svg {
     cursor: pointer;
+    border-radius: 20%;
+    background-color: #2f2828c1;
   }
   span {
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: #2f2828c1;
     opacity: ${(props) => (props.$isClick ? '1' : '0')};
     transform: translateX(${(props) => (props.$isClick ? '0' : '10px')});
     transition: 0.2s;

@@ -32,14 +32,15 @@ const StyleLike = styled.div`
 
 export default function Like({ heartCount, size, postId, type, likeUpdateSuccess }) {
   const { isLogin, userInfo, likeList } = useSelector((state) => state.user);
-  const { portfolioList, projectList } = likeList;
+
   const dispatch = useDispatch();
   const listType = type === 'projects' ? 'projectList' : 'portfolioList';
   const isUserLiked =
-    type === 'projects' ? projectList.includes(postId) : portfolioList.includes(postId);
+    type === 'projects'
+      ? likeList.projectList.includes(postId)
+      : likeList.portfolioList.includes(postId);
   const [isOpen, setIsOpen] = useState(false);
   const { toSignin } = useNav();
-
   const likeUpdateHandler = async () => {
     if (!isLogin) setIsOpen(true);
     else {
