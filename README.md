@@ -92,7 +92,7 @@
 
 ### API 명세서
 
-
+[http://52.78.224.100:8080/swagger-ui/index.html#/](http://52.78.224.100:8080/swagger-ui/index.html#/)
 ---
 
 ### ERD 
