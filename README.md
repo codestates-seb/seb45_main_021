@@ -74,7 +74,7 @@
 |ProjectList 페이지|ProfileList 페이지|
 |![ezgif com-crop (2)](https://github.com/codestates-seb/seb45_main_021/assets/117289923/4e46ec34-4287-47c0-8590-ec7a8ef3c38a) | ![ezgif com-crop (7)](https://github.com/codestates-seb/seb45_main_021/assets/117289923/4224e61e-5027-4509-92f6-619f77f12ed5)|
 |Project 생성 페이지|Profile 생성 페이지|
-|![ezgif com-crop (3)](https://github.com/codestates-seb/seb45_main_021/assets/117289923/7f09455e-5461-4054-b986-8c5a4a349c01) | ![ezgif com-crop (6)](https://github.com/codestates-seb/seb45_main_021/assets/117289923/cede27f0-1890-4aca-bd8d-d0e900e3abed)|
+| ![ezgif com-crop (1)](https://github.com/codestates-seb/seb45_main_021/assets/117289923/cdec95ae-7767-4f56-b317-87fffb754d16) | ![ezgif com-crop (6)](https://github.com/codestates-seb/seb45_main_021/assets/117289923/cede27f0-1890-4aca-bd8d-d0e900e3abed)|
 |Project 디테일 페이지|Profile 디테일 페이지|
 | ![ezgif com-crop (4)](https://github.com/codestates-seb/seb45_main_021/assets/117289923/942c11a5-ee5f-44ab-9760-0087864e6a42) |![ezgif com-crop](https://github.com/codestates-seb/seb45_main_021/assets/117289923/d01e1f3f-ffd8-4c31-90f1-4c45d15bff51)|
 
