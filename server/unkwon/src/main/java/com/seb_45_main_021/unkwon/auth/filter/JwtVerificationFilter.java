@@ -32,7 +32,6 @@ import java.util.Map;
 public class JwtVerificationFilter extends OncePerRequestFilter {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public JwtVerificationFilter(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils) {
         this.jwtTokenizer = jwtTokenizer;
@@ -88,14 +87,11 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
     /** DB 조회를 필터에서 하는 것은 옳지 않고, 서비스 레이어로 옮기고 싶지만 일단 구현 성공에 의의를 두려한다. **/
     private Map<String, Object> verifyJwsAndDelegateNewToken(HttpServletRequest request, HttpServletResponse response){
-        // 헤더 값이기 때문에 토큰이 null 불가
+        // 헤더 값이기 때문에 토큰 null 불가
         String accessToken = request.getHeader("AccessToken").replace("Bearer", "");
         String refreshToken = request.getHeader("RefreshToken");
-
-        log.info("AccessToken : " + accessToken);
-        log.info("RefreshToken : " + refreshToken);
-
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
+
         // refreshToken 을 먼저 확인 후 만료 시 로그아웃 처리 -> subject(memberId) 획득
         Long hostId = null;
         hostId = verifyRefreshToken(refreshToken, base64EncodedSecretKey); // Patch, Delete 가 들어오는 객체 주인 식별자
@@ -147,7 +143,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     private Long decodeJwtPayloadSubject(String refreshToken){
         Long hostId = null;
         try{
-            String sub = (String) objectMapper.readValue(new String(Base64.getUrlDecoder().decode(refreshToken.split("\\.")[1])), Map.class).get("sub");
+            String sub = jwtTokenizer.getSubjectNoException(refreshToken);
             hostId = Long.parseLong(sub);
         }catch(JsonProcessingException jpe){}
         return  hostId;

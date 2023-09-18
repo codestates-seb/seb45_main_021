@@ -4,10 +4,12 @@ import com.seb_45_main_021.unkwon.heart.entity.PortfolioHeart;
 import com.seb_45_main_021.unkwon.heart.entity.ProjectHeart;
 import com.seb_45_main_021.unkwon.member.entity.SocialType;
 import lombok.Builder;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class LoginResponseDto {
     private Long memberId;
     private String userName;

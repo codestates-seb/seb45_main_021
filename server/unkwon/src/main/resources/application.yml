@@ -39,6 +39,10 @@ spring:
             scope:
               - email
               - profile
+          github:
+            gitClientId: ${GIT_CLIENT_ID}
+            gitClientSecret: ${GIT_CLIENT_SECRET}
+
 logging:
   level:
     org.hibernate.SQL: debug

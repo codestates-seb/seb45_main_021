@@ -10,11 +10,6 @@ public class GoogleOAuth2MemberInfo extends OAuth2MemberInfo{
         super(attributes);
     }
     @Override
-    public String getId() {
-        return (String) attributes.get("sub");
-    }
-
-    @Override
     public String getUsername() {return (String) attributes.get("name");}
 
     @Override
@@ -26,5 +21,4 @@ public class GoogleOAuth2MemberInfo extends OAuth2MemberInfo{
     public String getEmail() {
         return (String) attributes.get("email");
     }
-
 }

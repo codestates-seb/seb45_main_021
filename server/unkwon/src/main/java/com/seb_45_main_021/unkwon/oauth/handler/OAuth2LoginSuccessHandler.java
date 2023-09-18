@@ -37,7 +37,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     private final MemberRepository memberRepository;
     private final ProjectHeartRepository projectHeartRepository;
     private final PortfolioHeartRepository portfolioHeartRepository;
-    public static final String REDIRECT_URI = "http://localhost:3000/login/redirect";
+    public static final String REDIRECT_URI = "http://localhost:3000/signin";
 
     private static final String GOOGLE = "GOOGLE";
     private static final String GITHUB = "GITHUB";

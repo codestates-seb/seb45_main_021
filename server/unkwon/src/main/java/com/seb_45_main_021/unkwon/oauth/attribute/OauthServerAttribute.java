@@ -3,43 +3,53 @@ package com.seb_45_main_021.unkwon.oauth.attribute;
 import com.seb_45_main_021.unkwon.auth.utils.CustomAuthorityUtils;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import com.seb_45_main_021.unkwon.member.entity.SocialType;
+import com.seb_45_main_021.unkwon.oauth.memberinfo.GithubOAuth2MemberInfo;
 import com.seb_45_main_021.unkwon.oauth.memberinfo.GoogleOAuth2MemberInfo;
 import com.seb_45_main_021.unkwon.oauth.memberinfo.OAuth2MemberInfo;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 import java.util.Map;
 
-/*데이터 분기 DTO 클래스*/
 @Getter
 @Slf4j
-public class OauthAttribute {
-    private final String nameAttributeKey; // 로그인 진행 시 키가 되는 필드 값
+public class OauthServerAttribute {
     private final OAuth2MemberInfo oAuth2MemberInfo; // 소셜 별 로그인 유저 정보 ( 닉네임, 이메일, 프로필 URL )
     private final CustomAuthorityUtils authorityUtils;
+    private final SocialType socialType;
 
     @Builder
-    public OauthAttribute(String nameAttributeKey, OAuth2MemberInfo oAuth2MemberInfo, CustomAuthorityUtils authorityUtils) {
-        this.nameAttributeKey = nameAttributeKey;
+    public OauthServerAttribute(OAuth2MemberInfo oAuth2MemberInfo, CustomAuthorityUtils authorityUtils, SocialType socialType) {
         this.oAuth2MemberInfo = oAuth2MemberInfo;
         this.authorityUtils = authorityUtils;
+        this.socialType = socialType;
     }
 
     // attributes : OAuth 서비스 유저 정보
-    public static OauthAttribute of(SocialType socialType,
-                                    String userNameAttributeName, Map<String, Object> attributes,
+    public static OauthServerAttribute of(SocialType socialType,
+                                    Map<String, Object> attributes,
                                     CustomAuthorityUtils authorityUtils){
-        return ofGoogle(userNameAttributeName, attributes, authorityUtils);
+        if(socialType.equals(SocialType.GOOGLE)) return ofGoogle(attributes, authorityUtils, socialType);
+        else return ofGithub(attributes, authorityUtils, socialType);
     }
 
-    public static OauthAttribute ofGoogle(String userAttributeName, Map<String, Object> attributes, CustomAuthorityUtils authorityUtils){
-        return OauthAttribute.builder()
-                .nameAttributeKey(userAttributeName)
+    public static OauthServerAttribute ofGoogle(Map<String, Object> attributes, CustomAuthorityUtils authorityUtils, SocialType socialType){
+        return OauthServerAttribute.builder()
                 .oAuth2MemberInfo(new GoogleOAuth2MemberInfo(attributes))
                 .authorityUtils(authorityUtils)
+                .socialType(socialType)
+                .build();
+    }
+
+    public static OauthServerAttribute ofGithub(Map<String, Object> attributes, CustomAuthorityUtils authorityUtils, SocialType socialType){
+        return OauthServerAttribute.builder()
+                .oAuth2MemberInfo(new GithubOAuth2MemberInfo(attributes))
+                .authorityUtils(authorityUtils)
+                .socialType(socialType)
                 .build();
     }
 
