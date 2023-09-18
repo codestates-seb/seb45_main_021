@@ -53,7 +53,21 @@
 
  **김예인**
 
- **박동근**
+ <details>
+  <summary>박동근</summary>
+  <div markdown="4">
+    <h4>1. 스프링 Security 적용</h4>
+      <p>&emsp;- </p>
+      <p>&emsp;- </p>
+    <h4>2. 구글 및 깃허브 OAuth2 적용</h4>
+      <p>&emsp;- </p>
+      <p>&emsp;- </p>
+    <h4>3. 회원, 프로젝트 카드 CRUD</h4>
+      <p>&emsp;- </p>
+      <p>&emsp;- </p>
+      <p>&emsp;- </p>
+  </div>
+</details>
 
  **한휘용**
 </div>
