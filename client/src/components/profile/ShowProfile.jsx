@@ -10,7 +10,6 @@ import Skeleton from '@mui/material/Skeleton';
 import Modal from '../common/Modal';
 import EditProfile from './EditProfile';
 import EditPassword from './EditPassword';
-import Profile from '../../pages/Profile';
 
 export default function ShowProfile({
   profile,
