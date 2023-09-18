@@ -194,7 +194,7 @@ public class OAuth2MemberService {
     }
 
     private String getResponseArrayToMap(ResponseEntity<String> response){
-        log.info("body" + response.getBody());
+
         String email = null;
         try{
             Gson gson = new Gson();

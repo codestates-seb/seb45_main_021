@@ -23,7 +23,7 @@ public class Oauth2Controller {
     @GetMapping("/google/signup")
     public ResponseEntity oauth2GoogleSignUp(@RequestParam("code") String code,
                                        HttpServletResponse response) {
-        String redirectUri = "http://spec.today/signup";
+        String redirectUri = "https://spec.today/signup";
         String id_token = oAuth2MemberService.getIdTokenFromGoogle(code, redirectUri);
         oAuth2MemberService.findOrSaveMember(id_token, "google");
 
@@ -32,7 +32,7 @@ public class Oauth2Controller {
     @GetMapping("/google/signin")
     public ResponseEntity oauth2GoogleSignIn(@RequestParam("code") String code,
                                        HttpServletResponse response){
-        String redirectUri = "http://spec.today/signin";
+        String redirectUri = "https://spec.today/signin";
         String id_token = oAuth2MemberService.getIdTokenFromGoogle(code, redirectUri);
 
         Map<String, Object> result = oAuth2MemberService.findOrSaveMember(id_token, "google");
