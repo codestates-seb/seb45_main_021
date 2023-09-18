@@ -3,8 +3,15 @@ import { useDispatch } from 'react-redux';
 import { updateUser, deleteUser } from '../redux/userForm/userSlice';
 import useNav from '../hooks/useNav';
 
+let baseURL;
+if (process.env.NODE_ENV === 'development') {
+  baseURL = 'http://ec2-52-78-224-100.ap-northeast-2.compute.amazonaws.com:8080/';
+} else {
+  baseURL = 'https://spec-lb-1567907173.ap-northeast-2.elb.amazonaws.com';
+}
+
 const instance = axios.create({
-  baseURL: 'http://ec2-52-78-224-100.ap-northeast-2.compute.amazonaws.com:8080/',
+  baseURL,
   timeout: 7000,
   headers: {
     'Content-Type': 'application/json',
