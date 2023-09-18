@@ -82,6 +82,7 @@
 ---
 
 ### ERD 
+![image](https://github.com/codestates-seb/seb45_main_021/assets/130070751/f7d07370-ebae-4fbe-b2f8-e4dd36783534)
 
 ---
 ### 서비스
