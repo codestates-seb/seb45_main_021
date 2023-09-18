@@ -150,7 +150,6 @@ export default function ProjectDetail() {
     api
       .get(`/projects/${projectId}`)
       .then((res) => {
-        console.log(shapingApiData(res.data));
         setIsLoading(false);
         setDetailData(shapingApiData(res.data));
       })
@@ -158,7 +157,6 @@ export default function ProjectDetail() {
         if (err.code === 'ERR_BAD_REQUEST') {
           setApiResult(false);
         } else if (err.code === 'ERR_BAD_RESPONSE') {
-          console.log(err.code);
           setApiResult(false);
           setIsDeleteModal(true);
         }
@@ -213,7 +211,6 @@ export default function ProjectDetail() {
 
   useEffect(() => {
     if (requestUpdate !== undefined) {
-      console.log('리퀘스트 업데이트');
       fetchRequestData();
     }
   }, [requestUpdate]);

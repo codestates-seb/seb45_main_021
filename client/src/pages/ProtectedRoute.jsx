@@ -1,19 +1,12 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
-export default function ProtectedRoute({ requireAdmin, requireLogin, requireUnlogin, children }) {
-  const user = useSelector((state) => state.user);
-  const { projectId, portfolioId } = useParams();
-  console.log(user);
+export default function ProtectedRoute({ requireLogin, requireUnlogin, children }) {
+  const { isLogin } = useSelector((state) => state.user);
 
-  if (requireAdmin) {
+  if ((requireLogin && !isLogin) || (requireUnlogin && isLogin)) {
+    return <Navigate to="/" />;
   }
-  if (requireLogin) {
-  }
-  if (requireUnlogin) {
-  }
+
   return children;
 }
-
-// 잘못된 접근입니다.

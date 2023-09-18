@@ -40,7 +40,6 @@ export default function ShowProfile({
   };
 
   const handleFileChange = (e) => {
-    console.log('유저 이미지 교체 요청');
     const file = e.target.files[0];
     const formData = new FormData();
     formData.append('uploadImg', file);

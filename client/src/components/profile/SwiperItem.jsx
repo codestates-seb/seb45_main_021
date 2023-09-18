@@ -92,7 +92,6 @@ export default function SwiperItem({
     handler(type);
   };
   const deleteHandler = () => {
-    console.log('삭제요청');
     api.delete(`/projectcards/${data.projectCardId}`).then((el) => {
       window.alert('삭제가 완료되었습니다.');
       const temp = trueData.projectCard;

@@ -79,14 +79,7 @@ function App() {
             }
           />
           <Route path="/project/detail/:projectId" element={<ProjectDetail />} />
-          <Route
-            path="/project/edit/:projectId"
-            element={
-              <ProtectedRoute requireAdmin>
-                <ProjectEdit />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/project/edit/:projectId" element={<ProjectEdit />} />
           <Route path="/portfolios" element={<Portfolios />} />
           <Route
             path="/portfolio/write"
@@ -97,14 +90,7 @@ function App() {
             }
           />
           <Route path="/portfolio/detail/:portfolioId" element={<PortfolioDetail />} />
-          <Route
-            path="/portfolio/edit/:portfolioId"
-            element={
-              <ProtectedRoute requireAdmin>
-                <PortfolioEdit />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/portfolio/edit/:portfolioId" element={<PortfolioEdit />} />
           <Route path="/search" element={<Search />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

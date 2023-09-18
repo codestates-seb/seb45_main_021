@@ -6,7 +6,7 @@ const StyleRecentSearches = styled.div`
   top: 45px;
   width: 100%;
   background-color: #181818;
-  box-shadow: 0 3px 5px 1px var(--shadow);
+  border: 1px solid var(--black-700);
   border-radius: 10px;
   padding: 2rem 0;
   button {

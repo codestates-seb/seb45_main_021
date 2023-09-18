@@ -35,13 +35,11 @@ const StyleAboutSecond = styled.section`
       margin-left: -3px;
     }
     p {
-      font-size: 3rem;
+      font-size: 5rem;
+      font-family: var(--barlow);
+      letter-spacing: 1cap.5;
       font-weight: var(--nanum-semi-bold);
-      font-style: italic;
-      padding-bottom: 20px;
-      span {
-        font-size: 5rem;
-      }
+      padding-bottom: 10px;
     }
   }
   .swiper {
@@ -88,11 +86,7 @@ const StyleAboutSecond = styled.section`
 `;
 
 export default function AboutSecond({ activePage }) {
-  const [ranking, setRanking] = useState(1);
   const [portfolios, setPortfolios] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const swiperSwitchHandler = (swiper) => setRanking(swiper.activeIndex + 1);
 
   useEffect(() => {
     const fetchPortfolioTopTen = async () => {
@@ -107,9 +101,7 @@ export default function AboutSecond({ activePage }) {
       <StyleFilter $background="#00000050" />
       <div className="center">
         <div className="page-description">
-          <p>
-            SPEC TOP <span>{ranking}</span> 포트폴리오
-          </p>
+          <p>SPEC TOP 10 PORTFOLIO </p>
         </div>
         <Swiper
           modules={[Pagination]}
@@ -131,7 +123,6 @@ export default function AboutSecond({ activePage }) {
               slidesPerView: 3,
             },
           }}
-          onSlideChange={swiperSwitchHandler}
         >
           {portfolios?.map((portfolio) => (
             <SwiperSlide key={portfolio.portfolioId}>

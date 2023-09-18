@@ -78,24 +78,21 @@ export default function ProjectDetail() {
 
   const fetchData = () => {
     setIsLoading(true);
-    api
-      .get(`/portfolios/${portfolioId}`)
-      .then((res) => {
-        console.log(res.data.data);
-        setIsLoading(false);
-        setDetailData(shapingApiData(res.data.data));
-      })
-      .catch((err) => {
-        if (err.code === 'ERR_BAD_REQUEST') {
-          setApiResult(false);
-        } else if (err.code === 'ERR_BAD_RESPONSE') {
-          console.log(err.code);
-          setApiResult(false);
-          setIsDeleteModal(true);
-        }
-      })
-      .finally(() => setIsLoading(false));
-  };
+    api.get(`/portfolios/${portfolioId}`)
+    .then(res=>{
+      setIsLoading(false);
+      setDetailData(shapingApiData(res.data.data));
+    })
+    .catch(err=>{
+      if(err.code === 'ERR_BAD_REQUEST') {
+        setApiResult(false);
+      } else if (err.code === 'ERR_BAD_RESPONSE'){
+        setApiResult(false);
+        setIsDeleteModal(true);
+      }
+    })
+    .finally(()=>setIsLoading(false));
+  }
 
   const fetchDeletPortfolio = (id) => {
     setIsDeleteModal(true);

@@ -261,7 +261,7 @@ export default function PortfolioEdit() {
             name={'이미지'}
             width={'100%'}
             height={'55rem'}
-            number={7}
+            number={10}
             dataForm={dataForm}
             handleInputChange={handleInputChange}
             setWillDeleteImgs={true}

@@ -81,7 +81,6 @@ export default function Header() {
     const handleResize = () => {
       const screenWidth = window.innerWidth;
       if (screenWidth >= 900 && isSpread) {
-        console.log('실행');
         setIsSpread(false);
       }
     };
