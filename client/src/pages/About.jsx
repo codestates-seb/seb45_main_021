@@ -52,7 +52,6 @@ export default function About() {
     header.style.opacity = swiper.activeIndex === 0 ? '1' : '0';
     header.style.visibility = swiper.activeIndex === 0 ? 'visible' : 'hidden';
   };
-
   useEffect(() => {
     return () => {
       const header = document.getElementById('header');

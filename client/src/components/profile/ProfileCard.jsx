@@ -100,6 +100,7 @@ const StyleProfileContainer = styled.div`
         justify-content: space-between;
         p {
           word-wrap: break-word;
+          line-height: 1.3;
           overflow-wrap: break-word;
           font-family: var(--nanum);
         }
@@ -249,7 +250,6 @@ export default function ProfileCard({ id, data, isLoading }) {
   };
 
   const handleEditProfile = () => {
-    console.log('프로필 수정 요청');
     let regExpPass = false;
     if (
       editProfile.aboutMe.value.length <= 200 &&
@@ -285,7 +285,6 @@ export default function ProfileCard({ id, data, isLoading }) {
   };
 
   const handleEditPassword = (e) => {
-    console.log('비밀번호 수정 요청');
     let regExpPass = false;
     if (
       editPassword.newPassword === editPassword.newPasswordCheck &&
@@ -339,12 +338,15 @@ export default function ProfileCard({ id, data, isLoading }) {
     return regExpPass;
   };
 
-  const handleClickWithdrawal = () => {
-    console.log('회원탈퇴 요청');
-    api.delete(`/members/${memberId}`).then((el) => console.log(el));
-    dispatch(deleteUser());
-    alert('이용해주셔서 감사합니다.');
-    toAbout();
+  const handleClickWithdrawal = async () => {
+    try {
+      await api.delete(`/members/${memberId}`);
+      dispatch(deleteUser());
+      alert('이용해주셔서 감사합니다.');
+      toAbout();
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (

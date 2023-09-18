@@ -111,10 +111,7 @@ export default function Profile() {
     }, 2000);
   }, []);
 
-  useEffect(() => {
-    console.log('data');
-    console.log(data);
-  }, [data]);
+
 
   return (
     <StyleContainer>

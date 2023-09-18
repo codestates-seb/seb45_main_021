@@ -214,7 +214,6 @@ export default function ProjectWrite() {
             height={height}
             type={'textarea'}
             onChange={(e)=>{
-              console.log(e.target.value);
               handleInputChange(null,e.target.value, 'body')
               handleErrorChange(null,e.target.value,'body',checkValidations)
             }}
