@@ -214,7 +214,7 @@ export default function SignUp() {
 
   const handleClickGoogleBtn = () => {
     window.location.assign(
-      'https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=15196070608-ti8mt0m3fo8tj48172bhq72h4re8bcni.apps.googleusercontent.com&scope=email%20profile&state=J8xE05niEcAJo0CAB8XkqVr25Prh7dXvkrqthZ2YJw0%3D&redirect_uri=http://localhost:3000/signup',
+      `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=15196070608-ti8mt0m3fo8tj48172bhq72h4re8bcni.apps.googleusercontent.com&scope=email%20profile&state=J8xE05niEcAJo0CAB8XkqVr25Prh7dXvkrqthZ2YJw0%3D&redirect_uri=${process.env.PUBLIC_URL}/signup`,
     );
   };
 
