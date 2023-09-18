@@ -1,6 +1,8 @@
 package com.seb_45_main_021.unkwon.portfolio.dto;
 
 import com.seb_45_main_021.unkwon.dto.Author;
+import com.seb_45_main_021.unkwon.image.portfolio.PortfolioImage;
+import com.seb_45_main_021.unkwon.image.portfolio.PortfolioTitleImage;
 import com.seb_45_main_021.unkwon.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,12 +23,12 @@ public class PortfolioDto {
         private String body;
         private String tags;
         private String lang;
-
+        private int isEmploy;
+        private int isComment;
     }
 
     @Getter
     @Setter
-    @Builder
     public static class Patch{
 
         private long portfolioId;
@@ -34,9 +36,8 @@ public class PortfolioDto {
         private String body;
         private String tags;
         private String lang;
-        private boolean IsEmploy;
-        private boolean IsComment;
-
+        private int isEmploy;
+        private int isComment;
     }
 
     @Getter
@@ -50,10 +51,11 @@ public class PortfolioDto {
         private String userImgUrl;
         private String title;
         private LocalDateTime createdAt;
+        private PortfolioTitleImage portfolioTitleImage;
         private String[] tags;
         private String lang;
         private int heartCount;
-        private boolean IsEmploy;
+        private int IsEmploy;
     }
 
     @Getter
@@ -74,12 +76,14 @@ public class PortfolioDto {
         private long portfolioId;
         private String title;
         private String body;
+        private List<PortfolioImage> images;
+        private PortfolioTitleImage portfolioTitleImage;
         private int view;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
         private List<PortfolioDto.CommentResponse> comments;
-        private boolean IsComment;
-        private boolean IsEmploy;
+        private int IsComment;
+        private int IsEmploy;
         private String[] tags;
         private String lang;
         private int heartCount;

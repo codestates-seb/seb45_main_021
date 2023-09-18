@@ -7,6 +7,7 @@ import com.seb_45_main_021.unkwon.comment.repository.CommentRepository;
 import com.seb_45_main_021.unkwon.exception.BusinessLogicException;
 import com.seb_45_main_021.unkwon.exception.ExceptionCode;
 import com.seb_45_main_021.unkwon.member.entity.Member;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,14 +57,19 @@ public class CommentService {
 
 
     // 댓글 삭제
-    public void deleteComment(long commentId,MemberInfo memberInfo) {
+    public void deleteComment(long commentId, MemberInfo memberInfo) {
+
         Comment findComment = findVerifiedComment(commentId);
 
-        Member findMember = findComment.getMember();
+        Member findCommentMember = findComment.getMember();
+        Member findPortfolioMember = findComment.getPortFolio().getMember();
 
-        findMember.checkMemberId(memberInfo);
-
-        commentRepository.delete(findComment);
+        if (findCommentMember.getMemberId() == memberInfo.getMemberId() || findPortfolioMember.getMemberId() == memberInfo.getMemberId()) {
+            commentRepository.delete(findComment);
+        } else {
+            // 권한이 없는 경우 예외 처리 또는 오류 응답을 처리할 수 있습니다.
+            throw new AccessDeniedException(ExceptionCode.DIFFERENT_MEMBER.getMessage());
+        }
     }
 
 

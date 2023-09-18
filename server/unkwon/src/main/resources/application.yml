@@ -24,6 +24,10 @@ spring:
       max-file-size: 50MB
       max-request-size: 50MB
 
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher # swagger path 설정
+
 
   security:
     oauth2:
@@ -54,14 +58,13 @@ jwt:
     secret: ${JWT_SECRET_KEY}
   access-token-expiration-minutes: 420
   refresh-token-expiration-minutes: 420
-
 cloud:
   aws:
     s3:
       bucket: mainproject-bucket
     credentials:
-      access-key: 
-      secret-key: 
+      access-key: AKIATUJ7QKHFUAP67DGX
+      secret-key: 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
     region:
       static: ap-northeast-2
       auto: false

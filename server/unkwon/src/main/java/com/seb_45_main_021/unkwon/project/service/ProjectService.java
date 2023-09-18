@@ -102,8 +102,9 @@ public class ProjectService {
                 .ifPresent(title -> findProject.setTitle(title));
         Optional.ofNullable(project.getTotalPeople())
                 .ifPresent(totalPeople -> findProject.setTotalPeople(totalPeople));
-        Optional.ofNullable(project.getTags())
-                .ifPresent(tags -> findProject.setTags(tags));
+        findProject.setTagA(project.getTagA());
+        findProject.setTagB(project.getTagB());
+        findProject.setTagC(project.getTagC());
         Optional.ofNullable(project.getLang())
                 .ifPresent(lang -> findProject.setLang(lang));
         Optional.ofNullable(project.getBody())
@@ -147,12 +148,6 @@ public class ProjectService {
         // 수정된 정보 DB 반영
         return projectRepository.save(findProject);
 
-    }
-    private int indexForImages(String searchUrl, List<ProjectImage> list ) {
-        for (int i = 0; i < list.size(); i++)
-            if (list.get(i).getImageUrl() == searchUrl)
-                return i;
-        return -1;
     }
 
     // 특정 프로젝트 조회
@@ -271,7 +266,6 @@ public class ProjectService {
 
         Long memberId = projectStatus.getMember().getMemberId();
         Long projectId = projectStatus.getProject().getProjectId();
-//        Long projectCardId = projectStatus.getProjectcard().getProjectCardId();
 
         // 0. 해당 memberId와 projectId 조합으로 이미 존재하는 projectStatus 가 있는지 확인
         Optional<ProjectStatus> existingStatus = projectStatusRepository.findByMember_MemberIdAndProject_ProjectId(memberId, projectId);
@@ -310,7 +304,7 @@ public class ProjectService {
     public void revokeProject(long projectId, long memberId) {
 
         ProjectStatus projectStatus = projectStatusRepository.findByMember_MemberIdAndProject_ProjectId(memberId, projectId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PROJECT_NOT_FOUND));
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PROJECT_STATUS_NOT_FOUND));
 
         projectStatusRepository.delete(projectStatus);
 
@@ -333,10 +327,10 @@ public class ProjectService {
     }
 
     // 프로젝트 지원 수락
-    public void approveProject(Long projectStatusId) {
+    public void approveProject(long projectId, long memberId) {
 
         // 프로젝트 지원 상태 식별자로 상태 찾기
-        ProjectStatus projectStatus = projectStatusRepository.findById(projectStatusId)
+        ProjectStatus projectStatus = projectStatusRepository.findByMember_MemberIdAndProject_ProjectId(memberId, projectId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PROJECT_STATUS_NOT_FOUND));
 
         // 변경할 상태코드가 존재하는지 검증
@@ -350,11 +344,11 @@ public class ProjectService {
     }
 
     // 프로젝트 지원 거절
-    public void rejectProject(Long projectStatusId) {
+    public void rejectProject(long projectId, long memberId) {
 
         // 프로젝트 지원 상태 식별자로 상태 찾기
-        ProjectStatus projectStatus = projectStatusRepository.findById(projectStatusId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PROJECT_NOT_FOUND));
+        ProjectStatus projectStatus = projectStatusRepository.findByMember_MemberIdAndProject_ProjectId(memberId, projectId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PROJECT_STATUS_NOT_FOUND));
 
         // 변경할 상태코드가 존재하는지 검증
         CommonCode acceptedStatus = commonCodeRepository.findByCodeId(3L)
@@ -409,65 +403,4 @@ public class ProjectService {
         // 할당된 값 반환
         return findMember;
     }
-
-//    // 전체 프로젝트 조회
-//    public Page<Project> findProjects(int page, int size) {
-//
-//        return projectRepository.findAll(
-//                PageRequest.of(page, size, Sort.by("projectId").descending()));
-//    }
-//
-//    // 태그 검색
-//    public Page<Project> findTagProject(int page, int size, String[] tags) { //검색 처리
-//
-//        Arrays.sort(tags);
-//
-//        StringBuilder likeQueryBuilder = new StringBuilder("");
-//
-//        for (int i = 0; i < tags.length; i++) {
-//            String temp = "%" + tags[i] + "%";
-//            likeQueryBuilder.append(temp);
-//        }
-//
-//        PageRequest pageRequest = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "created_at"));
-//        Page<Project> searchProjectTagList = projectRepository.getSearchProjectList(likeQueryBuilder.toString(), pageRequest);
-//
-//        System.out.println();
-//        return searchProjectTagList;
-//    }
-//
-//    // 언어 검색
-//    public Page<Project> findLangProject(int page, int size, String[] lang) { //검색 처리
-//
-//        Arrays.sort(lang);
-//
-//        StringBuilder likeQueryBuilder = new StringBuilder("");
-//
-//        for (int i = 0; i < lang.length; i++) {
-//            String temp = "%" + lang[i] + "%";
-//            likeQueryBuilder.append(temp);
-//        }
-//
-//        PageRequest pageRequest = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "created_at"));
-//        Page<Project> searchProjectLangList = projectRepository.getSearchProjectList1(likeQueryBuilder.toString(), pageRequest);
-//
-//        System.out.println();
-//        return searchProjectLangList;
-//    }
-//
-//    // '좋아요' 기준 프로젝트 주간 Top10
-//    public Page<Project> findWeeklyPopularProjects(Pageable pageRequest) {
-//        LocalDateTime now = LocalDateTime.now();
-//        LocalDateTime oneWeekAgo = now.minus(1, ChronoUnit.WEEKS);
-//
-//        return projectRepository.findByHeartAtBetween(oneWeekAgo, now, pageRequest);
-//    }
-//
-//    // 프로젝트 '조회수' 기준 정렬
-//    public Page<Project> findProjectsView(int page, int size){
-//
-//        return projectRepository.findAll(
-//                PageRequest.of(page, size, Sort.by("view").descending()));
-//    }
-
 }
