@@ -7,7 +7,7 @@ let baseURL;
 if (process.env.NODE_ENV === 'development') {
   baseURL = 'http://ec2-52-78-224-100.ap-northeast-2.compute.amazonaws.com:8080/';
 } else {
-  baseURL = 'https://spec-lb-1567907173.ap-northeast-2.elb.amazonaws.com';
+  baseURL = 'https://sebspec.site';
 }
 
 const instance = axios.create({
