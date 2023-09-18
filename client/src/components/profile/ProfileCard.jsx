@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import useNav from '../../hooks/useNav';
 import { useParams } from 'react-router-dom';
@@ -201,6 +201,19 @@ export default function ProfileCard({ id, data, isLoading }) {
       },
     });
   };
+
+  useEffect(() => {
+    setProfile({
+      email: data.email,
+      userName: data.userName,
+      userImgUrl: data.userImgUrl,
+      working: data.working,
+      age: data.age,
+      tags: data.tags,
+      aboutMe: data.aboutMe === null ? '' : data.aboutMe,
+      createdAt: data.createdAt,
+    });
+  }, [data]);
 
   const handleTagKeyDown = (e) => {
     if (e.code !== 'Enter' && e.code !== 'NumpadEnter') return;
