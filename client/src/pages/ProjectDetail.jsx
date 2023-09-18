@@ -74,11 +74,6 @@ export const StyleDetailContainer = styled.div`
       margin: 3rem 0;
     }
   }
-  
-  ${mobile} {
-    
-  }
-
 `;
 
 const StyleStatusContainer = styled.div`

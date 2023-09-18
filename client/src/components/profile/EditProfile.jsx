@@ -5,6 +5,8 @@ import Tag from '../common/Tag';
 import { styled } from 'styled-components';
 import CheckBox from '../common/CheckBox';
 import ProGress from '../common/ProGress';
+import { useSelector } from 'react-redux';
+
 const Container = styled.div`
   h3 {
     font-weight: 700;
@@ -32,6 +34,7 @@ export default function EditProfile({ editProfile, setEditProfile, handleTagKeyD
   const handleEditDeploy = (target) => {
     setEditProfile({ ...editProfile, working: { value: target } });
   };
+  const socialType = useSelector((state) => state.user.userInfo);
   return (
     <>
       <Container>
@@ -67,11 +70,13 @@ export default function EditProfile({ editProfile, setEditProfile, handleTagKeyD
             setEditProfile({ ...editProfile, userName: { value: e.target.value, error: '' } })
           }
         />
-        <ProGress
-          comPleteNum={5}
-          proGressNum={editProfile.userName.value?.length}
-          fontSize="1.5rem"
-        />
+        {socialType === 'SPEC' && (
+          <ProGress
+            comPleteNum={5}
+            proGressNum={editProfile.userName.value?.length}
+            fontSize="1.5rem"
+          />
+        )}
         <Input
           label="나이"
           width="100%"
