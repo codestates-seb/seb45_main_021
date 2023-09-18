@@ -48,10 +48,10 @@ export default function EnterTag({
             if(tags.length < 3 && tags.indexOf(e.target.value) === -1 && noSpecialCharsOrSpacesRegex.test(e.target.value)) {
                 setTags([e.target.value,...tags]);
                 handleInputChange(null,[e.target.value,...tags],'tags')
-            }
+            };
             setTimeout(()=>{
                 e.target.value = '';
-            },0)
+            },0);
         }
         
     }

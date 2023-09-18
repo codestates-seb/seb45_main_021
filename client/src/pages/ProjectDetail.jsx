@@ -14,7 +14,7 @@ import JoinStatusContainer from '../components/project/JoinStatusContainer';
 import useNav from '../hooks/useNav';
 import Modal from '../components/common/Modal';
 import api from '../hooks/useAxiosInterceptor';
-import { desktop, tablet } from '../static/theme';
+import { desktop, mobile, tablet } from '../static/theme';
 import SuspenseDetailPage from '../components/PfPjPublic/DetailSkeletonLoading';
 import ProjectCardSkeletion from './../components/project/ProjectCardSkeleton';
 import JoinCardSkeleton from '../components/project/JoinCardSkeleton';
@@ -74,6 +74,11 @@ export const StyleDetailContainer = styled.div`
       margin: 3rem 0;
     }
   }
+  
+  ${mobile} {
+    
+  }
+
 `;
 
 const StyleStatusContainer = styled.div`
