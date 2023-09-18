@@ -6,7 +6,7 @@ import Page from '../components/common/Page';
 import { AiFillGithub } from 'react-icons/ai';
 import Input from '../components/common/Input';
 import api from '../hooks/useAxiosInterceptor';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { updateUser } from '../redux/userForm/userSlice';
 import { isValidEmail, isValidPassword } from '../components/profile/isValid';
 import Spinner from '../components/common/Spinner';
@@ -181,6 +181,7 @@ export default function SignIn() {
   const [isSubmit, setIsSubmit] = useState(false);
   const { toSignup, toAbout } = useNav();
   const dispatch = useDispatch();
+  const isLogin = useSelector((state) => state.user.isLogin);
 
   const handleChangeEmail = (e) => {
     setEmail(e.target.value);
@@ -252,6 +253,7 @@ export default function SignIn() {
 
   useEffect(() => {
     // 마운트 함수
+    if (isLogin) toAbout();
     const url = new URL(window.location.href);
     const state = url.searchParams.get('state');
     const authorizationCode = url.searchParams.get('code');
