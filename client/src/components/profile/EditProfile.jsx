@@ -78,7 +78,7 @@ export default function EditProfile({ editProfile, setEditProfile, handleTagKeyD
           height="3rem"
           placeholder="숫자로 적어주세요."
           maxLength={3}
-          type="text"
+          type="number"
           value={Number(editProfile.age.value)}
           onChange={(e) =>
             setEditProfile({ ...editProfile, age: { value: Number(e.target.value) } })
