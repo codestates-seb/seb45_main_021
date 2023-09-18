@@ -9,6 +9,7 @@ import Page from '../components/common/Page';
 import { isValidEmail, isValidPassword } from '../components/profile/isValid';
 import Spinner from '../components/common/Spinner';
 import { desktop, mobile } from '../static/theme';
+import { useSelector } from 'react-redux';
 
 const StyleContainer = styled(Page)`
   width: fit-content;
@@ -165,7 +166,8 @@ export default function SignUp() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState({ userName: '', email: '', password: '' });
   const [isSubmit, setIsSubmit] = useState(false);
-  const { toSignin } = useNav();
+  const { toSignin, toAbout } = useNav();
+  const isLogin = useSelector((state) => state.user.isLogin);
 
   const handleChangeEmail = (e) => {
     setEmail(e.target.value);
@@ -224,6 +226,7 @@ export default function SignUp() {
 
   useEffect(() => {
     // 마운트 함수
+    if (isLogin) toAbout();
     const url = new URL(window.location.href);
     const authorizationCode = url.searchParams.get('code');
     if (authorizationCode) {
