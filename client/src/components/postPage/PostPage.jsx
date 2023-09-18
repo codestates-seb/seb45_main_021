@@ -10,14 +10,13 @@ import PostList from './PostList';
 import ToTopButton from '../common/ToTopButton';
 import PostSkeletonLoading from './PostSkeletonLoading';
 import CheckBox from '../common/CheckBox';
-import { desktop, tablet } from '../../static/theme.js';
+import { desktop, tablet, mobile } from '../../static/theme.js';
 import { StyleBackgroundButton } from '../common/Buttons';
 import Modal from '../common/Modal';
 import useNav from '../../hooks/useNav';
 import { useSelector } from 'react-redux';
 import usePostListQuery from '../../hooks/usePostListQuery';
 import scollToTop from '../../utils/scrollToTop';
-import useLikeUpdate from '../../hooks/useLikeUpdate';
 
 const StylePostList = styled(Page)`
   .top-menu {
@@ -26,6 +25,11 @@ const StylePostList = styled(Page)`
     align-items: center;
     h3 {
       flex: 1;
+      ${mobile} {
+        span {
+          font-size: 4rem;
+        }
+      }
     }
     ${desktop} {
       margin-top: 50px;

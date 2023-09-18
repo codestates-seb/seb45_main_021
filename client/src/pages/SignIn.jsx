@@ -6,7 +6,7 @@ import Page from '../components/common/Page';
 import { AiFillGithub } from 'react-icons/ai';
 import Input from '../components/common/Input';
 import api from '../hooks/useAxiosInterceptor';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { updateUser } from '../redux/userForm/userSlice';
 import { isValidEmail, isValidPassword } from '../components/profile/isValid';
 import Spinner from '../components/common/Spinner';
@@ -181,6 +181,7 @@ export default function SignIn() {
   const [isSubmit, setIsSubmit] = useState(false);
   const { toSignup, toAbout } = useNav();
   const dispatch = useDispatch();
+  const isLogin = useSelector((state) => state.user.isLogin);
 
   const handleChangeEmail = (e) => {
     setEmail(e.target.value);
@@ -240,7 +241,7 @@ export default function SignIn() {
 
   const handleClickGoogleBtn = () => {
     window.location.assign(
-      'https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=15196070608-ti8mt0m3fo8tj48172bhq72h4re8bcni.apps.googleusercontent.com&scope=email%20profile&state=J8xE05niEcAJo0CAB8XkqVr25Prh7dXvkrqthZ2YJw0%3D&redirect_uri=http://localhost:3000/signin',
+      `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=15196070608-ti8mt0m3fo8tj48172bhq72h4re8bcni.apps.googleusercontent.com&scope=email%20profile&state=J8xE05niEcAJo0CAB8XkqVr25Prh7dXvkrqthZ2YJw0%3D&redirect_uri=${process.env.PUBLIC_URL}/signin`,
     );
   };
 
@@ -252,6 +253,7 @@ export default function SignIn() {
 
   useEffect(() => {
     // 마운트 함수
+    if (isLogin) toAbout();
     const url = new URL(window.location.href);
     const state = url.searchParams.get('state');
     const authorizationCode = url.searchParams.get('code');
@@ -309,7 +311,7 @@ export default function SignIn() {
             console.log(error);
           });
       }
-    }
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

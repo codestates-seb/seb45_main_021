@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import { styled } from 'styled-components';
 import Input from '../components/common/Input';
 import Select from '../components/common/Select';
@@ -16,7 +16,7 @@ import ProGress from '../components/common/ProGress';
 import languages from '../static/languages'
 import { projectErrorInitData, projectWriteInitData, projectWriteRule } from '../static/projectInit';
 import Modal from '../components/common/Modal';
-import { custom, desktop, tablet } from '../static/theme';
+import { custom } from '../static/theme';
 import { useSelector } from 'react-redux';
 import { StyleBorderButton } from '../components/common/Buttons';
 import useSubmitWriteEdit from '../hooks/useSubmitWriteEdit';

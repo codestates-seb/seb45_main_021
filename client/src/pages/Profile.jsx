@@ -77,7 +77,7 @@ export default function Profile() {
       .get(`/members/${memberId}`)
       .then((el) => {
         const temp = [{}, {}, {}];
-        temp.map((_, i) => {
+        temp.forEach((_, i) => {
           temp[i] = {
             tags: { value: [], error: '', curString: '' },
             working: el.data.profile.working,
@@ -85,7 +85,7 @@ export default function Profile() {
           };
         });
         // eslint-disable-next-line array-callback-return
-        el.data.projectCard.map((ele, i) => {
+        el.data.projectCard.forEach((ele, i) => {
           temp[i] = {
             ...ele,
             userImgUrl: el.data.profile.userImgUrl,
@@ -108,10 +108,8 @@ export default function Profile() {
       });
     setTimeout(() => {
       setIsLoading(false);
-    }, 2000);
-  }, []);
-
-
+    }, 2000); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [memberId]);
 
   return (
     <StyleContainer>
