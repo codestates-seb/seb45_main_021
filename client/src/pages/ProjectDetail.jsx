@@ -145,8 +145,11 @@ export default function ProjectDetail() {
     },
   ];
 
-  const fetchData = () => {
-    setIsLoading(true);
+  const fetchData = (isLoading = true) => {
+    if(isLoading) {
+      setIsLoading(true);
+    }
+    
     api
       .get(`/projects/${projectId}`)
       .then((res) => {
@@ -208,6 +211,7 @@ export default function ProjectDetail() {
   }, [update]);
 
   useEffect(() => {
+    fetchData(false);
     fetchRequestData();
   }, [requestUpdate]);
 

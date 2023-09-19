@@ -86,10 +86,10 @@ export default function SubmitedCard({
     const {toProfile} = useNav();
     const [showModal, setShowModal] = useState(false);
     const isOnHandler = () => {setIsOn(!isOn)}
-    const isImpossibleAccept = detailData.joinPeople.length >= detailData.totalPeople;
+    // const isImpossibleAccept = detailData.joinPeople.length >= detailData.totalPeople;
     
     const acceptRefuseHandler = (projectId, memberId,type) => {
-        if(isImpossibleAccept && type==='accept') {
+        if(detailData.joinPeople.length >= detailData.totalPeople && type==='accept') {
             setShowModal(true);
         } else {
             api.patch(`/projects/${projectId}/request/${memberId}/${type}`)
@@ -111,7 +111,7 @@ export default function SubmitedCard({
                 setIsOpen={setShowModal}
                 type='alert'
                 title='알림'
-                body={isImpossibleAccept ? '모집인원이 모두 찼습니다.' : '통신 실패 다시 시도해 주세요.'}
+                body={detailData.joinPeople.length >= detailData.totalPeople ? '모집인원이 모두 찼습니다.' : '통신 실패 다시 시도해 주세요.'}
                 confirmHandler={()=>setShowModal(false)}
             />}
             <div className='card-box row'>
