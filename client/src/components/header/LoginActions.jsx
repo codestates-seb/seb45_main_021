@@ -23,6 +23,7 @@ export default function LoginActions({ userInfo }) {
           width: '45px',
           height: '45px',
           border: '1px solid var(--black-400)',
+          objectFit : 'cover',
         }}
       />
       <StyleBorderButton
