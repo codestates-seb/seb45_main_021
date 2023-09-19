@@ -118,4 +118,3 @@ https://www.erdcloud.com/d/K82YSkL2gJjnB7aw6
 | ![ezgif com-crop (1)](https://github.com/codestates-seb/seb45_main_021/assets/117289923/cdec95ae-7767-4f56-b317-87fffb754d16) | ![ezgif com-crop (6)](https://github.com/codestates-seb/seb45_main_021/assets/117289923/cede27f0-1890-4aca-bd8d-d0e900e3abed)|
 |Project 디테일 페이지|Profile 디테일 페이지|
 | ![ezgif com-crop (4)](https://github.com/codestates-seb/seb45_main_021/assets/117289923/942c11a5-ee5f-44ab-9760-0087864e6a42) |![ezgif com-crop](https://github.com/codestates-seb/seb45_main_021/assets/117289923/d01e1f3f-ffd8-4c31-90f1-4c45d15bff51)|
-
