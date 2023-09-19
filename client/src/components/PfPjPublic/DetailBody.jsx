@@ -203,7 +203,7 @@ export default function DetailBody({
                     <TextBox
                         title={'상세 요강'}
                         component={
-                            <p>{`${detailData.description}`}</p>
+                            <p>{ReplaceNewLine(detailData.description)}</p>
                         }
                     />}
                     {detailData.totalPeople && 
