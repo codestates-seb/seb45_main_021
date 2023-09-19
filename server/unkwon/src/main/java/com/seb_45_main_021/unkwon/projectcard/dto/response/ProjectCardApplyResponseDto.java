@@ -11,12 +11,11 @@ public class ProjectCardApplyResponseDto {
     private String[] tags;
     private String tell;
     private String aboutMe;
-    private String img;
+    private String userImgUrl;
     private Long memberId;
     private String userName;
     private String email;
     private boolean working;
-
 
     public ProjectCardApplyResponseDto(Long projectCardId, String aboutMe, String tell, String tags, Member member) {
         this.projectCardId = projectCardId;
@@ -25,6 +24,7 @@ public class ProjectCardApplyResponseDto {
         setTag(tags);
         this.userName = member.getUserName();
         this.memberId = member.getMemberId();
+        this.userImgUrl = member.getUserImgUrl();
         this.email = member.getEmail();
         this.working = member.isWorking();
     }
