@@ -48,9 +48,13 @@ export const useAxiosInterceptor = () => {
 
   instance.interceptors.response.use(
     (response) => {
+      const localData = JSON.parse(localStorage.getItem('persist:root'));
+      const jwt = JSON.parse(localData.user).jwt;
       const { accesstoken, refreshtoken } = response.headers;
       if (accesstoken && refreshtoken) {
         dispatch(updateUser({ jwt: { accesstoken: accesstoken, refreshtoken: refreshtoken } }));
+      } else if (accesstoken) {
+        dispatch(updateUser({ jwt: { ...jwt, accesstoken: accesstoken } }));
       }
       return response;
     },
