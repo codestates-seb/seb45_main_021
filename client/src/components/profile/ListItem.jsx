@@ -18,7 +18,7 @@ export default function ListItem({ data, type, isLoading }) {
   };
 
   const handleClickName = () => {
-    toProfile(data.author.merberId);
+    toProfile(data.author.memberId);
   };
 
   return (
