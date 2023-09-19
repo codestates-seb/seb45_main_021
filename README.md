@@ -27,7 +27,26 @@
 <summary>담당 파트</summary>
 <div markdown="1">
 
- **유명인**
+ <details>
+  <summary>유명인</summary>
+  <div markdown="1">
+    <h4>1. 전반적 기능 구상</h4>
+      <p>&emsp;- 전반적인 사이트의 목적 및 디자인 구상</p>
+    <h4>2. About Page 구현</h4>
+      <p>&emsp;- About Page 디자인, 캐러셀 구현</p>
+    <h4>3. 프로젝트, 포트폴리오 리스트 구현</h4>
+      <p>&emsp;- 데이터 캐싱 & 무한스크롤</p>
+    <h4>4. 검색기능 구현</h4>
+      <p>&emsp;- 최근 검색어 기능</p>
+      <p>&emsp;- 검색 페이지 구현</p>
+    <h4>5. 태그기능 구현</h4>
+      <p>&emsp;- 태그 클릭시 태그 검색 실행</p>
+    <h4>5. 필터기능 구현</h4>
+      <p>&emsp;- 쿼리 파람을 활용한 필터링 구현</p>
+    <h4>5. Top Ten 기능 구현</h4>
+      <p>&emsp;- 주간및 전체 기간동안의 Top Ten 구현</p>
+  </div>
+</details>
 
  <details>
   <summary>박찬섭</summary>
