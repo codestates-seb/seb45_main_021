@@ -52,7 +52,6 @@ export default function ListItem({ data, type, isLoading }) {
             <Skeleton width="90%" height="40px" sx={{ bgcolor: 'grey.700' }} animation="wave" />
           ) : (
             <>
-              <FaRegEye color="gray" size="20" />
               <span>{data.codeValue}</span>
             </>
           )}

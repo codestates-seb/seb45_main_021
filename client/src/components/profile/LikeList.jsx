@@ -68,19 +68,6 @@ const StyleContainer = styled(Page)`
       width: 200px;
     }
   }
-
-  th:nth-child(3),
-  td:nth-child(3) {
-    ${desktop} {
-      display: table-cell;
-    }
-    @media (max-width: 900px) {
-      display: none;
-    }
-    ${mobile} {
-      display: none;
-    }
-  }
 `;
 
 const NotContent = styled.div`
@@ -125,6 +112,7 @@ export default function LikeList({ id, data, isLoading }) {
           <tr>
             <th className="title">제목</th>
             <th className="author">작성자</th>
+            <th>작성시간</th>
             <th className="likes">좋아요</th>
           </tr>
         </thead>
