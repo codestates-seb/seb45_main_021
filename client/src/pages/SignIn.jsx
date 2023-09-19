@@ -283,43 +283,13 @@ export default function SignIn() {
           })
           .catch((error) => {
             if (error.response.status === 404) {
-              api
-                .get(`/oauth2/google/signup?code=${authorizationCode}`)
-                .then((el) => {
-                  if (el.status === 201) {
-                    api
-                      .get(`/oauth2/google/signin?code=${authorizationCode}`)
-                      .then((el) => {
-                        if (el.status === 200) {
-                          dispatch(
-                            updateUser({
-                              isLogin: true,
-                              userInfo: {
-                                memberId: el.data.memberId,
-                                userName: el.data.userName,
-                                userImgUrl: el.data.userImgUrl,
-                                socialType: el.data.socialType,
-                              },
-                              likeList: {
-                                portfolioList: el.data.portfolioList,
-                                projectList: el.data.projectList,
-                              },
-                            }),
-                          );
-                          toAbout();
-                        }
-                      })
-                      .catch((error) => console.log(error));
-                  }
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
+              window.alert('회원가입이 필요합니다.');
+              toSignup();
             }
           });
       } else {
         api
-          .get(`/oauth2/github/signin?code=${authorizationCode}`)
+          .get(`/oauth2/github?code=${authorizationCode}`)
           .then((el) => {
             if (el.status === 200) {
               dispatch(
@@ -342,38 +312,8 @@ export default function SignIn() {
           })
           .catch((error) => {
             if (error.response.status === 404) {
-              api
-                .get(`/oauth2/github/signup?code=${authorizationCode}`)
-                .then((el) => {
-                  if (el.status === 201) {
-                    api
-                      .get(`/oauth2/github/signin?code=${authorizationCode}`)
-                      .then((el) => {
-                        if (el.status === 200) {
-                          dispatch(
-                            updateUser({
-                              isLogin: true,
-                              userInfo: {
-                                memberId: el.data.memberId,
-                                userName: el.data.userName,
-                                userImgUrl: el.data.userImgUrl,
-                                socialType: el.data.socialType,
-                              },
-                              likeList: {
-                                portfolioList: el.data.portfolioList,
-                                projectList: el.data.projectList,
-                              },
-                            }),
-                          );
-                          toAbout();
-                        }
-                      })
-                      .catch((error) => console.log(error));
-                  }
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
+              window.alert('회원가입이 필요합니다.');
+              toSignup();
             }
           });
       }
