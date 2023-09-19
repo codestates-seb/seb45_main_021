@@ -32,6 +32,7 @@ const StyleProfileContainer = styled.div`
     width: 200px;
     height: 200px;
     border-radius: 20px;
+    object-fit:cover;
   }
   .editImg {
     position: absolute;
