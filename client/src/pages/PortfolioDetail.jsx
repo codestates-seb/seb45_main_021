@@ -173,7 +173,7 @@ export default function ProjectDetail() {
               />
             </StyleDetailContainer>
           )}
-          {Number(detailData.isComment) === 1 && (
+          {(Number(detailData.isComment) === 1 && loginUserData.isLogin) && (
             <Comment updateHandler={updateHandler} isAdmin={isAdmin} detailData={detailData} />
           )}
         </StyleDetailWrapper>
