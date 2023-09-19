@@ -69,7 +69,14 @@
   </div>
 </details>
 
- **한휘용**
+ <details>
+  <summary>**한휘용**</summary>
+  <div markdown="1">
+    <h4>1. 개발 환경 구성 및 AWS 배포 환경 구성</h4>
+    <h4>2. 포트폴리오 CRUD 구현</h4>
+    <h4>3. 댓글 CRUD 구현</h4>
+    <h4>4. 해쉬 태그/태그 검색 구현</h4>
+    <h4>5. 좋아요 기능 구현</h4>
 </div>
 </details>
 
