@@ -332,6 +332,7 @@ export default function ProfileCard({ id, data, isLoading }) {
   const handleEditPassword = (e) => {
     let regExpPass = false;
     if (
+      editPassword.prevPassword !== editPassword.newPassword &&
       editPassword.newPassword === editPassword.newPasswordCheck &&
       isValidPassword(editPassword.prevPassword) &&
       isValidPassword(editPassword.newPassword) &&
