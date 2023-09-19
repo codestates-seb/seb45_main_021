@@ -97,15 +97,13 @@
   <summary>박동근</summary>
   <div markdown="1">
     <h4>1. 스프링 Security 적용</h4>
-      <p>&emsp;- </p>
-      <p>&emsp;- </p>
+      <p>&emsp;- JWT 사용 </p>
+      <p>&emsp;- 서비스 단계에서 인가 처리 </p>
     <h4>2. 구글 및 깃허브 OAuth2 적용</h4>
-      <p>&emsp;- </p>
-      <p>&emsp;- </p>
+      <p>&emsp;- OAuth2를 이용해 구글 및 깃허브 회원가입 및 로그인 구현</p>
     <h4>3. 회원, 프로젝트 카드 CRUD</h4>
-      <p>&emsp;- </p>
-      <p>&emsp;- </p>
-      <p>&emsp;- </p>
+      <p>&emsp;- 회원가입 및 로그인 구현</p>
+      <p>&emsp;- 회원 및 프로젝트 카드 CRUD 구현</p>
   </div>
 </details>
 
