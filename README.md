@@ -91,7 +91,14 @@
   </div>
 </details>
 
- **김예인**
+ <details>
+  <summary>김예인</summary>
+  <div markdown="1">
+    <h4>1. 프로젝트 작성, 수정, 삭제, 조회 기능</h4>
+    <h4>2. 프로젝트 참가신청, 신청취소, 신청수락, 신청거절 기능</h4>
+    <h4>3. 클라우드 스토리지를 이용한 이미지 업로드/삭제 구현-S3 버킷</h4>
+  </div>
+</details>
 
  <details>
   <summary>박동근</summary>
