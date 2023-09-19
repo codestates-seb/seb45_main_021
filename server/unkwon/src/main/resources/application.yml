@@ -3,7 +3,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://spec-db-1.c8qdyivupwng.ap-northeast-2.rds.amazonaws.com:13306/SPEC
     username: admin
-    password: ${
+    password: qwer1234
 
   jpa:
     open-in-view: true

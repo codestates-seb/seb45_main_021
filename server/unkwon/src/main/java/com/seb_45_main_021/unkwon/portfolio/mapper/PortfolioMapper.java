@@ -182,7 +182,7 @@ public interface PortfolioMapper {
                         portfolioHeart.getPortFolio().getTitle(),
                         portfolioHeart.getPortFolio().getCreatedAt(),
                         portfolioHeart.getPortFolio().getHeartCount(),
-                        portfolioHeart.getMember()
+                        portfolioHeart.getPortFolio().getMember()
                 )).collect(Collectors.toList());
     }
 }
