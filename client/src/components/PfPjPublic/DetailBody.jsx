@@ -38,6 +38,14 @@ export const StyleDetailBody = styled.div`
             border-radius:5px;
         }
     }
+
+    .people-num {
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        font-weight:var(--nanum-bold);
+        font-size:1.6rem;
+    }
     ${custom(1000)} {
         flex-direction: column;
     }
@@ -211,7 +219,16 @@ export default function DetailBody({
                     <TextBox
                         title={'모집 현황'}
                         component={
-                            <p>{`${detailData.totalPeople}명 / ${detailData.joinPeople ? detailData.joinPeople.length : 0}명`}</p>
+                            <div className='col'>
+                                <div className='row'>
+                                    <p>모집 인원</p>
+                                    <h2 className='people-num'>{`${detailData.totalPeople}명`}</h2>
+                                </div>
+                                <div className='row'>
+                                    <p>참가 현황</p>
+                                    <h2 className='people-num'>{`${detailData.joinPeople?.length || 0}명`}</h2>
+                                </div>
+                            </div>
                         }
                     />}
                 {type === 'project' && !isAdmin && loginUserData.isLogin && 
