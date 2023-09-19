@@ -57,7 +57,7 @@ export default function ProjectCardContainer({
             ) : 
             <EmptyData 
                 height='500px'
-                text={'프로젝트 카드가 없습니다.'}
+                text={isForSubmit ? '프로젝트 카드가 없습니다.' : '신청자가 없습니다.'}
             />
             }
         </StyleProjectCardContainer>

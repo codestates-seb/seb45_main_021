@@ -24,7 +24,8 @@ export default function PortfolioWrite() {
   const [dataForm,handleInputChange] = useForm(portfolioWriteInitData);
   const [errors, handleErrorChange, clearError, setErrors ] = useError(portfolioErrorInitData , portfolioWriteRule);
   const [showModal, setShowModal] = useState(false);
-  const [apiResult, isSuccess, submitHandler] = useSubmitWriteEdit();
+  const [apiResult, isSuccess, submitHandler, setApiResult] = useSubmitWriteEdit();
+  const [isCancel, setIsCancel] = useState(false);
   const loginUserData = useSelector(state=>state.user);
 
   const width = '100%';
@@ -43,11 +44,11 @@ export default function PortfolioWrite() {
   return (
     <StyleProjectWrite className='col'>
       {showModal && <Modal
-        type={'alert'}
+        type={isCancel ? 'confirm' : 'alert'}
         setIsOpen={setShowModal}
         title={'알림'}
         body={apiResult}
-        confirmHandler={() => isSuccess ? toPortfolio() : setShowModal(false)}
+        confirmHandler={() => isSuccess || isCancel ? toPortfolio() : setShowModal(false)}
       />}
       <WriteHeader type='portfolio'/>
       <div className='write-wrapper row'>
@@ -181,7 +182,13 @@ export default function PortfolioWrite() {
         >
           작성
         </StyleBorderButton>
-        <StyleBorderButton>
+        <StyleBorderButton
+          onClick={()=>{
+            setShowModal(true);
+            setIsCancel(true);
+            setApiResult('작성 취소시 작성한 내용은 저장되지 않습니다.');
+          }}
+        >
           취소
         </StyleBorderButton>
       </div>

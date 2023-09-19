@@ -35,6 +35,7 @@ export const StyleDetailBody = styled.div`
         > img {
             width:100%;
             object-fit:cover;
+            border-radius:5px;
         }
     }
     ${custom(1000)} {
@@ -127,7 +128,7 @@ export default function DetailBody({
     useEffect(()=>{
         if(type === 'project') {
             if(!isAdmin && loginUserData.isLogin) {
-                for(let i = 0; i < detailData.requestPeople.length; i++) {
+                for(let i = 0; i < detailData.requestPeople?.length; i++) {
                     if(Number(detailData.requestPeople[i]) === Number(loginUserData.userInfo.memberId)) {
                         setIsPossibleApply(false);
                         return;
@@ -177,7 +178,7 @@ export default function DetailBody({
                     <TextBox
                         title={'검색 키워드'}
                         component={
-                            detailData.tags.length === 1 && detailData.tags[0] === '' 
+                            detailData.tags?.length === 1 && detailData.tags[0] === '' 
                             ? 
                             <p>검색 키워드 없음</p>
                             :
@@ -215,7 +216,7 @@ export default function DetailBody({
                     />}
                 {type === 'project' && !isAdmin && loginUserData.isLogin && 
                 <div className='sticky-box'>
-                    {detailData.totalPeople >= detailData.joinPeople.length && !isClosedProject() ?
+                    {detailData.totalPeople >= detailData.joinPeople?.length && !isClosedProject() ?
                     <StyleBorderButton 
                         $width={'100%'}
                         onClick={()=>{
@@ -236,7 +237,7 @@ export default function DetailBody({
                 </div>}
             </div>
             <div className='image-data-box col'>
-                {detailData.images.length
+                {detailData.images?.length
                     ? detailData.images.map((item,idx)=><img key={idx} src={item} alt='이미지'></img>)
                     : <EmptyData
                         text={'등록된 이미지가 없습니다.'}
