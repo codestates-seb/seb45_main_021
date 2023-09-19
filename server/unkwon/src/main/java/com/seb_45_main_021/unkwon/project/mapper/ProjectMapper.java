@@ -185,7 +185,7 @@ public interface ProjectMapper {
                         projectHeart.getProject().getTitle(),
                         projectHeart.getProject().getCreatedAt(),
                         projectHeart.getProject().getHeartCount(),
-                        projectHeart.getMember()
+                        projectHeart.getProject().getMember()
                 )).collect(Collectors.toList());
     }
 
@@ -196,7 +196,7 @@ public interface ProjectMapper {
                         projectStatus.getProject().getTitle(),
                         projectStatus.getProject().getCreatedAt(),
                         projectStatus.getProject().getHeartCount(),
-                        projectStatus.getMember(),
+                        projectStatus.getProject().getMember(),
                         projectStatus.getCommonCode().getCodeValue()
                 )).collect(Collectors.toList());
     }
