@@ -96,7 +96,7 @@
 ---
 
 ### ERD 
-![ERD](https://github.com/codestates-seb/seb45_main_021/assets/130070751/6bb65d5b-bb14-447d-b3dd-5c2e1a9aaba5)
+https://www.erdcloud.com/d/K82YSkL2gJjnB7aw6
 
 
 ---
