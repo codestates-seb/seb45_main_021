@@ -165,9 +165,7 @@ export default function ProjectDetail() {
   };
 
   const fetchRequestData = () => {
-    setIsLoading(true);
-    api
-      .get(`projects/${projectId}/application-status`)
+      api.get(`projects/${projectId}/application-status`)
       .then((res) => {
         setRequestPeopledata(res.data);
       })
@@ -177,7 +175,7 @@ export default function ProjectDetail() {
       })
       .finally(() => {
         setIsLoading(false);
-      });
+      });  
   };
 
   const fetchDeleteProject = (id) => {
@@ -210,9 +208,7 @@ export default function ProjectDetail() {
   }, [update]);
 
   useEffect(() => {
-    if (requestUpdate !== undefined) {
-      fetchRequestData();
-    }
+    fetchRequestData();
   }, [requestUpdate]);
 
   useEffect(() => {

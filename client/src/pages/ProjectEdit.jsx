@@ -28,7 +28,8 @@ export default function ProjectEdit() {
   const [dataForm, handleInputChange, clearForm, setDataForm] = useForm(projectWriteInitData);
   const [errors, handleErrorChange, clearError, setErrors] = useError({}, projectWriteRule);
   const [showModal, setShowModal] = useState(false);
-  const [apiResult, isSuccess, submitHandler] = useSubmitWriteEdit();
+  const [apiResult, isSuccess, submitHandler, setApiResult] = useSubmitWriteEdit();
+  const [isCancel, setIsCancel] = useState(false);
   //false면 프론트측 에러 true면 백측에러
   const [firstApiSuccess, setFirstApiSuccess] = useState(true);
   const loginUserData = useSelector((state) => state.user);
@@ -78,14 +79,14 @@ export default function ProjectEdit() {
           <StyleProjectWrite className="col">
             {showModal && (
               <Modal
-                type={'alert'}
+                type={isCancel ? 'confirm' : 'alert'}
                 setIsOpen={setShowModal}
                 title={'알림'}
                 body={
                   firstApiSuccess ? apiResult : '서버와의 통신에 실패했습니다. 다시 시도해 주세요.'
                 }
                 confirmHandler={() =>
-                  !firstApiSuccess || isSuccess ? toProject() : setShowModal(false)
+                  !firstApiSuccess || isSuccess || isCancel ? toProject() : setShowModal(false)
                 }
               />
             )}
@@ -231,7 +232,13 @@ export default function ProjectEdit() {
               >
                 수정
               </StyleBorderButton>
-              <StyleBorderButton>취소</StyleBorderButton>
+              <StyleBorderButton
+                onClick={()=>{
+                  setShowModal(true);
+                  setIsCancel(true);
+                  setApiResult('작성 취소시 작성한 내용은 저장되지 않습니다.');
+                }}
+              >취소</StyleBorderButton>
             </div>
           </StyleProjectWrite>
         )
