@@ -7,7 +7,7 @@ import userDefaultImg from '../../static/images/userDefaultImg.jpeg';
 
 export default function LoginActions({ userInfo }) {
   const { memberId, userImgUrl } = userInfo;
-  const { toProfile, toSignin } = useNav();
+  const { toProfile, toAbout } = useNav();
   const dispatch = useDispatch();
 
   return (
@@ -23,13 +23,13 @@ export default function LoginActions({ userInfo }) {
           width: '45px',
           height: '45px',
           border: '1px solid var(--black-400)',
-          objectFit : 'cover',
+          objectFit: 'cover',
         }}
       />
       <StyleBorderButton
         onClick={() => {
           dispatch(deleteUser());
-          toSignin();
+          toAbout();
         }}
       >
         로그아웃
