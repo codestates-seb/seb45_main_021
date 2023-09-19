@@ -80,7 +80,7 @@
   </div>
 </details>
 
----
+</details>
 
 ### 기술 스택
 
