@@ -25,8 +25,6 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             // 서명, 타임 아웃, 잘못된 토큰의 경우로 나누어야한다.
         } catch (JwtException e){
-            log.info("Handler : " + e.getMessage());
-            // setRefreshToken(Long.parseLong(request.getHeader("memberId")));
             setErrorResponse(response, HttpStatus.UNAUTHORIZED, e);
         }
     }

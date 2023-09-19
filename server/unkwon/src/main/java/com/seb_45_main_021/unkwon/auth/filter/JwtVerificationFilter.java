@@ -11,6 +11,7 @@ import com.seb_45_main_021.unkwon.member.entity.Member;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,12 +44,10 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
                                     throws ServletException, IOException {
         try {
-            log.info("JwtVerificationFilter");
             Map<String, Object> claims = verifyJwsAndDelegateNewToken(request, response);
             setAuthenticationToContext(claims);
             // 해당 예외들은 request 의 애트리뷰트로 추가
         } catch (JwtException e) {
-            log.info("Message : " + e.getMessage());
             throw new JwtException(e.getExceptionCode());
         }
         filterChain.doFilter(request, response);
@@ -55,8 +55,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException{
-        if(request.getRequestURI().startsWith("/h2") ||
-                request.getRequestURI().startsWith("/members/logout")) return true;
+        if(request.getRequestURI().startsWith("/members/logout")) return true;
 
         String accessToken = request.getHeader("AccessToken");
         String refreshToken = request.getHeader("RefreshToken");
@@ -103,7 +102,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         if (!member.getRefreshToken().equals(refreshToken)) throw new JwtException(ExceptionCode.BAD_TOKEN);
 
         // 일치할 경우 accessToken 확인 ( refreshToken 유효 )
-        Map<String, Object> claims = null;
+        Map<String, Object> claims = new HashMap<>();
         try{
             // 1. accessToken 유효 판단
             claims = jwtTokenizer.getClaims(accessToken, base64EncodedSecretKey).getBody();
@@ -112,6 +111,9 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         } catch (ExpiredJwtException ee) {
             // 2. accessToken 이 유효하지 않다면 refreshToken 을 통해 재발급 ( claims 는 위에서 조회한 member 객체를 이용해서 새로 생성 )
             String newAccessToken = jwtTokenizer.delegateAccessToken(member);
+            claims.put("username", member.getEmail());
+            claims.put("roles", member.getRoles());
+
             response.setHeader("AccessToken", newAccessToken);
         }catch (Exception e) {
             throw new JwtException(ExceptionCode.BAD_ACCESS);
@@ -127,13 +129,10 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         try {
             jwtTokenizer.getSubject(refreshToken, base64EncodedSecretKey);
         } catch (SignatureException se) {
-            log.info("SignatureException");
             throw new JwtException(ExceptionCode.BAD_TOKEN);
         } catch (ExpiredJwtException ee) {
-            log.info("ExpiredJwtException");
             setRefreshTokenHasNull(hostId, refreshToken);
         } catch (Exception e) {
-            log.info("Exception");
             throw new JwtException(ExceptionCode.BAD_ACCESS);
         }
         return hostId;

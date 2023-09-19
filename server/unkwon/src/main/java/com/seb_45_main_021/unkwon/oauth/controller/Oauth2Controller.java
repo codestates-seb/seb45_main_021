@@ -20,22 +20,24 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class Oauth2Controller {
     private final OAuth2MemberService oAuth2MemberService;
+    private String redirectUriBySignUp = "https://spec.today/signup";
+    private String redirectUriBySignIn = "https://spec.today/signin";
+
     @GetMapping("/google/signup")
     public ResponseEntity oauth2GoogleSignUp(@RequestParam("code") String code,
                                        HttpServletResponse response) {
-        String redirectUri = "https://spec.today/signup";
-        String id_token = oAuth2MemberService.getIdTokenFromGoogle(code, redirectUri);
-        oAuth2MemberService.findOrSaveMember(id_token, "google");
+        String id_token = oAuth2MemberService.getIdTokenFromGoogle(code, redirectUriBySignUp);
+        oAuth2MemberService.findOrSaveMember(id_token, "google", redirectUriBySignUp);
 
         return new ResponseEntity(HttpStatus.CREATED);
     }
+
     @GetMapping("/google/signin")
     public ResponseEntity oauth2GoogleSignIn(@RequestParam("code") String code,
                                        HttpServletResponse response){
-        String redirectUri = "https://spec.today/signin";
-        String id_token = oAuth2MemberService.getIdTokenFromGoogle(code, redirectUri);
+        String id_token = oAuth2MemberService.getIdTokenFromGoogle(code, redirectUriBySignIn);
 
-        Map<String, Object> result = oAuth2MemberService.findOrSaveMember(id_token, "google");
+        Map<String, Object> result = oAuth2MemberService.findOrSaveMember(id_token, "google", redirectUriBySignIn);
 
         if((Integer) result.get("status") == HttpStatus.CREATED.value()) return new ResponseEntity(HttpStatus.CREATED);
 
@@ -48,12 +50,20 @@ public class Oauth2Controller {
         return new ResponseEntity(loginResponse, HttpStatus.OK);
     }
 
-    @GetMapping("/github")
-    public ResponseEntity oauth2GitHub(@RequestParam("code") String code,
-                             HttpServletResponse response){
-        log.info(code);
+    @GetMapping("/github/signup")
+    public ResponseEntity oauth2GitHubSingUp(@RequestParam("code") String code,
+                                             HttpServletResponse response){
         String accessToken = oAuth2MemberService.getTokenFromGithub(code);
-        Map<String, Object> result = oAuth2MemberService.findOrSaveMember(accessToken, "github");
+        oAuth2MemberService.findOrSaveMember(accessToken, "github", redirectUriBySignUp);
+
+        return new ResponseEntity(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/github/signin")
+    public ResponseEntity oauth2GitHubSignIn(@RequestParam("code") String code,
+                                             HttpServletResponse response){
+        String accessToken = oAuth2MemberService.getTokenFromGithub(code);
+        Map<String, Object> result = oAuth2MemberService.findOrSaveMember(accessToken, "github", redirectUriBySignIn);
 
         if((Integer) result.get("status") == HttpStatus.CREATED.value()) return new ResponseEntity(HttpStatus.CREATED);
 

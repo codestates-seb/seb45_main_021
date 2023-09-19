@@ -5,6 +5,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.seb_45_main_021.unkwon.auth.jwt.JwtTokenizer;
 import com.seb_45_main_021.unkwon.auth.utils.CustomAuthorityUtils;
+import com.seb_45_main_021.unkwon.exception.BusinessLogicException;
+import com.seb_45_main_021.unkwon.exception.ExceptionCode;
 import com.seb_45_main_021.unkwon.heart.repository.PortfolioHeartRepository;
 import com.seb_45_main_021.unkwon.heart.repository.ProjectHeartRepository;
 import com.seb_45_main_021.unkwon.member.dto.response.LoginResponseDto;
@@ -39,6 +41,8 @@ public class OAuth2MemberService {
     @Value("${spring.security.oauth2.client.registration.github.gitClientSecret}")
     private String githubclientSecret;
 
+    private String redirectUriBySignIn = "https://spec.today/signin";
+
     private final MemberRepository memberRepository;
     private final ProjectHeartRepository projectHeartRepository;
     private final PortfolioHeartRepository portfolioHeartRepository;
@@ -47,7 +51,7 @@ public class OAuth2MemberService {
     private final JwtTokenizer jwtTokenizer;
 
     /**회원 가입 및 로그인 **/
-    public Map<String, Object> findOrSaveMember(String token, String provider){
+    public Map<String, Object> findOrSaveMember(String token, String provider, String redirectUri){
         OauthServerAttribute oauthServerAttribute = null;
 
         switch(provider){
@@ -70,6 +74,9 @@ public class OAuth2MemberService {
 
         //회원 가입
         if(!findMember.isPresent()){
+            // 회원가입이 안되어있을 때 들어온 요청이 로그인 요청일 경우 예외 코드 발생
+            // 프론트에서 404 status 를 받고 회원 가입 페이지로 이동
+            if(redirectUri.equals(redirectUriBySignIn)) throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
             isSignUp = true;
             member = memberRepository.save(oauthServerAttribute.toEntity(
                     oauthServerAttribute.getSocialType(),

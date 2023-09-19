@@ -7,5 +7,5 @@ import lombok.Getter;
 @Builder
 public class Author {
     private Long memberId;
-    private String username;
+    private String userName;
 }

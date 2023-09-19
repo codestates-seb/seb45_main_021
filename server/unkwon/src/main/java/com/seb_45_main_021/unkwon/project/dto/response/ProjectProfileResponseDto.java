@@ -30,7 +30,7 @@ public class ProjectProfileResponseDto {
         setCreatedAt(createdAt);
         this.heartCount = heartCount;
         author = Author.builder()
-                .username(member.getUserName())
+                .userName(member.getUserName())
                 .memberId(member.getMemberId())
                 .build();
         this.codeValue = codeValue;
@@ -42,7 +42,7 @@ public class ProjectProfileResponseDto {
         setCreatedAt(createdAt);
         this.heartCount = heartCount;
         author = Author.builder()
-                .username(member.getUserName())
+                .userName(member.getUserName())
                 .memberId(member.getMemberId())
                 .build();
     }
