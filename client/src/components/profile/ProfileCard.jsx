@@ -32,7 +32,7 @@ const StyleProfileContainer = styled.div`
     width: 200px;
     height: 200px;
     border-radius: 20px;
-    object-fit:cover;
+    object-fit: cover;
   }
   .editImg {
     position: absolute;
@@ -114,7 +114,7 @@ export default function ProfileCard({ id, data, isLoading }) {
   const { toAbout } = useNav();
   const { memberId } = useParams();
   const dispatch = useDispatch();
-  const socialType = useSelector((state) => state.user.userInfo.socialType);
+  const userInfo = useSelector((state) => state.user.userInfo);
   const [profile, setProfile] = useState({
     email: data.email,
     userName: data.userName,
@@ -266,7 +266,7 @@ export default function ProfileCard({ id, data, isLoading }) {
 
   const handleEditProfile = () => {
     let regExpPass = false;
-    if (socialType === 'SPEC') {
+    if (userInfo.socialType === 'SPEC') {
       if (
         editProfile.aboutMe.value.length <= 200 &&
         editProfile.userName.value.length <= 5 &&
