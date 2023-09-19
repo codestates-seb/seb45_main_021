@@ -8,7 +8,7 @@ const StyleJoinCard = styled.div`
     width:100%;
     padding:2rem;
     background-color:rgba(50,50,50,0.8);
-
+    border-radius:5px;
     .author-wrapper {
         padding:2px 5px;
         justify-content:start;

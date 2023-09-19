@@ -16,6 +16,7 @@ const StyleSeeComment = styled.div`
     background-color:rgba(42,42,42, 0.8);
     padding:2rem;
     gap:1rem;
+    border-radius: 5px;
     p {
         font-size:1.6rem;
     }

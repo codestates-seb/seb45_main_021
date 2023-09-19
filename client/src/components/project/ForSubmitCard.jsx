@@ -10,6 +10,7 @@ const StyleForSubmitCard = styled.div`
     background-color:rgba(30,30,30,0.8);
     opacity:${props => props.$selectedCard ? '0.5' : '1'};
     position:relative;
+    border-radius:5px;
     gap:1rem;
     .card-box {
         flex:1;
@@ -23,8 +24,8 @@ const StyleForSubmitCard = styled.div`
         > img {
             margin-bottom:1rem;
             border-radius:50%;      
-            width:100%;
-            height:auto;
+            width:70px;
+            height:70px;
             object-fit:cover;    
         }
     }
@@ -82,7 +83,7 @@ export default function ForSubmitCard({
             {selectedCard && <span className='display-selected'>카드 선택됨</span>}
             <div className='card-box row'>
                 <div className='image-container col'>
-                    <img src={cardData?.img ? cardData.img : defaultImg} alt='신청자이미지'/>
+                    <img src={cardData?.userImgUrl.length !== 0 ? cardData.userImgUrl : defaultImg } alt='신청자이미지'/>
                     <span>{cardData?.userName}</span>
                 </div>
                 <div className='data-box col'>

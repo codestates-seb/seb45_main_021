@@ -17,6 +17,6 @@ export default function useSubmitWriteEdit() {
         })
     }
 
-    return [apiResult, isSuccess, submitHandler];
+    return [apiResult, isSuccess, submitHandler, setApiResult];
 }
 

@@ -21,8 +21,8 @@ const StyleSubmitedCard = styled.div`
         > img {
             margin-bottom:1rem;
             border-radius:50%;      
-            width:100%;
-            height:auto;
+            width:70px;
+            height:70px;
             object-fit:cover;    
         }
         
@@ -94,7 +94,6 @@ export default function SubmitedCard({
         } else {
             api.patch(`/projects/${projectId}/request/${memberId}/${type}`)
             .then((res)=>{
-                requestUpdateHandler();
             })
             .catch(()=>{
                 setShowModal(true);
@@ -105,7 +104,6 @@ export default function SubmitedCard({
         }
     };
     
-
     return (
         <StyleSubmitedCard className='col'>
             {showModal &&
@@ -118,7 +116,7 @@ export default function SubmitedCard({
             />}
             <div className='card-box row'>
                 <div className='image-name-container col' onClick={()=>toProfile(cardData.memberId)}>
-                    <img src={cardData?.img ? cardData.img : defaultImg} alt='신청자이미지'/>
+                    <img src={cardData?.userImgUrl.length !== 0 ? cardData.userImgUrl : defaultImg} alt='신청자이미지'/>
                     <span>{cardData?.userName}</span>
                 </div>
                 <div className='data-box col'>
