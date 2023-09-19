@@ -124,7 +124,7 @@ public class PortfolioDto {
             setCreatedAt(createdAt);
             this.heartCount = heartCount;
             author = Author.builder()
-                    .username(member.getUserName())
+                    .userName(member.getUserName())
                     .memberId(member.getMemberId())
                     .build();
         }

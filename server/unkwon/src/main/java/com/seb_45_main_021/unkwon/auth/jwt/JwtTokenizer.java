@@ -136,8 +136,6 @@ public class JwtTokenizer {
         claims.put("username", member.getEmail());
         claims.put("roles", member.getRoles());
 
-        log.info(member.getRoles().toString());
-
         // subject 를 이메일 대신 회원 식별자로 변경
         String subject = String.valueOf(member.getMemberId());
         Date expiration = getTokenExpiration(getAccessTokenExpirationMinutes());
