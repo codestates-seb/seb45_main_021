@@ -82,7 +82,7 @@ export default function ForSubmitCard({
             {selectedCard && <span className='display-selected'>카드 선택됨</span>}
             <div className='card-box row'>
                 <div className='image-container col'>
-                    <img src={cardData?.img ? cardData.img : defaultImg} alt='신청자이미지'/>
+                    <img src={cardData?.imgUrl ? cardData.imgUrl : defaultImg} alt='신청자이미지'/>
                     <span>{cardData?.userName}</span>
                 </div>
                 <div className='data-box col'>

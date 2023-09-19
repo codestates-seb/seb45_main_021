@@ -118,7 +118,7 @@ export default function SubmitedCard({
             />}
             <div className='card-box row'>
                 <div className='image-name-container col' onClick={()=>toProfile(cardData.memberId)}>
-                    <img src={cardData?.img ? cardData.img : defaultImg} alt='신청자이미지'/>
+                    <img src={cardData?.imgUrl ? cardData.imgUrl : defaultImg} alt='신청자이미지'/>
                     <span>{cardData?.userName}</span>
                 </div>
                 <div className='data-box col'>
