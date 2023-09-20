@@ -173,9 +173,9 @@ export default function ProjectDetail() {
               />
             </StyleDetailContainer>
           )}
-          {(Number(detailData.isComment) === 1 && detailData.comments.length !== 0) && (
+          {Number(detailData.isComment) === 1 && 
             <Comment updateHandler={updateHandler} isAdmin={isAdmin} detailData={detailData} />
-          )}
+          }
         </StyleDetailWrapper>
       )}
     </>
