@@ -24,11 +24,11 @@
 |   <a href="https://github.com/myeongin0926">유명인</a>   |   <a href="https://github.com/qkrckstjq">박찬섭</a>   | <a href="https://github.com/blue7111">이종범C</a> | <a href="https://github.com/brightyein">김예인</a> | <a href="https://github.com/Park-DongGeun">박동근</a> | <a href="https://github.com/HwiyongHan">한휘용</a> |
 |    FE팀장    |      FE      |   FE    | BE팀장 |   BE   |   BE   |
 <details>
-<summary><u>#FE 파트</u></summary>
+<summary>FE 파트</summary>
 <div markdown="1">
-
+<p></p>
  <details>
-  <summary>FE 유명인 \[팀장\]</summary>
+  <summary>FE 유명인 [팀장]</summary>
   <div markdown="1">
     <h4>1. 전반적 기능 구상</h4>
       <p>&emsp;- 전반적인 사이트의 목적 및 디자인 구상</p>
@@ -93,11 +93,11 @@
 </details>
 
 <details>
-<summary><u>#BE 파트</u></summary>
+<summary>BE 파트</summary>
 <div markdown="1">
-
+<p></p>
  <details>
-  <summary>BE 김예인 (부팀장) </summary>
+  <summary>BE 김예인 [부팀장] </summary>
   <div markdown="1">
     <h4>1. 프로젝트 작성, 수정, 삭제, 조회 기능</h4>
     <h4>2. 프로젝트 참가신청, 신청취소, 신청수락, 신청거절 기능</h4>
