@@ -24,9 +24,8 @@
 |   <a href="https://github.com/myeongin0926">유명인</a>   |   <a href="https://github.com/qkrckstjq">박찬섭</a>   | <a href="https://github.com/blue7111">이종범C</a> | <a href="https://github.com/brightyein">김예인</a> | <a href="https://github.com/Park-DongGeun">박동근</a> | <a href="https://github.com/HwiyongHan">한휘용</a> |
 |    FE팀장    |      FE      |   FE    | BE팀장 |   BE   |   BE   |
 <details>
-<summary>FE 파트</summary>
+<summary><u>#FE 파트</u></summary>
 <div markdown="1">
-
 
  <details>
   <summary>FE 유명인 (팀장)</summary>
@@ -94,10 +93,9 @@
 </details>
 
 <details>
-<summary>BE 파트</summary>
+<summary><u>#BE 파트</u></summary>
 <div markdown="1">
 
-  
  <details>
   <summary>BE 김예인 (부팀장) </summary>
   <div markdown="1">
