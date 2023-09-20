@@ -212,35 +212,6 @@ export default function SignUp() {
     }
   };
 
-  const handleClickGoogleBtn = () => {
-    window.location.assign(
-      `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=15196070608-ti8mt0m3fo8tj48172bhq72h4re8bcni.apps.googleusercontent.com&scope=email%20profile&state=J8xE05niEcAJo0CAB8XkqVr25Prh7dXvkrqthZ2YJw0%3D&redirect_uri=https://spec.today/signup`,
-    );
-  };
-
-  const handleClickGithubBtn = () => {
-    window.location.assign(
-      'https://github.com/login/oauth/authorize?client_id=b7cd8d79c75bb40d352a&scope=user:email,read:user',
-    );
-  };
-
-  useEffect(() => {
-    // 마운트 함수
-    if (isLogin) toAbout();
-    const url = new URL(window.location.href);
-    const authorizationCode = url.searchParams.get('code');
-    if (authorizationCode) {
-      api
-        .get(`/oauth2/google/signup?code=${authorizationCode}`)
-        .then((el) => {
-          if (el.status === 201) toSignin();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <>
       {isSubmit ? (
@@ -253,21 +224,6 @@ export default function SignUp() {
             <p onClick={toSignin}>&nbsp;로그인</p>
           </div>
           <StyleRowContainer>
-            <StyleColContainer className="col colgap">
-              <StyleBtnContainer onClick={handleClickGoogleBtn}>
-                <FcGoogle className="logo" size={30} />
-                Google 회원가입
-              </StyleBtnContainer>
-              <StyleBtnContainer onClick={handleClickGithubBtn}>
-                <AiFillGithub className="logo" size={30} />
-                Github 회원가입
-              </StyleBtnContainer>
-            </StyleColContainer>
-            <div>
-              <StyleDivider>
-                <span>OR</span>
-              </StyleDivider>
-            </div>
             <StyleColContainer>
               <form className="formGap col" onSubmit={handleSubmitForm}>
                 <Input

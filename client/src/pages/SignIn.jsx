@@ -260,7 +260,7 @@ export default function SignIn() {
     if (authorizationCode) {
       if (state) {
         api
-          .get(`/oauth2/google/signin?code=${authorizationCode}`)
+          .get(`/oauth2/google?code=${authorizationCode}`)
           .then((el) => {
             if (el.status === 200) {
               dispatch(
@@ -282,9 +282,8 @@ export default function SignIn() {
             }
           })
           .catch((error) => {
-            if (error.response.status === 404) {
-              window.alert('회원가입이 필요합니다.');
-              toSignup();
+            if (error.response.status === 500) {
+              window.alert('서버가 준비되지 않았습니다.');
             }
           });
       } else {
@@ -311,9 +310,8 @@ export default function SignIn() {
             }
           })
           .catch((error) => {
-            if (error.response.status === 404) {
-              window.alert('회원가입이 필요합니다.');
-              toSignup();
+            if (error.response.status === 500) {
+              window.alert('서버가 준비되지 않았습니다.');
             }
           });
       }
@@ -335,11 +333,11 @@ export default function SignIn() {
             <StyleColContainer className="col colgap">
               <StyleBtnContainer onClick={handleClickGoogleBtn}>
                 <FcGoogle className="logo" size={30} />
-                Google 로그인
+                Google 시작하기
               </StyleBtnContainer>
               <StyleBtnContainer onClick={handleClickGithubBtn}>
                 <AiFillGithub className="logo" size={30} />
-                Github 로그인
+                Github 시작하기
               </StyleBtnContainer>
             </StyleColContainer>
             <div>
