@@ -87,11 +87,7 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
     console.log(temp);
     const isvalidPhone = isValidPhone(temp.tell.value.replace(/-/g, ''));
     if (type === 'fetch') {
-      if (
-        isvalidPhone &&
-        temp.aboutMe.value.length <= 200 &&
-        temp.abooutMe.value.trim().length > 0
-      ) {
+      if (isvalidPhone) {
         api
           .patch(`/projectcards/${data.projectCardId}`, {
             tags: temp.tags.value,
@@ -119,25 +115,9 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
             tell: { ...temp.tell, error: '-를 제외한 전화번호를 입력해주세요.' },
           });
         }
-        if (temp.aboutMe.value.length > 200) {
-          setTemp({
-            ...temp,
-            abooutMe: { ...temp.abooutMe.slice(0, 200), error: '200 글자 이하로 입력해주세요.' },
-          });
-        }
-        if (!temp.abooutMe.value.trim().length > 0) {
-          setTemp({
-            ...temp,
-            abooutMe: { ...temp.aboutMe, error: '비워둘 수 없습니다.' },
-          });
-        }
       }
     } else if (type === 'new') {
-      if (
-        isvalidPhone &&
-        temp.aboutMe.value.length <= 200 &&
-        temp.aboutMe.value.trim().length > 0
-      ) {
+      if (isvalidPhone) {
         api
           .post(`/projectcards/${memberId}`, {
             tags: temp.tags.value,
@@ -166,18 +146,6 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
           setTemp({
             ...temp,
             tell: { ...temp.tell, error: '-를 제외한 전화번호를 입력해주세요.' },
-          });
-        }
-        if (temp.aboutMe.value.length > 200) {
-          setTemp({
-            ...temp,
-            abooutMe: { ...temp.abooutMe, error: '200 글자 이하로 입력해주세요.' },
-          });
-        }
-        if (!temp.aboutMe.value.trim().length > 0) {
-          setTemp({
-            ...temp,
-            aboutMe: { ...temp.aboutMe, error: '비워둘 수 없습니다.' },
           });
         }
       }
@@ -271,7 +239,11 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
         error={temp.tell.error}
         onChange={(e) => setTemp({ ...temp, tell: { ...temp.tell, value: e.target.value } })}
       />
-      <ProGress comPleteNum={11} proGressNum={temp.tell.value?.length} fontSize="1.5rem" />
+      <ProGress
+        comPleteNum={11}
+        proGressNum={temp.tell.value?.replace(/-/g, '')?.length}
+        fontSize="1.5rem"
+      />
       <div className="tagwrapper">
         <Input
           label="태그"
@@ -280,7 +252,7 @@ export default function SwiperEdit({ data, idx, handler, type, setData, trueData
           type="text"
           borderRadius="10px"
           maxLength={10}
-          placeholder="태그는 최대 중복제외 3개까지 등록이 가능합니다."
+          placeholder="태그는 최대 중복제외 3개까지 엔터로 눌러 등록해주세요."
           error={temp.tags.error}
           onChange={(e) =>
             setTemp({

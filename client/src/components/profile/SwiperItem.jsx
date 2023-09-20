@@ -57,7 +57,7 @@ const InfoWrapper = styled.div`
     &:hover {
       filter: brightness(0.8);
     }
-    object-fit:cover;
+    object-fit: cover;
   }
 `;
 
