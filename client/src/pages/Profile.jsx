@@ -99,15 +99,15 @@ export default function Profile() {
           likeList: [el.data.portfolioHeart, el.data.projectHeart],
           projectCard: temp,
         });
+        setIsLoading(false);
       })
       .catch((error) => {
         if (error.response.status === 404) {
           setIsNotFound(true);
+          setIsLoading(false);
         }
       });
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000); // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberId]);
 
   return (
