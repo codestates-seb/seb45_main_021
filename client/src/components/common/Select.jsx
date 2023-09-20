@@ -15,7 +15,9 @@ const StyleSelect = styled.div`
   position: absolute;
   display: flex;
   align-items: center;
-  border: 1px solid var(--black-100);
+  transition: 0.2s;
+  opacity: ${(props) => (props.$isOn ? '1' : '0.7')};
+  border: 1px solid;
   border-radius: 5px;
   cursor: pointer;
   .arrow-icon {
@@ -42,6 +44,7 @@ const StyleDropMenu = styled.div`
   max-height: ${(props) => (props.$isOn ? '120px' : '0')};
   transition: all 0.3s;
   backdrop-filter: blur(10px);
+  z-index: 10;
   &::-webkit-scrollbar {
     width: 6px;
   }

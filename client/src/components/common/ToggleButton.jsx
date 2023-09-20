@@ -10,7 +10,7 @@ const StyleToggleContainer = styled.div`
   transition: 0.3s;
   border: 1px solid white;
   &.toggle--checked {
-    background-color: var(--black-800);
+    background-color: #363030;
   }
 
   .toggle-circle {
@@ -56,12 +56,12 @@ export default function ToggleButton({
     setIsOn(!isOn);
     onClickHandler && onClickHandler(!isOn);
   };
-  
-  useEffect(()=>{
-    if(defaultValue !== undefined) {
-        setIsOn(defaultValue);
+
+  useEffect(() => {
+    if (defaultValue !== undefined) {
+      setIsOn(defaultValue);
     }
-  },[defaultValue])
+  }, [defaultValue]);
 
   return (
     <>

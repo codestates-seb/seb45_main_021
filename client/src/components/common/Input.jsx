@@ -11,6 +11,7 @@ const StyleErrorInput = styled.div`
 
 const Label = styled.label`
   color: ${(props) => (props.$labelColor ? props.$labelColor : 'var(--black-100)')};
+  font-weight: var(--nanum-semi-bold);
   font-size: 1.6rem;
   background-color: transparent;
 `;
@@ -49,7 +50,7 @@ const StyleTextArea = styled.textarea`
   padding: 8px 6px;
   font-size: 1.5rem;
   font-family: var(--nanum);
-  line-height:1.3
+  line-height: 1.3;
 `;
 
 /**
