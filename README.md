@@ -27,6 +27,7 @@
 <summary>FE 담당 파트</summary>
 <div markdown="1">
 
+
  <details>
   <summary>유명인</summary>
   <div markdown="1">
@@ -91,9 +92,11 @@
   </div>
 </details>
 </details>
+
 <details>
 <summary>BE 담당 파트</summary>
 <div markdown="1">
+
   
  <details>
   <summary>김예인</summary>
