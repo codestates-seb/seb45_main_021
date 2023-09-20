@@ -29,7 +29,7 @@
 
 
  <details>
-  <summary>FE 유명인</summary>
+  <summary>FE 유명인 (팀장)</summary>
   <div markdown="1">
     <h4>1. 전반적 기능 구상</h4>
       <p>&emsp;- 전반적인 사이트의 목적 및 디자인 구상</p>
@@ -99,7 +99,7 @@
 
   
  <details>
-  <summary>BE 김예인</summary>
+  <summary>BE 김예인 (부팀장) </summary>
   <div markdown="1">
     <h4>1. 프로젝트 작성, 수정, 삭제, 조회 기능</h4>
     <h4>2. 프로젝트 참가신청, 신청취소, 신청수락, 신청거절 기능</h4>
