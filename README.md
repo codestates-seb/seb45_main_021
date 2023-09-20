@@ -28,7 +28,7 @@
 <div markdown="1">
 
  <details>
-  <summary>FE 유명인 (팀장)</summary>
+  <summary>FE 유명인 \[팀장\]</summary>
   <div markdown="1">
     <h4>1. 전반적 기능 구상</h4>
       <p>&emsp;- 전반적인 사이트의 목적 및 디자인 구상</p>
