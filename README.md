@@ -24,12 +24,12 @@
 |   <a href="https://github.com/myeongin0926">유명인</a>   |   <a href="https://github.com/qkrckstjq">박찬섭</a>   | <a href="https://github.com/blue7111">이종범C</a> | <a href="https://github.com/brightyein">김예인</a> | <a href="https://github.com/Park-DongGeun">박동근</a> | <a href="https://github.com/HwiyongHan">한휘용</a> |
 |    FE팀장    |      FE      |   FE    | BE팀장 |   BE   |   BE   |
 <details>
-<summary>FE 담당 파트</summary>
+<summary>FE 파트</summary>
 <div markdown="1">
 
 
  <details>
-  <summary>유명인</summary>
+  <summary>FE 유명인</summary>
   <div markdown="1">
     <h4>1. 전반적 기능 구상</h4>
       <p>&emsp;- 전반적인 사이트의 목적 및 디자인 구상</p>
@@ -52,7 +52,7 @@
 </details>
 
  <details>
-  <summary>박찬섭</summary>
+  <summary>FE 박찬섭</summary>
   <div markdown="1">
     <h4>1. 프로젝트, 포트폴리오 작성 기능</h4>
       <p>&emsp;- Json데이터 + FormData데이터</p>
@@ -72,7 +72,7 @@
 </details>
  
  <details>
-  <summary>이종범</summary>
+  <summary>FE 이종범</summary>
   <div markdown="1">
     <h4>1. 로그인 및 회원가입 기능</h4>
     <p>&emsp;- 자체 회원가입 및 로그인이 가능합니다.</p>
@@ -94,12 +94,12 @@
 </details>
 
 <details>
-<summary>BE 담당 파트</summary>
+<summary>BE 파트</summary>
 <div markdown="1">
 
   
  <details>
-  <summary>김예인</summary>
+  <summary>BE 김예인</summary>
   <div markdown="1">
     <h4>1. 프로젝트 작성, 수정, 삭제, 조회 기능</h4>
     <h4>2. 프로젝트 참가신청, 신청취소, 신청수락, 신청거절 기능</h4>
@@ -108,7 +108,7 @@
 </details>
 
  <details>
-  <summary>박동근</summary>
+  <summary>BE 박동근</summary>
   <div markdown="1">
     <h4>1. 스프링 Security 적용</h4>
       <p>&emsp;- JWT 사용 </p>
@@ -122,7 +122,7 @@
 </details>
 
  <details>
-  <summary>한휘용</summary>
+  <summary>BE 한휘용</summary>
   <div markdown="1">
     <h4>1. 개발 환경 구성 및 AWS 배포 환경 구성</h4>
     <h4>2. 포트폴리오 CRUD 구현</h4>
