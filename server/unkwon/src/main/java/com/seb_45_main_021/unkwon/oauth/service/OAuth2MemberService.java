@@ -84,6 +84,7 @@ public class OAuth2MemberService {
             generateToken(member, result);
         }
 
+        result.put("member", member);
         result.put("status", httpStatus);
         // email, name, picture
         return result;
