@@ -33,7 +33,7 @@ public class Project extends Auditable {
 
     private int totalPeople;
 
-    @OneToMany(mappedBy = "project")
+    @OneToMany(mappedBy = "project", cascade = CascadeType.REMOVE)
     private List<ProjectStatus> projectStatuses;
 
     @Column

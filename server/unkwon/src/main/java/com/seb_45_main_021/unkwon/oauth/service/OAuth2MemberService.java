@@ -74,9 +74,6 @@ public class OAuth2MemberService {
 
         //회원 가입
         if(!findMember.isPresent()){
-            // 회원가입이 안되어있을 때 들어온 요청이 로그인 요청일 경우 예외 코드 발생
-            // 프론트에서 404 status 를 받고 회원 가입 페이지로 이동
-            if(redirectUri != null && redirectUri.equals(redirectUriBySignIn)) throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
             isSignUp = true;
             member = memberRepository.save(oauthServerAttribute.toEntity(
                     oauthServerAttribute.getSocialType(),
@@ -87,7 +84,6 @@ public class OAuth2MemberService {
             generateToken(member, result);
         }
 
-        if(isSignUp) httpStatus = HttpStatus.CREATED.value();
         result.put("status", httpStatus);
         // email, name, picture
         return result;
