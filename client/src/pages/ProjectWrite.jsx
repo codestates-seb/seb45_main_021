@@ -20,6 +20,7 @@ import { custom } from '../static/theme';
 import { useSelector } from 'react-redux';
 import { StyleBorderButton } from '../components/common/Buttons';
 import useSubmitWriteEdit from '../hooks/useSubmitWriteEdit';
+import ReplaceNewLine from '../components/PfPjPublic/ReplaceNewLine';
 
 export const StyleProjectWrite = styled(Page)`
   height:auto;
