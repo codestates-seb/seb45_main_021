@@ -19,7 +19,7 @@ export default function Comment({
             <WriteComment
                 updateHandler={updateHandler}
             />}
-            {detailData.comments.map((item,idx,arr)=>
+            {detailData.comments.length !== 0 && detailData.comments.map((item,idx,arr)=>
                 <SeeComment
                     key={arr.length-idx-1}
                     isAdmin={isAdmin}
