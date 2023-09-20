@@ -247,7 +247,7 @@ export default function SignIn() {
 
   const handleClickGithubBtn = () => {
     window.location.assign(
-      'https://github.com/login/oauth/authorize?client_id=b7cd8d79c75bb40d352a',
+      'https://github.com/login/oauth/authorize?client_id=b7cd8d79c75bb40d352a&scope=user:email,read:user',
     );
   };
 
