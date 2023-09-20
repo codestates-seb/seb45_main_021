@@ -24,7 +24,7 @@
 |   <a href="https://github.com/myeongin0926">유명인</a>   |   <a href="https://github.com/qkrckstjq">박찬섭</a>   | <a href="https://github.com/blue7111">이종범C</a> | <a href="https://github.com/brightyein">김예인</a> | <a href="https://github.com/Park-DongGeun">박동근</a> | <a href="https://github.com/HwiyongHan">한휘용</a> |
 |    FE팀장    |      FE      |   FE    | BE팀장 |   BE   |   BE   |
 <details>
-<summary>담당 파트</summary>
+<summary>FE 담당 파트</summary>
 <div markdown="1">
 
  <details>
@@ -90,7 +90,11 @@
     <p>&emsp;- 도메인 구매후 깃허브 페이지 네임서버 적용을 완료하였습니다.</p>
   </div>
 </details>
-
+</details>
+<details>
+<summary>BE 담당 파트</summary>
+<div markdown="1">
+  
  <details>
   <summary>김예인</summary>
   <div markdown="1">
@@ -126,6 +130,7 @@
 </details>
 
 </details>
+
 
 ### 기술 스택
 
