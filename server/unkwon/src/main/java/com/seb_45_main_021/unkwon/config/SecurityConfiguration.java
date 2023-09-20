@@ -68,12 +68,12 @@ public class SecurityConfiguration {
                         .antMatchers("/portfolios/**", "/projects/**", "/members/**", "/projectcards/**", "/oauth2/**").permitAll()
                         .antMatchers("/portfolio/**", "/project/**").permitAll()
                         .antMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/swagger-ui.html", "/webjars/**").permitAll()
-                        .anyRequest().authenticated())
-                .oauth2Login()
-                .successHandler(oAuth2LoginSuccessHandler)
-                .failureHandler(oAuth2LoginFailureHandler)
-                .userInfoEndpoint() // OAuth2 로그인 성공 이후 사용자 정보를 가져올 설정
-                .userService(customOAuth2UserService);
+                        .anyRequest().authenticated());
+//                .oauth2Login()
+//                .successHandler(oAuth2LoginSuccessHandler)
+//                .failureHandler(oAuth2LoginFailureHandler)
+//                .userInfoEndpoint() // OAuth2 로그인 성공 이후 사용자 정보를 가져올 설정
+//                .userService(customOAuth2UserService);
 
         return http.build();
     }
