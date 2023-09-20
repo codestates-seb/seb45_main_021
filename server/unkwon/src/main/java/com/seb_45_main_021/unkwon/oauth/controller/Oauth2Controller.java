@@ -49,6 +49,21 @@ public class Oauth2Controller {
 
         return new ResponseEntity(loginResponse, HttpStatus.OK);
     }
+    @GetMapping("/github")
+    public ResponseEntity oauth2GitHub(@RequestParam("code") String code,
+                                             HttpServletResponse response){
+        String accessToken = oAuth2MemberService.getTokenFromGithub(code);
+        Map<String, Object> result = oAuth2MemberService.findOrSaveMember(accessToken, "github", null);
+
+        if((Integer) result.get("status") == HttpStatus.CREATED.value()) return new ResponseEntity(HttpStatus.CREATED);
+
+        Member member = (Member) result.get("member");
+        LoginResponseDto loginResponse = oAuth2MemberService.getLoginInform(member);
+        response.setHeader("accessToken", (String) result.get("accessToken"));
+        response.setHeader("refreshToken", (String) result.get("refreshToken"));
+
+        return new ResponseEntity(loginResponse, HttpStatus.OK);
+    }
 
     @GetMapping("/github/signup")
     public ResponseEntity oauth2GitHubSingUp(@RequestParam("code") String code,
