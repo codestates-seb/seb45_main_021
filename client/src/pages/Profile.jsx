@@ -5,7 +5,6 @@ import Project from '../components/profile/Project';
 import Portfolio from '../components/profile/Portfolio';
 import LikeList from '../components/profile/LikeList';
 import ProjectCard from '../components/profile/ProjectCard';
-import AnchorMenu from '../components/profile/AnchorMenu';
 import Page from '../components/common/Page';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -100,15 +99,15 @@ export default function Profile() {
           likeList: [el.data.portfolioHeart, el.data.projectHeart],
           projectCard: temp,
         });
+        setIsLoading(false);
       })
       .catch((error) => {
         if (error.response.status === 404) {
           setIsNotFound(true);
+          setIsLoading(false);
         }
       });
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000); // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberId]);
 
   return (
@@ -133,7 +132,6 @@ export default function Profile() {
               </>
             )}
           </StyleDiv>
-          <AnchorMenu />
         </>
       )}
     </StyleContainer>

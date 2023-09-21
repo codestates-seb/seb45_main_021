@@ -6,7 +6,7 @@ import { StyleBorderButton } from '../components/common/Buttons';
 import useForm from '../hooks/useForm';
 import useNav from '../hooks/useNav';
 import EnterTag from '../components/PfPjPublic/EnterTag';
-import WriteHeader from '../components/PfPjPublic/WriteHeader';
+import WriteDescription from '../components/PfPjPublic/WriteHeader';
 import SelectBox from '../components/PfPjPublic/SelectBox';
 import useError from '../hooks/useError';
 import { checkValidations } from '../utils/checkValidations';
@@ -90,7 +90,7 @@ export default function ProjectEdit() {
                 }
               />
             )}
-            <WriteHeader type="project" state="edit" />
+            <WriteDescription type="project" state="edit" />
             <div className="write-wrapper row">
               <div className="input-container col">
                 <Input
@@ -233,12 +233,14 @@ export default function ProjectEdit() {
                 수정
               </StyleBorderButton>
               <StyleBorderButton
-                onClick={()=>{
+                onClick={() => {
                   setShowModal(true);
                   setIsCancel(true);
                   setApiResult('작성 취소시 작성한 내용은 저장되지 않습니다.');
                 }}
-              >취소</StyleBorderButton>
+              >
+                취소
+              </StyleBorderButton>
             </div>
           </StyleProjectWrite>
         )

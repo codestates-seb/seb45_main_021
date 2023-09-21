@@ -247,7 +247,7 @@ export default function SignIn() {
 
   const handleClickGithubBtn = () => {
     window.location.assign(
-      'https://github.com/login/oauth/authorize?client_id=b7cd8d79c75bb40d352a',
+      'https://github.com/login/oauth/authorize?client_id=b7cd8d79c75bb40d352a&scope=user:email,read:user',
     );
   };
 
@@ -260,7 +260,7 @@ export default function SignIn() {
     if (authorizationCode) {
       if (state) {
         api
-          .get(`/oauth2/google/signin?code=${authorizationCode}`)
+          .get(`/oauth2/google?code=${authorizationCode}`)
           .then((el) => {
             if (el.status === 200) {
               dispatch(
@@ -282,44 +282,13 @@ export default function SignIn() {
             }
           })
           .catch((error) => {
-            if (error.response.status === 404) {
-              api
-                .get(`/oauth2/google/signup?code=${authorizationCode}`)
-                .then((el) => {
-                  if (el.status === 201) {
-                    api
-                      .get(`/oauth2/google/signin?code=${authorizationCode}`)
-                      .then((el) => {
-                        if (el.status === 200) {
-                          dispatch(
-                            updateUser({
-                              isLogin: true,
-                              userInfo: {
-                                memberId: el.data.memberId,
-                                userName: el.data.userName,
-                                userImgUrl: el.data.userImgUrl,
-                                socialType: el.data.socialType,
-                              },
-                              likeList: {
-                                portfolioList: el.data.portfolioList,
-                                projectList: el.data.projectList,
-                              },
-                            }),
-                          );
-                          toAbout();
-                        }
-                      })
-                      .catch((error) => console.log(error));
-                  }
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
+            if (error.response.status === 500) {
+              window.alert('서버가 준비되지 않았습니다.');
             }
           });
       } else {
         api
-          .get(`/oauth2/github/signin?code=${authorizationCode}`)
+          .get(`/oauth2/github?code=${authorizationCode}`)
           .then((el) => {
             if (el.status === 200) {
               dispatch(
@@ -341,39 +310,8 @@ export default function SignIn() {
             }
           })
           .catch((error) => {
-            if (error.response.status === 404) {
-              api
-                .get(`/oauth2/github/signup?code=${authorizationCode}`)
-                .then((el) => {
-                  if (el.status === 201) {
-                    api
-                      .get(`/oauth2/github/signin?code=${authorizationCode}`)
-                      .then((el) => {
-                        if (el.status === 200) {
-                          dispatch(
-                            updateUser({
-                              isLogin: true,
-                              userInfo: {
-                                memberId: el.data.memberId,
-                                userName: el.data.userName,
-                                userImgUrl: el.data.userImgUrl,
-                                socialType: el.data.socialType,
-                              },
-                              likeList: {
-                                portfolioList: el.data.portfolioList,
-                                projectList: el.data.projectList,
-                              },
-                            }),
-                          );
-                          toAbout();
-                        }
-                      })
-                      .catch((error) => console.log(error));
-                  }
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
+            if (error.response.status === 500) {
+              window.alert('서버가 준비되지 않았습니다.');
             }
           });
       }
@@ -395,11 +333,11 @@ export default function SignIn() {
             <StyleColContainer className="col colgap">
               <StyleBtnContainer onClick={handleClickGoogleBtn}>
                 <FcGoogle className="logo" size={30} />
-                Google 로그인
+                Google 시작하기
               </StyleBtnContainer>
               <StyleBtnContainer onClick={handleClickGithubBtn}>
                 <AiFillGithub className="logo" size={30} />
-                Github 로그인
+                Github 시작하기
               </StyleBtnContainer>
             </StyleColContainer>
             <div>
