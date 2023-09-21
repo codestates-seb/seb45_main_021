@@ -22,7 +22,7 @@ import Modal from '../components/common/Modal';
 import { StyleBorderButton } from '../components/common/Buttons';
 import { useSelector } from 'react-redux';
 import useSubmitWriteEdit from '../hooks/useSubmitWriteEdit';
-import { StyleProjectWrite } from './ProjectWrite';
+import { StylePortfolioWrite } from './PortfolioWrite';
 import NotFound from './NotFound';
 
 export default function PortfolioEdit() {
@@ -39,7 +39,7 @@ export default function PortfolioEdit() {
     userInfo: { memberId },
   } = useSelector((state) => state.user);
   const width = '100%';
-  const height = '70rem';
+  const height = '40rem';
 
   useEffect(() => {
     api
@@ -78,7 +78,7 @@ export default function PortfolioEdit() {
         <NotFound />
       ) : (
         firstApiSuccess === true && (
-          <StyleProjectWrite className="col">
+          <StylePortfolioWrite className="col">
             {showModal && (
               <Modal
                 type={isCancel ? 'confirm' : 'alert'}
@@ -92,9 +92,10 @@ export default function PortfolioEdit() {
                 }
               />
             )}
+            <div className='write-wrapper'>
             <WriteDescription type="portfolio" state="edit" />
-            <div className="write-wrapper row">
-              <div className="input-container col">
+            <div className="input-container col">
+              <div className="progress-input">
                 <Input
                   label={'포트폴리오 제목'}
                   width={'100%'}
@@ -108,19 +109,20 @@ export default function PortfolioEdit() {
                   defaultValue={dataForm.title}
                 />
                 <ProGress
-                  className={'margin-top-remove'}
                   width={'100%'}
-                  height={'1.2rem'}
-                  fontSize={'1.2rem'}
+                  fontSize={'1.3rem'}
                   comPleteNum={portfolioWriteRule.title.max}
                   proGressNum={dataForm.title.length ?? 0}
                   error={dataForm.title.length < 10 ? true : false}
                 />
-
+              </div>
+              <div className='selectors'>
                 <SelectBox
-                  text={'사용할 언어를 선택 해주세요.'}
+                  className="lang-selector"
+                  text={'언어 선택'}
                   component={
                     <Select
+                      height="37px"
                       width={width}
                       options={languagesOptions}
                       defaultLabel={dataForm.lang}
@@ -130,16 +132,13 @@ export default function PortfolioEdit() {
                       }}
                     />
                   }
-                  error={errors.lang}
-                  name="언어"
                 />
 
                 <SelectBox
-                  text={'포트폴리오에 댓글 허용 여부'}
+                  className="comment-selector"
+                  text={'댓글작성 허용'}
                   component={
                     <ToggleButton
-                      width="10rem"
-                      height="5rem"
                       onClickHandler={() => {
                         handleInputChange(null, dataForm.isComment ? 0 : 1, 'isComment');
                       }}
@@ -147,17 +146,12 @@ export default function PortfolioEdit() {
                       hideError={true}
                     />
                   }
-                  hideError={true}
-                  margin="3rem"
-                  customText={dataForm.isComment ? '허용됨' : '허용되지 않음'}
                 />
 
                 <SelectBox
-                  text={'구직용, 재직용 임시'}
+                  text={'구직용 여부'}
                   component={
                     <ToggleButton
-                      width="10rem"
-                      height="5rem"
                       onClickHandler={() => {
                         handleInputChange(null, dataForm.isEmploy ? 0 : 1, 'isEmploy');
                       }}
@@ -166,11 +160,10 @@ export default function PortfolioEdit() {
                     />
                   }
                   hideError={true}
-                  margin="3rem"
-                  customText={dataForm.isEmploy ? '구직을 위한 포트폴리오' : '일반 포트폴리오'}
                 />
-
+              </div>
                 <EnterTag
+                  className="tag-container"
                   width="100%"
                   height="3.5rem"
                   placeholder="태그는 최대 3개까지 등록이 가능합니다."
@@ -179,8 +172,9 @@ export default function PortfolioEdit() {
                     dataForm.tags.length === 1 && dataForm.tags[0] === '' ? [] : dataForm.tags
                   }
                 />
-
+              <div className='progress-textarea'>
                 <Input
+                  className="body-content"
                   label={'포트폴리오 본문'}
                   width={width}
                   height={height}
@@ -204,12 +198,11 @@ export default function PortfolioEdit() {
                   error={dataForm.body.length < 100 ? true : false}
                 />
               </div>
-
-              <div className="imgs-container col">
                 <FileInput
+                  className="title-image"
                   name={'타이틀 이미지'}
                   width={'100%'}
-                  height={'55rem'}
+                  height={'200px'}
                   number={1}
                   dataForm={dataForm}
                   handleInputChange={handleInputChange}
@@ -220,9 +213,10 @@ export default function PortfolioEdit() {
                 />
 
                 <FileInput
+                  className="body-image"
                   name={'이미지'}
                   width={'100%'}
-                  height={'55rem'}
+                  height={'200px'}
                   number={10}
                   dataForm={dataForm}
                   handleInputChange={handleInputChange}
@@ -257,7 +251,7 @@ export default function PortfolioEdit() {
                 취소
               </StyleBorderButton>
             </div>
-          </StyleProjectWrite>
+          </StylePortfolioWrite>
         )
       )}
     </>
