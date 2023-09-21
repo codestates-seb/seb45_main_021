@@ -20,77 +20,19 @@ import {
   projectWriteRule,
 } from '../static/projectInit';
 import Modal from '../components/common/Modal';
-import { custom } from '../static/theme';
+import { custom, desktop } from '../static/theme';
 import { useSelector } from 'react-redux';
 import { StyleBorderButton } from '../components/common/Buttons';
 import useSubmitWriteEdit from '../hooks/useSubmitWriteEdit';
-import ReplaceNewLine from '../components/PfPjPublic/ReplaceNewLine';
+import { StylePortfolioWrite } from './PortfolioWrite';
 
-export const StyleProjectWrite = styled(Page)`
-  height: auto;
-  background-color: transparent;
-  padding-top: 6rem;
-  font-size: 1.6rem;
-
-  .margin-top-remove {
-    margin-top: -20px !important;
-  }
-
-  .input-container {
-    width: 40%;
-    height: 100%;
-    > div {
-      margin-bottom: 3rem;
-    }
-  }
-
-  .write-wrapper {
-    gap: 3rem;
-  }
-
-  .imgs-container {
-    width: 60%;
-    height: auto;
-    > div {
-      margin-bottom: 6rem;
-    }
-  }
-  .submit-box {
-    width: 100%;
-    margin-bottom: 10rem;
-    display: flex;
-    button {
-      font-size: 1.6rem;
-      padding: 5px 15px;
-      margin-right: 5rem;
-    }
+export const StyleProjectWrite = styled(StylePortfolioWrite)`
+  .selectors {
+    gap:70px;
+    margin-bottom:5rem;
   }
   .data-select-container {
-    gap: 1rem;
-    div {
-      flex: 1;
-    }
-  }
-  .button-box {
-    width: 100%;
-    margin-bottom: 10rem;
-    display: flex;
-    > button {
-      font-size: 1.6rem;
-      padding: 5px 15px;
-      margin-right: 5rem;
-    }
-  }
-  ${custom(900)} {
-    .write-wrapper {
-      flex-direction: column;
-    }
-    .input-container {
-      width: 100%;
-    }
-    .imgs-container {
-      width: 100%;
-    }
+    gap:1rem;
   }
 `;
 
@@ -142,35 +84,37 @@ export default function ProjectWrite() {
           confirmHandler={() => (isSuccess || isCancel ? toProject() : setShowModal(false))}
         />
       )}
-      <WriteDescription type="project" />
-      <div className="write-wrapper row">
+      <div className='write-wrapper'>
+        <WriteDescription type="project" />
         <div className="input-container col">
-          <Input
-            label={'프로젝트 제목'}
-            width={'100%'}
-            onChange={(e) => {
-              handleInputChange(null, e.target.value, 'title');
-              handleErrorChange(null, e.target.value, 'title', checkValidations);
-            }}
-            placeholder={'최소 10 글자 최대 30글자까지 입력 가능 합니다. (필수)'}
-            type="text"
-            maxLength={30}
-          />
+          <div className="progress-input">
+            <Input
+              label={'프로젝트 제목'}
+              width={'100%'}
+              onChange={(e) => {
+                handleInputChange(null, e.target.value, 'title');
+                handleErrorChange(null, e.target.value, 'title', checkValidations);
+              }}
+              placeholder={'최소 10 글자 최대 30글자까지 입력 가능 합니다. (필수)'}
+              type="text"
+              maxLength={30}
+            />
 
-          <ProGress
-            className={'margin-top-remove'}
-            width={'100%'}
-            height={'1.2rem'}
-            fontSize={'1.2rem'}
-            comPleteNum={projectWriteRule.title.max}
-            proGressNum={dataForm.title.length ?? 0}
-            error={dataForm.title.length < 10 ? true : false}
-          />
-
+            <ProGress
+              width={'100%'}
+              fontSize={'1.3rem'}
+              comPleteNum={projectWriteRule.title.max}
+              proGressNum={dataForm.title.length ?? 0}
+              error={dataForm.title.length < 10 ? true : false}
+            />
+          </div>
+        <div className='selectors col'>
           <SelectBox
-            text={'사용할 언어를 선택 해주세요.'}
+            className="lang-selector"
+            text={'언어 선택'}
             component={
               <Select
+                height="37px"
                 width={width}
                 options={languagesOptions}
                 defaultLabel={'-'}
@@ -180,8 +124,6 @@ export default function ProjectWrite() {
                 }}
               />
             }
-            error={errors.lang}
-            name="언어"
           />
 
           <SelectBox
@@ -216,65 +158,66 @@ export default function ProjectWrite() {
             error={errors.closedAt}
             name="마감 날짜"
           />
-
+        </div>
           <EnterTag
+            className="tag-container"
             width="100%"
             height="3.5rem"
             placeholder="태그는 최대 3개까지 등록이 가능합니다."
             dataForm={dataForm}
             handleInputChange={handleInputChange}
           />
-
-          <Input
-            label={'기획서'}
-            width={width}
-            height={height}
-            type={'textarea'}
-            onChange={(e) => {
-              handleInputChange(null, e.target.value, 'body');
-              handleErrorChange(null, e.target.value, 'body', checkValidations);
-            }}
-            placeholder={'최소 100 ~ 500글자까지 입력 가능합니다. (필수)'}
-            maxLength={500}
-          />
-          <ProGress
-            className={'margin-top-remove'}
-            width={'100%'}
-            height={'1.2rem'}
-            fontSize={'1.2rem'}
-            comPleteNum={projectWriteRule.body.max}
-            proGressNum={dataForm.body.length ?? 0}
-            error={dataForm.body.length < 100 ? true : false}
-          />
-
-          <Input
-            label={'상세 요강'}
-            width={width}
-            height={height}
-            type={'textarea'}
-            onChange={(e) => {
-              handleInputChange(null, e.target.value, 'description');
-              handleErrorChange(null, e.target.value, 'description', checkValidations);
-            }}
-            placeholder={'최대 200글자까지 입력 가능합니다. (선택)'}
-            maxLength={200}
-          />
-          <ProGress
-            className={'margin-top-remove'}
-            width={'100%'}
-            height={'1.2rem'}
-            fontSize={'1.2rem'}
-            comPleteNum={projectWriteRule.description.max}
-            proGressNum={dataForm.description.length ?? 0}
-            error={dataForm.description.length > 200 ? true : false}
-          />
-        </div>
-
-        <div className="imgs-container col">
+          <div className='progress-textarea'>
+            <Input
+              className="body-content"
+              label={'프로젝트 본문'}
+              width={width}
+              height={height}
+              type={'textarea'}
+              onChange={(e) => {
+                handleInputChange(null, e.target.value, 'body');
+                handleErrorChange(null, e.target.value, 'body', checkValidations);
+              }}
+              placeholder={'100 - 500 글자를 입력해주세요'}
+              maxLength={500}
+            />
+            <ProGress
+              width={'100%'}
+              height={'1.2rem'}
+              fontSize={'1.2rem'}
+              comPleteNum={projectWriteRule.body.max}
+              proGressNum={dataForm.body.length ?? 0}
+              error={dataForm.body.length < 100 ? true : false}
+            />
+          </div>
+          <div className='progress-textarea'>
+            <Input
+              className="body-content"
+              label={'상세 요강'}
+              width={width}
+              height={height}
+              type={'textarea'}
+              onChange={(e) => {
+                handleInputChange(null, e.target.value, 'description');
+                handleErrorChange(null, e.target.value, 'description', checkValidations);
+              }}
+              placeholder={'최대 200글자까지 입력 가능합니다'}
+              maxLength={200}
+            />
+            <ProGress
+              width={'100%'}
+              height={'1.2rem'}
+              fontSize={'1.2rem'}
+              comPleteNum={projectWriteRule.description.max}
+              proGressNum={dataForm.description.length ?? 0}
+              error={dataForm.description.length > 200 ? true : false}
+            />
+          </div>
           <FileInput
+            className="title-image"
             name={'타이틀 이미지'}
             width={'100%'}
-            height={'55rem'}
+            height={'200px'}
             number={1}
             dataForm={dataForm}
             handleInputChange={handleInputChange}
@@ -283,9 +226,10 @@ export default function ProjectWrite() {
           />
 
           <FileInput
+            className="body-image"
             name={'이미지'}
             width={'100%'}
-            height={'55rem'}
+            height={'200px'}
             number={7}
             dataForm={dataForm}
             handleInputChange={handleInputChange}

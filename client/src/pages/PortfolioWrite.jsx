@@ -25,7 +25,7 @@ import { tablet, desktop } from '../static/theme';
 
 import styled from 'styled-components';
 
-const StylePortfolioWrite = styled.section`
+export const StylePortfolioWrite = styled.section`
   width: var(--inner);
   margin: var(--center);
   padding-top: 50px;
