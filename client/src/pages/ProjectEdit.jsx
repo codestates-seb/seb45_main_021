@@ -6,7 +6,7 @@ import { StyleBorderButton } from '../components/common/Buttons';
 import useForm from '../hooks/useForm';
 import useNav from '../hooks/useNav';
 import EnterTag from '../components/PfPjPublic/EnterTag';
-import WriteHeader from '../components/PfPjPublic/WriteHeader';
+import WriteDescription from '../components/PfPjPublic/WriteHeader';
 import SelectBox from '../components/PfPjPublic/SelectBox';
 import useError from '../hooks/useError';
 import { checkValidations } from '../utils/checkValidations';
@@ -21,6 +21,7 @@ import Modal from '../components/common/Modal';
 import useSubmitWriteEdit from '../hooks/useSubmitWriteEdit';
 import { StyleProjectWrite } from './ProjectWrite';
 import NotFound from './NotFound';
+
 
 export default function ProjectEdit() {
   const { toProject } = useNav();
@@ -90,48 +91,48 @@ export default function ProjectEdit() {
                 }
               />
             )}
-            <WriteHeader type="project" state="edit" />
-            <div className="write-wrapper row">
+            <div className='write-wrapper'>
+              <WriteDescription type="project" state="edit" />
               <div className="input-container col">
-                <Input
-                  label={'프로젝트 제목'}
-                  width={'100%'}
-                  onChange={(e) => {
-                    handleInputChange(null, e.target.value, 'title');
-                    handleErrorChange(null, e.target.value, 'title', checkValidations);
-                  }}
-                  placeholder={'최소 10 글자 최대 30글자까지 입력 가능 합니다. (필수)'}
-                  type="text"
-                  maxLength={30}
-                  defaultValue={dataForm.title}
-                />
+                <div className="progress-input">
+                  <Input
+                    label={'프로젝트 제목'}
+                    width={'100%'}
+                    onChange={(e) => {
+                      handleInputChange(null, e.target.value, 'title');
+                      handleErrorChange(null, e.target.value, 'title', checkValidations);
+                    }}
+                    placeholder={'최소 10 글자 최대 30글자까지 입력 가능 합니다. (필수)'}
+                    type="text"
+                    maxLength={30}
+                    defaultValue={dataForm.title}
+                  />
 
-                <ProGress
-                  className={'margin-top-remove'}
-                  width={'100%'}
-                  height={'1.2rem'}
-                  fontSize={'1.2rem'}
-                  comPleteNum={projectWriteRule.title.max}
-                  proGressNum={dataForm.title.length ?? 0}
-                  error={dataForm.title.length < 10 ? true : false}
-                />
-
-                <SelectBox
-                  text={'사용할 언어를 선택 해주세요.'}
-                  component={
-                    <Select
-                      width={width}
-                      options={languagesOptions}
-                      defaultLabel={dataForm.lang}
-                      onClickHandler={(e) => {
-                        handleInputChange(null, e, 'lang');
-                        handleErrorChange(null, e, 'lang', checkValidations);
-                      }}
-                    />
-                  }
-                  error={errors.lang}
-                  name="언어"
-                />
+                  <ProGress
+                    width={'100%'}
+                    fontSize={'1.3rem'}
+                    comPleteNum={projectWriteRule.title.max}
+                    proGressNum={dataForm.title.length ?? 0}
+                    error={dataForm.title.length < 10 ? true : false}
+                  />
+                </div>
+                <div className='selectors col'>
+                  <SelectBox
+                    className="lang-selector"
+                    text={'언어 선택'}
+                    component={
+                      <Select
+                        width={width}
+                        options={languagesOptions}
+                        defaultLabel={dataForm.lang}
+                        onClickHandler={(e) => {
+                          handleInputChange(null, e, 'lang');
+                          handleErrorChange(null, e, 'lang', checkValidations);
+                        }}
+                      />
+                    }
+                  />
+                </div>
 
                 <EnterTag
                   width="100%"
@@ -142,78 +143,77 @@ export default function ProjectEdit() {
                   }
                   handleInputChange={handleInputChange}
                 />
+                <div className='progress-textarea'>
+                  <Input
+                    label={'기획서'}
+                    width={width}
+                    height={height}
+                    type={'textarea'}
+                    onChange={(e) => {
+                      handleInputChange(null, e.target.value, 'body');
+                      handleErrorChange(null, e.target.value, 'body', checkValidations);
+                    }}
+                    placeholder={'최소 100 ~ 500글자까지 입력 가능합니다. (필수)'}
+                    maxLength={500}
+                    defaultValue={dataForm.body}
+                  />
+                  <ProGress
+                    className={'margin-top-remove'}
+                    width={'100%'}
+                    height={'1.2rem'}
+                    fontSize={'1.2rem'}
+                    comPleteNum={projectWriteRule.body.max}
+                    proGressNum={dataForm.body.length ?? 0}
+                    error={dataForm.body.length < 100 ? true : false}
+                  />
+                </div>
+                <div className='progress-textarae'>
+                  <Input
+                    label={'상세 요강'}
+                    width={width}
+                    height={height}
+                    type={'textarea'}
+                    onChange={(e) => {
+                      handleInputChange(null, e.target.value, 'description');
+                      handleErrorChange(null, e.target.value, 'description', checkValidations);
+                    }}
+                    placeholder={'최대 200글자까지 입력 가능합니다. (선택)'}
+                    maxLength={200}
+                    defaultValue={dataForm.description}
+                  />
+                  <ProGress
+                    className={'margin-top-remove'}
+                    width={'100%'}
+                    height={'1.2rem'}
+                    fontSize={'1.2rem'}
+                    comPleteNum={projectWriteRule.description.max}
+                    proGressNum={dataForm.description.length ?? 0}
+                    error={dataForm.description.length > 200 ? true : false}
+                  />
+                </div>
+                  <FileInput
+                    name={'타이틀 이미지'}
+                    width={'100%'}
+                    height={'200px'}
+                    number={1}
+                    dataForm={dataForm}
+                    handleInputChange={handleInputChange}
+                    handleErrorChange={handleErrorChange}
+                    clearError={clearError}
+                    defaultImgs={dataForm.titleImage}
+                    setWillDeleteImgs={true}
+                  />
 
-                <Input
-                  label={'기획서'}
-                  width={width}
-                  height={height}
-                  type={'textarea'}
-                  onChange={(e) => {
-                    handleInputChange(null, e.target.value, 'body');
-                    handleErrorChange(null, e.target.value, 'body', checkValidations);
-                  }}
-                  placeholder={'최소 100 ~ 500글자까지 입력 가능합니다. (필수)'}
-                  maxLength={500}
-                  defaultValue={dataForm.body}
-                />
-                <ProGress
-                  className={'margin-top-remove'}
-                  width={'100%'}
-                  height={'1.2rem'}
-                  fontSize={'1.2rem'}
-                  comPleteNum={projectWriteRule.body.max}
-                  proGressNum={dataForm.body.length ?? 0}
-                  error={dataForm.body.length < 100 ? true : false}
-                />
-
-                <Input
-                  label={'상세 요강'}
-                  width={width}
-                  height={height}
-                  type={'textarea'}
-                  onChange={(e) => {
-                    handleInputChange(null, e.target.value, 'description');
-                    handleErrorChange(null, e.target.value, 'description', checkValidations);
-                  }}
-                  placeholder={'최대 200글자까지 입력 가능합니다. (선택)'}
-                  maxLength={200}
-                  defaultValue={dataForm.description}
-                />
-                <ProGress
-                  className={'margin-top-remove'}
-                  width={'100%'}
-                  height={'1.2rem'}
-                  fontSize={'1.2rem'}
-                  comPleteNum={projectWriteRule.description.max}
-                  proGressNum={dataForm.description.length ?? 0}
-                  error={dataForm.description.length > 200 ? true : false}
-                />
-              </div>
-
-              <div className="imgs-container col">
-                <FileInput
-                  name={'타이틀 이미지'}
-                  width={'100%'}
-                  height={'55rem'}
-                  number={1}
-                  dataForm={dataForm}
-                  handleInputChange={handleInputChange}
-                  handleErrorChange={handleErrorChange}
-                  clearError={clearError}
-                  defaultImgs={dataForm.titleImage}
-                  setWillDeleteImgs={true}
-                />
-
-                <FileInput
-                  name={'이미지'}
-                  width={'100%'}
-                  height={'55rem'}
-                  number={7}
-                  dataForm={dataForm}
-                  handleInputChange={handleInputChange}
-                  defaultImgs={dataForm.images}
-                  setWillDeleteImgs={true}
-                />
+                  <FileInput
+                    name={'이미지'}
+                    width={'100%'}
+                    height={'200px'}
+                    number={7}
+                    dataForm={dataForm}
+                    handleInputChange={handleInputChange}
+                    defaultImgs={dataForm.images}
+                    setWillDeleteImgs={true}
+                  />
               </div>
             </div>
             <div className="button-box">
@@ -233,12 +233,14 @@ export default function ProjectEdit() {
                 수정
               </StyleBorderButton>
               <StyleBorderButton
-                onClick={()=>{
+                onClick={() => {
                   setShowModal(true);
                   setIsCancel(true);
                   setApiResult('작성 취소시 작성한 내용은 저장되지 않습니다.');
                 }}
-              >취소</StyleBorderButton>
+              >
+                취소
+              </StyleBorderButton>
             </div>
           </StyleProjectWrite>
         )

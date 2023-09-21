@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { writeSubmitHandler } from '../utils/writeSubmitHandler';
+import { returnErrorMsg } from '../utils/returnErrorMsg';
+import ReplaceNewLine from '../components/PfPjPublic/ReplaceNewLine';
 
 export default function useSubmitWriteEdit() {
     const [apiResult, setApiResult] = useState('전송 중');
@@ -12,7 +14,7 @@ export default function useSubmitWriteEdit() {
             setIsSuccess(true);
         })
         .catch((err)=>{
-            setApiResult(err==='formError' ? '필수 입력 양식을 다시 확인해 주세요.' : '서버와의 통신에 실패했습니다. 다시 시도해 주세요.');
+            setApiResult(err==='formError' ? ReplaceNewLine(returnErrorMsg(errors, type),true) : '서버와의 통신에 실패했습니다. 다시 시도해 주세요.');
             setIsSuccess(false);
         })
     }
