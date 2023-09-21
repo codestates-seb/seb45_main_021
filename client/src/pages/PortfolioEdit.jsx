@@ -22,7 +22,7 @@ import Modal from '../components/common/Modal';
 import { StyleBorderButton } from '../components/common/Buttons';
 import { useSelector } from 'react-redux';
 import useSubmitWriteEdit from '../hooks/useSubmitWriteEdit';
-import { StylePortfolioWrite } from './PortfolioWrite';
+import StylePortfolioWrite from '../components/common/PortfolioWriteCommon';
 import NotFound from './NotFound';
 
 export default function PortfolioEdit() {
@@ -92,76 +92,76 @@ export default function PortfolioEdit() {
                 }
               />
             )}
-            <div className='write-wrapper'>
-            <WriteDescription type="portfolio" state="edit" />
-            <div className="input-container col">
-              <div className="progress-input">
-                <Input
-                  label={'포트폴리오 제목'}
-                  width={'100%'}
-                  onChange={(e) => {
-                    handleInputChange(null, e.target.value, 'title');
-                    handleErrorChange(null, e.target.value, 'title', checkValidations);
-                  }}
-                  placeholder={'최소 10 글자 최대 30글자까지 입력 가능 합니다. (필수)'}
-                  type="text"
-                  maxLength={30}
-                  defaultValue={dataForm.title}
-                />
-                <ProGress
-                  width={'100%'}
-                  fontSize={'1.3rem'}
-                  comPleteNum={portfolioWriteRule.title.max}
-                  proGressNum={dataForm.title.length ?? 0}
-                  error={dataForm.title.length < 10 ? true : false}
-                />
-              </div>
-              <div className='selectors'>
-                <SelectBox
-                  className="lang-selector"
-                  text={'언어 선택'}
-                  component={
-                    <Select
-                      height="37px"
-                      width={width}
-                      options={languagesOptions}
-                      defaultLabel={dataForm.lang}
-                      onClickHandler={(e) => {
-                        handleInputChange(null, e, 'language');
-                        handleErrorChange(null, e, 'language', checkValidations);
-                      }}
-                    />
-                  }
-                />
+            <div className="write-wrapper">
+              <WriteDescription type="portfolio" state="edit" />
+              <div className="input-container col">
+                <div className="progress-input">
+                  <Input
+                    label={'포트폴리오 제목'}
+                    width={'100%'}
+                    onChange={(e) => {
+                      handleInputChange(null, e.target.value, 'title');
+                      handleErrorChange(null, e.target.value, 'title', checkValidations);
+                    }}
+                    placeholder={'최소 10 글자 최대 30글자까지 입력 가능 합니다. (필수)'}
+                    type="text"
+                    maxLength={30}
+                    defaultValue={dataForm.title}
+                  />
+                  <ProGress
+                    width={'100%'}
+                    fontSize={'1.3rem'}
+                    comPleteNum={portfolioWriteRule.title.max}
+                    proGressNum={dataForm.title.length ?? 0}
+                    error={dataForm.title.length < 10 ? true : false}
+                  />
+                </div>
+                <div className="selectors">
+                  <SelectBox
+                    className="lang-selector"
+                    text={'언어 선택'}
+                    component={
+                      <Select
+                        height="37px"
+                        width={width}
+                        options={languagesOptions}
+                        defaultLabel={dataForm.lang}
+                        onClickHandler={(e) => {
+                          handleInputChange(null, e, 'language');
+                          handleErrorChange(null, e, 'language', checkValidations);
+                        }}
+                      />
+                    }
+                  />
 
-                <SelectBox
-                  className="comment-selector"
-                  text={'댓글작성 허용'}
-                  component={
-                    <ToggleButton
-                      onClickHandler={() => {
-                        handleInputChange(null, dataForm.isComment ? 0 : 1, 'isComment');
-                      }}
-                      defaultValue={dataForm.isComment}
-                      hideError={true}
-                    />
-                  }
-                />
+                  <SelectBox
+                    className="comment-selector"
+                    text={'댓글작성 허용'}
+                    component={
+                      <ToggleButton
+                        onClickHandler={() => {
+                          handleInputChange(null, dataForm.isComment ? 0 : 1, 'isComment');
+                        }}
+                        defaultValue={dataForm.isComment}
+                        hideError={true}
+                      />
+                    }
+                  />
 
-                <SelectBox
-                  text={'구직용 여부'}
-                  component={
-                    <ToggleButton
-                      onClickHandler={() => {
-                        handleInputChange(null, dataForm.isEmploy ? 0 : 1, 'isEmploy');
-                      }}
-                      defaultValue={dataForm.isEmploy}
-                      hideError={true}
-                    />
-                  }
-                  hideError={true}
-                />
-              </div>
+                  <SelectBox
+                    text={'구직용 여부'}
+                    component={
+                      <ToggleButton
+                        onClickHandler={() => {
+                          handleInputChange(null, dataForm.isEmploy ? 0 : 1, 'isEmploy');
+                        }}
+                        defaultValue={dataForm.isEmploy}
+                        hideError={true}
+                      />
+                    }
+                    hideError={true}
+                  />
+                </div>
                 <EnterTag
                   className="tag-container"
                   width="100%"
@@ -172,32 +172,32 @@ export default function PortfolioEdit() {
                     dataForm.tags.length === 1 && dataForm.tags[0] === '' ? [] : dataForm.tags
                   }
                 />
-              <div className='progress-textarea'>
-                <Input
-                  className="body-content"
-                  label={'포트폴리오 본문'}
-                  width={width}
-                  height={height}
-                  type={'textarea'}
-                  onChange={(e) => {
-                    handleInputChange(null, e.target.value, 'body');
-                    handleErrorChange(null, e.target.value, 'body', checkValidations);
-                  }}
-                  placeholder={'최소 200 ~ 1000글자까지 입력 가능합니다. (필수)'}
-                  maxLength={1000}
-                  error={errors.body}
-                  defaultValue={dataForm.body}
-                />
-                <ProGress
-                  className={'margin-top-remove'}
-                  width={'100%'}
-                  height={'1.2rem'}
-                  fontSize={'1.2rem'}
-                  comPleteNum={portfolioWriteRule.body.max}
-                  proGressNum={dataForm.body.length ?? 0}
-                  error={dataForm.body.length < 100 ? true : false}
-                />
-              </div>
+                <div className="progress-textarea">
+                  <Input
+                    className="body-content"
+                    label={'포트폴리오 본문'}
+                    width={width}
+                    height={height}
+                    type={'textarea'}
+                    onChange={(e) => {
+                      handleInputChange(null, e.target.value, 'body');
+                      handleErrorChange(null, e.target.value, 'body', checkValidations);
+                    }}
+                    placeholder={'최소 200 ~ 1000글자까지 입력 가능합니다. (필수)'}
+                    maxLength={1000}
+                    error={errors.body}
+                    defaultValue={dataForm.body}
+                  />
+                  <ProGress
+                    className={'margin-top-remove'}
+                    width={'100%'}
+                    height={'1.2rem'}
+                    fontSize={'1.2rem'}
+                    comPleteNum={portfolioWriteRule.body.max}
+                    proGressNum={dataForm.body.length ?? 0}
+                    error={dataForm.body.length < 100 ? true : false}
+                  />
+                </div>
                 <FileInput
                   className="title-image"
                   name={'타이틀 이미지'}

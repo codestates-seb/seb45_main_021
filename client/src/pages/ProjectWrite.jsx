@@ -24,15 +24,15 @@ import { custom, desktop } from '../static/theme';
 import { useSelector } from 'react-redux';
 import { StyleBorderButton } from '../components/common/Buttons';
 import useSubmitWriteEdit from '../hooks/useSubmitWriteEdit';
-import { StylePortfolioWrite } from './PortfolioWrite';
+import StylePortfolioWrite from '../components/common/PortfolioWriteCommon';
 
 export const StyleProjectWrite = styled(StylePortfolioWrite)`
   .selectors {
-    gap:70px;
-    margin-bottom:5rem;
+    gap: 70px;
+    margin-bottom: 5rem;
   }
   .data-select-container {
-    gap:1rem;
+    gap: 1rem;
   }
 `;
 
@@ -84,7 +84,7 @@ export default function ProjectWrite() {
           confirmHandler={() => (isSuccess || isCancel ? toProject() : setShowModal(false))}
         />
       )}
-      <div className='write-wrapper'>
+      <div className="write-wrapper">
         <WriteDescription type="project" />
         <div className="input-container col">
           <div className="progress-input">
@@ -108,57 +108,57 @@ export default function ProjectWrite() {
               error={dataForm.title.length < 10 ? true : false}
             />
           </div>
-        <div className='selectors col'>
-          <SelectBox
-            className="lang-selector"
-            text={'언어 선택'}
-            component={
-              <Select
-                height="37px"
-                width={width}
-                options={languagesOptions}
-                defaultLabel={'-'}
-                onClickHandler={(e) => {
-                  handleInputChange(null, e, 'lang');
-                  handleErrorChange(null, e, 'lang', checkValidations);
-                }}
-              />
-            }
-          />
-
-          <SelectBox
-            text={'모집할 인원을 선택해주세요.'}
-            component={
-              <Select
-                width={width}
-                options={totalPeopleOptions}
-                defaultLabel={'-'}
-                onClickHandler={(e) => {
-                  handleInputChange(null, e, 'totalPeople');
-                  handleErrorChange(null, e, 'totalPeople', checkValidations);
-                }}
-              />
-            }
-            error={errors.totalPeople}
-            name="모집 인원"
-          />
-
-          <SelectBox
-            text={'프로젝트 마감 날짜를 선택 해 주세요. (모집 시작은 작성일 기준입니다.)'}
-            component={
-              <div className="data-select-container row">
-                <DateSelect
-                  defaultDate={dataForm.closedAt}
+          <div className="selectors col">
+            <SelectBox
+              className="lang-selector"
+              text={'언어 선택'}
+              component={
+                <Select
+                  height="37px"
                   width={width}
-                  handleInputChange={handleInputChange}
-                  handleErrorChange={handleErrorChange}
+                  options={languagesOptions}
+                  defaultLabel={'-'}
+                  onClickHandler={(e) => {
+                    handleInputChange(null, e, 'lang');
+                    handleErrorChange(null, e, 'lang', checkValidations);
+                  }}
                 />
-              </div>
-            }
-            error={errors.closedAt}
-            name="마감 날짜"
-          />
-        </div>
+              }
+            />
+
+            <SelectBox
+              text={'모집할 인원을 선택해주세요.'}
+              component={
+                <Select
+                  width={width}
+                  options={totalPeopleOptions}
+                  defaultLabel={'-'}
+                  onClickHandler={(e) => {
+                    handleInputChange(null, e, 'totalPeople');
+                    handleErrorChange(null, e, 'totalPeople', checkValidations);
+                  }}
+                />
+              }
+              error={errors.totalPeople}
+              name="모집 인원"
+            />
+
+            <SelectBox
+              text={'프로젝트 마감 날짜를 선택 해 주세요. (모집 시작은 작성일 기준입니다.)'}
+              component={
+                <div className="data-select-container row">
+                  <DateSelect
+                    defaultDate={dataForm.closedAt}
+                    width={width}
+                    handleInputChange={handleInputChange}
+                    handleErrorChange={handleErrorChange}
+                  />
+                </div>
+              }
+              error={errors.closedAt}
+              name="마감 날짜"
+            />
+          </div>
           <EnterTag
             className="tag-container"
             width="100%"
@@ -167,7 +167,7 @@ export default function ProjectWrite() {
             dataForm={dataForm}
             handleInputChange={handleInputChange}
           />
-          <div className='progress-textarea'>
+          <div className="progress-textarea">
             <Input
               className="body-content"
               label={'프로젝트 본문'}
@@ -190,7 +190,7 @@ export default function ProjectWrite() {
               error={dataForm.body.length < 100 ? true : false}
             />
           </div>
-          <div className='progress-textarea'>
+          <div className="progress-textarea">
             <Input
               className="body-content"
               label={'상세 요강'}
