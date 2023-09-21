@@ -62,7 +62,6 @@ export default function EnterTag({
       }, 0);
     }
   };
-  console.log(tags.length);
   return (
     <StyleEnterTag className="col" {...rest}>
       <div className="box-title">검색 키워드</div>
@@ -77,6 +76,7 @@ export default function EnterTag({
         />
       )}
       <div className="row">
+        <>
         {tags.map((el, idx) => (
           <StyleTag key={idx}>
             {el}
@@ -91,6 +91,7 @@ export default function EnterTag({
             />
           </StyleTag>
         ))}
+        </>
       </div>
     </StyleEnterTag>
   );
