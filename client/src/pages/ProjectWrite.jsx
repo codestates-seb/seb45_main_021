@@ -20,7 +20,6 @@ import {
   projectWriteRule,
 } from '../static/projectInit';
 import Modal from '../components/common/Modal';
-import { custom, desktop } from '../static/theme';
 import { useSelector } from 'react-redux';
 import { StyleBorderButton } from '../components/common/Buttons';
 import useSubmitWriteEdit from '../hooks/useSubmitWriteEdit';
@@ -164,7 +163,6 @@ export default function ProjectWrite() {
             width="100%"
             height="3.5rem"
             placeholder="태그는 최대 3개까지 등록이 가능합니다."
-            dataForm={dataForm}
             handleInputChange={handleInputChange}
           />
           <div className="progress-textarea">

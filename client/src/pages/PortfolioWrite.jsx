@@ -225,7 +225,6 @@ export default function PortfolioWrite() {
             className="tag-container"
             width="100%"
             placeholder="태그는 최대 3개까지 등록이 가능합니다."
-            dataForm={dataForm}
             handleInputChange={handleInputChange}
           />
           <div className="progress-textarea">
