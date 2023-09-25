@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="seb45_main_021">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/server/unkwon/build/generated/sources/annotationProcessor/java/main" />
+      <root url="file://$PROJECT_DIR$/server/unkwon/src/main/java" />
+      <root url="file://$PROJECT_DIR$/server/unkwon/src/test/java" />
+    </SOURCES>
+  </library>
+</component>

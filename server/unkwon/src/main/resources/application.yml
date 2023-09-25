@@ -1,0 +1,72 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://spec-db-1.c8qdyivupwng.ap-northeast-2.rds.amazonaws.com:13306/SPEC
+    username: admin
+    password: ${MYSQL_SECRET}
+
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      use-new-id-generator-mappings: false
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+      dialect: org.hibernate.dialect.MySQL8InnoDBDialect
+      hibernate:
+        connection:
+          characterEncoding: utf8mb4
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher # swagger path 설정
+
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: ${G_CLIENT_ID}
+            clientSecret: ${G_CLIENT_SECRET}
+            scope:
+              - email
+              - profile
+          github:
+            gitClientId: ${GIT_CLIENT_ID}
+            gitClientSecret: ${GIT_CLIENT_SECRET}
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+server:
+  servlet:
+    encoding:
+      force-response: true
+mail:
+  address:
+    admin: admin@gmail.com
+jwt:
+  key:
+    secret: ${JWT_SECRET_KEY}
+  access-token-expiration-minutes: 30 # 30분
+  refresh-token-expiration-minutes: 840 # 14일
+cloud:
+  aws:
+    s3:
+      bucket: mainproject-bucket
+    credentials:
+      access-key:
+      secret-key:
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
