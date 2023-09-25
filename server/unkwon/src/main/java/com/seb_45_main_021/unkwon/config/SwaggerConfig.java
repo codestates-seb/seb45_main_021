@@ -34,6 +34,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.OAS_30)
+                .host("ec2-52-78-224-100.ap-northeast-2.compute.amazonaws.com")
                 .useDefaultResponseMessages(false) // Swagger 에서 제공해주는 기본 응답 코드를 표시할 것이면 true
                 .apiInfo(apiInfo())
                 .select()

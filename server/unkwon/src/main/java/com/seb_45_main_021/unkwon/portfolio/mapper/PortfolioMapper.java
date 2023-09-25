@@ -126,6 +126,7 @@ public interface PortfolioMapper {
                 .portfolioId(portfolio.getPortfolioId())
                 .memberId(portfolio.getMember().getMemberId())
                 .userName(portfolio.getMember().getUserName())
+                .userImgUrl(portfolio.getMember().getUserImgUrl())
                 .title(portfolio.getTitle())
                 .body(portfolio.getBody())
                 .createdAt(portfolio.getCreatedAt())
